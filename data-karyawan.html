@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -8,388 +9,87 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
 :root{
---merah:#c90016;
---merah-gelap:#a50012;
---bg:#f4f5f7;
---putih:#fff;
---teks:#252525;
---abu:#777;
---border:#e4e4e4;
---hijau:#16834a;
+--merah:#c90016;--merah-gelap:#a50012;
+--bg:#f4f5f7;--putih:#fff;--teks:#252525;
+--abu:#777;--border:#e4e4e4;--hijau:#16834a;
 }
-
-body{
-font-family:Arial,Helvetica,sans-serif;
-background:var(--bg);
-color:var(--teks);
-min-height:100vh;
-}
-
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--teks);min-height:100vh}
 button,input,select,textarea{font-family:inherit;font-size:14px}
 button{cursor:pointer}
-
-.header{
-background:linear-gradient(135deg,var(--merah),#87000e);
-color:white;
-padding:18px 16px;
-position:sticky;
-top:0;
-z-index:20;
-box-shadow:0 3px 12px #0002;
-}
-
-.header-inner{
-max-width:1200px;
-margin:auto;
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.logo{
-width:43px;
-height:43px;
-background:white;
-color:var(--merah);
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:900;
-font-size:18px;
-flex-shrink:0;
-}
-
+.header{background:linear-gradient(135deg,var(--merah),#87000e);color:white;padding:18px 16px;position:sticky;top:0;z-index:20;box-shadow:0 3px 12px #0002}
+.header-inner{max-width:1200px;margin:auto;display:flex;align-items:center;gap:12px}
+.logo{width:43px;height:43px;background:white;color:var(--merah);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;flex-shrink:0}
 .header-title{flex:1}
 .header-title h1{font-size:17px;margin-bottom:4px}
 .header-title p{font-size:11px;opacity:.85}
-
-.btn-back{
-border:1px solid #ffffff55;
-background:#ffffff15;
-color:white;
-padding:9px 12px;
-border-radius:9px;
-text-decoration:none;
-font-size:12px;
-white-space:nowrap;
-}
-
+.btn-back{border:1px solid #ffffff55;background:#ffffff15;color:white;padding:9px 12px;border-radius:9px;text-decoration:none;font-size:12px;white-space:nowrap}
 .container{max-width:1200px;margin:auto;padding:16px}
-
-.info-card{
-background:white;
-border-radius:14px;
-padding:17px;
-margin-bottom:15px;
-border:1px solid var(--border);
-}
-
+.info-card{background:white;border-radius:14px;padding:17px;margin-bottom:15px;border:1px solid var(--border)}
 .info-card h2{font-size:16px;margin-bottom:7px}
 .info-card p{font-size:12px;color:var(--abu);line-height:1.6}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-bottom:15px;
-}
-
-.stat{
-background:white;
-padding:15px;
-border-radius:12px;
-border:1px solid var(--border);
-}
-
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px}
+.stat{background:white;padding:15px;border-radius:12px;border:1px solid var(--border)}
 .stat-label{color:var(--abu);font-size:11px;margin-bottom:7px}
 .stat-number{font-size:22px;font-weight:bold;color:var(--merah)}
-
-.toolbar{
-background:white;
-border-radius:13px;
-padding:13px;
-border:1px solid var(--border);
-margin-bottom:14px;
-}
-
-.toolbar-top{
-display:flex;
-gap:9px;
-flex-wrap:wrap;
-margin-bottom:11px;
-}
-
+.toolbar{background:white;border-radius:13px;padding:13px;border:1px solid var(--border);margin-bottom:14px}
+.toolbar-top{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:11px}
 .search{flex:1;min-width:170px}
-
-.search input,.toolbar select{
-width:100%;
-height:42px;
-border:1px solid var(--border);
-border-radius:9px;
-padding:0 12px;
-outline:none;
-background:white;
-}
-
-.search input:focus,input:focus,select:focus,textarea:focus{
-border-color:var(--merah);
-}
-
-.btn{
-border:none;
-border-radius:9px;
-padding:11px 14px;
-font-weight:bold;
-}
-
+.search input,.toolbar select{width:100%;height:42px;border:1px solid var(--border);border-radius:9px;padding:0 12px;outline:none;background:white}
+.search input:focus,input:focus,select:focus,textarea:focus{border-color:var(--merah)}
+.btn{border:none;border-radius:9px;padding:11px 14px;font-weight:bold}
 .btn-primary{background:var(--merah);color:white}
 .btn-primary:hover{background:var(--merah-gelap)}
 .btn-secondary{background:#eee;color:#333}
 .btn-danger{background:#ffe5e8;color:#b00015}
 .btn-success{background:#e1f5e9;color:#08743c}
 .btn-small{padding:7px 10px;font-size:12px}
-
 .btn:disabled{opacity:.55;cursor:not-allowed}
-
-.btn-icon{
-display:inline-flex;
-align-items:center;
-justify-content:center;
-gap:7px;
-}
-
-.toolbar-buttons{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-}
-
-.table-wrap{
-background:white;
-border-radius:13px;
-border:1px solid var(--border);
-overflow:hidden;
-}
-
+.btn-icon{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.toolbar-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.table-wrap{background:white;border-radius:13px;border:1px solid var(--border);overflow:hidden}
 .table-scroll{overflow-x:auto}
-
-table{
-width:100%;
-border-collapse:collapse;
-min-width:950px;
-}
-
-th{
-background:#fafafa;
-text-align:left;
-padding:12px;
-font-size:11px;
-color:#666;
-border-bottom:1px solid var(--border);
-white-space:nowrap;
-}
-
-td{
-padding:12px;
-font-size:12px;
-border-bottom:1px solid #eee;
-vertical-align:middle;
-}
-
+table{width:100%;border-collapse:collapse;min-width:950px}
+th{background:#fafafa;text-align:left;padding:12px;font-size:11px;color:#666;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:12px;font-size:12px;border-bottom:1px solid #eee;vertical-align:middle}
 tbody tr:hover{background:#fffafa}
-
 .nama{font-weight:bold}
 .nik{color:#777;margin-top:4px;font-size:11px}
-
-.badge{
-display:inline-block;
-padding:5px 8px;
-border-radius:20px;
-background:#f0f0f0;
-font-size:10px;
-white-space:nowrap;
-}
-
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;background:#f0f0f0;font-size:10px;white-space:nowrap}
 .badge-departemen{background:#fff0f1;color:var(--merah)}
 .badge-aktif{background:#e1f5e9;color:#08743c}
 .badge-dicabut{background:#ffe5e8;color:#b00015}
-
 .aksi{display:flex;gap:6px;white-space:nowrap}
-
-.empty{
-padding:35px 15px;
-text-align:center;
-color:#888;
-font-size:13px;
-}
-
+.empty{padding:35px 15px;text-align:center;color:#888;font-size:13px}
 .loading{padding:35px;text-align:center;color:#777}
-
-.overlay{
-position:fixed;
-inset:0;
-background:#0007;
-z-index:100;
-display:none;
-align-items:center;
-justify-content:center;
-padding:12px;
-}
-
-.overlay.show{
-display:flex !important;
-}
-
-.modal{
-background:white;
-width:100%;
-max-width:650px;
-max-height:92vh;
-overflow-y:auto;
-border-radius:16px;
-}
-
-.modal-header{
-padding:17px;
-border-bottom:1px solid var(--border);
-display:flex;
-align-items:center;
-justify-content:space-between;
-position:sticky;
-top:0;
-background:white;
-z-index:2;
-}
-
+.overlay{position:fixed;inset:0;background:#0007;z-index:100;display:none;align-items:center;justify-content:center;padding:12px}
+.overlay.show{display:flex!important}
+.modal{background:white;width:100%;max-width:650px;max-height:92vh;overflow-y:auto;border-radius:16px}
+.modal-header{padding:17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:2}
 .modal-header h2{font-size:16px}
-
-.close{
-border:none;
-background:#f1f1f1;
-width:33px;
-height:33px;
-border-radius:50%;
-font-size:20px;
-}
-
+.close{border:none;background:#f1f1f1;width:33px;height:33px;border-radius:50%;font-size:20px}
 .modal-body{padding:17px}
-
-.form-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:13px;
-}
-
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .field{margin-bottom:13px}
 .field.full{grid-column:1/-1}
-
-.field label{
-display:block;
-font-size:12px;
-font-weight:bold;
-margin-bottom:7px;
-}
-
-.field input,.field select,.field textarea{
-width:100%;
-border:1px solid #ddd;
-border-radius:9px;
-min-height:42px;
-padding:10px;
-background:white;
-outline:none;
-}
-
+.field label{display:block;font-size:12px;font-weight:bold;margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;border:1px solid #ddd;border-radius:9px;min-height:42px;padding:10px;background:white;outline:none}
 .field textarea{min-height:80px;resize:vertical}
-
 .required{color:var(--merah)}
 .helper{font-size:10px;color:#777;margin-top:5px}
-
-.modal-footer{
-display:flex;
-gap:8px;
-justify-content:flex-end;
-padding:15px 17px;
-border-top:1px solid var(--border);
-position:sticky;
-bottom:0;
-background:white;
-}
-
-.toast{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#222;
-color:white;
-padding:12px 18px;
-border-radius:10px;
-z-index:500;
-display:none;
-max-width:90%;
-text-align:center;
-font-size:13px;
-}
-
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;padding:15px 17px;border-top:1px solid var(--border);position:sticky;bottom:0;background:white}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:12px 18px;border-radius:10px;z-index:500;display:none;max-width:90%;text-align:center;font-size:13px}
 .toast.show{display:block}
-
-.section-title{
-font-size:14px;
-font-weight:bold;
-margin:15px 0 10px;
-color:var(--merah);
-}
-
+.section-title{font-size:14px;font-weight:bold;margin:15px 0 10px;color:var(--merah)}
 .task-list{display:grid;gap:10px}
-
-.task-card{
-border:1px solid var(--border);
-border-radius:10px;
-padding:12px;
-}
-
+.task-card{border:1px solid var(--border);border-radius:10px;padding:12px}
 .task-card h3{font-size:13px;margin-bottom:6px}
-
-.task-card p{
-font-size:11px;
-color:#777;
-line-height:1.6;
-white-space:pre-wrap;
-}
-
-.task-actions{display:flex;gap:6px;margin-top:10px}
-
-hr{
-border:none;
-border-top:1px solid var(--border);
-margin:15px 0;
-}
-
-.import-info{
-background:#f5f7f9;
-border-radius:10px;
-padding:12px;
-font-size:12px;
-line-height:1.7;
-color:#555;
-margin-bottom:12px;
-}
-
+.task-card p{font-size:11px;color:#777;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.task-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+hr{border:none;border-top:1px solid var(--border);margin:15px 0}
+.import-info{background:#f5f7f9;border-radius:10px;padding:12px;font-size:12px;line-height:1.7;color:#555;margin-bottom:12px}
 .import-info strong{color:#333}
-
-.progress{
-font-size:12px;
-color:#666;
-margin-top:10px;
-line-height:1.6;
-white-space:pre-wrap;
-overflow-wrap:anywhere;
-}
-
+.progress{font-size:12px;color:#666;margin-top:10px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:600px){
 .header{padding:13px}
 .header-title h1{font-size:15px}
@@ -414,510 +114,1101 @@ overflow-wrap:anywhere;
 <body>
 
 <header class="header">
-  <div class="header-inner">
-    <div class="logo">W</div>
-
-    <div class="header-title">
-      <h1>DATA KARYAWAN</h1>
-      <p>WAINI · Divisi Terminal Khusus</p>
-    </div>
-
-    <a href="menu.html" class="btn-back">← Menu</a>
-  </div>
+<div class="header-inner">
+<div class="logo">W</div>
+<div class="header-title">
+<h1>DATA KARYAWAN</h1>
+<p>WAINI · Divisi Terminal Khusus</p>
+</div>
+<a href="menu.html" class="btn-back">← Menu</a>
+</div>
 </header>
 
 <main class="container">
 
-  <div class="info-card">
-    <h2>Manajemen Data Karyawan</h2>
-    <p>
-      Pengelolaan data karyawan Divisi Terminal Khusus.
-      Data ini digunakan sebagai dasar akun, hak akses,
-      penugasan, absensi, dan pengelolaan cuti WAINI.
-    </p>
-  </div>
+<div class="info-card">
+<h2>Manajemen Data Karyawan</h2>
+<p>Pengelolaan data karyawan Divisi Terminal Khusus. Data ini digunakan sebagai dasar akun, hak akses, penugasan, absensi, dan pengelolaan cuti WAINI.</p>
+</div>
 
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-label">TOTAL KARYAWAN</div>
-      <div class="stat-number" id="totalKaryawan">0</div>
-    </div>
+<div class="stats">
+<div class="stat">
+<div class="stat-label">TOTAL KARYAWAN</div>
+<div class="stat-number" id="totalKaryawan">0</div>
+</div>
+<div class="stat">
+<div class="stat-label">OPERASIONAL PELABUHAN</div>
+<div class="stat-number" id="totalOperasional">0</div>
+</div>
+<div class="stat">
+<div class="stat-label">DEPARTEMEN LAIN</div>
+<div class="stat-number" id="totalLain">0</div>
+</div>
+</div>
 
-    <div class="stat">
-      <div class="stat-label">OPERASIONAL PELABUHAN</div>
-      <div class="stat-number" id="totalOperasional">0</div>
-    </div>
+<div class="toolbar">
+<div class="toolbar-top">
+<div class="search">
+<input type="search" id="searchInput" placeholder="Cari NIK, nama, jabatan...">
+</div>
+<button type="button" class="btn btn-primary btn-icon" id="btnTambah" onclick="window.bukaTambahKaryawanUI()">＋ Tambah Karyawan</button>
+</div>
+<div class="toolbar-buttons">
+<button type="button" class="btn btn-success btn-icon" id="btnImport">⇧ Import Excel</button>
+<button type="button" class="btn btn-secondary btn-icon" id="btnExport">⇩ Export Excel</button>
+</div>
+<select id="filterDepartemen" style="margin-top:11px">
+<option value="">Semua Departemen</option>
+<option value="Operasional Pelabuhan">Operasional Pelabuhan</option>
+<option value="Kendaraan Bergerak">Kendaraan Bergerak</option>
+<option value="Safety & Technology">Safety & Technology</option>
+</select>
+</div>
 
-    <div class="stat">
-      <div class="stat-label">DEPARTEMEN LAIN</div>
-      <div class="stat-number" id="totalLain">0</div>
-    </div>
-  </div>
-
-  <div class="toolbar">
-
-    <div class="toolbar-top">
-
-      <div class="search">
-        <input type="search" id="searchInput"
-          placeholder="Cari NIK, nama, jabatan...">
-      </div>
-
-      <button type="button" class="btn btn-primary btn-icon"
-        id="btnTambah" onclick="window.bukaTambahKaryawanUI()">
-        ＋ Tambah Karyawan
-      </button>
-
-    </div>
-
-    <div class="toolbar-buttons">
-
-      <button type="button" class="btn btn-success btn-icon" id="btnImport">
-        ⇧ Import Excel
-      </button>
-
-      <button type="button" class="btn btn-secondary btn-icon" id="btnExport">
-        ⇩ Export Excel
-      </button>
-
-    </div>
-
-    <select id="filterDepartemen" style="margin-top:11px">
-      <option value="">Semua Departemen</option>
-      <option value="Operasional Pelabuhan">Operasional Pelabuhan</option>
-      <option value="Kendaraan Bergerak">Kendaraan Bergerak</option>
-      <option value="Safety & Technology">Safety & Technology</option>
-    </select>
-
-  </div>
-
-  <div class="table-wrap">
-    <div class="table-scroll">
-      <table>
-
-        <thead>
-          <tr>
-            <th>NO</th>
-            <th>NIK / NAMA</th>
-            <th>DEPARTEMEN</th>
-            <th>JABATAN</th>
-            <th>TMK</th>
-            <th>POH</th>
-            <th>SISTEM CUTI</th>
-            <th>SHIFT KERJA</th>
-            <th>GRADE</th>
-            <th>NOWA</th>
-            <th>AKSI</th>
-          </tr>
-        </thead>
-
-        <tbody id="tbodyKaryawan">
-          <tr>
-            <td colspan="11" class="loading">Memeriksa akun...</td>
-          </tr>
-        </tbody>
-
-      </table>
-    </div>
-  </div>
-
+<div class="table-wrap">
+<div class="table-scroll">
+<table>
+<thead>
+<tr>
+<th>NO</th><th>NIK / NAMA</th><th>DEPARTEMEN</th>
+<th>JABATAN</th><th>TMK</th><th>POH</th>
+<th>SISTEM CUTI</th><th>SHIFT KERJA</th>
+<th>GRADE</th><th>NOWA</th><th>AKSI</th>
+</tr>
+</thead>
+<tbody id="tbodyKaryawan">
+<tr><td colspan="11" class="loading">Memeriksa akun...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
 </main>
 
-<!-- ==========================================
-     MODAL DATA KARYAWAN
-========================================== -->
-
+<!-- MODAL DATA KARYAWAN -->
 <div class="overlay" id="modalKaryawan">
+<div class="modal">
+<div class="modal-header">
+<h2 id="judulModal">Tambah Karyawan</h2>
+<button type="button" class="close" data-close="modalKaryawan">×</button>
+</div>
+<form id="formKaryawan">
+<div class="modal-body">
+<input type="hidden" id="modeForm" value="tambah">
+<input type="hidden" id="idDokumen">
 
-  <div class="modal">
-
-    <div class="modal-header">
-      <h2 id="judulModal">Tambah Karyawan</h2>
-
-      <button type="button" class="close"
-        data-close="modalKaryawan">×</button>
-    </div>
-
-    <form id="formKaryawan" action="#"
-      onsubmit="event.preventDefault();">
-
-      <div class="modal-body">
-
-        <input type="hidden" id="modeForm" value="tambah">
-        <input type="hidden" id="idDokumen">
-
-        <div class="form-grid">
-
-          <div class="field full">
-            <label>Divisi <span class="required">*</span></label>
-            <input id="divisi" value="Terminal Khusus" readonly>
-          </div>
-
-          <div class="field full">
-            <label>Departemen <span class="required">*</span></label>
-
-            <select id="departemen" required>
-              <option value="">Pilih Departemen</option>
-              <option>Operasional Pelabuhan</option>
-              <option>Kendaraan Bergerak</option>
-              <option>Safety & Technology</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>NIK <span class="required">*</span></label>
-
-            <input id="nik" required
-              inputmode="text"
-              autocomplete="off"
-              autocapitalize="characters"
-              spellcheck="false"
-              placeholder="Nomor induk karyawan">
-
-            <div class="helper">
-              NIK boleh kombinasi huruf dan angka.
-              Contoh: WHW001A atau OP-001.
-            </div>
-          </div>
-
-          <div class="field">
-            <label>Nama <span class="required">*</span></label>
-            <input id="nama" required placeholder="Nama lengkap">
-          </div>
-
-          <div class="field full">
-            <label>Jabatan <span class="required">*</span></label>
-            <input id="jabatan" required placeholder="Jabatan karyawan">
-          </div>
-
-          <div class="field">
-            <label>TMK <span class="required">*</span></label>
-
-            <input id="tmk" required maxlength="8"
-              placeholder="dd/mm/yy" inputmode="numeric">
-
-            <div class="helper">Format otomatis: dd/mm/yy</div>
-          </div>
-
-          <div class="field">
-            <label>POH</label>
-            <input id="poh" placeholder="Tempat POH">
-          </div>
-
-          <div class="field">
-            <label>Sistem Cuti <span class="required">*</span></label>
-
-            <select id="sistemCuti" required>
-              <option value="">Pilih Sistem Cuti</option>
-              <option value="Lokal">Lokal</option>
-              <option value="Roster">Roster</option>
-              <option value="5:2">5:2</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Shift Kerja <span class="required">*</span></label>
-
-            <select id="shiftKerja" required>
-              <option value="">Pilih Shift</option>
-              <option>Non Shift</option>
-              <option>Shift 1</option>
-              <option>Shift 2</option>
-              <option>Shift 3</option>
-              <option>Group 1</option>
-              <option>Group 2</option>
-              <option>Group 3</option>
-              <option>Maintenance</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Grade <span class="required">*</span></label>
-
-            <input id="grade" required type="number"
-              min="0" step="1" placeholder="Angka grade">
-          </div>
-
-          <div class="field">
-            <label>Nomor WhatsApp</label>
-            <input id="nowa" inputmode="tel" placeholder="08xxxxxxxxxx">
-          </div>
-
-        </div>
-      </div>
-
-      <div class="modal-footer">
-
-        <button type="button" class="btn btn-secondary"
-          data-close="modalKaryawan">Batal</button>
-
-        <button type="submit" class="btn btn-primary" id="btnSimpan">
-          Simpan Data
-        </button>
-
-      </div>
-
-    </form>
-
-  </div>
+<div class="form-grid">
+<div class="field full">
+<label>Divisi <span class="required">*</span></label>
+<input id="divisi" value="Terminal Khusus" readonly>
 </div>
 
-<!-- ==========================================
-     MODAL PENUGASAN
-========================================== -->
+<div class="field full">
+<label>Departemen <span class="required">*</span></label>
+<select id="departemen" required>
+<option value="">Pilih Departemen</option>
+<option>Operasional Pelabuhan</option>
+<option>Kendaraan Bergerak</option>
+<option>Safety & Technology</option>
+</select>
+</div>
 
+<div class="field">
+<label>NIK <span class="required">*</span></label>
+<input id="nik" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Nomor induk karyawan">
+<div class="helper">NIK boleh kombinasi huruf dan angka. Contoh: WHW001A atau OP-001.</div>
+</div>
+
+<div class="field">
+<label>Nama <span class="required">*</span></label>
+<input id="nama" required placeholder="Nama lengkap">
+</div>
+
+<div class="field full">
+<label>Jabatan <span class="required">*</span></label>
+<input id="jabatan" required placeholder="Jabatan karyawan">
+</div>
+
+<div class="field">
+<label>TMK <span class="required">*</span></label>
+<input id="tmk" required maxlength="8" placeholder="dd/mm/yy" inputmode="numeric">
+<div class="helper">Format otomatis: dd/mm/yy</div>
+</div>
+
+<div class="field">
+<label>POH</label>
+<input id="poh" placeholder="Tempat POH">
+</div>
+
+<div class="field">
+<label>Sistem Cuti <span class="required">*</span></label>
+<select id="sistemCuti" required>
+<option value="">Pilih Sistem Cuti</option>
+<option value="Lokal">Lokal</option>
+<option value="Roster">Roster</option>
+<option value="5:2">5:2</option>
+</select>
+</div>
+
+<div class="field">
+<label>Shift Kerja <span class="required">*</span></label>
+<select id="shiftKerja" required>
+<option value="">Pilih Shift</option>
+<option>Non Shift</option>
+<option>Shift 1</option>
+<option>Shift 2</option>
+<option>Shift 3</option>
+<option>Group 1</option>
+<option>Group 2</option>
+<option>Group 3</option>
+<option>Maintenance</option>
+</select>
+</div>
+
+<div class="field">
+<label>Grade <span class="required">*</span></label>
+<input id="grade" required type="number" min="0" step="1" placeholder="Angka grade">
+</div>
+
+<div class="field">
+<label>Nomor WhatsApp</label>
+<input id="nowa" inputmode="tel" placeholder="08xxxxxxxxxx">
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-close="modalKaryawan">Batal</button>
+<button type="submit" class="btn btn-primary" id="btnSimpan">Simpan Data</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- MODAL PENUGASAN -->
 <div class="overlay" id="modalTugas">
+<div class="modal">
+<div class="modal-header">
+<h2>Penugasan Karyawan</h2>
+<button type="button" class="close" data-close="modalTugas">×</button>
+</div>
+<div class="modal-body">
 
-  <div class="modal">
-
-    <div class="modal-header">
-      <h2>Penugasan Karyawan</h2>
-
-      <button type="button" class="close"
-        data-close="modalTugas">×</button>
-    </div>
-
-    <div class="modal-body">
-
-      <div class="info-card">
-        <h2 id="tugasNamaKaryawan">Karyawan</h2>
-        <p id="tugasNikKaryawan"></p>
-      </div>
-
-      <div class="section-title">Daftar Penugasan</div>
-
-      <div id="daftarTugas" class="task-list">
-        <div class="loading">Memuat penugasan...</div>
-      </div>
-
-      <hr>
-
-      <div class="section-title">Tambah Penugasan Baru</div>
-
-      <form id="formTugas" action="#"
-        onsubmit="event.preventDefault();">
-
-        <input type="hidden" id="tugasIdEdit">
-
-        <div class="field">
-          <label>Nama Tugas <span class="required">*</span></label>
-          <input id="namaTugas" required placeholder="Contoh: Admin Absensi">
-        </div>
-
-        <div class="field">
-          <label>Target Penugasan <span class="required">*</span></label>
-
-          <select id="targetMode" required>
-            <option value="semua">Semua Karyawan</option>
-            <option value="departemen">Departemen</option>
-            <option value="nik">NIK Tertentu</option>
-          </select>
-        </div>
-
-        <div class="field" id="fieldTargetDepartemen" style="display:none">
-          <label>Departemen Target</label>
-
-          <select id="targetDepartemen">
-            <option value="">Pilih Departemen</option>
-            <option>Operasional Pelabuhan</option>
-            <option>Kendaraan Bergerak</option>
-            <option>Safety & Technology</option>
-          </select>
-        </div>
-
-        <div class="field" id="fieldTargetNik" style="display:none">
-          <label>Daftar NIK Target</label>
-
-          <textarea id="targetNik"
-            placeholder="Masukkan NIK, pisahkan dengan koma atau baris baru"></textarea>
-
-          <div class="helper">
-            Contoh: WHW001A, OP-002, KRY2026B
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Keterangan</label>
-
-          <textarea id="keteranganTugas"
-            placeholder="Keterangan penugasan (opsional)"></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary" id="btnSimpanTugas">
-          Simpan Penugasan
-        </button>
-
-        <button type="button" class="btn btn-secondary"
-          id="btnBatalEditTugas">Batal Edit</button>
-
-      </form>
-
-    </div>
-
-  </div>
+<div class="info-card">
+<h2 id="tugasNamaKaryawan">Karyawan</h2>
+<p id="tugasNikKaryawan"></p>
 </div>
 
-<!-- ==========================================
-     MODAL IMPORT
-========================================== -->
+<div class="section-title">Daftar Penugasan</div>
+<div id="daftarTugas" class="task-list">
+<div class="loading">Memuat penugasan...</div>
+</div>
 
+<hr>
+<div class="section-title">Tambah Penugasan Baru</div>
+
+<form id="formTugas">
+<input type="hidden" id="tugasIdEdit">
+
+<div class="field">
+<label>Nama Tugas <span class="required">*</span></label>
+<input id="namaTugas" required placeholder="Contoh: Admin Absensi">
+</div>
+
+<div class="field">
+<label>Target Penugasan <span class="required">*</span></label>
+<select id="targetMode" required>
+<option value="semua">Semua Karyawan</option>
+<option value="departemen">Departemen</option>
+<option value="nik">NIK Tertentu</option>
+</select>
+</div>
+
+<div class="field" id="fieldTargetDepartemen" style="display:none">
+<label>Departemen Target</label>
+<select id="targetDepartemen">
+<option value="">Pilih Departemen</option>
+<option>Operasional Pelabuhan</option>
+<option>Kendaraan Bergerak</option>
+<option>Safety & Technology</option>
+</select>
+</div>
+
+<div class="field" id="fieldTargetNik" style="display:none">
+<label>Daftar NIK Target</label>
+<textarea id="targetNik" placeholder="Masukkan NIK, pisahkan dengan koma atau baris baru"></textarea>
+<div class="helper">Contoh: WHW001A, OP-002, KRY2026B</div>
+</div>
+
+<div class="field">
+<label>Keterangan</label>
+<textarea id="keteranganTugas" placeholder="Keterangan penugasan (opsional)"></textarea>
+</div>
+
+<button type="submit" class="btn btn-primary" id="btnSimpanTugas">Simpan Penugasan</button>
+<button type="button" class="btn btn-secondary" id="btnBatalEditTugas">Batal Edit</button>
+</form>
+</div>
+</div>
+</div>
+
+<!-- MODAL IMPORT -->
 <div class="overlay" id="modalImport">
-
-  <div class="modal">
-
-    <div class="modal-header">
-      <h2>Import Data Karyawan</h2>
-
-      <button type="button" class="close"
-        data-close="modalImport">×</button>
-    </div>
-
-    <div class="modal-body">
-
-      <div class="import-info">
-
-        <strong>Format file yang didukung:</strong><br>
-        Excel (.xlsx / .xls) dan CSV.<br><br>
-
-        Kolom yang dibaca: NIK, Nama, Departemen, Jabatan, TMK,
-        POH, Sistem Cuti, Shift Kerja, Grade, dan NOWA.<br><br>
-
-        <strong>Perhatian:</strong> NIK yang sudah ada akan dilewati.
-        Data lama tidak akan ditimpa.<br><br>
-
-        Pastikan kolom NIK pada Excel diatur sebagai
-        <strong>Text</strong> agar angka nol di depan tidak hilang.
-        NIK boleh berupa huruf, angka, atau gabungan keduanya.
-
-      </div>
-
-      <div class="field">
-        <label>Pilih File Excel / CSV</label>
-        <input type="file" id="fileImportModal"
-          accept=".xlsx,.xls,.csv">
-      </div>
-
-      <div id="hasilImport" class="progress"></div>
-
-    </div>
-
-    <div class="modal-footer">
-
-      <button type="button" class="btn btn-secondary"
-        data-close="modalImport">Tutup</button>
-
-      <button type="button" class="btn btn-primary" id="btnProsesImport">
-        Mulai Import
-      </button>
-
-    </div>
-
-  </div>
+<div class="modal">
+<div class="modal-header">
+<h2>Import Data Karyawan</h2>
+<button type="button" class="close" data-close="modalImport">×</button>
+</div>
+<div class="modal-body">
+<div class="import-info">
+<strong>Format file yang didukung:</strong><br>
+Excel (.xlsx / .xls) dan CSV.<br><br>
+Kolom yang dibaca: NIK, Nama, Departemen, Jabatan, TMK, POH, Sistem Cuti, Shift Kerja, Grade, dan NOWA.<br><br>
+<strong>Perhatian:</strong> NIK yang sudah ada akan dilewati. Data lama tidak akan ditimpa.<br><br>
+Pastikan kolom NIK pada Excel diatur sebagai <strong>Text</strong> agar angka nol di depan tidak hilang.
+</div>
+<div class="field">
+<label>Pilih File Excel / CSV</label>
+<input type="file" id="fileImportModal" accept=".xlsx,.xls,.csv">
+</div>
+<div id="hasilImport" class="progress"></div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-close="modalImport">Tutup</button>
+<button type="button" class="btn btn-primary" id="btnProsesImport">Mulai Import</button>
+</div>
+</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-<!-- ==========================================
-     MODAL INDEPENDEN
-========================================== -->
-
 <script>
-
 window.bukaTambahKaryawanUI=function(){
-
-  const modal=document.getElementById("modalKaryawan");
-  const form=document.getElementById("formKaryawan");
-
-  if(!modal||!form){
-    alert("Form tambah karyawan tidak ditemukan.");
-    return;
-  }
-
-  form.reset();
-
-  document.getElementById("modeForm").value="tambah";
-  document.getElementById("idDokumen").value="";
-  document.getElementById("judulModal").textContent="Tambah Karyawan";
-  document.getElementById("divisi").value="Terminal Khusus";
-
-  const nik=document.getElementById("nik");
-
-  nik.disabled=false;
-  nik.readOnly=false;
-  nik.value="";
-  nik.inputMode="text";
-
-  const simpan=document.getElementById("btnSimpan");
-
-  simpan.disabled=false;
-  simpan.textContent="Simpan Data";
-
-  modal.classList.add("show");
-  modal.style.display="flex";
-
-  setTimeout(function(){
-    document.getElementById("departemen").focus();
-  },200);
+const form=document.getElementById("formKaryawan");
+form.reset();
+document.getElementById("modeForm").value="tambah";
+document.getElementById("idDokumen").value="";
+document.getElementById("judulModal").textContent="Tambah Karyawan";
+document.getElementById("divisi").value="Terminal Khusus";
+document.getElementById("nik").disabled=false;
+document.getElementById("btnSimpan").disabled=false;
+document.getElementById("btnSimpan").textContent="Simpan Data";
+buka("modalKaryawan");
+setTimeout(()=>document.getElementById("departemen").focus(),200);
 };
 
 window.tutupModalWAINI=function(id){
-
-  const modal=document.getElementById(id);
-
-  if(modal){
-    modal.classList.remove("show");
-    modal.style.display="none";
-  }
-
+const el=document.getElementById(id);
+if(el){el.classList.remove("show");el.style.display="none";}
 };
 
-document.addEventListener("DOMContentLoaded",function(){
+function buka(id){
+const el=document.getElementById(id);
+el.style.display="flex";
+el.classList.add("show");
+}
 
-  document.querySelectorAll("[data-close]").forEach(function(btn){
-
-    btn.addEventListener("click",function(){
-      window.tutupModalWAINI(btn.dataset.close);
-    });
-
-  });
-
-  document.querySelectorAll(".overlay").forEach(function(overlay){
-
-    overlay.addEventListener("click",function(event){
-
-      if(event.target===overlay){
-        window.tutupModalWAINI(overlay.id);
-      }
-
-    });
-
-  });
-
+document.addEventListener("DOMContentLoaded",()=>{
+document.querySelectorAll("[data-close]").forEach(btn=>{
+btn.addEventListener("click",()=>window.tutupModalWAINI(btn.dataset.close));
 });
-
+document.querySelectorAll(".overlay").forEach(el=>{
+el.addEventListener("click",e=>{
+if(e.target===el)window.tutupModalWAINI(el.id);
+});
+});
+});
 </script>
-
-<!-- ==========================================
-     FIREBASE DAN PROGRAM UTAMA
-========================================== -->
 
 <script type="module">
 
 import {auth,db} from "./firebase.js";
 
-import {
-onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import {onAuthStateChanged}
+from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 import {
-collection,
-doc,
-getDoc,
-getDocs,
-addDoc,
-setDoc,
-updateDoc,
-deleteDoc,
-que
+collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,
+query,where,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const C_KARYAWAN="karyawan";
+const C_PENGGUNA="pengguna";
+const C_TUGAS="penugasan";
+const C_RIWAYAT="riwayat_penugasan";
+
+let penggunaLogin=null;
+let daftarKaryawan=[];
+let karyawanAktif=null;
+let tugasAktif=[];
+
+const $=id=>document.getElementById(id);
+
+function toast(pesan){
+const el=$("toast");
+el.textContent=pesan;
+el.classList.add("show");
+setTimeout(()=>el.classList.remove("show"),3000);
+}
+
+function tampilLoading(pesan="Memuat data..."){
+$("tbodyKaryawan").innerHTML=
+`<tr><td colspan="11" class="loading">${pesan}</td></tr>`;
+}
+
+function esc(v){
+return String(v??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+}
+
+function normalisasiNIK(v){
+return String(v??"").trim().toUpperCase();
+}
+
+function nilai(id){
+return $(id).value.trim();
+}
+
+function tutup(id){
+window.tutupModalWAINI(id);
+}
+
+function bukaModal(id){
+const el=$(id);
+el.style.display="flex";
+el.classList.add("show");
+}
+
+function tanggalExcel(v){
+if(v instanceof Date){
+return formatTanggal(v);
+}
+if(typeof v==="number" && window.XLSX){
+const d=window.XLSX.SSF.parse_date_code(v);
+if(d)return String(d.d).padStart(2,"0")+"/"+String(d.m).padStart(2,"0")+"/"+String(d.y).slice(-2);
+}
+return String(v??"").trim();
+}
+
+function formatTanggal(d){
+return String(d.getDate()).padStart(2,"0")+"/"+
+String(d.getMonth()+1).padStart(2,"0")+"/"+
+String(d.getFullYear()).slice(-2);
+}
+
+function validasiTMK(v){
+return /^\d{2}\/\d{2}\/\d{2}$/.test(v);
+}
+
+$("tmk").addEventListener("input",e=>{
+let v=e.target.value.replace(/\D/g,"").slice(0,6);
+if(v.length>4)v=v.slice(0,2)+"/"+v.slice(2,4)+"/"+v.slice(4);
+else if(v.length>2)v=v.slice(0,2)+"/"+v.slice(2);
+e.target.value=v;
+});
+
+async function simpanRiwayat(data){
+await addDoc(collection(db,C_RIWAYAT),{
+...data,
+pelaku_uid:penggunaLogin.uid,
+pelaku_nik:penggunaLogin.nik||"",
+pelaku_nama:penggunaLogin.nama||"",
+waktu:serverTimestamp(),
+createdAt:serverTimestamp()
+});
+}
+
+async function muatKaryawan(){
+tampilLoading();
+const snap=await getDocs(collection(db,C_KARYAWAN));
+daftarKaryawan=snap.docs.map(d=>({
+...d.data(),
+nik:d.id
+}));
+daftarKaryawan.sort((a,b)=>
+String(a.nama||"").localeCompare(String(b.nama||""),"id")
+);
+renderKaryawan();
+}
+
+function renderStatistik(){
+$("totalKaryawan").textContent=daftarKaryawan.length;
+$("totalOperasional").textContent=daftarKaryawan.filter(
+k=>k.departemen==="Operasional Pelabuhan"
+).length;
+$("totalLain").textContent=daftarKaryawan.filter(
+k=>k.departemen!=="Operasional Pelabuhan"
+).length;
+}
+
+function renderKaryawan(){
+renderStatistik();
+
+const cari=$("searchInput").value.toLowerCase().trim();
+const departemen=$("filterDepartemen").value;
+
+const hasil=daftarKaryawan.filter(k=>{
+const cocokCari=[
+k.nik,k.nama,k.jabatan,k.departemen,k.poh
+].some(v=>String(v||"").toLowerCase().includes(cari));
+
+return cocokCari && (!departemen||k.departemen===departemen);
+});
+
+if(!hasil.length){
+$("tbodyKaryawan").innerHTML=
+`<tr><td colspan="11" class="empty">Belum ada data karyawan yang sesuai.</td></tr>`;
+return;
+}
+
+$("tbodyKaryawan").innerHTML=hasil.map((k,i)=>`
+<tr>
+<td>${i+1}</td>
+<td>
+<div class="nama">${esc(k.nama)}</div>
+<div class="nik">${esc(k.nik)}</div>
+</td>
+<td><span class="badge badge-departemen">${esc(k.departemen)}</span></td>
+<td>${esc(k.jabatan)}</td>
+<td>${esc(k.tmk)}</td>
+<td>${esc(k.poh||"-")}</td>
+<td>${esc(k.sistem_cuti)}</td>
+<td>${esc(k.shift_kerja)}</td>
+<td>${esc(k.grade)}</td>
+<td>${esc(k.nowa||"-")}</td>
+<td>
+<div class="aksi">
+<button class="btn btn-secondary btn-small" data-action="edit" data-nik="${encodeURIComponent(k.nik)}">✎ Edit</button>
+<button class="btn btn-success btn-small" data-action="tugas" data-nik="${encodeURIComponent(k.nik)}">♙ Tugas</button>
+<button class="btn btn-danger btn-small" data-action="hapus" data-nik="${encodeURIComponent(k.nik)}">Hapus</button>
+</div>
+</td>
+</tr>`).join("");
+}
+
+$("tbodyKaryawan").addEventListener("click",async e=>{
+const btn=e.target.closest("button[data-action]");
+if(!btn)return;
+const nik=decodeURIComponent(btn.dataset.nik);
+const k=daftarKaryawan.find(x=>x.nik===nik);
+if(!k)return;
+
+try{
+if(btn.dataset.action==="edit")bukaEdit(k);
+if(btn.dataset.action==="tugas")await bukaPenugasan(k);
+if(btn.dataset.action==="hapus")await hapusKaryawan(k);
+}catch(err){
+console.error(err);
+toast("Terjadi kesalahan: "+err.message);
+}
+});
+
+function bukaEdit(k){
+$("formKaryawan").reset();
+$("modeForm").value="edit";
+$("idDokumen").value=k.nik;
+$("judulModal").textContent="Edit Data Karyawan";
+$("divisi").value=k.divisi||"Terminal Khusus";
+
+$("departemen").value=k.departemen||"";
+$("nik").value=k.nik;
+$("nik").disabled=true;
+$("nama").value=k.nama||"";
+$("jabatan").value=k.jabatan||"";
+$("tmk").value=k.tmk||"";
+$("poh").value=k.poh||"";
+$("sistemCuti").value=k.sistem_cuti||"";
+$("shiftKerja").value=k.shift_kerja||"";
+$("grade").value=k.grade??"";
+$("nowa").value=k.nowa||"";
+
+$("btnSimpan").disabled=false;
+$("btnSimpan").textContent="Simpan Perubahan";
+bukaModal("modalKaryawan");
+}
+
+function ambilFormKaryawan(){
+return {
+divisi:"Terminal Khusus",
+departemen:nilai("departemen"),
+nik:normalisasiNIK(nilai("nik")),
+nama:nilai("nama"),
+jabatan:nilai("jabatan"),
+tmk:nilai("tmk"),
+poh:nilai("poh"),
+sistem_cuti:nilai("sistemCuti"),
+shift_kerja:nilai("shiftKerja"),
+grade:Number(nilai("grade")),
+nowa:nilai("nowa"),
+updatedAt:serverTimestamp()
+};
+}
+
+function validasiKaryawan(k){
+if(!k.departemen||!k.nik||!k.nama||!k.jabatan||
+!k.tmk||!k.sistem_cuti||!k.shift_kerja||
+nilai("grade")===""){
+throw new Error("Lengkapi semua kolom wajib.");
+}
+if(!validasiTMK(k.tmk)){
+throw new Error("TMK harus menggunakan format dd/mm/yy.");
+}
+if(!Number.isInteger(k.grade)||k.grade<0){
+throw new Error("Grade harus berupa angka bulat.");
+}
+}
+
+$("formKaryawan").addEventListener("submit",async e=>{
+e.preventDefault();
+const btn=$("btnSimpan");
+btn.disabled=true;
+
+try{
+const data=ambilFormKaryawan();
+validasiKaryawan(data);
+
+const mode=$("modeForm").value;
+const nik=data.nik;
+
+if(mode==="tambah"){
+const ref=doc(db,C_KARYAWAN,nik);
+const cek=await getDoc(ref);
+if(cek.exists())throw new Error("NIK tersebut sudah terdaftar.");
+
+data.createdAt=serverTimestamp();
+data.createdBy=penggunaLogin.uid;
+await setDoc(ref,data);
+toast("Data karyawan berhasil ditambahkan.");
+}else{
+const nikLama=$("idDokumen").value;
+const ref=doc(db,C_KARYAWAN,nikLama);
+data.updatedBy=penggunaLogin.uid;
+await updateDoc(ref,data);
+toast("Data karyawan berhasil diperbarui.");
+}
+
+tutup("modalKaryawan");
+await muatKaryawan();
+
+}catch(err){
+console.error(err);
+toast(err.message||"Gagal menyimpan data.");
+}finally{
+btn.disabled=false;
+btn.textContent=$("modeForm").value==="edit"?"Simpan Perubahan":"Simpan Data";
+}
+});
+
+async function hapusKaryawan(k){
+const yakin=confirm(
+"Hapus data karyawan berikut?\n\n"+
+k.nama+"\nNIK: "+k.nik+
+"\n\nData yang dihapus tidak dapat dikembalikan."
+);
+if(!yakin)return;
+
+await deleteDoc(doc(db,C_KARYAWAN,k.nik));
+toast("Data karyawan berhasil dihapus.");
+await muatKaryawan();
+}
+
+// PENUGASAN
+
+$("targetMode").addEventListener("change",()=>{
+const mode=$("targetMode").value;
+$("fieldTargetDepartemen").style.display=mode==="departemen"?"block":"none";
+$("fieldTargetNik").style.display=mode==="nik"?"block":"none";
+});
+
+function resetFormTugas(){
+$("formTugas").reset();
+$("tugasIdEdit").value="";
+$("targetMode").value="semua";
+$("fieldTargetDepartemen").style.display="none";
+$("fieldTargetNik").style.display="none";
+$("btnSimpanTugas").textContent="Simpan Penugasan";
+$("btnBatalEditTugas").style.display="none";
+}
+
+$("btnBatalEditTugas").addEventListener("click",resetFormTugas);
+
+async function bukaPenugasan(k){
+karyawanAktif=k;
+$("tugasNamaKaryawan").textContent=k.nama;
+$("tugasNikKaryawan").textContent="NIK: "+k.nik;
+resetFormTugas();
+bukaModal("modalTugas");
+await muatTugas();
+}
+
+async function muatTugas(){
+$("daftarTugas").innerHTML='<div class="loading">Memuat penugasan...</div>';
+
+const q=query(
+collection(db,C_TUGAS),
+where("penerima_nik","==",karyawanAktif.nik)
+);
+const snap=await getDocs(q);
+
+tugasAktif=snap.docs.map(d=>({
+...d.data(),id:d.id
+}));
+
+tugasAktif.sort((a,b)=>{
+const ta=a.createdAt?.toMillis?.()||0;
+const tb=b.createdAt?.toMillis?.()||0;
+return tb-ta;
+});
+
+renderTugas();
+}
+
+function renderTugas(){
+if(!tugasAktif.length){
+$("daftarTugas").innerHTML=
+'<div class="empty">Belum ada penugasan untuk karyawan ini.</div>';
+return;
+}
+
+$("daftarTugas").innerHTML=tugasAktif.map(t=>{
+const target=t.target_mode==="semua"?"Semua Karyawan":
+t.target_mode==="departemen"?"Departemen: "+(t.target_departemen||"-"):
+"Daftar NIK: "+(t.target_nik||[]).join(", ");
+
+return `
+<div class="task-card">
+<h3>${esc(t.nama_tugas)}</h3>
+<p>
+Status: <span class="badge ${t.status==="aktif"?"badge-aktif":"badge-dicabut"}">${esc(t.status||"aktif")}</span>
+<br>Target: ${esc(target)}
+<br>Keterangan: ${esc(t.keterangan||"-")}
+</p>
+<div class="task-actions">
+<button class="btn btn-secondary btn-small" data-task="edit" data-id="${esc(t.id)}">✎ Edit</button>
+${t.status==="aktif"?
+`<button class="btn btn-danger btn-small" data-task="cabut" data-id="${esc(t.id)}">Cabut Tugas</button>`:
+`<button class="btn btn-success btn-small" data-task="aktifkan" data-id="${esc(t.id)}">Aktifkan Kembali</button>`}
+</div>
+</div>`;
+}).join("");
+}
+
+$("daftarTugas").addEventListener("click",async e=>{
+const btn=e.target.closest("button[data-task]");
+if(!btn)return;
+
+const t=tugasAktif.find(x=>x.id===btn.dataset.id);
+if(!t)return;
+
+try{
+if(btn.dataset.task==="edit"){
+$("tugasIdEdit").value=t.id;
+$("namaTugas").value=t.nama_tugas||"";
+$("targetMode").value=t.target_mode||"semua";
+$("targetDepartemen").value=t.target_departemen||"";
+$("targetNik").value=(t.target_nik||[]).join(", ");
+$("keteranganTugas").value=t.keterangan||"";
+$("targetMode").dispatchEvent(new Event("change"));
+$("btnSimpanTugas").textContent="Simpan Perubahan";
+$("btnBatalEditTugas").style.display="inline-block";
+}else{
+const aktif=btn.dataset.task==="aktifkan";
+const yakin=confirm(aktif?
+"Aktifkan kembali penugasan ini?":
+"Cabut penugasan ini?");
+if(!yakin)return;
+
+await ubahStatusTugas(t,aktif?"aktif":"dicabut");
+await muatTugas();
+toast(aktif?"Penugasan diaktifkan kembali.":"Penugasan berhasil dicabut.");
+}
+}catch(err){
+console.error(err);
+toast("Gagal memproses penugasan: "+err.message);
+}
+});
+
+function ambilTarget(){
+const mode=$("targetMode").value;
+let targetNik=[];
+let targetDepartemen="";
+
+if(mode==="departemen"){
+targetDepartemen=nilai("targetDepartemen");
+if(!targetDepartemen)throw new Error("Pilih departemen target.");
+}
+
+if(mode==="nik"){
+targetNik=nilai("targetNik")
+.split(/[\n,;]+/)
+.map(normalisasiNIK)
+.filter(Boolean);
+targetNik=[...new Set(targetNik)];
+if(!targetNik.length)throw new Error("Masukkan minimal satu NIK target.");
+
+const tidakAda=targetNik.filter(n=>!daftarKaryawan.some(k=>k.nik===n));
+if(tidakAda.length){
+throw new Error("NIK target tidak ditemukan: "+tidakAda.join(", "));
+}
+}
+
+return {target_mode:mode,target_nik:targetNik,target_departemen:targetDepartemen};
+}
+
+async function ubahStatusTugas(t,status){
+await updateDoc(doc(db,C_TUGAS,t.id),{
+status,
+updatedAt:serverTimestamp(),
+updatedBy:penggunaLogin.uid
+});
+
+await simpanRiwayat({
+aksi:status==="dicabut"?"CABUT":"AKTIFKAN KEMBALI",
+penugasan_id:t.id,
+penerima_nik:t.penerima_nik,
+penerima_nama:t.penerima_nama,
+nama_tugas:t.nama_tugas,
+data_lama:{status:t.status||"aktif"},
+data_baru:{status}
+});
+}
+
+$("formTugas").addEventListener("submit",async e=>{
+e.preventDefault();
+const btn=$("btnSimpanTugas");
+btn.disabled=true;
+
+try{
+const namaTugas=nilai("namaTugas");
+if(!namaTugas)throw new Error("Nama tugas wajib diisi.");
+
+const target=ambilTarget();
+const idEdit=$("tugasIdEdit").value;
+
+const data={
+penerima_nik:karyawanAktif.nik,
+penerima_nama:karyawanAktif.nama,
+nama_tugas:namaTugas,
+...target,
+keterangan:nilai("keteranganTugas"),
+status:"aktif",
+updatedAt:serverTimestamp(),
+updatedBy:penggunaLogin.uid
+};
+
+if(idEdit){
+const lama=tugasAktif.find(t=>t.id===idEdit);
+if(!lama)throw new Error("Penugasan tidak ditemukan.");
+
+await updateDoc(doc(db,C_TUGAS,idEdit),data);
+
+await simpanRiwayat({
+aksi:"EDIT",
+penugasan_id:idEdit,
+penerima_nik:karyawanAktif.nik,
+penerima_nama:karyawanAktif.nama,
+nama_tugas:namaTugas,
+data_lama:{
+nama_tugas:lama.nama_tugas,
+target_mode:lama.target_mode,
+target_nik:lama.target_nik||[],
+target_departemen:lama.target_departemen||"",
+keterangan:lama.keterangan||"",
+status:lama.status||"aktif"
+},
+data_baru:{
+nama_tugas:namaTugas,
+...target,
+keterangan:nilai("keteranganTugas"),
+status:"aktif"
+}
+});
+
+toast("Penugasan berhasil diperbarui.");
+}else{
+data.createdAt=serverTimestamp();
+data.createdBy=penggunaLogin.uid;
+
+const ref=await addDoc(collection(db,C_TUGAS),data);
+
+await simpanRiwayat({
+aksi:"TAMBAH",
+penugasan_id:ref.id,
+penerima_nik:karyawanAktif.nik,
+penerima_nama:karyawanAktif.nama,
+nama_tugas:namaTugas,
+data_baru:{
+nama_tugas:namaTugas,
+...target,
+keterangan:nilai("keteranganTugas"),
+status:"aktif"
+}
+});
+
+toast("Penugasan berhasil ditambahkan.");
+}
+
+resetFormTugas();
+await muatTugas();
+
+}catch(err){
+console.error(err);
+toast(err.message||"Gagal menyimpan penugasan.");
+}finally{
+btn.disabled=false;
+}
+});
+
+// PENCARIAN DAN FILTER
+
+$("searchInput").addEventListener("input",renderKaryawan);
+$("filterDepartemen").addEventListener("change",renderKaryawan);
+
+// IMPORT EXCEL
+
+$("btnImport").addEventListener("click",()=>{
+$("fileImportModal").value="";
+$("hasilImport").textContent="";
+bukaModal("modalImport");
+});
+
+function normalHeader(v){
+return String(v||"").toLowerCase()
+.replace(/[^a-z0-9]/g,"");
+}
+
+function ambilKolom(row,nama){
+const cari=normalHeader(nama);
+const key=Object.keys(row).find(k=>normalHeader(k)===cari);
+return key===undefined?"":row[key];
+}
+
+function konversiBaris(row){
+return {
+divisi:"Terminal Khusus",
+nik:normalisasiNIK(ambilKolom(row,"NIK")),
+nama:String(ambilKolom(row,"Nama")||"").trim(),
+departemen:String(ambilKolom(row,"Departemen")||"").trim(),
+jabatan:String(ambilKolom(row,"Jabatan")||"").trim(),
+tmk:tanggalExcel(ambilKolom(row,"TMK")),
+poh:String(ambilKolom(row,"POH")||"").trim(),
+sistem_cuti:String(
+ambilKolom(row,"Sistem Cuti")||ambilKolom(row,"Sistem_Cuti")||""
+).trim(),
+shift_kerja:String(
+ambilKolom(row,"Shift Kerja")||ambilKolom(row,"Shift_Kerja")||""
+).trim(),
+grade:Number(ambilKolom(row,"Grade")),
+nowa:String(
+ambilKolom(row,"NOWA")||ambilKolom(row,"No WA")||""
+).trim()
+};
+}
+
+$("btnProsesImport").addEventListener("click",async()=>{
+const file=$("fileImportModal").files[0];
+if(!file){
+toast("Pilih file Excel atau CSV terlebih dahulu.");
+return;
+}
+if(!window.XLSX){
+toast("Library Excel belum berhasil dimuat.");
+return;
+}
+
+const btn=$("btnProsesImport");
+btn.disabled=true;
+$("hasilImport").textContent="Membaca file...";
+
+try{
+const buffer=await file.arrayBuffer();
+const workbook=XLSX.read(buffer,{type:"array",cellDates:true});
+const sheet=workbook.Sheets[workbook.SheetNames[0]];
+const rows=XLSX.utils.sheet_to_json(sheet,{defval:"",raw:true});
+
+if(!rows.length)throw new Error("File tidak berisi data.");
+
+const sudahAda=new Set(daftarKaryawan.map(k=>k.nik));
+const diproses=new Set();
+const siap=[];
+let dilewati=0;
+let gagal=0;
+
+for(let i=0;i<rows.length;i++){
+const k=konversiBaris(rows[i]);
+
+if(!k.nik||!k.nama||!k.departemen||!k.jabatan||
+!k.tmk||!k.sistem_cuti||!k.shift_kerja||
+!validasiTMK(k.tmk)||!Number.isInteger(k.grade)||k.grade<0){
+gagal++;
+continue;
+}
+
+if(![
+"Operasional Pelabuhan",
+"Kendaraan Bergerak",
+"Safety & Technology"
+].includes(k.departemen)){
+gagal++;
+continue;
+}
+
+if(sudahAda.has(k.nik)||diproses.has(k.nik)){
+dilewati++;
+continue;
+}
+
+diproses.add(k.nik);
+siap.push(k);
+}
+
+if(!siap.length){
+$("hasilImport").textContent=
+"Import selesai. Tidak ada data valid.\n"+
+"Dilewati: "+dilewati+"\n"+
+"Data tidak valid: "+gagal;
+return;
+}
+
+let berhasil=0;
+
+for(let i=0;i<siap.length;i+=400){
+const bagian=siap.slice(i,i+400);
+const {writeBatch}=await import(
+"https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"
+);
+const batch=writeBatch(db);
+
+bagian.forEach(k=>{
+const ref=doc(db,C_KARYAWAN,k.nik);
+batch.set(ref,{
+...k,
+createdAt:serverTimestamp(),
+createdBy:penggunaLogin.uid,
+updatedAt:serverTimestamp()
+});
+});
+
+await batch.commit();
+berhasil+=bagian.length;
+
+$("hasilImport").textContent=
+"Sedang menyimpan...\n"+
+"Berhasil: "+berhasil+" dari "+siap.length;
+}
+
+$("hasilImport").textContent=
+"IMPORT SELESAI\n\n"+
+"Berhasil ditambahkan: "+berhasil+
+"\nNIK sudah terdaftar: "+dilewati+
+"\nData tidak valid: "+gagal;
+
+await muatKaryawan();
+toast("Import data selesai.");
+
+}catch(err){
+console.error(err);
+$("hasilImport").textContent="IMPORT GAGAL\n"+err.message;
+toast("Import gagal: "+err.message);
+}finally{
+btn.disabled=false;
+}
+});
+
+// EXPORT EXCEL
+
+$("btnExport").addEventListener("click",()=>{
+try{
+if(!daftarKaryawan.length){
+toast("Belum ada data untuk diexport.");
+return;
+}
+if(!window.XLSX){
+toast("Library Excel belum berhasil dimuat.");
+return;
+}
+
+const data=daftarKaryawan.map((k,i)=>({
+"No":i+1,
+"NIK":k.nik,
+"Nama":k.nama||"",
+"Divisi":k.divisi||"",
+"Departemen":k.departemen||"",
+"Jabatan":k.jabatan||"",
+"TMK":k.tmk||"",
+"POH":k.poh||"",
+"Sistem Cuti":k.sistem_cuti||"",
+"Shift Kerja":k.shift_kerja||"",
+"Grade":k.grade??"",
+"NOWA":k.nowa||""
+}));
+
+const ws=XLSX.utils.json_to_sheet(data);
+ws["!cols"]=[
+{wch:6},{wch:18},{wch:28},{wch:20},
+{wch:25},{wch:25},{wch:12},{wch:18},
+{wch:15},{wch:18},{wch:10},{wch:18}
+];
+
+const wb=XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb,ws,"Data Karyawan");
+
+const tanggal=new Date().toISOString().slice(0,10);
+XLSX.writeFile(wb,"Data_Karyawan_WAINI_"+tanggal+".xlsx");
+
+toast("File Excel berhasil dibuat.");
+}catch(err){
+console.error(err);
+toast("Export gagal: "+err.message);
+}
+});
+
+// PEMERIKSAAN AKUN
+
+onAuthStateChanged(auth,async user=>{
+if(!user){
+location.replace("login.html");
+return;
+}
+
+try{
+const ref=doc(db,C_PENGGUNA,user.uid);
+const snap=await getDoc(ref);
+
+if(!snap.exists()){
+alert("Data pengguna tidak ditemukan.");
+location.replace("menu.html");
+return;
+}
+
+penggunaLogin={
+uid:user.uid,
+...snap.data()
+};
+
+if(
+penggunaLogin.role!=="super_admin"||
+penggunaLogin.status!=="aktif"
+){
+alert("Akses ditolak. Halaman ini hanya dapat dikelola Super Admin aktif.");
+location.replace("menu.html");
+return;
+}
+
+await muatKaryawan();
+
+}catch(err){
+console.error(err);
+$("tbodyKaryawan").innerHTML=
+`<tr><td colspan="11" class="empty">
+Gagal memuat data. Periksa koneksi internet dan Firestore Rules.
+<br><br>${esc(err.message)}
+</td></tr>`;
+toast("Gagal memeriksa akses akun.");
+}
+});
+
+</script>
+</body>
+</html>
