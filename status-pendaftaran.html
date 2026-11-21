@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Status Pendaftaran - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f6f8;
+    color: #222;
+    padding-bottom: 25px;
+}
+
+.header {
+    background: #991b1b;
+    color: white;
+    padding: 18px 16px 23px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 22px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    background: white;
+    color: #991b1b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+}
+
+.brand-name {
+    flex: 1;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.brand-name small {
+    display: block;
+    color: #fecaca;
+    font-size: 11px;
+    font-weight: normal;
+    margin-top: 3px;
+}
+
+.online {
+    background: #15803d;
+    color: white;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.header h1 {
+    font-size: 24px;
+    margin-bottom: 7px;
+}
+
+.header p {
+    font-size: 12px;
+    color: #fee2e2;
+    line-height: 1.5;
+}
+
+.container {
+    padding: 18px 15px;
+    max-width: 550px;
+    margin: auto;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.latest {
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 10px;
+    padding: 5px 9px;
+    border-radius: 20px;
+}
+
+.person-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 13px;
+    margin-bottom: 11px;
+}
+
+.person-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 37px;
+    height: 37px;
+    border-radius: 50%;
+    background: #f1f2f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    flex-shrink: 0;
+}
+
+.person-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.person-info strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+    overflow-wrap: anywhere;
+}
+
+.person-info small {
+    font-size: 11px;
+    color: #777;
+}
+
+.status-icon {
+    font-size: 21px;
+    flex-shrink: 0;
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.status-label {
+    color: #777;
+    font-size: 11px;
+}
+
+.status {
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.waiting {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.approved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.note {
+    color: #888;
+    font-size: 11px;
+    line-height: 1.5;
+    margin: 15px 2px;
+}
+
+.back-button {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 9px;
+    color: #444;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.back-button:active {
+    background: #eee;
+}
+
+/* STATUS PEMUATAN */
+
+.loading,
+.empty,
+.error-message {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+    line-height: 1.6;
+    margin-bottom: 11px;
+}
+
+.error-message {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.refresh-button {
+    display: block;
+    margin: 10px auto 0;
+    border: none;
+    background: #991b1b;
+    color: white;
+    border-radius: 7px;
+    padding: 9px 14px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="brand">
+        <div class="logo">♙</div>
+
+        <div class="brand-name">
+            WAINI
+            <small>Sistem Informasi Internal Divisi</small>
+        </div>
+
+        <div class="online">ONLINE</div>
+    </div>
+
+    <h1>Status Pendaftaran</h1>
+
+    <p>
+        Pantau perkembangan pendaftaran anggota divisi.
+    </p>
+
+</header>
+
+<main class="container">
+
+    <div class="section-title">
+        <span>5 Pendaftar Terbaru</span>
+        <span class="latest">Terbaru</span>
+    </div>
+
+    <!-- TEMPAT DATA PENDAFTAR -->
+
+    <div id="daftarPendaftar">
+
+        <div class="loading">
+            Memuat data pendaftaran...
+        </div>
+
+    </div>
+
+    <p class="note" id="catatan">
+        Menampilkan maksimal 5 pendaftar terbaru.
+        NIK tidak ditampilkan untuk menjaga privasi.
+    </p>
+
+    <button
+        class="back-button"
+        onclick="window.location.href='daftar.html'"
+    >
+        ← Kembali ke Halaman Pendaftaran
+    </button>
+
+</main>
+
+
+<!-- FIREBASE -->
+
+<script type="module">
+
+import { firebaseConfig } from "./firebase.js";
+
+import {
+    initializeApp,
+    getApps,
+    getApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    query,
+    orderBy,
+    limit,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// =====================================
+// 1. HUBUNGKAN FIREBASE
+// =====================================
+
+const app = getApps().length
+    ? getApp()
+    : initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+// =====================================
+// 2. ELEMEN HALAMAN
+// =====================================
+
+const daftarPendaftar =
+    document.getElementById("daftarPendaftar");
+
+const catatan =
+    document.getElementById("catatan");
+
+
+// =====================================
+// 3. FORMAT TANGGAL
+// =====================================
+
+function formatTanggal(data) {
+
+    let tanggal = null;
+
+    if (data?.createdAt?.toDate) {
+
+        tanggal = data.createdAt.toDate();
+
+    } else if (data?.createdAt instanceof Date) {
+
+        tanggal = data.createdAt;
+
+    } else if (data?.tanggal) {
+
+        tanggal = new Date(data.tanggal);
+
+    }
+
+    if (!tanggal || isNaN(tanggal.getTime())) {
+        return "Tanggal tidak tersedia";
+    }
+
+    return tanggal.toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+}
+
+
+// =====================================
+// 4. TERJEMAHAN STATUS
+// =====================================
+
+function informasiStatus(status) {
+
+    const nilai = String(status || "")
+        .toLowerCase()
+        .trim();
+
+    if (
+        nilai === "disetujui" ||
+        nilai === "approved" ||
+        nilai === "aktif"
+    ) {
+
+        return {
+            label: "Disetujui",
+            kelas: "approved",
+            ikon: "✓",
+            warna: "#16a34a"
+        };
+
+    }
+
+    if (
+        nilai === "ditolak" ||
+        nilai === "rejected"
+    ) {
+
+        return {
+            label: "Ditolak",
+            kelas: "rejected",
+            ikon: "✕",
+            warna: "#dc2626"
+        };
+
+    }
+
+    return {
+        label: "Menunggu Verifikasi",
+        kelas: "waiting",
+        ikon: "◷",
+        warna: "#d97706"
+    };
+
+}
+
+
+// =====================================
+// 5. BUAT KARTU PENDAFTAR
+// =====================================
+
+function buatKartu(data) {
+
+    const status = informasiStatus(data.status);
+
+    const kartu = document.createElement("div");
+
+    kartu.className = "person-card";
+
+
+    const bagianAtas = document.createElement("div");
+
+    bagianAtas.className = "person-top";
+
+
+    const avatar = document.createElement("div");
+
+    avatar.className = "avatar";
+
+    avatar.textContent = "♙";
+
+
+    const informasi = document.createElement("div");
+
+    informasi.className = "person-info";
+
+
+    const nama = document.createElement("strong");
+
+    nama.textContent = data.nama || "Nama tidak tersedia";
+
+
+    const tanggal = document.createElement("small");
+
+    tanggal.textContent = formatTanggal(data);
+
+
+    informasi.appendChild(nama);
+
+    informasi.appendChild(tanggal);
+
+
+    const ikonStatus = document.createElement("span");
+
+    ikonStatus.className = "status-icon";
+
+    ikonStatus.textContent = status.ikon;
+
+    ikonStatus.style.color = status.warna;
+
+
+    bagianAtas.appendChild(avatar);
+
+    bagianAtas.appendChild(informasi);
+
+    bagianAtas.appendChild(ikonStatus);
+
+
+    const barisStatus = document.createElement("div");
+
+    barisStatus.className = "status-row";
+
+
+    const labelStatus = document.createElement("span");
+
+    labelStatus.className = "status-label";
+
+    labelStatus.textContent = "Status pendaftaran";
+
+
+    const badgeStatus = document.createElement("span");
+
+    badgeStatus.className =
+        "status " + status.kelas;
+
+    badgeStatus.textContent = status.label;
+
+
+    barisStatus.appendChild(labelStatus);
+
+    barisStatus.appendChild(badgeStatus);
+
+
+    kartu.appendChild(bagianAtas);
+
+    kartu.appendChild(barisStatus);
+
+
+    return kartu;
+
+}
+
+
+// =====================================
+// 6. TAMPILKAN DATA KOSONG
+// =====================================
+
+function tampilKosong() {
+
+    daftarPendaftar.innerHTML = "";
+
+    const kosong = document.createElement("div");
+
+    kosong.className = "empty";
+
+    kosong.textContent =
+        "Belum ada pendaftaran yang tercatat.";
+
+    daftarPendaftar.appendChild(kosong);
+
+    catatan.textContent =
+        "Informasi pendaftaran terbaru akan ditampilkan di sini setelah ada pendaftar.";
+
+}
+
+
+// =====================================
+// 7. TAMPILKAN ERROR
+// =====================================
+
+function tampilError(error) {
+
+    console.error(
+        "Gagal mengambil data pendaftaran:",
+        error
+    );
+
+    daftarPendaftar.innerHTML = "";
+
+    const kotakError = document.createElement("div");
+
+    kotakError.className = "error-message";
+
+    kotakError.textContent =
+        "Data pendaftaran belum dapat dimuat. Periksa koneksi internet atau aturan akses Firebase.";
+
+    const tombolUlang = document.createElement("button");
+
+    tombolUlang.className = "refresh-button";
+
+    tombolUlang.textContent = "Coba Lagi";
+
+    tombolUlang.onclick = muatPendaftaran;
+
+    kotakError.appendChild(tombolUlang);
+
+    daftarPendaftar.appendChild(kotakError);
+
+}
+
+
+// =====================================
+// 8. AMBIL 5 DATA TERBARU
+// =====================================
+
+async function muatPendaftaran() {
+
+    daftarPendaftar.innerHTML = "";
+
+    const loading = document.createElement("div");
+
+    loading.className = "loading";
+
+    loading.textContent =
+        "Memuat data pendaftaran...";
+
+    daftarPendaftar.appendChild(loading);
+
+
+    try {
+
+        const referensi =
+            collection(db, "status_pendaftaran_public");
+
+
+        const pencarian = query(
+            referensi,
+            orderBy("createdAt", "desc"),
+            limit(5)
+        );
+
+
+        const hasil = await getDocs(pencarian);
+
+
+        daftarPendaftar.innerHTML = "";
+
+
+        if (hasil.empty) {
+
+            tampilKosong();
+
+            return;
+
+        }
+
+
+        hasil.forEach((dokumen) => {
+
+            const data = dokumen.data();
+
+            const kartu = buatKartu(data);
+
+            daftarPendaftar.appendChild(kartu);
+
+        });
+
+
+        catatan.textContent =
+            "Menampilkan maksimal 5 pendaftar terbaru. NIK tidak ditampilkan untuk menjaga privasi.";
+
+
+    } catch (error) {
+
+        tampilError(error);
+
+    }
+
+}
+
+
+// =====================================
+// 9. JALANKAN
+// =====================================
+
+muatPendaftaran();
+
+</script>
+
+</body>
+</html>

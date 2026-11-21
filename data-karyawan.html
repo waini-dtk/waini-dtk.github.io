@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#c90016">
+<title>Data Karyawan | WAINI</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--merah:#c90016;
+--merah-gelap:#a50012;
+--bg:#f4f5f7;
+--putih:#fff;
+--teks:#252525;
+--abu:#777;
+--border:#e4e4e4;
+--hijau:#16834a;
+}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:var(--bg);
+color:var(--teks);
+min-height:100vh;
+}
+
+button,input,select,textarea{font-family:inherit;font-size:14px}
+button{cursor:pointer}
+
+.header{
+background:linear-gradient(135deg,var(--merah),#87000e);
+color:white;
+padding:18px 16px;
+position:sticky;
+top:0;
+z-index:20;
+box-shadow:0 3px 12px #0002;
+}
+
+.header-inner{
+max-width:1200px;
+margin:auto;
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo{
+width:43px;
+height:43px;
+background:white;
+color:var(--merah);
+border-radius:12px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+font-size:18px;
+flex-shrink:0;
+}
+
+.header-title{flex:1}
+.header-title h1{font-size:17px;margin-bottom:4px}
+.header-title p{font-size:11px;opacity:.85}
+
+.btn-back{
+border:1px solid #ffffff55;
+background:#ffffff15;
+color:white;
+padding:9px 12px;
+border-radius:9px;
+text-decoration:none;
+font-size:12px;
+white-space:nowrap;
+}
+
+.container{max-width:1200px;margin:auto;padding:16px}
+
+.info-card{
+background:white;
+border-radius:14px;
+padding:17px;
+margin-bottom:15px;
+border:1px solid var(--border);
+}
+
+.info-card h2{font-size:16px;margin-bottom:7px}
+.info-card p{font-size:12px;color:var(--abu);line-height:1.6}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-bottom:15px;
+}
+
+.stat{
+background:white;
+padding:15px;
+border-radius:12px;
+border:1px solid var(--border);
+}
+
+.stat-label{color:var(--abu);font-size:11px;margin-bottom:7px}
+.stat-number{font-size:22px;font-weight:bold;color:var(--merah)}
+
+.toolbar{
+background:white;
+border-radius:13px;
+padding:13px;
+border:1px solid var(--border);
+margin-bottom:14px;
+}
+
+.toolbar-top{
+display:flex;
+gap:9px;
+flex-wrap:wrap;
+margin-bottom:11px;
+}
+
+.search{flex:1;min-width:170px}
+
+.search input,.toolbar select{
+width:100%;
+height:42px;
+border:1px solid var(--border);
+border-radius:9px;
+padding:0 12px;
+outline:none;
+background:white;
+}
+
+.search input:focus,input:focus,select:focus,textarea:focus{
+border-color:var(--merah);
+}
+
+.btn{
+border:none;
+border-radius:9px;
+padding:11px 14px;
+font-weight:bold;
+}
+
+.btn-primary{background:var(--merah);color:white}
+.btn-primary:hover{background:var(--merah-gelap)}
+.btn-secondary{background:#eee;color:#333}
+.btn-danger{background:#ffe5e8;color:#b00015}
+.btn-success{background:#e1f5e9;color:#08743c}
+.btn-small{padding:7px 10px;font-size:12px}
+
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+.btn-icon{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:7px;
+}
+
+.toolbar-buttons{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.table-wrap{
+background:white;
+border-radius:13px;
+border:1px solid var(--border);
+overflow:hidden;
+}
+
+.table-scroll{overflow-x:auto}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:950px;
+}
+
+th{
+background:#fafafa;
+text-align:left;
+padding:12px;
+font-size:11px;
+color:#666;
+border-bottom:1px solid var(--border);
+white-space:nowrap;
+}
+
+td{
+padding:12px;
+font-size:12px;
+border-bottom:1px solid #eee;
+vertical-align:middle;
+}
+
+tbody tr:hover{background:#fffafa}
+
+.nama{font-weight:bold}
+.nik{color:#777;margin-top:4px;font-size:11px}
+
+.badge{
+display:inline-block;
+padding:5px 8px;
+border-radius:20px;
+background:#f0f0f0;
+font-size:10px;
+white-space:nowrap;
+}
+
+.badge-departemen{background:#fff0f1;color:var(--merah)}
+.badge-aktif{background:#e1f5e9;color:#08743c}
+.badge-dicabut{background:#ffe5e8;color:#b00015}
+
+.aksi{display:flex;gap:6px;white-space:nowrap}
+
+.empty{
+padding:35px 15px;
+text-align:center;
+color:#888;
+font-size:13px;
+}
+
+.loading{padding:35px;text-align:center;color:#777}
+
+.overlay{
+position:fixed;
+inset:0;
+background:#0007;
+z-index:100;
+display:none;
+align-items:center;
+justify-content:center;
+padding:12px;
+}
+
+.overlay.show{
+display:flex !important;
+}
+
+.modal{
+background:white;
+width:100%;
+max-width:650px;
+max-height:92vh;
+overflow-y:auto;
+border-radius:16px;
+}
+
+.modal-header{
+padding:17px;
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+position:sticky;
+top:0;
+background:white;
+z-index:2;
+}
+
+.modal-header h2{font-size:16px}
+
+.close{
+border:none;
+background:#f1f1f1;
+width:33px;
+height:33px;
+border-radius:50%;
+font-size:20px;
+}
+
+.modal-body{padding:17px}
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:13px;
+}
+
+.field{margin-bottom:13px}
+.field.full{grid-column:1/-1}
+
+.field label{
+display:block;
+font-size:12px;
+font-weight:bold;
+margin-bottom:7px;
+}
+
+.field input,.field select,.field textarea{
+width:100%;
+border:1px solid #ddd;
+border-radius:9px;
+min-height:42px;
+padding:10px;
+background:white;
+outline:none;
+}
+
+.field textarea{min-height:80px;resize:vertical}
+
+.required{color:var(--merah)}
+.helper{font-size:10px;color:#777;margin-top:5px}
+
+.modal-footer{
+display:flex;
+gap:8px;
+justify-content:flex-end;
+padding:15px 17px;
+border-top:1px solid var(--border);
+position:sticky;
+bottom:0;
+background:white;
+}
+
+.toast{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#222;
+color:white;
+padding:12px 18px;
+border-radius:10px;
+z-index:500;
+display:none;
+max-width:90%;
+text-align:center;
+font-size:13px;
+}
+
+.toast.show{display:block}
+
+.section-title{
+font-size:14px;
+font-weight:bold;
+margin:15px 0 10px;
+color:var(--merah);
+}
+
+.task-list{display:grid;gap:10px}
+
+.task-card{
+border:1px solid var(--border);
+border-radius:10px;
+padding:12px;
+}
+
+.task-card h3{font-size:13px;margin-bottom:6px}
+
+.task-card p{
+font-size:11px;
+color:#777;
+line-height:1.6;
+white-space:pre-wrap;
+}
+
+.task-actions{display:flex;gap:6px;margin-top:10px}
+
+hr{
+border:none;
+border-top:1px solid var(--border);
+margin:15px 0;
+}
+
+.import-info{
+background:#f5f7f9;
+border-radius:10px;
+padding:12px;
+font-size:12px;
+line-height:1.7;
+color:#555;
+margin-bottom:12px;
+}
+
+.import-info strong{color:#333}
+
+.progress{
+font-size:12px;
+color:#666;
+margin-top:10px;
+line-height:1.6;
+white-space:pre-wrap;
+overflow-wrap:anywhere;
+}
+
+@media(max-width:600px){
+.header{padding:13px}
+.header-title h1{font-size:15px}
+.header-title p{font-size:10px}
+.container{padding:11px}
+.stats{gap:7px}
+.stat{padding:11px}
+.stat-number{font-size:19px}
+.stat-label{font-size:10px}
+.toolbar-top{flex-direction:column}
+.toolbar-top .btn{width:100%}
+.toolbar-buttons{display:grid;grid-template-columns:1fr 1fr}
+.toolbar-buttons .btn{padding:10px 7px;font-size:12px}
+.form-grid{grid-template-columns:1fr;gap:0}
+.field.full{grid-column:auto}
+.modal{max-height:95vh}
+.btn-back{padding:8px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">W</div>
+
+    <div class="header-title">
+      <h1>DATA KARYAWAN</h1>
+      <p>WAINI · Divisi Terminal Khusus</p>
+    </div>
+
+    <a href="menu.html" class="btn-back">← Menu</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="info-card">
+    <h2>Manajemen Data Karyawan</h2>
+    <p>
+      Pengelolaan data karyawan Divisi Terminal Khusus.
+      Data ini digunakan sebagai dasar akun, hak akses,
+      penugasan, absensi, dan pengelolaan cuti WAINI.
+    </p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">TOTAL KARYAWAN</div>
+      <div class="stat-number" id="totalKaryawan">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">OPERASIONAL PELABUHAN</div>
+      <div class="stat-number" id="totalOperasional">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">DEPARTEMEN LAIN</div>
+      <div class="stat-number" id="totalLain">0</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+
+    <div class="toolbar-top">
+
+      <div class="search">
+        <input type="search" id="searchInput"
+          placeholder="Cari NIK, nama, jabatan...">
+      </div>
+
+      <button type="button" class="btn btn-primary btn-icon"
+        id="btnTambah" onclick="window.bukaTambahKaryawanUI()">
+        ＋ Tambah Karyawan
+      </button>
+
+    </div>
+
+    <div class="toolbar-buttons">
+
+      <button type="button" class="btn btn-success btn-icon" id="btnImport">
+        ⇧ Import Excel
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-icon" id="btnExport">
+        ⇩ Export Excel
+      </button>
+
+    </div>
+
+    <select id="filterDepartemen" style="margin-top:11px">
+      <option value="">Semua Departemen</option>
+      <option value="Operasional Pelabuhan">Operasional Pelabuhan</option>
+      <option value="Kendaraan Bergerak">Kendaraan Bergerak</option>
+      <option value="Safety & Technology">Safety & Technology</option>
+    </select>
+
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table>
+
+        <thead>
+          <tr>
+            <th>NO</th>
+            <th>NIK / NAMA</th>
+            <th>DEPARTEMEN</th>
+            <th>JABATAN</th>
+            <th>TMK</th>
+            <th>POH</th>
+            <th>SISTEM CUTI</th>
+            <th>SHIFT KERJA</th>
+            <th>GRADE</th>
+            <th>NOWA</th>
+            <th>AKSI</th>
+          </tr>
+        </thead>
+
+        <tbody id="tbodyKaryawan">
+          <tr>
+            <td colspan="11" class="loading">Memeriksa akun...</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- ==========================================
+     MODAL DATA KARYAWAN
+========================================== -->
+
+<div class="overlay" id="modalKaryawan">
+
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2 id="judulModal">Tambah Karyawan</h2>
+
+      <button type="button" class="close"
+        data-close="modalKaryawan">×</button>
+    </div>
+
+    <form id="formKaryawan" action="#"
+      onsubmit="event.preventDefault();">
+
+      <div class="modal-body">
+
+        <input type="hidden" id="modeForm" value="tambah">
+        <input type="hidden" id="idDokumen">
+
+        <div class="form-grid">
+
+          <div class="field full">
+            <label>Divisi <span class="required">*</span></label>
+            <input id="divisi" value="Terminal Khusus" readonly>
+          </div>
+
+          <div class="field full">
+            <label>Departemen <span class="required">*</span></label>
+
+            <select id="departemen" required>
+              <option value="">Pilih Departemen</option>
+              <option>Operasional Pelabuhan</option>
+              <option>Kendaraan Bergerak</option>
+              <option>Safety & Technology</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>NIK <span class="required">*</span></label>
+
+            <input id="nik" required
+              inputmode="text"
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+              placeholder="Nomor induk karyawan">
+
+            <div class="helper">
+              NIK boleh kombinasi huruf dan angka.
+              Contoh: WHW001A atau OP-001.
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Nama <span class="required">*</span></label>
+            <input id="nama" required placeholder="Nama lengkap">
+          </div>
+
+          <div class="field full">
+            <label>Jabatan <span class="required">*</span></label>
+            <input id="jabatan" required placeholder="Jabatan karyawan">
+          </div>
+
+          <div class="field">
+            <label>TMK <span class="required">*</span></label>
+
+            <input id="tmk" required maxlength="8"
+              placeholder="dd/mm/yy" inputmode="numeric">
+
+            <div class="helper">Format otomatis: dd/mm/yy</div>
+          </div>
+
+          <div class="field">
+            <label>POH</label>
+            <input id="poh" placeholder="Tempat POH">
+          </div>
+
+          <div class="field">
+            <label>Sistem Cuti <span class="required">*</span></label>
+
+            <select id="sistemCuti" required>
+              <option value="">Pilih Sistem Cuti</option>
+              <option value="Lokal">Lokal</option>
+              <option value="Roster">Roster</option>
+              <option value="5:2">5:2</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Shift Kerja <span class="required">*</span></label>
+
+            <select id="shiftKerja" required>
+              <option value="">Pilih Shift</option>
+              <option>Non Shift</option>
+              <option>Shift 1</option>
+              <option>Shift 2</option>
+              <option>Shift 3</option>
+              <option>Group 1</option>
+              <option>Group 2</option>
+              <option>Group 3</option>
+              <option>Maintenance</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Grade <span class="required">*</span></label>
+
+            <input id="grade" required type="number"
+              min="0" step="1" placeholder="Angka grade">
+          </div>
+
+          <div class="field">
+            <label>Nomor WhatsApp</label>
+            <input id="nowa" inputmode="tel" placeholder="08xxxxxxxxxx">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary"
+          data-close="modalKaryawan">Batal</button>
+
+        <button type="submit" class="btn btn-primary" id="btnSimpan">
+          Simpan Data
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+<!-- ==========================================
+     MODAL PENUGASAN
+========================================== -->
+
+<div class="overlay" id="modalTugas">
+
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2>Penugasan Karyawan</h2>
+
+      <button type="button" class="close"
+        data-close="modalTugas">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="info-card">
+        <h2 id="tugasNamaKaryawan">Karyawan</h2>
+        <p id="tugasNikKaryawan"></p>
+      </div>
+
+      <div class="section-title">Daftar Penugasan</div>
+
+      <div id="daftarTugas" class="task-list">
+        <div class="loading">Memuat penugasan...</div>
+      </div>
+
+      <hr>
+
+      <div class="section-title">Tambah Penugasan Baru</div>
+
+      <form id="formTugas" action="#"
+        onsubmit="event.preventDefault();">
+
+        <input type="hidden" id="tugasIdEdit">
+
+        <div class="field">
+          <label>Nama Tugas <span class="required">*</span></label>
+          <input id="namaTugas" required placeholder="Contoh: Admin Absensi">
+        </div>
+
+        <div class="field">
+          <label>Target Penugasan <span class="required">*</span></label>
+
+          <select id="targetMode" required>
+            <option value="semua">Semua Karyawan</option>
+            <option value="departemen">Departemen</option>
+            <option value="nik">NIK Tertentu</option>
+          </select>
+        </div>
+
+        <div class="field" id="fieldTargetDepartemen" style="display:none">
+          <label>Departemen Target</label>
+
+          <select id="targetDepartemen">
+            <option value="">Pilih Departemen</option>
+            <option>Operasional Pelabuhan</option>
+            <option>Kendaraan Bergerak</option>
+            <option>Safety & Technology</option>
+          </select>
+        </div>
+
+        <div class="field" id="fieldTargetNik" style="display:none">
+          <label>Daftar NIK Target</label>
+
+          <textarea id="targetNik"
+            placeholder="Masukkan NIK, pisahkan dengan koma atau baris baru"></textarea>
+
+          <div class="helper">
+            Contoh: WHW001A, OP-002, KRY2026B
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Keterangan</label>
+
+          <textarea id="keteranganTugas"
+            placeholder="Keterangan penugasan (opsional)"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btnSimpanTugas">
+          Simpan Penugasan
+        </button>
+
+        <button type="button" class="btn btn-secondary"
+          id="btnBatalEditTugas">Batal Edit</button>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ==========================================
+     MODAL IMPORT
+========================================== -->
+
+<div class="overlay" id="modalImport">
+
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2>Import Data Karyawan</h2>
+
+      <button type="button" class="close"
+        data-close="modalImport">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="import-info">
+
+        <strong>Format file yang didukung:</strong><br>
+        Excel (.xlsx / .xls) dan CSV.<br><br>
+
+        Kolom yang dibaca: NIK, Nama, Departemen, Jabatan, TMK,
+        POH, Sistem Cuti, Shift Kerja, Grade, dan NOWA.<br><br>
+
+        <strong>Perhatian:</strong> NIK yang sudah ada akan dilewati.
+        Data lama tidak akan ditimpa.<br><br>
+
+        Pastikan kolom NIK pada Excel diatur sebagai
+        <strong>Text</strong> agar angka nol di depan tidak hilang.
+        NIK boleh berupa huruf, angka, atau gabungan keduanya.
+
+      </div>
+
+      <div class="field">
+        <label>Pilih File Excel / CSV</label>
+        <input type="file" id="fileImportModal"
+          accept=".xlsx,.xls,.csv">
+      </div>
+
+      <div id="hasilImport" class="progress"></div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button type="button" class="btn btn-secondary"
+        data-close="modalImport">Tutup</button>
+
+      <button type="button" class="btn btn-primary" id="btnProsesImport">
+        Mulai Import
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<!-- ==========================================
+     MODAL INDEPENDEN
+========================================== -->
+
+<script>
+
+window.bukaTambahKaryawanUI=function(){
+
+  const modal=document.getElementById("modalKaryawan");
+  const form=document.getElementById("formKaryawan");
+
+  if(!modal||!form){
+    alert("Form tambah karyawan tidak ditemukan.");
+    return;
+  }
+
+  form.reset();
+
+  document.getElementById("modeForm").value="tambah";
+  document.getElementById("idDokumen").value="";
+  document.getElementById("judulModal").textContent="Tambah Karyawan";
+  document.getElementById("divisi").value="Terminal Khusus";
+
+  const nik=document.getElementById("nik");
+
+  nik.disabled=false;
+  nik.readOnly=false;
+  nik.value="";
+  nik.inputMode="text";
+
+  const simpan=document.getElementById("btnSimpan");
+
+  simpan.disabled=false;
+  simpan.textContent="Simpan Data";
+
+  modal.classList.add("show");
+  modal.style.display="flex";
+
+  setTimeout(function(){
+    document.getElementById("departemen").focus();
+  },200);
+};
+
+window.tutupModalWAINI=function(id){
+
+  const modal=document.getElementById(id);
+
+  if(modal){
+    modal.classList.remove("show");
+    modal.style.display="none";
+  }
+
+};
+
+document.addEventListener("DOMContentLoaded",function(){
+
+  document.querySelectorAll("[data-close]").forEach(function(btn){
+
+    btn.addEventListener("click",function(){
+      window.tutupModalWAINI(btn.dataset.close);
+    });
+
+  });
+
+  document.querySelectorAll(".overlay").forEach(function(overlay){
+
+    overlay.addEventListener("click",function(event){
+
+      if(event.target===overlay){
+        window.tutupModalWAINI(overlay.id);
+      }
+
+    });
+
+  });
+
+});
+
+</script>
+
+<!-- ==========================================
+     FIREBASE DAN PROGRAM UTAMA
+========================================== -->
+
+<script type="module">
+
+import {auth,db} from "./firebase.js";
+
+import {
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+import {
+collection,
+doc,
+getDoc,
+getDocs,
+addDoc,
+setDoc,
+updateDoc,
+deleteDoc,
+que
