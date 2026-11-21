@@ -214,7 +214,7 @@ hr{border:none;border-top:1px solid var(--border);margin:15px 0}
 
 <div class="field">
 <label>NIK <span class="required">*</span></label>
-<input id="nik" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Nomor induk karyawan">
+<input id="nik" type="text" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Nomor induk karyawan">
 <div class="helper">NIK boleh kombinasi huruf dan angka. Contoh: WHW001A atau OP-001.</div>
 </div>
 
@@ -424,7 +424,6 @@ if(e.target===el)window.tutupModalWAINI(el.id);
 
 import {auth,db} from "./firebase.js";
 
-/* VERSI FIREBASE DISESUAIKAN DENGAN firebase.js */
 import {onAuthStateChanged}
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -442,6 +441,7 @@ let penggunaLogin=null;
 let daftarKaryawan=[];
 let karyawanAktif=null;
 let tugasAktif=[];
+let superAdmin=false;
 
 const $=id=>document.getElementById(id);
 
@@ -498,7 +498,11 @@ String(d.getFullYear()).slice(-2);
 }
 
 function validasiTMK(v){
-return /^\d{2}\/\d{2}\/\d{2}$/.test(v);
+if(!/^\d{2}\/\d{2}\/\d{2}$/.test(v))return false;
+const [dd,mm,yy]=v.split("/").map(Number);
+const tahun=yy>=50?1900+yy:2000+yy;
+const d=new Date(tahun,mm-1,dd);
+return d.getDate()===dd&&d.getMonth()===mm-1&&d.getFullYear()===tahun;
 }
 
 $("tmk").addEventListener("input",e=>{
@@ -579,35 +583,58 @@ $("tbodyKaryawan").innerHTML=hasil.map((k,i)=>`
 <td>${esc(k.nowa||"-")}</td>
 <td>
 <div class="aksi">
-<button class="btn btn-secondary btn-small" data-action="edit" data-nik="${encodeURIComponent(k.nik)}">✎ Edit</button>
-<button class="btn btn-success btn-small" data-action="tugas" data-nik="${encodeURIComponent(k.nik)}">♙ Tugas</button>
-<button class="btn btn-danger btn-small" data-action="hapus" data-nik="${encodeURIComponent(k.nik)}">Hapus</button>
+<button class="btn btn-secondary btn-small" onclick="window.editKaryawan('${esc(k.nik)}')">Edit</button>
+<button class="btn btn-success btn-small" onclick="window.bukaPenugasan('${esc(k.nik)}')">Tugas</button>
+<button class="btn btn-danger btn-small" onclick="window.hapusKaryawan('${esc(k.nik)}')">Hapus</button>
 </div>
 </td>
-</tr>`).join("");
+</tr>
+`).join("");
 }
 
-$("tbodyKaryawan").addEventListener("click",async e=>{
-const btn=e.target.closest("button[data-action]");
-if(!btn)return;
-const nik=decodeURIComponent(btn.dataset.nik);
+/* =========================
+   CEK SUPER ADMIN
+========================= */
+
+async function cekSuperAdmin(user){
+try{
+const snap=await getDoc(doc(db,C_PENGGUNA,user.uid));
+if(!snap.exists())return false;
+
+const data=snap.data();
+penggunaLogin={
+uid:user.uid,
+...data
+};
+
+return String(data.role||"").toLowerCase()==="super_admin" &&
+String(data.status||"").toLowerCase()==="aktif";
+}catch(err){
+console.error(err);
+return false;
+}
+
+}
+
+function tampilAksesDitolak(pesan){
+$("tbodyKaryawan").innerHTML=
+`<tr><td colspan="11" class="empty">${esc(pesan)}</td></tr>`;
+$("btnTambah").disabled=true;
+$("btnImport").disabled=true;
+$("btnExport").disabled=true;
+}
+
+/* =========================
+   TAMBAH / EDIT KARYAWAN
+========================= */
+
+window.editKaryawan=async function(nik){
 const k=daftarKaryawan.find(x=>x.nik===nik);
 if(!k)return;
 
-try{
-if(btn.dataset.action==="edit")bukaEdit(k);
-if(btn.dataset.action==="tugas")await bukaPenugasan(k);
-if(btn.dataset.action==="hapus")await hapusKaryawan(k);
-}catch(err){
-console.error(err);
-toast("Terjadi kesalahan: "+err.message);
-}
-});
-
-function bukaEdit(k){
 $("formKaryawan").reset();
 $("modeForm").value="edit";
-$("idDokumen").value=k.nik;
+$("idDokumen").value=nik;
 $("judulModal").textContent="Edit Data Karyawan";
 $("divisi").value=k.divisi||"Terminal Khusus";
 $("departemen").value=k.departemen||"";
@@ -624,13 +651,35 @@ $("nowa").value=k.nowa||"";
 $("btnSimpan").disabled=false;
 $("btnSimpan").textContent="Simpan Perubahan";
 bukaModal("modalKaryawan");
-}
+};
 
-function ambilFormKaryawan(){
-return {
+$("formKaryawan").addEventListener("submit",async()=>{
+if(!superAdmin)return toast("Akses ditolak.");
+
+const btn=$("btnSimpan");
+if(btn.disabled)return;
+
+const mode=$("modeForm").value;
+const nik=normalisasiNIK($("nik").value);
+const idLama=$("idDokumen").value;
+
+if(!nik)return toast("NIK wajib diisi.");
+if(!nilai("nama"))return toast("Nama wajib diisi.");
+if(!nilai("departemen"))return toast("Departemen wajib dipilih.");
+if(!nilai("jabatan"))return toast("Jabatan wajib diisi.");
+if(!validasiTMK(nilai("tmk")))return toast("Format TMK harus dd/mm/yy dan tanggal valid.");
+if(!nilai("sistemCuti"))return toast("Sistem cuti wajib dipilih.");
+if(!nilai("shiftKerja"))return toast("Shift kerja wajib dipilih.");
+if(nilai("grade")===""||Number(nilai("grade"))<0)return toast("Grade tidak valid.");
+
+btn.disabled=true;
+btn.textContent="Menyimpan...";
+
+try{
+const data={
 divisi:"Terminal Khusus",
 departemen:nilai("departemen"),
-nik:normalisasiNIK(nilai("nik")),
+nik:nik,
 nama:nilai("nama"),
 jabatan:nilai("jabatan"),
 tmk:nilai("tmk"),
@@ -638,147 +687,99 @@ poh:nilai("poh"),
 sistem_cuti:nilai("sistemCuti"),
 shift_kerja:nilai("shiftKerja"),
 grade:Number(nilai("grade")),
-nowa:nilai("nowa")
-};
-}
-
-function validasiKaryawan(k){
-if(!k.departemen||!k.nik||!k.nama||!k.jabatan||
-!k.tmk||!k.sistem_cuti||!k.shift_kerja||
-nilai("grade")===""){
-throw new Error("Lengkapi semua kolom wajib.");
-}
-if(!validasiTMK(k.tmk)){
-throw new Error("TMK harus menggunakan format dd/mm/yy.");
-}
-if(!Number.isInteger(k.grade)||k.grade<0){
-throw new Error("Grade harus berupa angka bulat.");
-}
-if(!/^[A-Z0-9-]+$/.test(k.nik)){
-throw new Error("NIK hanya boleh berisi huruf, angka, dan tanda hubung (-).");
-}
-}
-
-/* SIMPAN DATA KARYAWAN */
-$("formKaryawan").addEventListener("submit",async e=>{
-e.preventDefault();
-e.stopPropagation();
-
-const btn=$("btnSimpan");
-if(btn.disabled)return;
-
-btn.disabled=true;
-btn.textContent="Menyimpan...";
-
-try{
-if(!penggunaLogin||!penggunaLogin.uid){
-throw new Error("Sesi pengguna belum siap. Silakan muat ulang halaman.");
-}
-
-const data=ambilFormKaryawan();
-validasiKaryawan(data);
-
-const mode=$("modeForm").value;
-const nikLama=$("idDokumen").value;
-const nik=data.nik;
-const waktu=serverTimestamp();
-
-const dataSimpan={
-...data,
-updatedAt:waktu,
-updatedBy:penggunaLogin.uid
+nowa:nilai("nowa"),
+updatedAt:serverTimestamp(),
+updated_by:penggunaLogin.uid
 };
 
 if(mode==="tambah"){
-const ref=doc(db,C_KARYAWAN,nik);
-
-const cek=await getDoc(ref);
+const cek=await getDoc(doc(db,C_KARYAWAN,nik));
 if(cek.exists()){
-throw new Error("NIK "+nik+" sudah terdaftar. Gunakan NIK lain.");
+toast("NIK sudah terdaftar. Gunakan NIK lain.");
+btn.disabled=false;
+btn.textContent="Simpan Data";
+return;
 }
 
-dataSimpan.createdAt=waktu;
-dataSimpan.createdBy=penggunaLogin.uid;
+data.createdAt=serverTimestamp();
+data.created_by=penggunaLogin.uid;
+await setDoc(doc(db,C_KARYAWAN,nik),data);
 
-await setDoc(ref,dataSimpan);
-
-daftarKaryawan.push({
-...data,
-nik:nik
+await simpanRiwayat({
+aksi:"tambah_karyawan",
+nik_karyawan:nik,
+nama_karyawan:data.nama,
+detail:"Menambahkan data karyawan"
 });
 
+toast("Data karyawan berhasil ditambahkan.");
 }else{
-const ref=doc(db,C_KARYAWAN,nikLama);
+await updateDoc(doc(db,C_KARYAWAN,idLama),data);
 
-await updateDoc(ref,dataSimpan);
+await simpanRiwayat({
+aksi:"edit_karyawan",
+nik_karyawan:idLama,
+nama_karyawan:data.nama,
+detail:"Memperbarui data karyawan"
+});
 
-daftarKaryawan=daftarKaryawan.map(k=>
-k.nik===nikLama?{...k,...data,nik:nikLama}:k
-);
+toast("Data karyawan berhasil diperbarui.");
 }
-
-daftarKaryawan.sort((a,b)=>
-String(a.nama||"").localeCompare(String(b.nama||""),"id")
-);
-renderKaryawan();
 
 tutup("modalKaryawan");
-
-if(mode==="tambah"){
-toast("BERHASIL! Data karyawan "+nik+" sudah dikirim ke Firestore.");
-}else{
-toast("BERHASIL! Data karyawan berhasil diperbarui.");
-}
-
-try{
 await muatKaryawan();
-}catch(refreshError){
-console.error("Gagal menyegarkan tabel:",refreshError);
-toast("Data sudah disimpan. Tabel belum dapat disegarkan: "+refreshError.message);
-}
 
 }catch(err){
-console.error("KESALAHAN SIMPAN KARYAWAN:",err);
-
-let pesan=err.message||"Tidak diketahui";
-
-if(err.code==="permission-denied"){
-pesan="Akses ditolak Firestore Rules. Periksa izin tulis koleksi karyawan.";
-}else if(err.code==="unavailable"){
-pesan="Firebase tidak tersedia. Periksa koneksi internet.";
-}else if(err.code==="already-exists"){
-pesan="NIK tersebut sudah digunakan.";
-}
-
-toast("GAGAL MENYIMPAN: "+pesan);
-
+console.error(err);
+toast("GAGAL MENYIMPAN: "+(err.code==="permission-denied"?"Akses ditolak Firestore Rules. Periksa izin tulis koleksi karyawan.":err.message));
 }finally{
 btn.disabled=false;
-btn.textContent=$("modeForm").value==="edit"?
-"Simpan Perubahan":"Simpan Data";
+btn.textContent=mode==="edit"?"Simpan Perubahan":"Simpan Data";
 }
 });
 
-async function hapusKaryawan(k){
-const yakin=confirm(
-"Hapus data karyawan berikut?\n\n"+
-k.nama+"\nNIK: "+k.nik+
-"\n\nData yang dihapus tidak dapat dikembalikan."
-);
-if(!yakin)return;
+/* =========================
+   HAPUS KARYAWAN
+========================= */
+
+window.hapusKaryawan=async function(nik){
+if(!superAdmin)return toast("Akses ditolak.");
+
+const k=daftarKaryawan.find(x=>x.nik===nik);
+if(!k)return;
+
+if(!confirm("Hapus data karyawan berikut?\n\n"+k.nama+"\nNIK: "+nik+"\n\nData yang dihapus tidak dapat dikembalikan."))return;
 
 try{
-await deleteDoc(doc(db,C_KARYAWAN,k.nik));
-daftarKaryawan=daftarKaryawan.filter(x=>x.nik!==k.nik);
-renderKaryawan();
+await deleteDoc(doc(db,C_KARYAWAN,nik));
+
+await simpanRiwayat({
+aksi:"hapus_karyawan",
+nik_karyawan:nik,
+nama_karyawan:k.nama,
+detail:"Menghapus data karyawan"
+});
+
 toast("Data karyawan berhasil dihapus.");
+await muatKaryawan();
 }catch(err){
 console.error(err);
 toast("Gagal menghapus: "+err.message);
 }
-}
+};
 
-// PENUGASAN
+/* =========================
+   PENUGASAN
+========================= */
+
+function resetFormTugas(){
+$("formTugas").reset();
+$("tugasIdEdit").value="";
+$("btnSimpanTugas").textContent="Simpan Penugasan";
+$("btnBatalEditTugas").style.display="none";
+$("fieldTargetDepartemen").style.display="none";
+$("fieldTargetNik").style.display="none";
+}
 
 $("targetMode").addEventListener("change",()=>{
 const mode=$("targetMode").value;
@@ -786,422 +787,262 @@ $("fieldTargetDepartemen").style.display=mode==="departemen"?"block":"none";
 $("fieldTargetNik").style.display=mode==="nik"?"block":"none";
 });
 
-function resetFormTugas(){
-$("formTugas").reset();
-$("tugasIdEdit").value="";
-$("targetMode").value="semua";
-$("fieldTargetDepartemen").style.display="none";
-$("fieldTargetNik").style.display="none";
-$("btnSimpanTugas").textContent="Simpan Penugasan";
-$("btnBatalEditTugas").style.display="none";
-}
-
 $("btnBatalEditTugas").addEventListener("click",resetFormTugas);
 
-async function bukaPenugasan(k){
-karyawanAktif=k;
-$("tugasNamaKaryawan").textContent=k.nama;
-$("tugasNikKaryawan").textContent="NIK: "+k.nik;
+window.bukaPenugasan=async function(nik){
+if(!superAdmin)return toast("Akses ditolak.");
+
+karyawanAktif=daftarKaryawan.find(x=>x.nik===nik);
+if(!karyawanAktif)return;
+
+$("tugasNamaKaryawan").textContent=karyawanAktif.nama||"Karyawan";
+$("tugasNikKaryawan").textContent="NIK: "+karyawanAktif.nik;
+
 resetFormTugas();
 bukaModal("modalTugas");
-await muatTugas();
-}
+await muatTugasKaryawan();
+};
 
-async function muatTugas(){
+async function muatTugasKaryawan(){
 $("daftarTugas").innerHTML='<div class="loading">Memuat penugasan...</div>';
 
-const q=query(
-collection(db,C_TUGAS),
-where("penerima_nik","==",karyawanAktif.nik)
-);
-const snap=await getDocs(q);
-
-tugasAktif=snap.docs.map(d=>({
-...d.data(),id:d.id
-}));
-
-tugasAktif.sort((a,b)=>{
-const ta=a.createdAt?.toMillis?.()||0;
-const tb=b.createdAt?.toMillis?.()||0;
-return tb-ta;
-});
+try{
+const snap=await getDocs(collection(db,C_TUGAS));
+tugasAktif=snap.docs.map(d=>({id:d.id,...d.data()}))
+.filter(t=>normalisasiNIK(t.pemegang_tugas_nik)===normalisasiNIK(karyawanAktif.nik));
 
 renderTugas();
+}catch(err){
+console.error(err);
+$("daftarTugas").innerHTML='<div class="empty">Gagal memuat penugasan.</div>';
+}
 }
 
 function renderTugas(){
 if(!tugasAktif.length){
-$("daftarTugas").innerHTML=
-'<div class="empty">Belum ada penugasan untuk karyawan ini.</div>';
+$("daftarTugas").innerHTML='<div class="empty">Belum ada penugasan untuk karyawan ini.</div>';
 return;
 }
 
 $("daftarTugas").innerHTML=tugasAktif.map(t=>{
-const target=t.target_mode==="semua"?"Semua Karyawan":
-t.target_mode==="departemen"?"Departemen: "+(t.target_departemen||"-"):
-"Daftar NIK: "+(t.target_nik||[]).join(", ");
+const status=t.status||"aktif";
+let target="Semua Karyawan";
+if(t.target_mode==="departemen")target="Departemen: "+(t.target_departemen||"-");
+if(t.target_mode==="nik")target="NIK Target: "+(Array.isArray(t.target_nik)?t.target_nik.join(", "):"-");
 
 return `
 <div class="task-card">
 <h3>${esc(t.nama_tugas)}</h3>
-<p>
-Status: <span class="badge ${t.status==="aktif"?"badge-aktif":"badge-dicabut"}">${esc(t.status||"aktif")}</span>
-<br>Target: ${esc(target)}
-<br>Keterangan: ${esc(t.keterangan||"-")}
-</p>
+<p>Target: ${esc(target)}</p>
+<p>Status: ${esc(status.toUpperCase())}</p>
+<p>Keterangan: ${esc(t.keterangan||"-")}</p>
 <div class="task-actions">
-<button class="btn btn-secondary btn-small" data-task="edit" data-id="${esc(t.id)}">✎ Edit</button>
-${t.status==="aktif"?
-`<button class="btn btn-danger btn-small" data-task="cabut" data-id="${esc(t.id)}">Cabut Tugas</button>`:
-`<button class="btn btn-success btn-small" data-task="aktifkan" data-id="${esc(t.id)}">Aktifkan Kembali</button>`}
+<button class="btn btn-secondary btn-small" onclick="window.editPenugasan('${esc(t.id)}')">Edit</button>
+${status==="aktif"?`<button class="btn btn-danger btn-small" onclick="window.cabutPenugasan('${esc(t.id)}')">Cabut</button>`:`<button class="btn btn-success btn-small" onclick="window.aktifkanPenugasan('${esc(t.id)}')">Aktifkan</button>`}
 </div>
 </div>`;
 }).join("");
 }
 
-$("daftarTugas").addEventListener("click",async e=>{
-const btn=e.target.closest("button[data-task]");
-if(!btn)return;
-
-const t=tugasAktif.find(x=>x.id===btn.dataset.id);
-if(!t)return;
-
-try{
-if(btn.dataset.task==="edit"){
-$("tugasIdEdit").value=t.id;
-$("namaTugas").value=t.nama_tugas||"";
-$("targetMode").value=t.target_mode||"semua";
-$("targetDepartemen").value=t.target_departemen||"";
-$("targetNik").value=(t.target_nik||[]).join(", ");
-$("keteranganTugas").value=t.keterangan||"";
-$("targetMode").dispatchEvent(new Event("change"));
-$("btnSimpanTugas").textContent="Simpan Perubahan";
-$("btnBatalEditTugas").style.display="inline-block";
-}else{
-const aktif=btn.dataset.task==="aktifkan";
-const yakin=confirm(aktif?
-"Aktifkan kembali penugasan ini?":
-"Cabut penugasan ini?");
-if(!yakin)return;
-
-await ubahStatusTugas(t,aktif?"aktif":"dicabut");
-await muatTugas();
-toast(aktif?"Penugasan diaktifkan kembali.":"Penugasan berhasil dicabut.");
-}
-}catch(err){
-console.error(err);
-toast("Gagal memproses penugasan: "+err.message);
-}
-});
-
-function ambilTarget(){
-const mode=$("targetMode").value;
-let targetNik=[];
-let targetDepartemen="";
-
-if(mode==="departemen"){
-targetDepartemen=nilai("targetDepartemen");
-if(!targetDepartemen)throw new Error("Pilih departemen target.");
-}
-
-if(mode==="nik"){
-targetNik=nilai("targetNik")
-.split(/[\n,;]+/)
-.map(normalisasiNIK)
+function ambilTargetNIK(){
+return $("targetNik").value
+.split(/[,;\n]+/)
+.map(x=>normalisasiNIK(x))
 .filter(Boolean);
-targetNik=[...new Set(targetNik)];
-if(!targetNik.length)throw new Error("Masukkan minimal satu NIK target.");
-
-const tidakAda=targetNik.filter(n=>!daftarKaryawan.some(k=>k.nik===n));
-if(tidakAda.length){
-throw new Error("NIK target tidak ditemukan: "+tidakAda.join(", "));
-}
 }
 
-return {target_mode:mode,target_nik:targetNik,target_departemen:targetDepartemen};
+function validasiTarget(mode){
+if(mode==="departemen"&&!nilai("targetDepartemen")){
+toast("Departemen target wajib dipilih.");
+return false;
+}
+if(mode==="nik"&&!ambilTargetNIK().length){
+toast("Masukkan minimal satu NIK target.");
+return false;
+}
+return true;
 }
 
-async function ubahStatusTugas(t,status){
-await updateDoc(doc(db,C_TUGAS,t.id),{
-status,
-updatedAt:serverTimestamp(),
-updatedBy:penggunaLogin.uid
-});
-
-await simpanRiwayat({
-aksi:status==="dicabut"?"CABUT":"AKTIFKAN KEMBALI",
-penugasan_id:t.id,
-penerima_nik:t.penerima_nik,
-penerima_nama:t.penerima_nama,
-nama_tugas:t.nama_tugas,
-data_lama:{status:t.status||"aktif"},
-data_baru:{status}
-});
-}
-
-$("formTugas").addEventListener("submit",async e=>{
-e.preventDefault();
-e.stopPropagation();
+$("formTugas").addEventListener("submit",async()=>{
+if(!superAdmin)return toast("Akses ditolak.");
 
 const btn=$("btnSimpanTugas");
+if(btn.disabled)return;
+
+const mode=$("targetMode").value;
+if(!nilai("namaTugas"))return toast("Nama tugas wajib diisi.");
+if(!validasiTarget(mode))return;
+
 btn.disabled=true;
 btn.textContent="Menyimpan...";
 
 try{
-const namaTugas=nilai("namaTugas");
-if(!namaTugas)throw new Error("Nama tugas wajib diisi.");
-
-const target=ambilTarget();
 const idEdit=$("tugasIdEdit").value;
 
 const data={
-penerima_nik:karyawanAktif.nik,
-penerima_nama:karyawanAktif.nama,
-nama_tugas:namaTugas,
-...target,
+pemegang_tugas_nik:karyawanAktif.nik,
+pemegang_tugas_nama:karyawanAktif.nama,
+nama_tugas:nilai("namaTugas"),
+target_mode:mode,
+target_departemen:mode==="departemen"?nilai("targetDepartemen"):"",
+target_nik:mode==="nik"?ambilTargetNIK():[],
 keterangan:nilai("keteranganTugas"),
 status:"aktif",
 updatedAt:serverTimestamp(),
-updatedBy:penggunaLogin.uid
+updated_by:penggunaLogin.uid
 };
 
 if(idEdit){
-const lama=tugasAktif.find(t=>t.id===idEdit);
-if(!lama)throw new Error("Penugasan tidak ditemukan.");
-
+const lama=tugasAktif.find(x=>x.id===idEdit);
 await updateDoc(doc(db,C_TUGAS,idEdit),data);
-
 await simpanRiwayat({
-aksi:"EDIT",
-penugasan_id:idEdit,
-penerima_nik:karyawanAktif.nik,
-penerima_nama:karyawanAktif.nama,
-nama_tugas:namaTugas,
-data_lama:{
-nama_tugas:lama.nama_tugas,
-target_mode:lama.target_mode,
-target_nik:lama.target_nik||[],
-target_departemen:lama.target_departemen||"",
-keterangan:lama.keterangan||"",
-status:lama.status||"aktif"
-},
-data_baru:{
-nama_tugas:namaTugas,
-...target,
-keterangan:nilai("keteranganTugas"),
-status:"aktif"
-}
+aksi:"edit_penugasan",
+nik_karyawan:karyawanAktif.nik,
+nama_karyawan:karyawanAktif.nama,
+id_penugasan:idEdit,
+detail:"Mengubah penugasan "+data.nama_tugas
 });
-
-toast("Penugasan berhasil diperbarui.");
+toast("Penugasan diperbarui.");
 }else{
 data.createdAt=serverTimestamp();
-data.createdBy=penggunaLogin.uid;
-
+data.created_by=penggunaLogin.uid;
 const ref=await addDoc(collection(db,C_TUGAS),data);
-
 await simpanRiwayat({
-aksi:"TAMBAH",
-penugasan_id:ref.id,
-penerima_nik:karyawanAktif.nik,
-penerima_nama:karyawanAktif.nama,
-nama_tugas:namaTugas,
-data_baru:{
-nama_tugas:namaTugas,
-...target,
-keterangan:nilai("keteranganTugas"),
-status:"aktif"
-}
+aksi:"tambah_penugasan",
+nik_karyawan:karyawanAktif.nik,
+nama_karyawan:karyawanAktif.nama,
+id_penugasan:ref.id,
+detail:"Menambahkan penugasan "+data.nama_tugas
 });
-
 toast("Penugasan berhasil ditambahkan.");
 }
 
 resetFormTugas();
-await muatTugas();
+await muatTugasKaryawan();
 
 }catch(err){
 console.error(err);
 toast("Gagal menyimpan penugasan: "+err.message);
 }finally{
 btn.disabled=false;
-btn.textContent=$("tugasIdEdit").value?
-"Simpan Perubahan":"Simpan Penugasan";
+btn.textContent="Simpan Penugasan";
 }
 });
 
-// PENCARIAN DAN FILTER
+window.editPenugasan=function(id){
+const t=tugasAktif.find(x=>x.id===id);
+if(!t)return;
+
+$("tugasIdEdit").value=t.id;
+$("namaTugas").value=t.nama_tugas||"";
+$("targetMode").value=t.target_mode||"semua";
+$("targetDepartemen").value=t.target_departemen||"";
+$("targetNik").value=Array.isArray(t.target_nik)?t.target_nik.join(", "):"";
+$("keteranganTugas").value=t.keterangan||"";
+
+$("fieldTargetDepartemen").style.display=t.target_mode==="departemen"?"block":"none";
+$("fieldTargetNik").style.display=t.target_mode==="nik"?"block":"none";
+$("btnSimpanTugas").textContent="Simpan Perubahan";
+$("btnBatalEditTugas").style.display="inline-block";
+
+$("namaTugas").focus();
+};
+
+window.cabutPenugasan=async function(id){
+const t=tugasAktif.find(x=>x.id===id);
+if(!t)return;
+
+if(!confirm("Cabut penugasan "+t.nama_tugas+"?"))return;
+
+try{
+await updateDoc(doc(db,C_TUGAS,id),{
+status:"dicabut",
+dicabutAt:serverTimestamp(),
+dicabut_by:penggunaLogin.uid,
+updatedAt:serverTimestamp()
+});
+
+await simpanRiwayat({
+aksi:"cabut_penugasan",
+nik_karyawan:karyawanAktif.nik,
+nama_karyawan:karyawanAktif.nama,
+id_penugasan:id,
+detail:"Mencabut penugasan "+t.nama_tugas
+});
+
+toast("Penugasan dicabut.");
+await muatTugasKaryawan();
+}catch(err){
+console.error(err);
+toast("Gagal mencabut penugasan: "+err.message);
+}
+};
+
+window.aktifkanPenugasan=async function(id){
+const t=tugasAktif.find(x=>x.id===id);
+if(!t)return;
+
+if(!confirm("Aktifkan kembali penugasan "+t.nama_tugas+"?"))return;
+
+try{
+await updateDoc(doc(db,C_TUGAS,id),{
+status:"aktif",
+diaktifkanAt:serverTimestamp(),
+diaktifkan_by:penggunaLogin.uid,
+updatedAt:serverTimestamp()
+});
+
+await simpanRiwayat({
+aksi:"aktifkan_penugasan",
+nik_karyawan:karyawanAktif.nik,
+nama_karyawan:karyawanAktif.nama,
+id_penugasan:id,
+detail:"Mengaktifkan kembali penugasan "+t.nama_tugas
+});
+
+toast("Penugasan diaktifkan kembali.");
+await muatTugasKaryawan();
+}catch(err){
+console.error(err);
+toast("Gagal mengaktifkan penugasan: "+err.message);
+}
+};
+
+/* =========================
+   SEARCH DAN FILTER
+========================= */
 
 $("searchInput").addEventListener("input",renderKaryawan);
 $("filterDepartemen").addEventListener("change",renderKaryawan);
 
-// IMPORT EXCEL
-
-$("btnImport").addEventListener("click",()=>{
-$("fileImportModal").value="";
-$("hasilImport").textContent="";
-bukaModal("modalImport");
-});
-
-function normalHeader(v){
-return String(v||"").toLowerCase().replace(/[^a-z0-9]/g,"");
-}
-
-function ambilKolom(row,nama){
-const cari=normalHeader(nama);
-const key=Object.keys(row).find(k=>normalHeader(k)===cari);
-return key===undefined?"":row[key];
-}
-
-function konversiBaris(row){
-return {
-divisi:"Terminal Khusus",
-nik:normalisasiNIK(ambilKolom(row,"NIK")),
-nama:String(ambilKolom(row,"Nama")||"").trim(),
-departemen:String(ambilKolom(row,"Departemen")||"").trim(),
-jabatan:String(ambilKolom(row,"Jabatan")||"").trim(),
-tmk:tanggalExcel(ambilKolom(row,"TMK")),
-poh:String(ambilKolom(row,"POH")||"").trim(),
-sistem_cuti:String(ambilKolom(row,"Sistem Cuti")||ambilKolom(row,"Sistem_Cuti")||"").trim(),
-shift_kerja:String(ambilKolom(row,"Shift Kerja")||ambilKolom(row,"Shift_Kerja")||"").trim(),
-grade:Number(ambilKolom(row,"Grade")),
-nowa:String(ambilKolom(row,"NOWA")||ambilKolom(row,"No WA")||"").trim()
-};
-}
-
-$("btnProsesImport").addEventListener("click",async()=>{
-const file=$("fileImportModal").files[0];
-if(!file){
-toast("Pilih file Excel atau CSV terlebih dahulu.");
-return;
-}
-if(!window.XLSX){
-toast("Library Excel belum berhasil dimuat.");
-return;
-}
-
-const btn=$("btnProsesImport");
-btn.disabled=true;
-$("hasilImport").textContent="Membaca file...";
-
-try{
-const buffer=await file.arrayBuffer();
-const workbook=XLSX.read(buffer,{type:"array",cellDates:true});
-const sheet=workbook.Sheets[workbook.SheetNames[0]];
-const rows=XLSX.utils.sheet_to_json(sheet,{defval:"",raw:true});
-
-if(!rows.length)throw new Error("File tidak berisi data.");
-
-const sudahAda=new Set(daftarKaryawan.map(k=>k.nik));
-const diproses=new Set();
-const siap=[];
-let dilewati=0;
-let gagal=0;
-
-for(let i=0;i<rows.length;i++){
-const k=konversiBaris(rows[i]);
-
-if(!k.nik||!k.nama||!k.departemen||!k.jabatan||
-!k.tmk||!k.sistem_cuti||!k.shift_kerja||
-!validasiTMK(k.tmk)||!Number.isInteger(k.grade)||k.grade<0){
-gagal++;
-continue;
-}
-
-if(!["Operasional Pelabuhan","Kendaraan Bergerak","Safety & Technology"].includes(k.departemen)){
-gagal++;
-continue;
-}
-
-if(sudahAda.has(k.nik)||diproses.has(k.nik)){
-dilewati++;
-continue;
-}
-
-diproses.add(k.nik);
-siap.push(k);
-}
-
-if(!siap.length){
-$("hasilImport").textContent=
-"Import selesai. Tidak ada data valid.\nDilewati: "+dilewati+
-"\nData tidak valid: "+gagal;
-return;
-}
-
-let berhasil=0;
-
-for(let i=0;i<siap.length;i+=400){
-const bagian=siap.slice(i,i+400);
-const batch=writeBatch(db);
-
-bagian.forEach(k=>{
-const ref=doc(db,C_KARYAWAN,k.nik);
-batch.set(ref,{
-...k,
-createdAt:serverTimestamp(),
-createdBy:penggunaLogin.uid,
-updatedAt:serverTimestamp()
-});
-});
-
-await batch.commit();
-berhasil+=bagian.length;
-
-$("hasilImport").textContent=
-"Sedang menyimpan...\nBerhasil: "+berhasil+" dari "+siap.length;
-}
-
-$("hasilImport").textContent=
-"IMPORT SELESAI\n\nBerhasil ditambahkan: "+berhasil+
-"\nNIK sudah terdaftar: "+dilewati+
-"\nData tidak valid: "+gagal;
-
-await muatKaryawan();
-toast("Import data selesai.");
-
-}catch(err){
-console.error(err);
-$("hasilImport").textContent="IMPORT GAGAL\n"+err.message;
-toast("Import gagal: "+err.message);
-}finally{
-btn.disabled=false;
-}
-});
-
-// EXPORT EXCEL
+/* =========================
+   EXPORT EXCEL
+========================= */
 
 $("btnExport").addEventListener("click",()=>{
-try{
-if(!daftarKaryawan.length){
-toast("Belum ada data untuk diexport.");
-return;
-}
-if(!window.XLSX){
-toast("Library Excel belum berhasil dimuat.");
-return;
-}
+if(!superAdmin)return toast("Akses ditolak.");
+if(!window.XLSX)return toast("Library Excel belum berhasil dimuat.");
 
-const data=daftarKaryawan.map((k,i)=>({
-"No":i+1,
-"NIK":k.nik,
-"Nama":k.nama||"",
-"Divisi":k.divisi||"",
-"Departemen":k.departemen||"",
-"Jabatan":k.jabatan||"",
-"TMK":k.tmk||"",
-"POH":k.poh||"",
-"Sistem Cuti":k.sistem_cuti||"",
-"Shift Kerja":k.shift_kerja||"",
-"Grade":k.grade??"",
-"NOWA":k.nowa||""
+if(!daftarKaryawan.length)return toast("Belum ada data untuk diekspor.");
+
+const rows=daftarKaryawan.map(k=>({
+NIK:k.nik,
+Nama:k.nama,
+Divisi:k.divisi||"Terminal Khusus",
+Departemen:k.departemen,
+Jabatan:k.jabatan,
+TMK:k.tmk,
+POH:k.poh||"",
+"Sistem Cuti":k.sistem_cuti,
+"Shift Kerja":k.shift_kerja,
+Grade:k.grade,
+NOWA:k.nowa||""
 }));
 
-const ws=XLSX.utils.json_to_sheet(data);
+const ws=XLSX.utils.json_to_sheet(rows);
 ws["!cols"]=[
-{wch:6},{wch:18},{wch:28},{wch:20},
-{wch:25},{wch:25},{wch:12},{wch:18},
-{wch:15},{wch:18},{wch:10},{wch:18}
+{wch:18},{wch:30},{wch:22},{wch:28},{wch:25},
+{wch:12},{wch:20},{wch:15},{wch:18},{wch:10},{wch:18}
 ];
 
 const wb=XLSX.utils.book_new();
@@ -1211,54 +1052,203 @@ const tanggal=new Date().toISOString().slice(0,10);
 XLSX.writeFile(wb,"Data_Karyawan_WAINI_"+tanggal+".xlsx");
 
 toast("File Excel berhasil dibuat.");
+});
+
+/* =========================
+   IMPORT EXCEL / CSV
+========================= */
+
+$("btnImport").addEventListener("click",()=>{
+if(!superAdmin)return toast("Akses ditolak.");
+$("fileImportModal").value="";
+$("hasilImport").textContent="";
+bukaModal("modalImport");
+});
+
+function normalisasiHeader(v){
+return String(v||"")
+.toLowerCase()
+.trim()
+.replace(/[\s_\-]+/g,"")
+.replace(/[^\w]/g,"");
+}
+
+function cariKolom(row,aliases){
+const keys=Object.keys(row);
+for(const alias of aliases){
+const target=normalisasiHeader(alias);
+const key=keys.find(k=>normalisasiHeader(k)===target);
+if(key!==undefined)return row[key];
+}
+return "";
+}
+
+function normalisasiDepartemen(v){
+const s=String(v||"").trim();
+const list=[
+"Operasional Pelabuhan",
+"Kendaraan Bergerak",
+"Safety & Technology"
+];
+return list.find(x=>x.toLowerCase()===s.toLowerCase())||s;
+}
+
+function normalisasiSistemCuti(v){
+const s=String(v||"").trim().toLowerCase();
+if(s==="lokal")return"Lokal";
+if(s==="roster")return"Roster";
+if(s==="5:2"||s==="5/2")return"5:2";
+return String(v||"").trim();
+}
+
+function normalisasiShift(v){
+const s=String(v||"").trim();
+const list=["Non Shift","Shift 1","Shift 2","Shift 3","Group 1","Group 2","Group 3","Maintenance"];
+return list.find(x=>x.toLowerCase()===s.toLowerCase())||s;
+}
+
+function buatDataImport(row){
+return{
+nik:normalisasiNIK(cariKolom(row,["NIK","No NIK","Nomor Induk","ID Karyawan"])),
+nama:String(cariKolom(row,["Nama","Nama Karyawan"] )||"").trim(),
+divisi:"Terminal Khusus",
+departemen:normalisasiDepartemen(cariKolom(row,["Departemen","Department"])),
+jabatan:String(cariKolom(row,["Jabatan","Posisi"] )||"").trim(),
+tmk:tanggalExcel(cariKolom(row,["TMK","Tanggal Masuk","Tanggal Mulai Kerja"])),
+poh:String(cariKolom(row,["POH","Tempat POH"] )||"").trim(),
+sistem_cuti:normalisasiSistemCuti(cariKolom(row,["Sistem Cuti","Cuti"])),
+shift_kerja:normalisasiShift(cariKolom(row,["Shift Kerja","Shift"])),
+grade:Number(cariKolom(row,["Grade","Golongan"])),
+nowa:String(cariKolom(row,["NOWA","No WA","WhatsApp","Nomor WhatsApp"] )||"").trim()
+};
+}
+
+$("btnProsesImport").addEventListener("click",async()=>{
+if(!superAdmin)return toast("Akses ditolak.");
+
+const file=$("fileImportModal").files[0];
+if(!file)return toast("Pilih file Excel/CSV terlebih dahulu.");
+if(!window.XLSX)return toast("Library Excel belum berhasil dimuat.");
+
+const btn=$("btnProsesImport");
+btn.disabled=true;
+btn.textContent="Memproses...";
+$("hasilImport").textContent="Membaca file...";
+
+try{
+const buffer=await file.arrayBuffer();
+const workbook=XLSX.read(buffer,{type:"array",cellDates:true});
+const sheet=workbook.Sheets[workbook.SheetNames[0]];
+const rows=XLSX.utils.sheet_to_json(sheet,{defval:"",raw:false});
+
+if(!rows.length){
+$("hasilImport").textContent="File tidak memiliki data.";
+return;
+}
+
+let berhasil=0,duplikat=0,gagal=0;
+const daftarGagal=[];
+const batch=writeBatch(db);
+let operasi=0;
+
+const nikDalamFile=new Set();
+
+for(let i=0;i<rows.length;i++){
+const data=buatDataImport(rows[i]);
+
+if(!data.nik||!data.nama){
+gagal++;
+daftarGagal.push("Baris "+(i+2)+": NIK atau Nama kosong.");
+continue;
+}
+
+if(!data.departemen||!data.jabatan||!validasiTMK(data.tmk)||!data.sistem_cuti||!data.shift_kerja||!Number.isFinite(data.grade)){
+gagal++;
+daftarGagal.push("Baris "+(i+2)+" ("+data.nik+"): data wajib tidak valid.");
+continue;
+}
+
+if(nikDalamFile.has(data.nik)){
+duplikat++;
+daftarGagal.push("Baris "+(i+2)+": NIK duplikat dalam file "+data.nik);
+continue;
+}
+nikDalamFile.add(data.nik);
+
+const existing=await getDoc(doc(db,C_KARYAWAN,data.nik));
+if(existing.exists()){
+duplikat++;
+continue;
+}
+
+data.createdAt=serverTimestamp();
+data.created_by=penggunaLogin.uid;
+data.updatedAt=serverTimestamp();
+data.updated_by=penggunaLogin.uid;
+
+batch.set(doc(db,C_KARYAWAN,data.nik),data);
+operasi++;
+berhasil++;
+}
+
+if(operasi>0)await batch.commit();
+
+$("hasilImport").textContent=
+"Import selesai.\n"+
+"Berhasil: "+berhasil+"\n"+
+"Duplikat dilewati: "+duplikat+"\n"+
+"Gagal: "+gagal+
+(daftarGagal.length?"\n\nDetail:\n"+daftarGagal.slice(0,30).join("\n"):"");
+
+if(berhasil>0){
+await simpanRiwayat({
+aksi:"import_karyawan",
+detail:"Import Excel: "+berhasil+" data berhasil, "+duplikat+" duplikat, "+gagal+" gagal"
+});
+await muatKaryawan();
+toast("Import selesai. "+berhasil+" data berhasil ditambahkan.");
+}
+
 }catch(err){
 console.error(err);
-toast("Export gagal: "+err.message);
+$("hasilImport").textContent="Import gagal: "+err.message;
+toast("Import gagal: "+err.message);
+}finally{
+btn.disabled=false;
+btn.textContent="Mulai Import";
 }
 });
 
-// PEMERIKSAAN AKUN
+/* =========================
+   LOGIN / INISIALISASI
+========================= */
 
 onAuthStateChanged(auth,async user=>{
 if(!user){
-location.replace("login.html");
+penggunaLogin=null;
+superAdmin=false;
+tampilAksesDitolak("Anda belum login. Silakan login terlebih dahulu.");
 return;
 }
+
+const lolos=await cekSuperAdmin(user);
+
+if(!lolos){
+superAdmin=false;
+tampilAksesDitolak("AKSES DITOLAK. Halaman Data Karyawan hanya dapat diakses Super Admin aktif.");
+return;
+}
+
+superAdmin=true;
+$("btnTambah").disabled=false;
+$("btnImport").disabled=false;
+$("btnExport").disabled=false;
 
 try{
-const ref=doc(db,C_PENGGUNA,user.uid);
-const snap=await getDoc(ref);
-
-if(!snap.exists()){
-alert("Data pengguna tidak ditemukan.");
-location.replace("menu.html");
-return;
-}
-
-penggunaLogin={
-uid:user.uid,
-...snap.data()
-};
-
-if(
-penggunaLogin.role!=="super_admin"||
-penggunaLogin.status!=="aktif"
-){
-alert("Akses ditolak. Halaman ini hanya dapat dikelola Super Admin aktif.");
-location.replace("menu.html");
-return;
-}
-
 await muatKaryawan();
-
 }catch(err){
 console.error(err);
-$("tbodyKaryawan").innerHTML=
-`<tr><td colspan="11" class="empty">
-Gagal memuat data. Periksa koneksi internet dan Firestore Rules.
-<br><br>${esc(err.message)}
-</td></tr>`;
-toast("Gagal memeriksa akses akun: "+err.message);
+tampilAksesDitolak("Gagal memuat data karyawan: "+err.message);
 }
 });
 
