@@ -1,0 +1,1013 @@
+pengelolaan-menu-tugas.html
+
+Simpan file ini dengan nama "pengelolaan-menu-tugas.html" di folder yang sama dengan "firebase.js".
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#991b1b">
+<title>Pengelolaan Menu Tugas - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f7;
+    color: #222;
+    padding-bottom: 30px;
+}
+
+header {
+    background: #991b1b;
+    color: white;
+    padding: 20px 16px;
+}
+
+.header-inner {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.header-title {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.header-subtitle {
+    font-size: 12px;
+    margin-top: 6px;
+    opacity: .9;
+}
+
+.header-info {
+    font-size: 12px;
+    margin-top: 12px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 14px;
+}
+
+.card {
+    background: white;
+    padding: 16px;
+    border-radius: 13px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+.card-title {
+    font-size: 17px;
+    font-weight: bold;
+    color: #991b1b;
+    margin-bottom: 14px;
+}
+
+.info-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 12px;
+    border-radius: 9px;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 14px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 13px 0 6px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    font-size: 14px;
+    outline: none;
+    background: white;
+}
+
+input:focus, textarea:focus {
+    border-color: #991b1b;
+}
+
+textarea {
+    min-height: 75px;
+    resize: vertical;
+}
+
+button {
+    border: none;
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: #991b1b;
+    color: white;
+}
+
+.btn-secondary {
+    background: #eee;
+    color: #333;
+}
+
+.btn-warning {
+    background: #d97706;
+    color: white;
+}
+
+.btn-success {
+    background: #15803d;
+    color: white;
+}
+
+.btn-small {
+    padding: 8px 11px;
+    font-size: 12px;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 9px;
+    margin-bottom: 14px;
+}
+
+.summary-item {
+    background: white;
+    border-radius: 11px;
+    padding: 13px 5px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+}
+
+.summary-number {
+    font-size: 22px;
+    font-weight: bold;
+    color: #991b1b;
+}
+
+.summary-label {
+    font-size: 10px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.task-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 13px;
+    margin-top: 10px;
+}
+
+.task-name {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.task-code {
+    font-size: 11px;
+    color: #991b1b;
+    margin-top: 5px;
+}
+
+.task-detail {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.7;
+    margin-top: 8px;
+    overflow-wrap: anywhere;
+}
+
+.task-status {
+    display: inline-block;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 9px;
+}
+
+.aktif {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.nonaktif {
+    background: #eee;
+    color: #555;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.empty, .loading {
+    padding: 22px 10px;
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+}
+
+.success-box {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    padding: 12px;
+    border-radius: 9px;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.error-box {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 12px;
+    border-radius: 9px;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.checkbox-row input {
+    width: 19px;
+    height: 19px;
+    accent-color: #991b1b;
+}
+
+.checkbox-row label {
+    margin: 0;
+}
+
+@media(max-width:600px) {
+    .container {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 14px;
+    }
+
+    .button-row button {
+        flex: 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="header-title">
+            📋 Pengelolaan Menu Tugas
+        </div>
+
+        <div class="header-subtitle">
+            WAINI - Wadah Informasi Internal Divisi Terminal Khusus
+        </div>
+
+        <div class="header-info" id="infoPengguna">
+            Memeriksa akun...
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div id="pesanGlobal"></div>
+
+    <div class="summary">
+
+        <div class="summary-item">
+            <div class="summary-number" id="jumlahSemua">0</div>
+            <div class="summary-label">Total Menu</div>
+        </div>
+
+        <div class="summary-item">
+            <div class="summary-number" id="jumlahAktif">0</div>
+            <div class="summary-label">Menu Aktif</div>
+        </div>
+
+        <div class="summary-item">
+            <div class="summary-number" id="jumlahNonaktif">0</div>
+            <div class="summary-label">Nonaktif</div>
+        </div>
+
+    </div>
+
+    <!-- FORM -->
+
+    <div class="card">
+
+        <div class="card-title" id="judulForm">
+            ➕ Tambah Menu Tugas
+        </div>
+
+        <div class="info-box">
+            Menu tugas yang dibuat di sini akan otomatis tersedia
+            pada halaman Pengolahan Penugasan apabila statusnya aktif.
+            Menu tidak perlu ditulis ulang di kode HTML.
+        </div>
+
+        <input type="hidden" id="editId">
+
+        <label>Kode Tugas</label>
+        <input
+            type="text"
+            id="kode"
+            placeholder="Contoh: verifikasi_absensi"
+            maxlength="50"
+        >
+
+        <label>Nama Menu Tugas</label>
+        <input
+            type="text"
+            id="nama"
+            placeholder="Contoh: Verifikasi Absensi"
+            maxlength="100"
+        >
+
+        <label>Halaman HTML</label>
+        <input
+            type="text"
+            id="halaman"
+            placeholder="Contoh: verifikasi-absensi.html"
+            maxlength="150"
+        >
+
+        <label>Deskripsi</label>
+        <textarea
+            id="deskripsi"
+            placeholder="Penjelasan mengenai tugas ini..."
+            maxlength="500"
+        ></textarea>
+
+        <label>Urutan Tampilan</label>
+        <input
+            type="number"
+            id="urutan"
+            min="1"
+            step="1"
+            value="1"
+        >
+
+        <div class="checkbox-row">
+            <input
+                type="checkbox"
+                id="aktif"
+                checked
+            >
+            <label for="aktif">
+                Aktifkan menu tugas
+            </label>
+        </div>
+
+        <div class="button-row">
+
+            <button
+                type="button"
+                class="btn-primary"
+                id="btnSimpan"
+            >
+                💾 Simpan Menu
+            </button>
+
+            <button
+                type="button"
+                class="btn-secondary hidden"
+                id="btnBatal"
+            >
+                Batal Edit
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- DAFTAR -->
+
+    <div class="card">
+
+        <div class="card-title">
+            📑 Daftar Menu Tugas
+        </div>
+
+        <input
+            type="text"
+            id="pencarian"
+            placeholder="Cari kode atau nama tugas..."
+        >
+
+        <div id="daftarMenu">
+            <div class="loading">
+                Memuat menu tugas...
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+import {
+    auth,
+    db
+} from "./firebase.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    collection,
+    getDocs,
+    getDoc,
+    doc,
+    addDoc,
+    updateDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// ==========================================
+// VARIABEL
+// ==========================================
+
+let semuaMenu = [];
+let uidLogin = null;
+let sedangMenyimpan = false;
+
+const el = id => document.getElementById(id);
+
+
+// ==========================================
+// FUNGSI UMUM
+// ==========================================
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function pesan(text, tipe = "success") {
+
+    const className = tipe === "error"
+        ? "error-box"
+        : "success-box";
+
+    el("pesanGlobal").innerHTML = `
+        <div class="${className}">
+            ${escapeHTML(text)}
+        </div>
+    `;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+function hapusPesan() {
+    el("pesanGlobal").innerHTML = "";
+}
+
+
+// ==========================================
+// PEMERIKSAAN LOGIN
+// ==========================================
+
+onAuthStateChanged(auth, async user => {
+
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    uidLogin = user.uid;
+
+    try {
+
+        const snap = await getDoc(
+            doc(db, "pengguna", user.uid)
+        );
+
+        if (!snap.exists()) {
+            pesan("Data pengguna tidak ditemukan.", "error");
+            return;
+        }
+
+        const pengguna = snap.data();
+
+        if (pengguna.status !== "aktif") {
+            pesan("Akun Anda belum aktif.", "error");
+            return;
+        }
+
+        if (pengguna.role !== "super_admin") {
+
+            pesan(
+                "Halaman ini hanya dapat diakses Super Admin.",
+                "error"
+            );
+
+            setTimeout(() => {
+                window.location.href = "menu.html";
+            }, 2000);
+
+            return;
+        }
+
+        el("infoPengguna").textContent =
+            "Login sebagai Super Admin: " +
+            (pengguna.nama || pengguna.nik || user.email || "");
+
+        await muatMenu();
+
+    } catch (error) {
+
+        console.error(error);
+
+        pesan(
+            "Gagal memeriksa akun: " + error.message,
+            "error"
+        );
+    }
+
+});
+
+
+// ==========================================
+// MEMUAT MENU TUGAS
+// ==========================================
+
+async function muatMenu() {
+
+    el("daftarMenu").innerHTML =
+        '<div class="loading">Memuat data...</div>';
+
+    try {
+
+        const snap = await getDocs(
+            collection(db, "menu_tugas")
+        );
+
+        semuaMenu = snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+        }));
+
+        semuaMenu.sort((a, b) =>
+            Number(a.urutan || 0) -
+            Number(b.urutan || 0)
+        );
+
+        tampilkanRingkasan();
+        tampilkanDaftar();
+
+    } catch (error) {
+
+        console.error(error);
+
+        el("daftarMenu").innerHTML = `
+            <div class="error-box">
+                Gagal memuat menu tugas:
+                ${escapeHTML(error.message)}
+            </div>
+        `;
+    }
+}
+
+
+// ==========================================
+// RINGKASAN
+// ==========================================
+
+function tampilkanRingkasan() {
+
+    const aktif = semuaMenu.filter(
+        m => m.aktif === true
+    ).length;
+
+    el("jumlahSemua").textContent =
+        semuaMenu.length;
+
+    el("jumlahAktif").textContent =
+        aktif;
+
+    el("jumlahNonaktif").textContent =
+        semuaMenu.length - aktif;
+}
+
+
+// ==========================================
+// MENAMPILKAN DAFTAR
+// ==========================================
+
+function tampilkanDaftar() {
+
+    const cari = el("pencarian").value
+        .trim()
+        .toLowerCase();
+
+    const hasil = semuaMenu.filter(m => {
+
+        const kode = String(m.kode || "").toLowerCase();
+        const nama = String(m.nama || "").toLowerCase();
+
+        return kode.includes(cari) ||
+               nama.includes(cari);
+    });
+
+    if (!hasil.length) {
+
+        el("daftarMenu").innerHTML = `
+            <div class="empty">
+                Belum ada menu tugas yang ditemukan.
+            </div>
+        `;
+
+        return;
+    }
+
+    el("daftarMenu").innerHTML = hasil.map(m => `
+
+        <div class="task-card">
+
+            <div class="task-name">
+                ${escapeHTML(m.nama || "-")}
+            </div>
+
+            <div class="task-code">
+                Kode: ${escapeHTML(m.kode || "-")}
+            </div>
+
+            <div class="task-detail">
+                <strong>Halaman:</strong>
+                ${escapeHTML(m.halaman || "-")}
+                <br>
+
+                <strong>Deskripsi:</strong>
+                ${escapeHTML(m.deskripsi || "-")}
+                <br>
+
+                <strong>Urutan:</strong>
+                ${Number(m.urutan || 0)}
+            </div>
+
+            <span class="task-status ${
+                m.aktif === true ? "aktif" : "nonaktif"
+            }">
+                ${m.aktif === true ? "AKTIF" : "NONAKTIF"}
+            </span>
+
+            <div class="button-row">
+
+                <button
+                    class="btn-warning btn-small"
+                    data-edit="${escapeHTML(m.id)}"
+                >
+                    ✏️ Edit
+                </button>
+
+                <button
+                    class="${
+                        m.aktif === true
+                        ? "btn-secondary"
+                        : "btn-success"
+                    } btn-small"
+                    data-toggle="${escapeHTML(m.id)}"
+                >
+                    ${
+                        m.aktif === true
+                        ? "Nonaktifkan"
+                        : "Aktifkan"
+                    }
+                </button>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+// ==========================================
+// SIMPAN MENU BARU / EDIT
+// ==========================================
+
+async function simpanMenu() {
+
+    if (sedangMenyimpan) return;
+
+    hapusPesan();
+
+    const editId = el("editId").value.trim();
+
+    const kode = el("kode").value.trim().toLowerCase();
+
+    const nama = el("nama").value.trim();
+
+    const halaman = el("halaman").value.trim();
+
+    const deskripsi = el("deskripsi").value.trim();
+
+    const urutan = Number(el("urutan").value);
+
+    const aktif = el("aktif").checked;
+
+    if (!/^[a-z0-9_-]{2,50}$/.test(kode)) {
+        pesan(
+            "Kode harus 2-50 karakter, hanya huruf kecil, angka, garis bawah atau tanda hubung.",
+            "error"
+        );
+        return;
+    }
+
+    if (nama.length < 2 || nama.length > 100) {
+        pesan("Nama menu harus 2-100 karakter.", "error");
+        return;
+    }
+
+    if (
+        !/^[a-zA-Z0-9_-]+\.html$/.test(halaman)
+    ) {
+        pesan(
+            "Nama halaman harus berupa file HTML, contoh verifikasi-absensi.html.",
+            "error"
+        );
+        return;
+    }
+
+    if (
+        !Number.isSafeInteger(urutan) ||
+        urutan < 1
+    ) {
+        pesan("Urutan harus berupa bilangan bulat minimal 1.", "error");
+        return;
+    }
+
+    if (deskripsi.length > 500) {
+        pesan("Deskripsi maksimal 500 karakter.", "error");
+        return;
+    }
+
+    const duplikat = semuaMenu.find(m =>
+        String(m.kode || "").toLowerCase() === kode
+        && m.id !== editId
+    );
+
+    if (duplikat) {
+        pesan("Kode tugas sudah digunakan menu lain.", "error");
+        return;
+    }
+
+    const data = {
+        kode,
+        nama,
+        halaman,
+        deskripsi,
+        urutan,
+        aktif,
+        updatedAt: serverTimestamp()
+    };
+
+    sedangMenyimpan = true;
+    el("btnSimpan").disabled = true;
+    el("btnSimpan").textContent = "Menyimpan...";
+
+    try {
+
+        if (editId) {
+
+            await updateDoc(
+                doc(db, "menu_tugas", editId),
+                data
+            );
+
+            pesan("Menu tugas berhasil diperbarui.");
+
+        } else {
+
+            data.createdAt = serverTimestamp();
+
+            await addDoc(
+                collection(db, "menu_tugas"),
+                data
+            );
+
+            pesan("Menu tugas baru berhasil ditambahkan.");
+        }
+
+        resetForm();
+        await muatMenu();
+
+    } catch (error) {
+
+        console.error(error);
+
+        pesan(
+            "Gagal menyimpan menu: " + error.message,
+            "error"
+        );
+
+    } finally {
+
+        sedangMenyimpan = false;
+        el("btnSimpan").disabled = false;
+        el("btnSimpan").textContent = "💾 Simpan Menu";
+    }
+}
+
+
+// ==========================================
+// EDIT MENU
+// ==========================================
+
+function editMenu(id) {
+
+    const m = semuaMenu.find(x => x.id === id);
+
+    if (!m) return;
+
+    el("editId").value = m.id;
+    el("kode").value = m.kode || "";
+    el("nama").value = m.nama || "";
+    el("halaman").value = m.halaman || "";
+    el("deskripsi").value = m.deskripsi || "";
+    el("urutan").value = m.urutan || 1;
+    el("aktif").checked = m.aktif === true;
+
+    el("judulForm").textContent =
+        "✏️ Edit Menu Tugas";
+
+    el("btnSimpan").textContent =
+        "💾 Simpan Perubahan";
+
+    el("btnBatal").classList.remove("hidden");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+// ==========================================
+// AKTIFKAN / NONAKTIFKAN
+// ==========================================
+
+async function ubahStatus(id) {
+
+    const m = semuaMenu.find(x => x.id === id);
+
+    if (!m) return;
+
+    const statusBaru = m.aktif !== true;
+
+    const konfirmasi = confirm(
+        statusBaru
+        ? "Aktifkan menu tugas ini?"
+        : "Nonaktifkan menu tugas ini? Menu tidak akan dihapus."
+    );
+
+    if (!konfirmasi) return;
+
+    try {
+
+        await updateDoc(
+            doc(db, "menu_tugas", id),
+            {
+                aktif: statusBaru,
+                updatedAt: serverTimestamp()
+            }
+        );
+
+        pesan(
+            statusBaru
+            ? "Menu berhasil diaktifkan."
+            : "Menu berhasil dinonaktifkan."
+        );
+
+        await muatMenu();
+
+    } catch (error) {
+
+        console.error(error);
+
+        pesan(
+            "Gagal mengubah status: " + error.message,
+            "error"
+        );
+    }
+}
+
+
+// ==========================================
+// RESET FORM
+// ==========================================
+
+function resetForm() {
+
+    el("editId").value = "";
+    el("kode").value = "";
+    el("nama").value = "";
+    el("halaman").value = "";
+    el("deskripsi").value = "";
+    el("urutan").value = 1;
+    el("aktif").checked = true;
+
+    el("judulForm").textContent =
+        "➕ Tambah Menu Tugas";
+
+    el("btnSimpan").textContent =
+        "💾 Simpan Menu";
+
+    el("btnBatal").classList.add("hidden");
+}
+
+
+// ==========================================
+// EVENT
+// ==========================================
+
+el("btnSimpan").addEventListener(
+    "click",
+    simpanMenu
+);
+
+el("btnBatal").addEventListener(
+    "click",
+    resetForm
+);
+
+el("pencarian").addEventListener(
+    "input",
+    tampilkanDaftar
+);
+
+el("daftarMenu").addEventListener(
+    "click",
+    event => {
+
+        const tombolEdit = event.target.closest("[data-edit]");
+        const tombolToggle = event.target.closest("[data-toggle]");
+
+        if (tombolEdit) {
+            editMenu(tombolEdit.dataset.edit);
+        }
+
+        if (tombolToggle) {
+            ubahStatus(tombolToggle.dataset.toggle);
+        }
+    }
+);
+
+</script>
+
+</body>
+</html>
