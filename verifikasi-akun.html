@@ -1,0 +1,1580 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#c90016">
+<title>Verifikasi Akun | WAINI</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --red:#c90016;
+  --red2:#e50920;
+  --bg:#f4f6fa;
+  --dark:#172033;
+  --muted:#687386;
+  --green:#159447;
+  --blue:#1265d8;
+  --orange:#e99a00;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--dark);
+  min-height:100vh;
+}
+
+header{
+  background:linear-gradient(120deg,#a90012,#ed1027);
+  color:white;
+  padding:15px 17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  box-shadow:0 3px 12px #0002;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo{
+  width:54px;
+  height:54px;
+  border:2px solid white;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.brand h1{
+  font-size:23px;
+  letter-spacing:1px;
+}
+
+.brand p{
+  font-size:11px;
+  line-height:1.4;
+  opacity:.95;
+}
+
+.menu-btn{
+  background:#ffffff25;
+  border:1px solid #ffffff55;
+  color:white;
+  border-radius:9px;
+  padding:10px 13px;
+  font-size:23px;
+  cursor:pointer;
+}
+
+nav{
+  display:none;
+  background:white;
+  padding:12px;
+  box-shadow:0 3px 10px #0001;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+nav.show{display:flex}
+
+nav a{
+  color:var(--dark);
+  text-decoration:none;
+  padding:11px 13px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:bold;
+  background:#f2f3f6;
+}
+
+nav a.active{
+  background:#ffe5e8;
+  color:var(--red);
+}
+
+main{
+  max-width:850px;
+  margin:auto;
+  padding:16px 12px 25px;
+}
+
+.page-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:17px;
+}
+
+.title-icon{
+  width:53px;
+  height:53px;
+  flex-shrink:0;
+  background:#ffe5e8;
+  color:var(--red);
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  font-size:27px;
+}
+
+.page-title h2{
+  font-size:21px;
+  margin-bottom:4px;
+}
+
+.page-title p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+  margin-bottom:16px;
+}
+
+.summary-card{
+  padding:13px 12px;
+  border-radius:13px;
+  border:1px solid #e3e6ed;
+  background:white;
+}
+
+.summary-card small{
+  color:var(--muted);
+  font-size:11px;
+  display:block;
+  margin-bottom:6px;
+}
+
+.summary-card strong{
+  font-size:25px;
+}
+
+.summary-card.pending{background:#fff6df}
+.summary-card.approved{background:#e9f8ee}
+.summary-card.rejected{background:#ffebed}
+.summary-card.total{background:#edf1f8}
+
+.toolbar{
+  background:white;
+  padding:12px;
+  border-radius:13px;
+  margin-bottom:13px;
+  border:1px solid #e5e8ef;
+}
+
+.search{
+  width:100%;
+  padding:13px;
+  border:1px solid #d8dce5;
+  border-radius:9px;
+  outline:none;
+  font-size:14px;
+  margin-bottom:10px;
+}
+
+.search:focus{border-color:var(--red)}
+
+.filters{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+select{
+  width:100%;
+  padding:11px 9px;
+  border:1px solid #d8dce5;
+  border-radius:8px;
+  background:white;
+  font-size:12px;
+  color:var(--dark);
+}
+
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:17px 2px 10px;
+  gap:8px;
+}
+
+.section-heading h3{font-size:15px}
+
+.section-heading span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.card-list{
+  display:grid;
+  gap:12px;
+}
+
+.applicant{
+  background:white;
+  border:1px solid #e1e5ec;
+  border-radius:14px;
+  padding:14px;
+  box-shadow:0 2px 7px #00000008;
+}
+
+.applicant-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.person{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.avatar{
+  width:43px;
+  height:43px;
+  flex-shrink:0;
+  border-radius:12px;
+  background:#ffe8eb;
+  color:var(--red);
+  display:grid;
+  place-items:center;
+  font-size:19px;
+  font-weight:bold;
+}
+
+.person h4{
+  font-size:14px;
+  overflow-wrap:anywhere;
+  margin-bottom:4px;
+}
+
+.person small{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.status{
+  font-size:10px;
+  font-weight:bold;
+  border-radius:30px;
+  padding:7px 9px;
+  white-space:normal;
+  text-align:center;
+  line-height:1.3;
+  max-width:125px;
+}
+
+.status.menunggu{background:#fff0c9;color:#9a6500}
+.status.disetujui{background:#dcf6e5;color:#087b36}
+.status.ditolak{background:#ffe0e3;color:#bd0017}
+.status.lengkapi{background:#e1efff;color:#0756b5}
+.status.aktif{background:#dcf6e5;color:#087b36}
+
+.details{
+  border-top:1px solid #edf0f4;
+  padding-top:10px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px 8px;
+}
+
+.detail label{
+  display:block;
+  font-size:10px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+.detail strong{
+  display:block;
+  font-size:12px;
+  overflow-wrap:anywhere;
+  line-height:1.4;
+}
+
+.employee-match{
+  margin-top:12px;
+  border-radius:9px;
+  padding:10px;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.employee-match.found{
+  background:#e8f7ed;
+  color:#087b36;
+}
+
+.employee-match.notfound{
+  background:#fff2df;
+  color:#946000;
+}
+
+.applicant-actions{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  margin-top:13px;
+}
+
+.btn{
+  border:0;
+  padding:11px 5px;
+  border-radius:8px;
+  color:white;
+  font-size:11px;
+  font-weight:bold;
+  cursor:pointer;
+  min-width:0;
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.btn-green{background:var(--green)}
+.btn-red{background:var(--red)}
+.btn-blue{background:var(--blue)}
+.btn-gray{background:#64748b}
+.btn-light{
+  background:#edf0f5;
+  color:#263246;
+  border:1px solid #dce1e9;
+}
+
+.single-action{
+  grid-column:1/-1;
+}
+
+.empty{
+  background:white;
+  border-radius:13px;
+  padding:35px 15px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  border:1px solid #e5e8ef;
+}
+
+.pagination{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:15px;
+  background:white;
+  padding:11px;
+  border-radius:11px;
+}
+
+.pagination small{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.page-buttons{
+  display:flex;
+  gap:5px;
+}
+
+.page-buttons button{
+  border:1px solid #ddd;
+  background:white;
+  padding:8px 11px;
+  border-radius:7px;
+  cursor:pointer;
+}
+
+.page-buttons button.active{
+  background:var(--red);
+  color:white;
+  border-color:var(--red);
+}
+
+.info{
+  margin-top:16px;
+  background:#e8f2ff;
+  border:1px solid #bfdbff;
+  border-radius:12px;
+  padding:13px;
+  font-size:12px;
+  line-height:1.6;
+}
+
+.info strong{color:#0756b5}
+
+footer{
+  background:linear-gradient(120deg,#ad0013,#e50920);
+  color:white;
+  text-align:center;
+  padding:17px 10px;
+  font-size:11px;
+}
+
+/* MODAL */
+
+.modal-bg{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:#0008;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+
+.modal-bg.show{display:flex}
+
+.modal{
+  background:white;
+  border-radius:15px;
+  width:100%;
+  max-width:430px;
+  max-height:90vh;
+  overflow:auto;
+  padding:18px;
+}
+
+.modal h3{
+  font-size:18px;
+  margin-bottom:7px;
+}
+
+.modal p{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+  margin-bottom:13px;
+}
+
+.modal label{
+  display:block;
+  font-size:12px;
+  font-weight:bold;
+  margin:12px 0 6px;
+}
+
+.modal input,.modal textarea{
+  width:100%;
+  border:1px solid #d8dce5;
+  border-radius:8px;
+  padding:12px;
+  font-family:Arial,sans-serif;
+  font-size:13px;
+  outline:none;
+}
+
+.modal textarea{
+  resize:vertical;
+  min-height:90px;
+}
+
+.modal-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:17px;
+}
+
+.message{
+  display:none;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:9px;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.message.show{display:block}
+.message.error{background:#ffe5e8;color:#b00016}
+.message.success{background:#e1f7e8;color:#087b36}
+
+.loading{
+  text-align:center;
+  background:white;
+  border-radius:12px;
+  padding:30px 15px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+@media(min-width:650px){
+  main{padding:22px 18px 30px}
+  .summary{grid-template-columns:repeat(4,1fr)}
+  .applicant{padding:18px}
+  .details{grid-template-columns:repeat(4,1fr)}
+  .applicant-actions{max-width:400px;margin-left:auto}
+}
+
+@media(max-width:380px){
+  .brand h1{font-size:20px}
+  .brand p{font-size:10px}
+  .page-title h2{font-size:18px}
+  .applicant-actions{gap:5px}
+  .btn{font-size:10px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo">WHW</div>
+    <div>
+      <h1>WAINI</h1>
+      <p>Sistem Manajemen Karyawan<br>Divisi Terminal Khusus</p>
+    </div>
+  </div>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+</header>
+
+<nav id="navigation">
+  <a href="menu.html">⌂ Dashboard</a>
+  <a href="verifikasi-akun.html" class="active">✓ Verifikasi Akun</a>
+  <a href="data-karyawan.html">♟ Data Karyawan</a>
+  <a href="penugasan.html">▣ Penugasan</a>
+  <a href="laporan.html">▤ Laporan</a>
+</nav>
+
+<main>
+
+  <div id="message" class="message"></div>
+
+  <div class="page-title">
+    <div class="title-icon">🛡</div>
+    <div>
+      <h2>Verifikasi Akun</h2>
+      <p>Periksa dan setujui pendaftaran akun karyawan</p>
+    </div>
+  </div>
+
+  <section class="summary">
+    <div class="summary-card total">
+      <small>Total Pendaftar</small>
+      <strong id="totalCount">0</strong>
+    </div>
+    <div class="summary-card pending">
+      <small>Menunggu Verifikasi</small>
+      <strong id="pendingCount">0</strong>
+    </div>
+    <div class="summary-card approved">
+      <small>Disetujui</small>
+      <strong id="approvedCount">0</strong>
+    </div>
+    <div class="summary-card rejected">
+      <small>Ditolak</small>
+      <strong id="rejectedCount">0</strong>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <input
+      type="search"
+      class="search"
+      id="searchInput"
+      placeholder="Cari nama atau NIK..."
+    >
+
+    <div class="filters">
+      <select id="statusFilter">
+        <option value="semua">Semua Status</option>
+        <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
+        <option value="aktif">Disetujui</option>
+        <option value="ditolak">Ditolak</option>
+        <option value="perlu_melengkapi_data">Perlu Melengkapi Data</option>
+      </select>
+
+      <select id="pageSize">
+        <option value="5">5 data / halaman</option>
+        <option value="10">10 data / halaman</option>
+      </select>
+    </div>
+  </section>
+
+  <div class="section-heading">
+    <h3>Daftar Pendaftaran</h3>
+    <span id="resultCount">Memuat data...</span>
+  </div>
+
+  <section id="cardList" class="card-list">
+    <div class="loading">Memuat data pendaftaran...</div>
+  </section>
+
+  <div class="pagination">
+    <small id="pageInfo">Halaman 1</small>
+    <div class="page-buttons">
+      <button id="prevBtn">‹</button>
+      <button id="nextBtn">›</button>
+    </div>
+  </div>
+
+  <div class="info">
+    <strong>ⓘ Informasi Penting</strong><br>
+    Setelah akun disetujui, status akan otomatis diperbarui
+    pada halaman publik <b>Status Pendaftaran</b>.
+    Pengguna yang disetujui langsung dapat login ke WAINI.
+  </div>
+
+</main>
+
+<footer>
+  © 2026 WAINI | Divisi Terminal Khusus
+</footer>
+
+<!-- MODAL TINDAKAN -->
+
+<div class="modal-bg" id="actionModal">
+  <div class="modal">
+    <h3 id="modalTitle">Verifikasi Pendaftaran</h3>
+    <p id="modalDescription">Periksa tindakan yang akan dilakukan.</p>
+
+    <div id="modalFields"></div>
+
+    <div class="modal-actions">
+      <button class="btn btn-light" id="cancelModal">Batal</button>
+      <button class="btn btn-green" id="confirmModal">Konfirmasi</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL -->
+
+<div class="modal-bg" id="detailModal">
+  <div class="modal">
+    <h3>Detail Pendaftaran</h3>
+    <div id="detailContent"></div>
+    <div class="modal-actions">
+      <button class="btn btn-gray" id="closeDetail">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+
+import { firebaseConfig } from "./firebase.js";
+
+import {
+  initializeApp,
+  getApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+/* =====================================
+   1. FIREBASE
+===================================== */
+
+let app;
+
+try{
+  app=getApp();
+}catch(error){
+  app=initializeApp(firebaseConfig);
+}
+
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+
+/* =====================================
+   2. ELEMEN HALAMAN
+===================================== */
+
+const cardList=document.getElementById("cardList");
+const searchInput=document.getElementById("searchInput");
+const statusFilter=document.getElementById("statusFilter");
+const pageSize=document.getElementById("pageSize");
+
+const actionModal=document.getElementById("actionModal");
+const detailModal=document.getElementById("detailModal");
+
+let currentUser=null;
+let profile=null;
+let applicants=[];
+let employeeCache={};
+let currentPage=1;
+let actionTarget=null;
+let actionType=null;
+let busy=false;
+
+
+/* =====================================
+   3. FUNGSI BANTUAN
+===================================== */
+
+function normalize(value){
+  return String(value||"")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g,"_");
+}
+
+function safe(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
+function dateText(value){
+  if(!value) return "-";
+
+  let date;
+
+  if(typeof value.toDate==="function"){
+    date=value.toDate();
+  }else if(value.seconds){
+    date=new Date(value.seconds*1000);
+  }else{
+    date=new Date(value);
+  }
+
+  if(isNaN(date.getTime())) return "-";
+
+  return date.toLocaleString("id-ID",{
+    day:"2-digit",
+    month:"long",
+    year:"numeric",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function statusText(status){
+  const value=normalize(status);
+
+  const map={
+    menunggu_verifikasi:"Menunggu Verifikasi",
+    aktif:"Disetujui",
+    ditolak:"Ditolak",
+    perlu_melengkapi_data:"Perlu Melengkapi Data"
+  };
+
+  return map[value]||status||"-";
+}
+
+function statusClass(status){
+  const value=normalize(status);
+
+  if(value==="aktif") return "disetujui";
+  if(value==="ditolak") return "ditolak";
+  if(value==="perlu_melengkapi_data") return "lengkapi";
+
+  return "menunggu";
+}
+
+function showMessage(text,type="success"){
+  const box=document.getElementById("message");
+
+  box.textContent=text;
+  box.className="message show "+type;
+
+  window.scrollTo({top:0,behavior:"smooth"});
+
+  setTimeout(()=>{
+    box.classList.remove("show");
+  },6000);
+}
+
+
+/* =====================================
+   4. CEK LOGIN DAN HAK AKSES
+===================================== */
+
+onAuthStateChanged(auth,async user=>{
+
+  if(!user){
+    window.location.href="login.html";
+    return;
+  }
+
+  currentUser=user;
+
+  try{
+
+    const profileRef=doc(db,"pengguna",user.uid);
+    const profileSnap=await getDoc(profileRef);
+
+    if(!profileSnap.exists()){
+      throw new Error("Profil pengguna tidak ditemukan.");
+    }
+
+    profile=profileSnap.data();
+
+    if(normalize(profile.status)!=="aktif"){
+      throw new Error("Akun Anda belum aktif.");
+    }
+
+    const role=normalize(profile.role);
+
+    const superAdmin=role==="super_admin";
+
+    const permissions=Array.isArray(profile.hak_akses)
+      ? profile.hak_akses.map(normalize)
+      : [];
+
+    const allowed=
+      superAdmin ||
+      (role==="admin" && permissions.includes("verifikasi_pendaftaran"));
+
+    if(!allowed){
+      throw new Error("Anda tidak memiliki hak akses Verifikasi Akun.");
+    }
+
+    await loadApplicants();
+
+  }catch(error){
+
+    cardList.innerHTML=`
+      <div class="empty">
+        <b>Akses tidak tersedia</b><br><br>
+        ${safe(error.message)}
+        <br><br>
+        <a href="menu.html">Kembali ke Menu Utama</a>
+      </div>
+    `;
+
+    showMessage(error.message,"error");
+  }
+
+});
+
+
+/* =====================================
+   5. MEMUAT DATA PENDAFTAR
+===================================== */
+
+async function loadApplicants(){
+
+  cardList.innerHTML=`
+    <div class="loading">Memuat data pendaftaran...</div>
+  `;
+
+  try{
+
+    const snapshot=await getDocs(collection(db,"pengguna"));
+
+    applicants=[];
+
+    snapshot.forEach(item=>{
+
+      const data=item.data();
+
+      if(normalize(data.role)!=="karyawan") return;
+
+      applicants.push({
+        id:item.id,
+        ...data
+      });
+
+    });
+
+    applicants.sort((a,b)=>{
+      const da=a.createdAt?.seconds||0;
+      const dbb=b.createdAt?.seconds||0;
+      return dbb-da;
+    });
+
+    await loadEmployeeMatches();
+
+    updateSummary();
+    renderCards();
+
+  }catch(error){
+
+    cardList.innerHTML=`
+      <div class="empty">
+        Gagal memuat pendaftaran.<br><br>
+        ${safe(error.message)}
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* =====================================
+   6. COCOKKAN NIK DENGAN DATA KARYAWAN
+===================================== */
+
+async function loadEmployeeMatches(){
+
+  const niks=[...new Set(
+    applicants
+      .map(item=>String(item.nik||"").trim())
+      .filter(Boolean)
+  )];
+
+  await Promise.all(niks.map(async nik=>{
+
+    if(employeeCache[nik]!==undefined) return;
+
+    try{
+
+      const employeeRef=doc(db,"karyawan",nik);
+      const employeeSnap=await getDoc(employeeRef);
+
+      employeeCache[nik]=employeeSnap.exists()
+        ? employeeSnap.data()
+        : null;
+
+    }catch(error){
+
+      employeeCache[nik]=null;
+
+    }
+
+  }));
+
+}
+
+
+/* =====================================
+   7. RINGKASAN
+===================================== */
+
+function updateSummary(){
+
+  const total=applicants.length;
+
+  const pending=applicants.filter(item=>
+    normalize(item.status)==="menunggu_verifikasi"
+  ).length;
+
+  const approved=applicants.filter(item=>
+    normalize(item.status)==="aktif"
+  ).length;
+
+  const rejected=applicants.filter(item=>
+    normalize(item.status)==="ditolak"
+  ).length;
+
+  document.getElementById("totalCount").textContent=total;
+  document.getElementById("pendingCount").textContent=pending;
+  document.getElementById("approvedCount").textContent=approved;
+  document.getElementById("rejectedCount").textContent=rejected;
+
+}
+
+
+/* =====================================
+   8. FILTER DAN PENCARIAN
+===================================== */
+
+function getFiltered(){
+
+  const keyword=searchInput.value.trim().toLowerCase();
+  const filter=statusFilter.value;
+
+  return applicants.filter(item=>{
+
+    const name=String(item.nama||"").toLowerCase();
+    const nik=String(item.nik||"").toLowerCase();
+
+    const matchKeyword=
+      name.includes(keyword) ||
+      nik.includes(keyword);
+
+    const matchStatus=
+      filter==="semua" ||
+      normalize(item.status)===filter;
+
+    return matchKeyword && matchStatus;
+
+  });
+
+}
+
+
+/* =====================================
+   9. TAMPILKAN KARTU
+===================================== */
+
+function renderCards(){
+
+  const filtered=getFiltered();
+
+  const limit=Number(pageSize.value);
+  const totalPages=Math.max(1,Math.ceil(filtered.length/limit));
+
+  if(currentPage>totalPages) currentPage=totalPages;
+
+  const start=(currentPage-1)*limit;
+  const pageData=filtered.slice(start,start+limit);
+
+  document.getElementById("resultCount").textContent=
+    filtered.length+" pendaftar";
+
+  document.getElementById("pageInfo").textContent=
+    `Halaman ${currentPage} dari ${totalPages}`;
+
+  document.getElementById("prevBtn").disabled=currentPage<=1;
+  document.getElementById("nextBtn").disabled=currentPage>=totalPages;
+
+  if(pageData.length===0){
+
+    cardList.innerHTML=`
+      <div class="empty">
+        Tidak ada data pendaftaran yang ditemukan.
+      </div>
+    `;
+
+    return;
+  }
+
+  cardList.innerHTML=pageData.map(item=>{
+
+    const status=normalize(item.status);
+    const nik=String(item.nik||"").trim();
+    const employee=employeeCache[nik];
+
+    const match=employee
+      ? `<div class="employee-match found">
+          ✓ NIK ditemukan dalam data karyawan.<br>
+          Nama resmi: <b>${safe(employee.nama||"-")}</b><br>
+          Jabatan: ${safe(employee.jabatan||"-")}<br>
+          Departemen: ${safe(employee.departemen||"-")}
+        </div>`
+      : `<div class="employee-match notfound">
+          ! NIK tidak ditemukan dalam data karyawan.
+          Pendaftar perlu diperiksa secara manual.
+        </div>`;
+
+    let actions="";
+
+    if(status==="menunggu_verifikasi"){
+
+      actions=`
+        <button class="btn btn-green"
+          data-action="setujui" data-id="${safe(item.id)}">
+          ✓ Setujui
+        </button>
+
+        <button class="btn btn-red"
+          data-action="tolak" data-id="${safe(item.id)}">
+          ✕ Tolak
+        </button>
+
+        <button class="btn btn-blue"
+          data-action="lengkapi" data-id="${safe(item.id)}">
+          ✎ Lengkapi
+        </button>
+      `;
+
+    }else if(status==="perlu_melengkapi_data"){
+
+      actions=`
+        <button class="btn btn-blue single-action"
+          data-action="lengkapi" data-id="${safe(item.id)}">
+          ✎ Periksa / Lengkapi
+        </button>
+      `;
+
+    }else{
+
+      actions=`
+        <button class="btn btn-gray single-action"
+          data-action="detail" data-id="${safe(item.id)}">
+          ◉ Lihat Detail
+        </button>
+      `;
+
+    }
+
+    return `
+      <article class="applicant">
+
+        <div class="applicant-top">
+
+          <div class="person">
+            <div class="avatar">
+              ${safe((item.nama||"?").charAt(0).toUpperCase())}
+            </div>
+
+            <div>
+              <h4>${safe(item.nama||"Tanpa Nama")}</h4>
+              <small>NIK: ${safe(nik||"-")}</small>
+            </div>
+          </div>
+
+          <span class="status ${statusClass(status)}">
+            ${safe(statusText(status))}
+          </span>
+
+        </div>
+
+        <div class="details">
+
+          <div class="detail">
+            <label>Tanggal Pendaftaran</label>
+            <strong>${safe(dateText(item.createdAt))}</strong>
+          </div>
+
+          <div class="detail">
+            <label>Jabatan</label>
+            <strong>${safe(item.jabatan||"-")}</strong>
+          </div>
+
+          <div class="detail">
+            <label>Email</label>
+            <strong>${safe(item.email||"-")}</strong>
+          </div>
+
+          <div class="detail">
+            <label>ID Akun</label>
+            <strong>${safe(item.uid||item.id)}</strong>
+          </div>
+
+        </div>
+
+        ${match}
+
+        <div class="applicant-actions">
+          ${actions}
+        </div>
+
+      </article>
+    `;
+
+  }).join("");
+
+}
+
+
+/* =====================================
+   10. DETAIL PENDAFTAR
+===================================== */
+
+function showDetail(id){
+
+  const item=applicants.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const employee=employeeCache[String(item.nik||"").trim()];
+
+  document.getElementById("detailContent").innerHTML=`
+
+    <div class="details">
+
+      <div class="detail">
+        <label>Nama</label>
+        <strong>${safe(item.nama||"-")}</strong>
+      </div>
+
+      <div class="detail">
+        <label>NIK</label>
+        <strong>${safe(item.nik||"-")}</strong>
+      </div>
+
+      <div class="detail">
+        <label>Jabatan</label>
+        <strong>${safe(item.jabatan||"-")}</strong>
+      </div>
+
+      <div class="detail">
+        <label>Email</label>
+        <strong>${safe(item.email||"-")}</strong>
+      </div>
+
+      <div class="detail">
+        <label>Tanggal Daftar</label>
+        <strong>${safe(dateText(item.createdAt))}</strong>
+      </div>
+
+      <div class="detail">
+        <label>Status</label>
+        <strong>${safe(statusText(item.status))}</strong>
+      </div>
+
+      <div class="detail">
+        <label>Tanggal Persetujuan</label>
+        <strong>${safe(dateText(item.approvedAt))}</strong>
+      </div>
+
+    </div>
+
+    <div class="employee-match ${employee?"found":"notfound"}">
+      <b>Hasil pencocokan data karyawan</b><br>
+      ${employee
+        ? `Nama resmi: ${safe(employee.nama||"-")}<br>
+           NIK: ${safe(employee.nik||item.nik||"-")}<br>
+           Divisi: ${safe(employee.divisi||"-")}<br>
+           Departemen: ${safe(employee.departemen||"-")}<br>
+           Jabatan: ${safe(employee.jabatan||"-")}`
+        : "Data NIK tidak ditemukan dalam koleksi karyawan."}
+    </div>
+
+    ${item.catatan_admin
+      ? `<p style="margin-top:12px">Catatan Admin:<br>
+         <b>${safe(item.catatan_admin)}</b></p>`
+      : ""}
+
+  `;
+
+  detailModal.classList.add("show");
+
+}
+
+
+/* =====================================
+   11. MODAL TINDAKAN
+===================================== */
+
+function openAction(type,id){
+
+  const item=applicants.find(x=>x.id===id);
+
+  if(!item) return;
+
+  actionTarget=item;
+  actionType=type;
+
+  const title=document.getElementById("modalTitle");
+  const desc=document.getElementById("modalDescription");
+  const fields=document.getElementById("modalFields");
+  const confirm=document.getElementById("confirmModal");
+
+  if(type==="setujui"){
+
+    title.textContent="Setujui Pendaftaran";
+    desc.textContent=
+      "Apakah Anda yakin ingin menyetujui akun "+item.nama+"? Akun akan langsung aktif dan dapat login.";
+
+    fields.innerHTML=`
+      <div class="employee-match ${
+        employeeCache[String(item.nik||"").trim()]?"found":"notfound"
+      }">
+        ${employeeCache[String(item.nik||"").trim()]
+          ? "NIK ditemukan dalam data karyawan."
+          : "PERHATIAN: NIK tidak ditemukan dalam data karyawan. Pastikan identitas pendaftar sudah diperiksa sebelum menyetujui."}
+      </div>
+    `;
+
+    confirm.textContent="Ya, Setujui";
+    confirm.className="btn btn-green";
+
+  }
+
+  if(type==="tolak"){
+
+    title.textContent="Tolak Pendaftaran";
+    desc.textContent=
+      "Masukkan alasan penolakan agar dapat dibaca oleh pendaftar.";
+
+    fields.innerHTML=`
+      <label>Alasan Penolakan</label>
+      <textarea id="actionNote" placeholder="Tuliskan alasan penolakan..." required></textarea>
+    `;
+
+    confirm.textContent="Tolak Pendaftaran";
+    confirm.className="btn btn-red";
+
+  }
+
+  if(type==="lengkapi"){
+
+    title.textContent="Minta Melengkapi Data";
+    desc.textContent=
+      "Tuliskan data yang harus diperbaiki atau dilengkapi oleh pendaftar.";
+
+    fields.innerHTML=`
+      <label>Catatan untuk Pendaftar</label>
+      <textarea id="actionNote" placeholder="Contoh: Mohon periksa kembali NIK dan nama..." required></textarea>
+    `;
+
+    confirm.textContent="Kirim Permintaan";
+    confirm.className="btn btn-blue";
+
+  }
+
+  actionModal.classList.add("show");
+
+}
+
+
+/* =====================================
+   12. SIMPAN PERUBAHAN STATUS
+===================================== */
+
+async function saveAction(){
+
+  if(busy || !actionTarget) return;
+
+  busy=true;
+
+  const button=document.getElementById("confirmModal");
+
+  button.disabled=true;
+  button.textContent="Memproses...";
+
+  try{
+
+    const item=actionTarget;
+
+    let newStatus="";
+    let note="";
+    let userUpdate={};
+    let publicUpdate={};
+
+    if(actionType==="setujui"){
+
+      newStatus="aktif";
+
+      userUpdate={
+        status:"aktif",
+        approvedAt:serverTimestamp(),
+        approvedBy:currentUser.uid,
+        updatedAt:serverTimestamp()
+      };
+
+      publicUpdate={
+        nama:item.nama||"",
+        status:"Disetujui",
+        tanggal_persetujuan:serverTimestamp(),
+        updatedAt:serverTimestamp()
+      };
+
+    }
+
+    if(actionType==="tolak"){
+
+      note=document.getElementById("actionNote")?.value.trim()||"";
+
+      if(!note){
+        throw new Error("Alasan penolakan wajib diisi.");
+      }
+
+      newStatus="ditolak";
+
+      userUpdate={
+        status:"ditolak",
+        catatan_admin:note,
+        rejectedAt:serverTimestamp(),
+        rejectedBy:currentUser.uid,
+        updatedAt:serverTimestamp()
+      };
+
+      publicUpdate={
+        nama:item.nama||"",
+        status:"Ditolak",
+        alasan:note,
+        catatan_admin:note,
+        updatedAt:serverTimestamp()
+      };
+
+    }
+
+    if(actionType==="lengkapi"){
+
+      note=document.getElementById("actionNote")?.value.trim()||"";
+
+      if(!note){
+        throw new Error("Catatan kelengkapan data wajib diisi.");
+      }
+
+      newStatus="perlu_melengkapi_data";
+
+      userUpdate={
+        status:"perlu_melengkapi_data",
+        catatan_admin:note,
+        updatedAt:serverTimestamp()
+      };
+
+      publicUpdate={
+        nama:item.nama||"",
+        status:"Perlu Melengkapi Data",
+        catatan_admin:note,
+        updatedAt:serverTimestamp()
+      };
+
+    }
+
+    const userRef=doc(db,"pengguna",item.id);
+    const publicRef=doc(db,"status_pendaftaran_public",item.id);
+
+    await updateDoc(userRef,userUpdate);
+
+    await setDoc(publicRef,publicUpdate,{merge:true});
+
+    const localItem=applicants.find(x=>x.id===item.id);
+
+    if(localItem){
+      localItem.status=newStatus;
+
+      if(note) localItem.catatan_admin=note;
+
+      if(actionType==="setujui"){
+        localItem.approvedAt=new Date();
+      }
+    }
+
+    actionModal.classList.remove("show");
+
+    updateSummary();
+    renderCards();
+
+    showMessage(
+      actionType==="setujui"
+        ? "Pendaftaran "+item.nama+" berhasil disetujui. Akun sudah aktif."
+        : actionType==="tolak"
+          ? "Pendaftaran berhasil ditolak."
+          : "Permintaan melengkapi data berhasil dikirim."
+    );
+
+  }catch(error){
+
+    showMessage("Gagal menyimpan perubahan: "+error.message,"error");
+
+  }finally{
+
+    busy=false;
+    button.disabled=false;
+    button.textContent="Konfirmasi";
+
+  }
+
+}
+
+
+/* =====================================
+   13. EVENT KARTU
+===================================== */
+
+cardList.addEventListener("click",event=>{
+
+  const button=event.target.closest("[data-action]");
+
+  if(!button) return;
+
+  const type=button.dataset.action;
+  const id=button.dataset.id;
+
+  if(type==="detail"){
+    showDetail(id);
+  }else{
+    openAction(type,id);
+  }
+
+});
+
+
+/* =====================================
+   14. EVENT FILTER DAN HALAMAN
+===================================== */
+
+searchInput.addEventListener("input",()=>{
+  currentPage=1;
+  renderCards();
+});
+
+statusFilter.addEventListener("change",()=>{
+  currentPage=1;
+  renderCards();
+});
+
+pageSize.addEventListener("change",()=>{
+  currentPage=1;
+  renderCards();
+});
+
+document.getElementById("prevBtn").addEventListener("click",()=>{
+  if(currentPage>1){
+    currentPage--;
+    renderCards();
+  }
+});
+
+document.getElementById("nextBtn").addEventListener("click",()=>{
+  const totalPages=Math.max(
+    1,
+    Math.ceil(getFiltered().length/Number(pageSize.value))
+  );
+
+  if(currentPage<totalPages){
+    currentPage++;
+    renderCards();
+  }
+});
+
+
+/* =====================================
+   15. MODAL
+===================================== */
+
+document.getElementById("cancelModal").onclick=()=>{
+  actionModal.classList.remove("show");
+};
+
+document.getElementById("confirmModal").onclick=saveAction;
+
+document.getElementById("closeDetail").onclick=()=>{
+  detailModal.classList.remove("show");
+};
+
+actionModal.addEventListener("click",event=>{
+  if(event.target===actionModal){
+    actionModal.classList.remove("show");
+  }
+});
+
+detailModal.addEventListener("click",event=>{
+  if(event.target===detailModal){
+    detailModal.classList.remove("show");
+  }
+});
+
+
+/* =====================================
+   16. MENU
+===================================== */
+
+document.getElementById("menuBtn").onclick=()=>{
+  document.getElementById("navigation").classList.toggle("show");
+};
+
+</script>
+
+</body>
+</html>
