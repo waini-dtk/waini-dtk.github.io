@@ -20,8 +20,6 @@ body {
     color: #222;
 }
 
-/* HEADER */
-
 .header {
     background: #991b1b;
     color: white;
@@ -81,8 +79,6 @@ body {
     line-height: 1.5;
 }
 
-/* CONTAINER */
-
 .container {
     max-width: 550px;
     padding: 18px 15px;
@@ -93,8 +89,6 @@ body {
 .container.siap {
     display: block;
 }
-
-/* KARTU MENU */
 
 .menu-card {
     background: white;
@@ -164,13 +158,9 @@ body {
     font-size: 23px;
 }
 
-/* MENU PROFIL */
-
 .menu-profil {
     margin-bottom: 12px;
 }
-
-/* GRID */
 
 .menu-grid {
     display: grid;
@@ -178,13 +168,9 @@ body {
     gap: 10px;
 }
 
-/* MENU BAWAH */
-
 .menu-bawah {
     margin-top: 12px;
 }
-
-/* JUDUL MENU ADMIN */
 
 .judul-kelompok {
     margin: 22px 0 11px;
@@ -204,8 +190,6 @@ body {
     color: #888;
     margin-top: 4px;
 }
-
-/* FOOTER */
 
 .footer {
     background: #991b1b;
@@ -228,8 +212,6 @@ body {
     font-size: 10px;
 }
 
-/* STATUS */
-
 #status-pemuatan {
     max-width: 550px;
     margin: 20px auto;
@@ -240,10 +222,7 @@ body {
     line-height: 1.6;
 }
 
-/* RESPONSIVE */
-
 @media (max-width: 360px) {
-
     .menu-grid {
         gap: 8px;
     }
@@ -269,8 +248,6 @@ body {
 </head>
 
 <body>
-
-<!-- HEADER -->
 
 <header class="header">
 
@@ -300,31 +277,17 @@ body {
 
 </header>
 
-
-<!-- STATUS PEMUATAN -->
-
 <div id="status-pemuatan">
     Menghubungkan ke WAINI...
 </div>
 
-
-<!-- MENU -->
-
 <main class="container" id="menu-container">
-
-    <!-- PROFIL -->
 
     <div id="area-profil"></div>
 
-    <!-- MENU UMUM -->
-
     <div id="area-menu-umum" class="menu-grid"></div>
 
-    <!-- INFORMASI DAN BANTUAN -->
-
     <div id="area-menu-bawah"></div>
-
-    <!-- MENU SUPER ADMIN -->
 
     <div id="area-admin" style="display:none;">
 
@@ -342,8 +305,6 @@ body {
 
     </div>
 
-    <!-- FOOTER -->
-
     <div class="footer">
 
         <strong>WAINI</strong>
@@ -356,8 +317,6 @@ body {
 
 </main>
 
-
-<!-- FIREBASE -->
 
 <script type="module">
 
@@ -497,7 +456,6 @@ const ikonMenu = {
     <circle cx="12" cy="12" r="3"></circle>
     <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 1.7-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.1h-2.4v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L8 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H6.7v-2.4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L8 8.6l1.7-1.7.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6v-.1h2.4v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.7 1.7-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1V14h-.1a1.7 1.7 0 0 0-1.6 1z"></path>
     `
-
 };
 
 
@@ -516,7 +474,7 @@ function normalisasiRole(role) {
 
 
 // =====================================
-// 6. NORMALISASI HAK AKSES
+// 6. NORMALISASI ARRAY
 // =====================================
 
 function normalisasiArray(data) {
@@ -525,9 +483,15 @@ function normalisasiArray(data) {
         return [];
     }
 
-    return data.map(item =>
-        String(item).trim().toLowerCase()
-    );
+    return data.map(item => {
+
+        if (typeof item === "string") {
+            return item.trim().toLowerCase();
+        }
+
+        return "";
+
+    }).filter(Boolean);
 
 }
 
@@ -594,9 +558,7 @@ function buatKartu(menu) {
 
         if (!akunSiap) return;
 
-        // Validasi alamat halaman
-
-        const halaman = String(menu.halaman || "");
+        const halaman = String(menu.halaman || "").trim();
 
         if (!/^[a-zA-Z0-9_-]+\.html$/.test(halaman)) {
 
@@ -621,33 +583,75 @@ function buatKartu(menu) {
 
 function bolehLihatMenu(menu) {
 
-    // Super Admin dapat melihat semua menu aktif
+    // SUPER ADMIN MELIHAT SEMUA MENU AKTIF
 
     if (superAdmin) {
         return true;
     }
 
+    // Ambil role yang diizinkan oleh menu
+
     const aksesRole = normalisasiArray(
         menu.akses_role
     );
 
-    // Role harus terdaftar pada menu
+    // Role dasar pengguna
 
-    if (!aksesRole.includes(rolePengguna)) {
+    const daftarRolePengguna = [rolePengguna];
+
+    // Leader / petugas absensi yang menggunakan
+    // role dasar karyawan tetap dapat membaca
+    // menu umum untuk role karyawan.
+
+    if (
+        [
+            "leader",
+            "leader_absensi",
+            "petugas_absensi"
+        ].includes(rolePengguna)
+    ) {
+        daftarRolePengguna.push("karyawan");
+    }
+
+    // Periksa kesesuaian role
+
+    const roleDiizinkan = daftarRolePengguna.some(
+        role => aksesRole.includes(role)
+    );
+
+    if (!roleDiizinkan) {
         return false;
     }
 
-    // Jika akun memiliki hak_akses,
-    // periksa izin per menu juga.
+    // PROFIL SELALU TERSEDIA BAGI PENGGUNA
+    // AKTIF YANG ROLE-NYA DIIZINKAN.
 
-    if (Array.isArray(penggunaAktif.hak_akses)) {
+    if (menu.kode === "profil") {
+        return true;
+    }
 
-        return hakAksesPengguna.includes(menu.kode);
+    // MENU INFORMASI DAN BANTUAN
+    // MENGIKUTI AKSES ROLE.
+
+    if (
+        menu.kode === "informasi" ||
+        menu.kode === "bantuan"
+    ) {
+        return true;
+    }
+
+    // Menu yang secara eksplisit membutuhkan
+    // penugasan/hak akses tambahan.
+
+    if (menu.perlu_hak_akses === true) {
+
+        return hakAksesPengguna.includes(
+            menu.kode
+        );
 
     }
 
-    // Jika hak_akses belum dibuat,
-    // gunakan akses_role dari dokumen menu.
+    // Menu lainnya mengikuti akses_role.
 
     return true;
 
@@ -655,7 +659,7 @@ function bolehLihatMenu(menu) {
 
 
 // =====================================
-// 9. MENAMPILKAN SELURUH MENU FIRESTORE
+// 9. MEMUAT MENU FIRESTORE
 // =====================================
 
 async function muatMenuFirestore() {
@@ -682,26 +686,25 @@ async function muatMenuFirestore() {
 
                 ...data,
 
-                // Jika kode belum ada, gunakan Document ID
                 kode: data.kode || dokumen.id
 
             });
 
         });
 
-        // Hanya menu aktif
+        // HANYA MENU AKTIF
 
         const menuAktif = semuaMenu.filter(menu =>
             menu.aktif === true
         );
 
-        // Filter sesuai hak akses
+        // FILTER HAK AKSES
 
         const menuTampil = menuAktif.filter(menu =>
             bolehLihatMenu(menu)
         );
 
-        // Urutkan berdasarkan angka urutan
+        // URUTKAN MENU
 
         menuTampil.sort((a, b) =>
             Number(a.urutan || 999) -
@@ -709,7 +712,7 @@ async function muatMenuFirestore() {
         );
 
 
-        // Bersihkan area sebelumnya
+        // BERSIHKAN AREA
 
         const areaProfil = document.getElementById(
             "area-profil"
@@ -733,13 +736,13 @@ async function muatMenuFirestore() {
         areaAdmin.replaceChildren();
 
 
-        // Kelompok menu
+        // TAMPILKAN MENU
 
         menuTampil.forEach(menu => {
 
             const kartu = buatKartu(menu);
 
-            // Profil: kartu lebar
+            // PROFIL
 
             if (menu.kode === "profil") {
 
@@ -749,7 +752,7 @@ async function muatMenuFirestore() {
 
             }
 
-            // Informasi dan bantuan: kartu lebar
+            // INFORMASI DAN BANTUAN
 
             else if (
                 menu.kode === "informasi" ||
@@ -762,7 +765,7 @@ async function muatMenuFirestore() {
 
             }
 
-            // Menu khusus Super Admin
+            // MENU KHUSUS SUPER ADMIN
 
             else if (
                 [
@@ -774,11 +777,16 @@ async function muatMenuFirestore() {
                 ].includes(menu.kode)
             ) {
 
-                areaAdmin.appendChild(kartu);
+                // Menu ini tidak diberikan kepada
+                // pengguna selain Super Admin.
+
+                if (superAdmin) {
+                    areaAdmin.appendChild(kartu);
+                }
 
             }
 
-            // Menu umum lainnya
+            // MENU UMUM
 
             else {
 
@@ -789,17 +797,17 @@ async function muatMenuFirestore() {
         });
 
 
-        // Tampilkan bagian admin jika ada menu
+        // TAMPILKAN AREA ADMIN
 
-        areaAdmin.parentElement.style.display =
-            areaAdmin.children.length > 0
+        document.getElementById(
+            "area-admin"
+        ).style.display =
+            superAdmin && areaAdmin.children.length > 0
                 ? "block"
                 : "none";
 
 
-        // Tampilkan halaman
-
-        status.style.display = "none";
+        // TAMPILKAN HALAMAN
 
         document.getElementById(
             "menu-container"
@@ -807,39 +815,52 @@ async function muatMenuFirestore() {
 
         akunSiap = true;
 
+        status.style.display = "none";
 
-        console.log(
-            "Jumlah dokumen Firestore:",
-            snapshot.size
-        );
 
-        console.log(
-            "Jumlah menu aktif:",
-            menuAktif.length
-        );
+        // DIAGNOSTIK
 
-        console.log(
-            "Jumlah menu yang ditampilkan:",
-            menuTampil.length
-        );
+        console.log("========== WAINI MENU ==========");
 
-        console.log(
-            "Role pengguna:",
-            rolePengguna
-        );
+        console.log("Jumlah dokumen:", snapshot.size);
 
-        console.log(
-            "Super Admin:",
-            superAdmin
-        );
+        console.log("Jumlah menu aktif:", menuAktif.length);
 
+        console.log("Jumlah menu tampil:", menuTampil.length);
+
+        console.log("Role pengguna:", rolePengguna);
+
+        console.log("Hak akses:", hakAksesPengguna);
+
+        console.log("Super Admin:", superAdmin);
+
+        console.log("Menu ditemukan:", menuTampil.map(m => m.kode));
+
+
+        // JIKA TIDAK ADA MENU
 
         if (menuTampil.length === 0) {
 
             status.style.display = "block";
 
-            status.textContent =
-                "Belum ada menu yang dapat ditampilkan. Periksa pengaturan hak akses.";
+            if (snapshot.size === 0) {
+
+                status.textContent =
+                    "Koleksi menu_utama belum memiliki dokumen.";
+
+            } else if (menuAktif.length === 0) {
+
+                status.textContent =
+                    "Dokumen menu ditemukan, tetapi belum ada menu dengan status aktif.";
+
+            } else {
+
+                status.textContent =
+                    "Menu aktif ditemukan, tetapi tidak ada menu yang sesuai dengan role akun: " +
+                    rolePengguna +
+                    ". Periksa field akses_role di Firestore.";
+
+            }
 
         }
 
@@ -853,8 +874,8 @@ async function muatMenuFirestore() {
         status.style.display = "block";
 
         status.textContent =
-            "Gagal membaca menu dari Firestore. Periksa Firestore Rules dan koneksi internet. Kode: " +
-            error.code;
+            "Gagal membaca menu dari Firestore. Kode: " +
+            (error.code || error.message);
 
     }
 
@@ -873,7 +894,7 @@ async function periksaPengguna(user) {
 
     try {
 
-        // Ambil data pengguna berdasarkan UID
+        // AMBIL PROFIL PENGGUNA
 
         const referensi = doc(
             db,
@@ -899,10 +920,11 @@ async function periksaPengguna(user) {
 
         const data = hasil.data();
 
-        // Periksa status akun
+        // PERIKSA STATUS AKUN
 
         if (
-            String(data.status || "").toLowerCase() !== "aktif"
+            String(data.status || "").trim().toLowerCase()
+            !== "aktif"
         ) {
 
             alert(
@@ -918,7 +940,7 @@ async function periksaPengguna(user) {
         }
 
 
-        // Simpan data
+        // SIMPAN DATA PENGGUNA
 
         penggunaAktif = data;
 
@@ -934,19 +956,27 @@ async function periksaPengguna(user) {
         superAdmin = rolePengguna === "super_admin";
 
 
-        // Tampilkan salam pengguna
+        // TAMPILKAN SALAM
 
-        const nama = data.nama || data.nik || "Pengguna";
+        const nama =
+            data.nama ||
+            data.nik ||
+            "Pengguna";
 
-        const jabatan = data.jabatan || "Anggota Divisi";
+        const jabatan =
+            data.jabatan ||
+            "Anggota Divisi";
 
         document.getElementById(
             "salam-pengguna"
         ).textContent =
-            "Selamat datang, " + nama + " • " + jabatan;
+            "Selamat datang, " +
+            nama +
+            " • " +
+            jabatan;
 
 
-        // Baca seluruh menu dari Firestore
+        // MUAT MENU
 
         await muatMenuFirestore();
 
@@ -958,8 +988,11 @@ async function periksaPengguna(user) {
             error
         );
 
+        status.style.display = "block";
+
         status.textContent =
-            "Gagal memeriksa akun. Periksa koneksi Firebase dan Firestore Rules.";
+            "Gagal memeriksa akun. Kode: " +
+            (error.code || error.message);
 
     }
 
