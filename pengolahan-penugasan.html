@@ -384,18 +384,12 @@ hr {
         </div>
 
         <label>Nama / Jenis Tugas</label>
-        <input
-            type="text"
-            id="namaTugas"
-            placeholder="Contoh: Verifikator Cuti"
-        >
+        <input type="text" id="namaTugas"
+            placeholder="Contoh: Verifikator Cuti">
 
         <label>Petugas yang Ditunjuk</label>
-        <input
-            type="text"
-            id="cariPetugas"
-            placeholder="Cari petugas berdasarkan NIK atau nama..."
-        >
+        <input type="text" id="cariPetugas"
+            placeholder="Cari petugas berdasarkan NIK atau nama...">
 
         <div id="hasilPetugas" class="employee-area hidden">
             <div class="employee-list" id="daftarPetugas"></div>
@@ -420,11 +414,8 @@ hr {
 
         <div id="areaTargetNik">
             <label>Cari Karyawan Target</label>
-            <input
-                type="text"
-                id="cariTarget"
-                placeholder="Cari NIK atau nama karyawan..."
-            >
+            <input type="text" id="cariTarget"
+                placeholder="Cari NIK atau nama karyawan...">
 
             <label>Filter Departemen</label>
             <select id="filterDepartemen">
@@ -434,11 +425,13 @@ hr {
             <div class="employee-area">
                 <div class="employee-area-header">
                     <div class="button-row">
-                        <button type="button" class="btn-secondary btn-small" id="pilihSemua">
+                        <button type="button" class="btn-secondary btn-small"
+                            id="pilihSemua">
                             Pilih Semua Hasil
                         </button>
 
-                        <button type="button" class="btn-secondary btn-small" id="hapusPilihan">
+                        <button type="button" class="btn-secondary btn-small"
+                            id="hapusPilihan">
                             Hapus Pilihan
                         </button>
                     </div>
@@ -457,10 +450,8 @@ hr {
         </div>
 
         <label>Keterangan Penugasan</label>
-        <textarea
-            id="keterangan"
-            placeholder="Keterangan tambahan, tugas khusus, atau batasan..."
-        ></textarea>
+        <textarea id="keterangan"
+            placeholder="Keterangan tambahan, tugas khusus, atau batasan..."></textarea>
 
         <div class="button-row">
             <button type="button" class="btn-primary" id="btnSimpan">
@@ -478,11 +469,8 @@ hr {
         <h2>Daftar Penugasan</h2>
 
         <label>Cari Penugasan</label>
-        <input
-            type="text"
-            id="cariPenugasan"
-            placeholder="Cari nama petugas, tugas, atau NIK..."
-        >
+        <input type="text" id="cariPenugasan"
+            placeholder="Cari nama petugas, tugas, atau NIK...">
 
         <label>Filter Status</label>
         <select id="filterStatus">
@@ -499,11 +487,12 @@ hr {
         <h2>Riwayat Perubahan Penugasan</h2>
 
         <label>Cari Riwayat</label>
-        <input
-            type="text"
-            id="cariRiwayat"
-            placeholder="Cari petugas, NIK, atau jenis tugas..."
-        >
+        <input type="text" id="cariRiwayat"
+            placeholder="Cari petugas, NIK, atau jenis tugas...">
+
+        <div class="counter">
+            Riwayat yang dimuat: maksimal 5 data terbaru
+        </div>
 
         <div id="daftarRiwayat"></div>
     </div>
@@ -527,7 +516,9 @@ import {
     updateDoc,
     serverTimestamp,
     query,
-    orderBy
+    orderBy,
+    limit,
+    writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
@@ -604,22 +595,14 @@ function escapeHTML(value) {
 }
 
 function normalisasi(value) {
-    return String(value ?? "")
-        .toLowerCase()
-        .trim();
+    return String(value ?? "").toLowerCase().trim();
 }
 
 function tanggal(value) {
     if (!value) return "-";
 
     try {
-        let d;
-
-        if (value.toDate) {
-            d = value.toDate();
-        } else {
-            d = new Date(value);
-        }
+        let d = value.toDate ? value.toDate() : new Date(value);
 
         if (isNaN(d.getTime())) return "-";
 
@@ -663,9 +646,7 @@ function jabatanKaryawan(k) {
 }
 
 function cariKaryawanNik(nik) {
-    return semuaKaryawan.find(
-        k => nikKaryawan(k) === String(nik)
-    );
+    return semuaKaryawan.find(k => nikKaryawan(k) === String(nik));
 }
 
 function namaDariNik(nik) {
@@ -713,15 +694,53 @@ function getKeterangan(data) {
     return String(data.keterangan || "");
 }
 
-function getTargetText(data) {
+
+/* =========================================
+   PERLUAS TARGET PENUGASAN
+   Mendukung:
+   - target NIK tertentu
+   - seluruh departemen
+   - seluruh karyawan
+========================================= */
+
+function perluasTarget(data) {
+
     const mode = getMode(data);
 
     if (mode === "semua") {
-        return "Semua Karyawan";
+        return semuaKaryawan.map(nikKaryawan).filter(Boolean);
     }
 
     if (mode === "departemen") {
-        return "Departemen: " + (data.target_departemen || "-");
+        const dep = String(data.target_departemen || "");
+
+        return semuaKaryawan
+            .filter(k => departemenKaryawan(k) === dep)
+            .map(nikKaryawan)
+            .filter(Boolean);
+    }
+
+    return getTargetNik(data);
+}
+
+
+function getTargetText(data) {
+
+    const mode = getMode(data);
+
+    if (mode === "semua") {
+        return "Semua Karyawan (" + semuaKaryawan.length + ")";
+    }
+
+    if (mode === "departemen") {
+
+        const jumlah = semuaKaryawan.filter(
+            k => departemenKaryawan(k) === data.target_departemen
+        ).length;
+
+        return "Departemen: " +
+            (data.target_departemen || "-") +
+            " (" + jumlah + " karyawan)";
     }
 
     return getTargetNik(data).length + " Karyawan";
@@ -743,9 +762,7 @@ onAuthStateChanged(auth, async user => {
 
     try {
 
-        const snap = await getDoc(
-            doc(db, "pengguna", user.uid)
-        );
+        const snap = await getDoc(doc(db, "pengguna", user.uid));
 
         if (!snap.exists()) {
             tampilStatus("Data pengguna tidak ditemukan.", "error");
@@ -786,6 +803,7 @@ onAuthStateChanged(auth, async user => {
 
 /* =========================================
    LOAD DATA
+   RIWAYAT DIBATASI 5 DATA TERBARU
 ========================================= */
 
 async function muatSemuaData() {
@@ -794,11 +812,17 @@ async function muatSemuaData() {
 
     try {
 
+        const qRiwayat = query(
+            collection(db, "riwayat_penugasan"),
+            orderBy("createdAt", "desc"),
+            limit(5)
+        );
+
         const [snapKaryawan, snapPenugasan, snapRiwayat] =
             await Promise.all([
                 getDocs(collection(db, "karyawan")),
                 getDocs(collection(db, "penugasan")),
-                getDocs(collection(db, "riwayat_penugasan"))
+                getDocs(qRiwayat)
             ]);
 
         semuaKaryawan = snapKaryawan.docs.map(d => ({
@@ -817,21 +841,12 @@ async function muatSemuaData() {
         }));
 
         semuaKaryawan.sort((a, b) =>
-            namaKaryawan(a).localeCompare(
-                namaKaryawan(b),
-                "id"
-            )
+            namaKaryawan(a).localeCompare(namaKaryawan(b), "id")
         );
 
         semuaPenugasan.sort((a, b) => {
             const ta = a.updatedAt?.seconds || a.createdAt?.seconds || 0;
             const tb = b.updatedAt?.seconds || b.createdAt?.seconds || 0;
-            return tb - ta;
-        });
-
-        semuaRiwayat.sort((a, b) => {
-            const ta = a.createdAt?.seconds || a.waktu?.seconds || 0;
-            const tb = b.createdAt?.seconds || b.waktu?.seconds || 0;
             return tb - ta;
         });
 
@@ -871,9 +886,7 @@ function daftarDepartemen() {
         }
     });
 
-    return [...hasil].sort((a, b) =>
-        a.localeCompare(b, "id")
-    );
+    return [...hasil].sort((a, b) => a.localeCompare(b, "id"));
 }
 
 function isiFilterDepartemen() {
@@ -927,6 +940,7 @@ function renderPetugas() {
         );
 
         return teks.includes(keyword);
+
     }).slice(0, 30);
 
     hasilPetugas.classList.remove("hidden");
@@ -1038,15 +1052,9 @@ function aturModeTarget() {
 
     const mode = modeTarget.value;
 
-    areaDepartemen.classList.toggle(
-        "hidden",
-        mode !== "departemen"
-    );
+    areaDepartemen.classList.toggle("hidden", mode !== "departemen");
 
-    areaTargetNik.classList.toggle(
-        "hidden",
-        mode !== "nik"
-    );
+    areaTargetNik.classList.toggle("hidden", mode !== "nik");
 
     if (mode !== "nik") {
         targetTerpilih.clear();
@@ -1094,8 +1102,10 @@ function renderTarget() {
     const mode = modeTarget.value;
 
     if (mode !== "nik") {
+
         daftarTarget.innerHTML = "";
         counterTarget.textContent = "";
+
         infoTargetTerpilih.textContent =
             mode === "semua"
                 ? "Target: seluruh karyawan."
@@ -1164,7 +1174,6 @@ daftarTarget.addEventListener("change", event => {
     renderTarget();
 });
 
-
 document.getElementById("pilihSemua").addEventListener("click", () => {
 
     const hasil = karyawanTargetTerfilter();
@@ -1176,13 +1185,231 @@ document.getElementById("pilihSemua").addEventListener("click", () => {
     renderTarget();
 });
 
-
 document.getElementById("hapusPilihan").addEventListener("click", () => {
 
     targetTerpilih.clear();
 
     renderTarget();
 });
+
+
+/* =========================================
+   SISTEM AKSES KARYAWAN
+   ID DOKUMEN:
+   NIK_PETUGAS__NIK_TARGET
+
+   Satu dokumen akses untuk satu pasangan
+   petugas dan target.
+
+   Jika satu pasangan memiliki beberapa
+   penugasan, akses tetap aktif selama
+   minimal satu penugasan aktif.
+========================================= */
+
+function idAksesKaryawan(petugasNik, targetNik) {
+    return String(petugasNik) + "__" + String(targetNik);
+}
+
+
+function daftarPasanganDariPenugasan(data) {
+
+    const hasil = [];
+
+    const petugasNik = getPetugasNik(data);
+
+    if (!petugasNik) return hasil;
+
+    const targets = perluasTarget(data);
+
+    targets.forEach(targetNik => {
+
+        if (!targetNik) return;
+
+        hasil.push({
+            petugas_nik: petugasNik,
+            target_nik: String(targetNik)
+        });
+    });
+
+    return hasil;
+}
+
+
+function pasanganKey(petugasNik, targetNik) {
+    return petugasNik + "__" + targetNik;
+}
+
+
+function kumpulkanPasangan(data) {
+
+    const set = new Set();
+
+    if (!data) return set;
+
+    daftarPasanganDariPenugasan(data).forEach(p => {
+        set.add(pasanganKey(p.petugas_nik, p.target_nik));
+    });
+
+    return set;
+}
+
+
+/*
+Mengambil pasangan dari penugasan lama
+dan penugasan baru, sehingga target yang
+dihapus juga ikut diperbarui izinnya.
+*/
+
+function pasanganTerpengaruh(dataLama, dataBaru) {
+
+    const hasil = new Set();
+
+    kumpulkanPasangan(dataLama).forEach(x => hasil.add(x));
+    kumpulkanPasangan(dataBaru).forEach(x => hasil.add(x));
+
+    return hasil;
+}
+
+
+/*
+Memeriksa apakah pasangan petugas-target
+masih mempunyai penugasan aktif.
+
+Jika masih ada:
+    status akses = aktif
+
+Jika sudah tidak ada:
+    status akses = dicabut
+*/
+
+function penugasanAktifUntukPasangan(petugasNik, targetNik) {
+
+    return semuaPenugasan.filter(p => {
+
+        if (getStatus(p) !== "aktif") return false;
+
+        if (getPetugasNik(p) !== petugasNik) return false;
+
+        return perluasTarget(p).includes(targetNik);
+    });
+}
+
+
+/*
+Sinkronisasi dokumen akses_karyawan.
+
+Dokumen akses dibuat otomatis ketika
+penugasan dibuat.
+
+Dokumen akses dinonaktifkan ketika
+semua penugasan pasangan dicabut.
+
+Dokumen tidak dihapus agar rekam akses
+tetap tersedia.
+*/
+
+async function sinkronkanAksesPasangan(pasanganSet) {
+
+    if (!pasanganSet || pasanganSet.size === 0) {
+        return;
+    }
+
+    tampilStatus(
+        "Memperbarui izin akses karyawan...",
+        "loading"
+    );
+
+    const daftarPerubahan = [];
+
+    for (const key of pasanganSet) {
+
+        const bagian = key.split("__");
+
+        const petugasNik = bagian[0];
+        const targetNik = bagian.slice(1).join("__");
+
+        if (!petugasNik || !targetNik) continue;
+
+        const id = idAksesKaryawan(petugasNik, targetNik);
+
+        const ref = doc(db, "akses_karyawan", id);
+
+        const snap = await getDoc(ref);
+
+        const tugasAktif = penugasanAktifUntukPasangan(
+            petugasNik,
+            targetNik
+        );
+
+        const masihAktif = tugasAktif.length > 0;
+
+        /*
+        Jika belum pernah ada dokumen akses
+        dan pasangan tidak memiliki tugas aktif,
+        tidak perlu membuat dokumen dicabut.
+        */
+
+        if (!snap.exists() && !masihAktif) {
+            continue;
+        }
+
+        let tugasTerpilih = tugasAktif[0] || null;
+
+        const dataAkses = {
+
+            petugas_nik: petugasNik,
+
+            target_nik: targetNik,
+
+            penugasan_id: tugasTerpilih
+                ? tugasTerpilih.id
+                : (snap.exists()
+                    ? snap.data().penugasan_id || ""
+                    : ""),
+
+            nama_tugas: tugasTerpilih
+                ? getNamaTugas(tugasTerpilih)
+                : (snap.exists()
+                    ? snap.data().nama_tugas || ""
+                    : ""),
+
+            status: masihAktif ? "aktif" : "dicabut",
+
+            updatedAt: serverTimestamp()
+        };
+
+        daftarPerubahan.push({
+            ref,
+            data: dataAkses,
+            exists: snap.exists()
+        });
+    }
+
+    /*
+    Firestore batch dibatasi 500 operasi.
+    Kita gunakan maksimal 400 per batch.
+    */
+
+    const MAX_BATCH = 400;
+
+    for (let i = 0; i < daftarPerubahan.length; i += MAX_BATCH) {
+
+        const potongan = daftarPerubahan.slice(i, i + MAX_BATCH);
+
+        const batch = writeBatch(db);
+
+        potongan.forEach(item => {
+
+            batch.set(
+                item.ref,
+                item.data,
+                { merge: false }
+            );
+        });
+
+        await batch.commit();
+    }
+}
 
 
 /* =========================================
@@ -1242,7 +1469,10 @@ async function simpanPenugasan() {
     }
 
     if (!petugasTerpilih) {
-        tampilStatus("Silakan pilih petugas terlebih dahulu.", "error");
+        tampilStatus(
+            "Silakan pilih petugas terlebih dahulu.",
+            "error"
+        );
         cariPetugas.focus();
         return;
     }
@@ -1271,6 +1501,28 @@ async function simpanPenugasan() {
         if (!targetDep) {
             tampilStatus(
                 "Pilih departemen target.",
+                "error"
+            );
+            return;
+        }
+
+        const jumlahTarget = semuaKaryawan.filter(
+            k => departemenKaryawan(k) === targetDep
+        ).length;
+
+        if (jumlahTarget === 0) {
+            tampilStatus(
+                "Departemen tersebut tidak memiliki karyawan.",
+                "error"
+            );
+            return;
+        }
+
+    } else if (mode === "semua") {
+
+        if (!semuaKaryawan.length) {
+            tampilStatus(
+                "Data karyawan belum tersedia.",
                 "error"
             );
             return;
@@ -1311,20 +1563,64 @@ async function simpanPenugasan() {
             updated_by_nama: dataPenggunaLogin?.nama || ""
         };
 
+        let penugasanId = "";
+
+        let pasanganTerpengaruh = new Set();
+
         if (modeEdit && idEdit) {
 
             const sebelumnya = dataEdit;
+
+            /*
+            Pasangan target lama perlu disinkronkan
+            karena sebagian mungkin tidak lagi
+            menjadi target penugasan.
+            */
+
+            pasanganTerpengaruh = pasanganTerpengaruh(
+                sebelumnya,
+                data
+            );
 
             await updateDoc(
                 doc(db, "penugasan", idEdit),
                 data
             );
 
+            penugasanId = idEdit;
+
+            /*
+            Perbarui cache lokal agar proses
+            sinkronisasi menghitung data terbaru.
+            */
+
+            semuaPenugasan = semuaPenugasan.map(p =>
+                p.id === idEdit
+                    ? { ...p, ...data }
+                    : p
+            );
+
+            /*
+            Tambahkan pasangan target baru.
+            */
+
+            kumpulkanPasangan(data).forEach(x =>
+                pasanganTerpengaruh.add(x)
+            );
+
+            /*
+            Sinkronisasi izin akses.
+            */
+
+            await sinkronkanAksesPasangan(
+                pasanganTerpengaruh
+            );
+
             await catatRiwayat({
 
                 aksi: "edit",
 
-                penugasanId: idEdit,
+                penugasanId,
 
                 nikPetugas,
 
@@ -1339,7 +1635,7 @@ async function simpanPenugasan() {
             });
 
             tampilStatus(
-                "Penugasan berhasil diperbarui.",
+                "Penugasan dan izin akses berhasil diperbarui.",
                 "success"
             );
 
@@ -1355,11 +1651,33 @@ async function simpanPenugasan() {
                 data
             );
 
+            penugasanId = ref.id;
+
+            /*
+            Tambahkan data baru ke cache lokal
+            agar sinkronisasi dapat menghitungnya.
+            */
+
+            semuaPenugasan.push({
+                id: ref.id,
+                ...data
+            });
+
+            pasanganTerpengaruh = kumpulkanPasangan(data);
+
+            /*
+            Buat izin akses otomatis.
+            */
+
+            await sinkronkanAksesPasangan(
+                pasanganTerpengaruh
+            );
+
             await catatRiwayat({
 
                 aksi: "buat",
 
-                penugasanId: ref.id,
+                penugasanId,
 
                 nikPetugas,
 
@@ -1373,7 +1691,7 @@ async function simpanPenugasan() {
             });
 
             tampilStatus(
-                "Penugasan baru berhasil disimpan.",
+                "Penugasan dan izin akses berhasil dibuat.",
                 "success"
             );
         }
@@ -1387,7 +1705,9 @@ async function simpanPenugasan() {
         console.error(error);
 
         tampilStatus(
-            "Gagal menyimpan: " + error.message,
+            "Gagal menyimpan. " +
+            error.message +
+            ". Periksa Rules Firestore dan koneksi internet.",
             "error"
         );
 
@@ -1436,8 +1756,7 @@ function editPenugasan(id) {
 
     aturModeTarget();
 
-    departemenTarget.value =
-        data.target_departemen || "";
+    departemenTarget.value = data.target_departemen || "";
 
     targetTerpilih = new Set(getTargetNik(data));
 
@@ -1501,6 +1820,8 @@ function resetForm() {
 
 /* =========================================
    CABUT PENUGASAN
+   Izin target otomatis dinonaktifkan
+   jika tidak ada tugas aktif lainnya.
 ========================================= */
 
 async function cabutPenugasan(id) {
@@ -1527,6 +1848,8 @@ async function cabutPenugasan(id) {
 
         tampilStatus("Mencabut penugasan...", "loading");
 
+        const pasangan = kumpulkanPasangan(data);
+
         await updateDoc(
             doc(db, "penugasan", id),
             {
@@ -1542,6 +1865,24 @@ async function cabutPenugasan(id) {
                 updated_by: userLogin.uid
             }
         );
+
+        /*
+        Update cache sebelum sinkronisasi akses.
+        */
+
+        semuaPenugasan = semuaPenugasan.map(p =>
+            p.id === id
+                ? { ...p, status: "dicabut" }
+                : p
+        );
+
+        /*
+        Sinkronkan semua pasangan petugas-target.
+        Jika masih memiliki tugas aktif lain,
+        izin tidak akan dicabut.
+        */
+
+        await sinkronkanAksesPasangan(pasangan);
 
         await catatRiwayat({
 
@@ -1559,7 +1900,7 @@ async function cabutPenugasan(id) {
         });
 
         tampilStatus(
-            "Penugasan berhasil dicabut. Riwayat tetap tersimpan.",
+            "Penugasan dicabut dan izin akses telah diperbarui.",
             "success"
         );
 
@@ -1579,6 +1920,7 @@ async function cabutPenugasan(id) {
 
 /* =========================================
    AKTIFKAN KEMBALI
+   Izin akses target otomatis diaktifkan.
 ========================================= */
 
 async function aktifkanPenugasan(id) {
@@ -1597,6 +1939,8 @@ async function aktifkanPenugasan(id) {
 
         tampilStatus("Mengaktifkan penugasan...", "loading");
 
+        const pasangan = kumpulkanPasangan(data);
+
         await updateDoc(
             doc(db, "penugasan", id),
             {
@@ -1609,6 +1953,19 @@ async function aktifkanPenugasan(id) {
                 updated_by: userLogin.uid
             }
         );
+
+        /*
+        Update cache lokal agar izin
+        dapat dihitung dari status terbaru.
+        */
+
+        semuaPenugasan = semuaPenugasan.map(p =>
+            p.id === id
+                ? { ...p, status: "aktif" }
+                : p
+        );
+
+        await sinkronkanAksesPasangan(pasangan);
 
         await catatRiwayat({
 
@@ -1627,7 +1984,7 @@ async function aktifkanPenugasan(id) {
         });
 
         tampilStatus(
-            "Penugasan berhasil diaktifkan kembali.",
+            "Penugasan dan izin akses berhasil diaktifkan kembali.",
             "success"
         );
 
@@ -1787,6 +2144,7 @@ daftarPenugasan.addEventListener("click", async event => {
 
 /* =========================================
    RIWAYAT
+   HANYA 5 DATA TERBARU DARI FIRESTORE
 ========================================= */
 
 cariRiwayat.addEventListener("input", renderRiwayat);
@@ -1820,7 +2178,7 @@ function renderRiwayat() {
         return;
     }
 
-    daftarRiwayat.innerHTML = data.slice(0, 100).map(r => {
+    daftarRiwayat.innerHTML = data.map(r => {
 
         return `
             <div class="assignment-item">
@@ -1885,11 +2243,6 @@ function renderRingkasan() {
     document.getElementById("jumlahKaryawan").textContent =
         semuaKaryawan.length;
 }
-
-
-/* =========================================
-   SELESAI
-========================================= */
 
 </script>
 
