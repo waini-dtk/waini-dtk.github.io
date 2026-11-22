@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -115,86 +116,9 @@ input:focus {
     box-shadow: 0 0 0 1px #991b1b;
 }
 
-/* =====================================
-   KOLOM YANG TERKUNCI
-===================================== */
-
-.input-terkunci {
-    background: #e5e7eb !important;
-    color: #9ca3af !important;
-    filter: blur(3px);
-    user-select: none;
-    pointer-events: none;
-    border: 1px solid #e5e7eb;
+input:disabled {
+    opacity: .6;
 }
-
-.kelompok-terkunci {
-    position: relative;
-    transition: .3s;
-}
-
-.kelompok-terkunci::after {
-    content: "🔒 Masukkan dan periksa NIK terlebih dahulu";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255,255,255,.94);
-    color: #777;
-    font-size: 10px;
-    padding: 6px 9px;
-    border-radius: 6px;
-    text-align: center;
-    width: max-content;
-    max-width: 90%;
-    pointer-events: none;
-    z-index: 2;
-}
-
-.kelompok-terkunci input {
-    pointer-events: none;
-}
-
-.kelompok-terbuka::after {
-    display: none;
-}
-
-.input-readonly {
-    background: #f0fdf4 !important;
-    color: #166534 !important;
-    border: 1px solid #bbf7d0 !important;
-}
-
-/* =====================================
-   TOMBOL PERIKSA NIK
-===================================== */
-
-.tombol-periksa {
-    width: 100%;
-    padding: 12px;
-    background: #374151;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: -3px;
-    margin-bottom: 15px;
-}
-
-.tombol-periksa:active {
-    background: #1f2937;
-}
-
-.tombol-periksa:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-/* =====================================
-   TOMBOL DAFTAR
-===================================== */
 
 .submit-button {
     width: 100%;
@@ -205,13 +129,8 @@ input:focus {
     color: white;
     font-size: 13px;
     font-weight: bold;
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-.submit-button:not(:disabled) {
-    opacity: 1;
     cursor: pointer;
+    transition: .2s;
 }
 
 .submit-button:not(:disabled):active {
@@ -219,22 +138,15 @@ input:focus {
 }
 
 .submit-button:disabled {
+    opacity: .5;
     cursor: not-allowed;
 }
-
-/* =====================================
-   PEMISAH
-===================================== */
 
 .divider {
     border: none;
     border-top: 1px solid #e5e7eb;
     margin: 19px 0;
 }
-
-/* =====================================
-   INFORMASI PENDAFTARAN
-===================================== */
 
 .info-card {
     background: white;
@@ -301,10 +213,6 @@ input:focus {
     background: #15803d;
 }
 
-/* =====================================
-   PESAN SISTEM
-===================================== */
-
 .pesan {
     display: none;
     padding: 11px;
@@ -350,48 +258,6 @@ input:focus {
     line-height: 1.5;
 }
 
-.catatan-nik {
-    margin-top: -9px;
-    margin-bottom: 12px;
-}
-
-.status-nik {
-    display: none;
-    padding: 10px;
-    border-radius: 7px;
-    margin-bottom: 12px;
-    font-size: 11px;
-    line-height: 1.5;
-}
-
-.status-nik.sukses {
-    display: block;
-    background: #dcfce7;
-    color: #166534;
-    border: 1px solid #86efac;
-}
-
-.status-nik.error {
-    display: block;
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fecaca;
-}
-
-.status-nik.proses {
-    display: block;
-    background: #fef9c3;
-    color: #854d0e;
-    border: 1px solid #fde047;
-}
-
-.status-nik.info {
-    display: block;
-    background: #dbeafe;
-    color: #1e40af;
-    border: 1px solid #93c5fd;
-}
-
 .hidden {
     display: none !important;
 }
@@ -411,7 +277,9 @@ input:focus {
 <body>
 
 <header class="header">
+
     <div class="brand">
+
         <div class="logo">♙</div>
 
         <div class="brand-info">
@@ -420,10 +288,13 @@ input:focus {
         </div>
 
         <div class="menu-icon">☰</div>
+
     </div>
 
     <h1>Pendaftaran Karyawan</h1>
+
     <p>Silakan lengkapi formulir pendaftaran Anda.</p>
+
 </header>
 
 <main class="container">
@@ -436,9 +307,7 @@ input:focus {
 
         <form id="formPendaftaran">
 
-            <!-- =================================
-                 NIK
-            ================================== -->
+            <!-- NIK -->
 
             <label>NIK Karyawan</label>
 
@@ -452,89 +321,75 @@ input:focus {
                 required
             >
 
-            <div class="catatan catatan-nik">
-                Masukkan NIK yang sebelumnya telah didaftarkan oleh Super Admin.
+            <div class="catatan">
+                Masukkan NIK sesuai identitas Anda.
             </div>
 
-            <button
-                type="button"
-                class="tombol-periksa"
-                id="tombolPeriksa"
+            <!-- NAMA -->
+
+            <label>Nama Lengkap</label>
+
+            <input
+                type="text"
+                id="nama"
+                placeholder="Masukkan nama lengkap"
+                maxlength="100"
+                autocomplete="name"
+                required
             >
-                🔍 PERIKSA NIK
-            </button>
 
-            <div id="statusNik" class="status-nik"></div>
+            <!-- JABATAN -->
 
-            <!-- =================================
-                 NAMA DAN JABATAN
-                 TERKUNCI SEBELUM NIK VALID
-            ================================== -->
+            <label>Jabatan</label>
 
-            <div id="kelompokData" class="kelompok-terkunci">
+            <input
+                type="text"
+                id="jabatan"
+                placeholder="Masukkan jabatan"
+                maxlength="100"
+                required
+            >
 
-                <label>Nama Lengkap</label>
+            <!-- PASSWORD -->
 
-                <input
-                    type="text"
-                    id="nama"
-                    placeholder="Nama sesuai data karyawan"
-                    readonly
-                    disabled
-                >
+            <label>Password</label>
 
-                <label>Jabatan</label>
+            <input
+                type="password"
+                id="password"
+                placeholder="Buat password minimal 6 karakter"
+                minlength="6"
+                autocomplete="new-password"
+                required
+            >
 
-                <input
-                    type="text"
-                    id="jabatan"
-                    placeholder="Jabatan sesuai data karyawan"
-                    readonly
-                    disabled
-                >
-
+            <div class="catatan">
+                Password minimal 6 karakter.
             </div>
 
-            <!-- =================================
-                 PASSWORD
-                 TERKUNCI SEBELUM NIK VALID
-            ================================== -->
+            <!-- KONFIRMASI PASSWORD -->
 
-            <div id="kelompokPassword" class="kelompok-terkunci">
+            <label>Konfirmasi Password</label>
 
-                <label>Password</label>
+            <input
+                type="password"
+                id="konfirmasiPassword"
+                placeholder="Ulangi password"
+                minlength="6"
+                autocomplete="new-password"
+                required
+            >
 
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Buat password minimal 6 karakter"
-                    minlength="6"
-                    autocomplete="new-password"
-                    disabled
-                    required
-                >
-
-                <label>Konfirmasi Password</label>
-
-                <input
-                    type="password"
-                    id="konfirmasiPassword"
-                    placeholder="Ulangi password"
-                    minlength="6"
-                    autocomplete="new-password"
-                    disabled
-                    required
-                >
-
-            </div>
+            <!-- PESAN -->
 
             <div id="pesan" class="pesan"></div>
+
+            <!-- TOMBOL DAFTAR -->
 
             <button
                 type="submit"
                 class="submit-button"
                 id="tombolDaftar"
-                disabled
             >
                 Daftar Sekarang
             </button>
@@ -545,6 +400,8 @@ input:focus {
 
     <hr class="divider">
 
+    <!-- INFORMASI PENDAFTARAN -->
+
     <div class="info-card">
 
         <div class="info-content">
@@ -552,6 +409,7 @@ input:focus {
             <div class="info-icon">☷</div>
 
             <div class="info-text">
+
                 <strong>
                     Informasi Pendaftaran Terbaru
                 </strong>
@@ -559,6 +417,7 @@ input:focus {
                 <small>
                     Lihat perkembangan pendaftaran anggota divisi.
                 </small>
+
             </div>
 
             <div class="arrow">›</div>
@@ -600,7 +459,6 @@ import {
 import {
     getFirestore,
     doc,
-    getDoc,
     writeBatch,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -616,141 +474,63 @@ const db = getFirestore(app);
 // 2. NAMA KOLEKSI
 // =====================================
 
-const KOLEKSI_KARYAWAN = "karyawan";
 const KOLEKSI_PENGGUNA = "pengguna";
-const KOLEKSI_PUBLIK = "status_pendaftaran_public";
+
+const KOLEKSI_PUBLIK =
+    "status_pendaftaran_public";
 
 // =====================================
-// 3. NIK SUPER ADMIN
+// 3. ELEMEN FORM
 // =====================================
 
-const NIK_SUPER_ADMIN = "28B03150560";
-
-// =====================================
-// 4. ELEMEN
-// =====================================
-
-const form = document.getElementById("formPendaftaran");
+const form = document.getElementById(
+    "formPendaftaran"
+);
 
 const nikInput = document.getElementById("nik");
+
 const namaInput = document.getElementById("nama");
-const jabatanInput = document.getElementById("jabatan");
 
-const passwordInput = document.getElementById("password");
-const konfirmasiInput = document.getElementById("konfirmasiPassword");
+const jabatanInput = document.getElementById(
+    "jabatan"
+);
 
-const tombolPeriksa = document.getElementById("tombolPeriksa");
-const tombolDaftar = document.getElementById("tombolDaftar");
+const passwordInput = document.getElementById(
+    "password"
+);
 
-const kelompokData = document.getElementById("kelompokData");
-const kelompokPassword = document.getElementById("kelompokPassword");
+const konfirmasiInput = document.getElementById(
+    "konfirmasiPassword"
+);
 
-const statusNik = document.getElementById("statusNik");
+const tombolDaftar = document.getElementById(
+    "tombolDaftar"
+);
+
 const pesan = document.getElementById("pesan");
 
 // =====================================
-// 5. STATUS VALIDASI
-// =====================================
-
-let nikSudahValid = false;
-let dataKaryawanDitemukan = null;
-let nikTerakhirDiperiksa = "";
-
-// =====================================
-// 6. KUNCI FORM
-// =====================================
-
-function kunciForm() {
-
-    nikSudahValid = false;
-    dataKaryawanDitemukan = null;
-    nikTerakhirDiperiksa = "";
-
-    namaInput.value = "";
-    jabatanInput.value = "";
-
-    passwordInput.value = "";
-    konfirmasiInput.value = "";
-
-    namaInput.disabled = true;
-    jabatanInput.disabled = true;
-
-    passwordInput.disabled = true;
-    konfirmasiInput.disabled = true;
-
-    namaInput.classList.remove("input-readonly");
-    jabatanInput.classList.remove("input-readonly");
-
-    kelompokData.classList.add("kelompok-terkunci");
-    kelompokData.classList.remove("kelompok-terbuka");
-
-    kelompokPassword.classList.add("kelompok-terkunci");
-    kelompokPassword.classList.remove("kelompok-terbuka");
-
-    tombolDaftar.disabled = true;
-
-    tombolDaftar.textContent = "Daftar Sekarang";
-}
-
-// =====================================
-// 7. BUKA FORM
-// =====================================
-
-function bukaForm(data) {
-
-    nikSudahValid = true;
-    dataKaryawanDitemukan = data;
-    nikTerakhirDiperiksa = nikInput.value.trim().toUpperCase();
-
-    namaInput.value = data.nama || "";
-    jabatanInput.value = data.jabatan || "";
-
-    namaInput.disabled = false;
-    jabatanInput.disabled = false;
-
-    passwordInput.disabled = false;
-    konfirmasiInput.disabled = false;
-
-    namaInput.classList.add("input-readonly");
-    jabatanInput.classList.add("input-readonly");
-
-    kelompokData.classList.remove("kelompok-terkunci");
-    kelompokData.classList.add("kelompok-terbuka");
-
-    kelompokPassword.classList.remove("kelompok-terkunci");
-    kelompokPassword.classList.add("kelompok-terbuka");
-
-    periksaForm();
-}
-
-// =====================================
-// 8. PESAN STATUS NIK
-// =====================================
-
-function tampilStatusNik(teks, jenis) {
-
-    statusNik.textContent = teks;
-    statusNik.className = "status-nik " + jenis;
-}
-
-// =====================================
-// 9. PESAN FORM
+// 4. TAMPILKAN PESAN
 // =====================================
 
 function tampilPesan(teks, jenis) {
 
     pesan.textContent = teks;
+
     pesan.className = "pesan " + jenis;
+
 }
 
 function hapusPesan() {
 
     pesan.textContent = "";
+
     pesan.className = "pesan";
+
 }
 
 // =====================================
-// 10. FORMAT NIK
+// 5. FORMAT NIK
 // =====================================
 
 nikInput.addEventListener("input", () => {
@@ -759,231 +539,28 @@ nikInput.addEventListener("input", () => {
         .toUpperCase()
         .replace(/[^A-Z0-9]/g, "");
 
-    kunciForm();
+    hapusPesan();
 
-    statusNik.textContent = "";
-    statusNik.className = "status-nik";
+});
+
+// =====================================
+// 6. VALIDASI PASSWORD
+// =====================================
+
+konfirmasiInput.addEventListener("input", () => {
 
     hapusPesan();
 
-    tombolPeriksa.disabled = false;
-    tombolPeriksa.textContent = "🔍 PERIKSA NIK";
-
 });
 
-// =====================================
-// 11. VALIDASI FORM
-// =====================================
+passwordInput.addEventListener("input", () => {
 
-function periksaForm() {
-
-    const nik = nikInput.value.trim().toUpperCase();
-
-    const nama = namaInput.value.trim();
-    const jabatan = jabatanInput.value.trim();
-
-    const password = passwordInput.value;
-    const konfirmasi = konfirmasiInput.value;
-
-    const nikValid =
-        /^[A-Z0-9]{5,30}$/.test(nik);
-
-    const bukanSuperAdmin =
-        nik !== NIK_SUPER_ADMIN;
-
-    const dataValid =
-        nikSudahValid &&
-        dataKaryawanDitemukan !== null &&
-        nik === nikTerakhirDiperiksa;
-
-    const namaValid = nama.length >= 2;
-    const jabatanValid = jabatan.length >= 2;
-
-    const passwordValid = password.length >= 6;
-    const passwordSama = password === konfirmasi;
-
-    tombolDaftar.disabled = !(
-        nikValid &&
-        bukanSuperAdmin &&
-        dataValid &&
-        namaValid &&
-        jabatanValid &&
-        passwordValid &&
-        passwordSama
-    );
-}
-
-// =====================================
-// 12. PANTAU INPUT PASSWORD
-// =====================================
-
-[
-    passwordInput,
-    konfirmasiInput
-].forEach(input => {
-
-    input.addEventListener("input", periksaForm);
-
-});
-
-// =====================================
-// 13. PERIKSA DATA NIK KE FIRESTORE
-// =====================================
-
-tombolPeriksa.addEventListener("click", async () => {
-
-    const nik = nikInput.value.trim().toUpperCase();
-
-    kunciForm();
     hapusPesan();
 
-    // Validasi format
-
-    if (!/^[A-Z0-9]{5,30}$/.test(nik)) {
-
-        tampilStatusNik(
-            "NIK harus terdiri dari 5 sampai 30 karakter huruf atau angka.",
-            "error"
-        );
-
-        return;
-    }
-
-    // Larangan NIK Super Admin
-
-    if (nik === NIK_SUPER_ADMIN) {
-
-        tampilStatusNik(
-            "NIK Super Admin tidak dapat digunakan untuk pendaftaran karyawan.",
-            "error"
-        );
-
-        return;
-    }
-
-    tombolPeriksa.disabled = true;
-    tombolPeriksa.textContent = "Memeriksa NIK...";
-
-    tampilStatusNik(
-        "Sedang memeriksa data NIK ke database WAINI...",
-        "proses"
-    );
-
-    try {
-
-        // Dokumen karyawan menggunakan ID dokumen = NIK
-
-        const referensiKaryawan = doc(
-            db,
-            KOLEKSI_KARYAWAN,
-            nik
-        );
-
-        const hasil = await getDoc(referensiKaryawan);
-
-        // =================================
-        // NIK TIDAK DITEMUKAN
-        // =================================
-
-        if (!hasil.exists()) {
-
-            tampilStatusNik(
-                "NIK tidak ditemukan. Pastikan Super Admin sudah memasukkan data karyawan Anda ke WAINI. Formulir pendaftaran tetap terkunci.",
-                "error"
-            );
-
-            return;
-        }
-
-        const data = hasil.data();
-
-        // =================================
-        // VALIDASI STATUS KARYAWAN
-        // =================================
-
-        const statusKaryawan = String(
-            data.status_karyawan ||
-            data.status ||
-            "aktif"
-        ).toLowerCase();
-
-        const statusTidakAktif = [
-            "nonaktif",
-            "tidak aktif",
-            "keluar",
-            "resign",
-            "terminated",
-            "inactive"
-        ];
-
-        if (statusTidakAktif.includes(statusKaryawan)) {
-
-            tampilStatusNik(
-                "Data karyawan ditemukan, tetapi status karyawan tidak aktif. Silakan hubungi Super Admin.",
-                "error"
-            );
-
-            return;
-        }
-
-        // =================================
-        // VALIDASI NAMA
-        // =================================
-
-        if (!data.nama) {
-
-            tampilStatusNik(
-                "Data NIK ditemukan, tetapi nama karyawan belum lengkap. Hubungi Super Admin.",
-                "error"
-            );
-
-            return;
-        }
-
-        // =================================
-        // NIK VALID
-        // =================================
-
-        bukaForm(data);
-
-        tampilStatusNik(
-            "NIK berhasil diverifikasi. Nama dan jabatan sesuai database WAINI. Silakan buat password untuk akun Anda.",
-            "sukses"
-        );
-
-    } catch (error) {
-
-        console.error("Pemeriksaan NIK gagal:", error);
-
-        if (
-            error.code === "permission-denied" ||
-            error.message?.includes("Missing or insufficient permissions")
-        ) {
-
-            tampilStatusNik(
-                "Database menolak pemeriksaan NIK. Firestore Rules untuk pemeriksaan pendaftaran perlu diperbaiki.",
-                "error"
-            );
-
-        } else {
-
-            tampilStatusNik(
-                "Gagal memeriksa NIK. Periksa koneksi internet dan coba kembali.",
-                "error"
-            );
-        }
-
-    } finally {
-
-        tombolPeriksa.disabled = false;
-        tombolPeriksa.textContent = "🔍 PERIKSA NIK";
-
-    }
-
 });
 
 // =====================================
-// 14. TERJEMAHAN ERROR AUTH
+// 7. TERJEMAHAN ERROR FIREBASE
 // =====================================
 
 function terjemahkanError(error) {
@@ -1025,7 +602,9 @@ function terjemahkanError(error) {
     };
 
     if (daftarError[kode]) {
+
         return daftarError[kode];
+
     }
 
     if (
@@ -1035,45 +614,90 @@ function terjemahkanError(error) {
     ) {
 
         return "Akses Firestore ditolak. Periksa Rules Firebase.";
+
     }
 
     return "Pendaftaran gagal. Silakan periksa koneksi dan coba kembali.";
+
 }
 
 // =====================================
-// 15. PROSES DAFTAR
+// 8. PROSES PENDAFTARAN
 // =====================================
 
 form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-    if (tombolDaftar.disabled) return;
+    hapusPesan();
 
-    const nik = nikInput.value.trim().toUpperCase();
+    // =================================
+    // AMBIL DATA FORM
+    // =================================
 
-    const nama = namaInput.value.trim();
-    const jabatan = jabatanInput.value.trim();
+    const nik = nikInput.value
+        .trim()
+        .toUpperCase();
+
+    const nama = namaInput.value
+        .trim();
+
+    const jabatan = jabatanInput.value
+        .trim();
 
     const password = passwordInput.value;
+
     const konfirmasi = konfirmasiInput.value;
 
     // =================================
-    // VALIDASI NIK SUDAH DIPERIKSA
+    // VALIDASI NIK
     // =================================
 
-    if (
-        !nikSudahValid ||
-        nik !== nikTerakhirDiperiksa ||
-        !dataKaryawanDitemukan
-    ) {
+    if (!/^[A-Z0-9]{5,30}$/.test(nik)) {
 
         tampilPesan(
-            "Silakan periksa dan verifikasi NIK terlebih dahulu.",
+            "NIK harus terdiri dari 5 sampai 30 karakter huruf atau angka.",
             "error"
         );
 
+        nikInput.focus();
+
         return;
+
+    }
+
+    // =================================
+    // VALIDASI NAMA
+    // =================================
+
+    if (nama.length < 2) {
+
+        tampilPesan(
+            "Nama lengkap harus diisi minimal 2 karakter.",
+            "error"
+        );
+
+        namaInput.focus();
+
+        return;
+
+    }
+
+    // =================================
+    // VALIDASI JABATAN
+    // =================================
+
+    if (jabatan.length < 2) {
+
+        tampilPesan(
+            "Jabatan harus diisi minimal 2 karakter.",
+            "error"
+        );
+
+        jabatanInput.focus();
+
+        return;
+
     }
 
     // =================================
@@ -1087,8 +711,15 @@ form.addEventListener("submit", async (e) => {
             "error"
         );
 
+        passwordInput.focus();
+
         return;
+
     }
+
+    // =================================
+    // VALIDASI KONFIRMASI
+    // =================================
 
     if (password !== konfirmasi) {
 
@@ -1097,25 +728,20 @@ form.addEventListener("submit", async (e) => {
             "error"
         );
 
+        konfirmasiInput.focus();
+
         return;
+
     }
 
     // =================================
-    // VALIDASI DATA KARYAWAN
+    // TOMBOL PROSES
     // =================================
-
-    if (!nama || !jabatan) {
-
-        tampilPesan(
-            "Data karyawan tidak lengkap. Hubungi Super Admin.",
-            "error"
-        );
-
-        return;
-    }
 
     tombolDaftar.disabled = true;
-    tombolDaftar.textContent = "Memproses Pendaftaran...";
+
+    tombolDaftar.textContent =
+        "Memproses Pendaftaran...";
 
     tampilPesan(
         "Sedang membuat akun WAINI. Mohon tunggu dan jangan menutup halaman.",
@@ -1123,7 +749,12 @@ form.addEventListener("submit", async (e) => {
     );
 
     let userBaru = null;
+
     let dataBerhasilTersimpan = false;
+
+    // =================================
+    // 9. PROSES FIREBASE
+    // =================================
 
     try {
 
@@ -1132,7 +763,8 @@ form.addEventListener("submit", async (e) => {
         // =================================
 
         const emailInternal =
-            nik.toLowerCase() + "@waini-dtk.invalid";
+            nik.toLowerCase() +
+            "@waini-dtk.invalid";
 
         // =================================
         // BUAT AKUN FIREBASE AUTH
@@ -1148,13 +780,13 @@ form.addEventListener("submit", async (e) => {
         userBaru = hasilAuth.user;
 
         // =================================
-        // BATCH FIRESTORE
+        // BUAT BATCH FIRESTORE
         // =================================
 
         const batch = writeBatch(db);
 
         // =================================
-        // PROFIL PENGGUNA
+        // 10. DATA PENGGUNA
         // =================================
 
         const referensiPengguna = doc(
@@ -1163,33 +795,43 @@ form.addEventListener("submit", async (e) => {
             userBaru.uid
         );
 
-        batch.set(referensiPengguna, {
+        batch.set(
+            referensiPengguna,
+            {
 
-            uid: userBaru.uid,
-            nik: nik,
-            nama: nama,
-            jabatan: jabatan,
+                uid: userBaru.uid,
 
-            // Role dasar
-            role: "karyawan",
+                nik: nik,
 
-            // Status menunggu persetujuan Super Admin
-            status: "menunggu_verifikasi",
+                nama: nama,
 
-            // Hak akses awal kosong.
-            // Hak tugas dibaca dari koleksi penugasan.
-            hak_akses: [],
+                jabatan: jabatan,
 
-            // Data akun
-            email: emailInternal,
+                email: emailInternal,
 
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp()
+                // Semua pendaftar menjadi karyawan biasa.
+                // Tidak ada pembuatan Super Admin dari halaman ini.
 
-        });
+                role: "karyawan",
+
+                // Akun belum boleh digunakan
+                // sebelum diverifikasi Admin.
+
+                status: "menunggu_verifikasi",
+
+                // Hak akses awal kosong.
+
+                hak_akses: [],
+
+                createdAt: serverTimestamp(),
+
+                updatedAt: serverTimestamp()
+
+            }
+        );
 
         // =================================
-        // STATUS PENDAFTARAN PUBLIK
+        // 11. STATUS PENDAFTARAN
         // =================================
 
         const referensiPublik = doc(
@@ -1198,19 +840,21 @@ form.addEventListener("submit", async (e) => {
             userBaru.uid
         );
 
-        batch.set(referensiPublik, {
+        batch.set(
+            referensiPublik,
+            {
 
-            nama: nama,
-            nik: nik,
+                nama: nama,
 
-            status: "Menunggu Verifikasi",
+                status: "Menunggu Verifikasi",
 
-            createdAt: serverTimestamp()
+                createdAt: serverTimestamp()
 
-        });
+            }
+        );
 
         // =================================
-        // SIMPAN FIRESTORE
+        // 12. SIMPAN DATA
         // =================================
 
         await batch.commit();
@@ -1218,7 +862,7 @@ form.addEventListener("submit", async (e) => {
         dataBerhasilTersimpan = true;
 
         // =================================
-        // LOGOUT OTOMATIS
+        // 13. KELUAR OTOMATIS
         // =================================
 
         try {
@@ -1235,26 +879,20 @@ form.addEventListener("submit", async (e) => {
         }
 
         // =================================
-        // PENDAFTARAN BERHASIL
+        // 14. PENDAFTARAN BERHASIL
         // =================================
 
         tampilPesan(
-            "Pendaftaran berhasil! Akun Anda telah dibuat dan menunggu verifikasi Super Admin. Silakan cek status pendaftaran.",
+            "Pendaftaran berhasil! Akun Anda sedang menunggu verifikasi Admin. Silakan cek status pendaftaran secara berkala.",
             "sukses"
         );
 
         form.reset();
 
-        kunciForm();
-
-        nikInput.disabled = false;
-        tombolPeriksa.disabled = false;
-
-        tombolDaftar.textContent = "Daftar Sekarang";
         tombolDaftar.disabled = true;
 
-        statusNik.textContent = "";
-        statusNik.className = "status-nik";
+        tombolDaftar.textContent =
+            "Pendaftaran Berhasil";
 
     } catch (error) {
 
@@ -1264,10 +902,13 @@ form.addEventListener("submit", async (e) => {
         );
 
         // =================================
-        // HAPUS AUTH JIKA FIRESTORE GAGAL
+        // 15. HAPUS AUTH JIKA PENYIMPANAN GAGAL
         // =================================
 
-        if (userBaru && !dataBerhasilTersimpan) {
+        if (
+            userBaru &&
+            !dataBerhasilTersimpan
+        ) {
 
             try {
 
@@ -1285,12 +926,16 @@ form.addEventListener("submit", async (e) => {
                 );
 
                 try {
+
                     await signOut(auth);
+
                 } catch (logoutError) {
+
                     console.error(
                         "Logout gagal:",
                         logoutError
                     );
+
                 }
 
                 tampilPesan(
@@ -1298,15 +943,19 @@ form.addEventListener("submit", async (e) => {
                     "error"
                 );
 
-                tombolDaftar.textContent = "Daftar Sekarang";
                 tombolDaftar.disabled = false;
 
+                tombolDaftar.textContent =
+                    "Daftar Sekarang";
+
                 return;
+
             }
+
         }
 
         // =================================
-        // TAMPILKAN ERROR
+        // 16. TAMPILKAN ERROR
         // =================================
 
         tampilPesan(
@@ -1314,24 +963,23 @@ form.addEventListener("submit", async (e) => {
             "error"
         );
 
-        tombolDaftar.textContent = "Daftar Sekarang";
         tombolDaftar.disabled = false;
+
+        tombolDaftar.textContent =
+            "Daftar Sekarang";
 
     }
 
 });
 
 // =====================================
-// 16. KONDISI AWAL
+// 17. KONDISI AWAL
 // =====================================
 
-kunciForm();
+tombolDaftar.disabled = false;
 
-nikInput.disabled = false;
-
-tombolPeriksa.disabled = false;
-
-tombolDaftar.disabled = true;
+tombolDaftar.textContent =
+    "Daftar Sekarang";
 
 </script>
 
