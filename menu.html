@@ -460,12 +460,21 @@ const ikonMenu = {
 
 
 // =====================================
-// 5. NORMALISASI ROLE
+// 5. NORMALISASI ROLE DAN KODE
 // =====================================
 
 function normalisasiRole(role) {
 
     return String(role || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+
+}
+
+function normalisasiKode(kode) {
+
+    return String(kode || "")
         .trim()
         .toLowerCase()
         .replace(/[\s-]+/g, "_");
@@ -483,15 +492,10 @@ function normalisasiArray(data) {
         return [];
     }
 
-    return data.map(item => {
-
-        if (typeof item === "string") {
-            return item.trim().toLowerCase();
-        }
-
-        return "";
-
-    }).filter(Boolean);
+    return data
+        .filter(item => typeof item === "string")
+        .map(item => normalisasiKode(item))
+        .filter(Boolean);
 
 }
 
@@ -583,25 +587,38 @@ function buatKartu(menu) {
 
 function bolehLihatMenu(menu) {
 
+    const kodeMenu = normalisasiKode(menu.kode);
+
     // SUPER ADMIN MELIHAT SEMUA MENU AKTIF
 
     if (superAdmin) {
         return true;
     }
 
-    // Ambil role yang diizinkan oleh menu
+    // =================================
+    // PROFIL ADALAH MENU BAWAAN
+    // =================================
+    // Semua akun aktif dapat melihat profil.
+    // Tidak perlu akses_role.
+    // Tidak perlu hak_akses.
+    // Tidak perlu penugasan khusus.
+
+    if (kodeMenu === "profil") {
+        return true;
+    }
+
+    // =================================
+    // MENU LAIN MENGIKUTI ROLE
+    // =================================
 
     const aksesRole = normalisasiArray(
         menu.akses_role
     );
 
-    // Role dasar pengguna
-
     const daftarRolePengguna = [rolePengguna];
 
-    // Leader / petugas absensi yang menggunakan
-    // role dasar karyawan tetap dapat membaca
-    // menu umum untuk role karyawan.
+    // Role khusus yang menggunakan akses
+    // menu umum milik karyawan.
 
     if (
         [
@@ -610,10 +627,10 @@ function bolehLihatMenu(menu) {
             "petugas_absensi"
         ].includes(rolePengguna)
     ) {
-        daftarRolePengguna.push("karyawan");
-    }
 
-    // Periksa kesesuaian role
+        daftarRolePengguna.push("karyawan");
+
+    }
 
     const roleDiizinkan = daftarRolePengguna.some(
         role => aksesRole.includes(role)
@@ -623,35 +640,26 @@ function bolehLihatMenu(menu) {
         return false;
     }
 
-    // PROFIL SELALU TERSEDIA BAGI PENGGUNA
-    // AKTIF YANG ROLE-NYA DIIZINKAN.
-
-    if (menu.kode === "profil") {
-        return true;
-    }
-
+    // =================================
     // MENU INFORMASI DAN BANTUAN
-    // MENGIKUTI AKSES ROLE.
+    // =================================
 
     if (
-        menu.kode === "informasi" ||
-        menu.kode === "bantuan"
+        kodeMenu === "informasi" ||
+        kodeMenu === "bantuan"
     ) {
         return true;
     }
 
-    // Menu yang secara eksplisit membutuhkan
-    // penugasan/hak akses tambahan.
+    // =================================
+    // HAK AKSES TAMBAHAN
+    // =================================
 
     if (menu.perlu_hak_akses === true) {
 
-        return hakAksesPengguna.includes(
-            menu.kode
-        );
+        return hakAksesPengguna.includes(kodeMenu);
 
     }
-
-    // Menu lainnya mengikuti akses_role.
 
     return true;
 
@@ -686,7 +694,9 @@ async function muatMenuFirestore() {
 
                 ...data,
 
-                kode: data.kode || dokumen.id
+                kode: normalisasiKode(
+                    data.kode || dokumen.id
+                )
 
             });
 
@@ -777,9 +787,6 @@ async function muatMenuFirestore() {
                 ].includes(menu.kode)
             ) {
 
-                // Menu ini tidak diberikan kepada
-                // pengguna selain Super Admin.
-
                 if (superAdmin) {
                     areaAdmin.appendChild(kartu);
                 }
@@ -834,7 +841,15 @@ async function muatMenuFirestore() {
 
         console.log("Super Admin:", superAdmin);
 
-        console.log("Menu ditemukan:", menuTampil.map(m => m.kode));
+        console.log(
+            "Daftar menu aktif:",
+            menuAktif.map(m => m.kode)
+        );
+
+        console.log(
+            "Menu yang ditampilkan:",
+            menuTampil.map(m => m.kode)
+        );
 
 
         // JIKA TIDAK ADA MENU
@@ -858,7 +873,7 @@ async function muatMenuFirestore() {
                 status.textContent =
                     "Menu aktif ditemukan, tetapi tidak ada menu yang sesuai dengan role akun: " +
                     rolePengguna +
-                    ". Periksa field akses_role di Firestore.";
+                    ". Periksa pengaturan akses menu di Firestore.";
 
             }
 
@@ -974,6 +989,23 @@ async function periksaPengguna(user) {
             nama +
             " • " +
             jabatan;
+
+
+        // DIAGNOSTIK PENGGUNA
+
+        console.log("========== AKUN WAINI ==========");
+
+        console.log("Nama:", nama);
+
+        console.log("Role asli:", data.role);
+
+        console.log("Role normalisasi:", rolePengguna);
+
+        console.log("Status:", data.status);
+
+        console.log("NIK:", data.nik);
+
+        console.log("Hak akses:", hakAksesPengguna);
 
 
         // MUAT MENU
