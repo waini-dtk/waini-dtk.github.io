@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -62,6 +61,19 @@ tbody tr:hover{background:#fffafa}
 .aksi{display:flex;gap:6px;white-space:nowrap}
 .empty{padding:35px 15px;text-align:center;color:#888;font-size:13px}
 .loading{padding:35px;text-align:center;color:#777}
+
+/* PAGINATION */
+.pagination{
+display:flex;align-items:center;justify-content:space-between;
+gap:10px;flex-wrap:wrap;padding:12px;background:white;
+border-top:1px solid var(--border)
+}
+.pagination-info{font-size:12px;color:#666}
+.pagination-buttons{display:flex;align-items:center;gap:6px}
+.pagination-buttons button{min-width:38px}
+.page-number{font-size:12px;font-weight:bold;color:var(--merah);padding:0 5px}
+
+/* MODAL */
 .overlay{position:fixed;inset:0;background:#0007;z-index:100;display:none;align-items:center;justify-content:center;padding:12px}
 .overlay.show{display:flex!important}
 .modal{background:white;width:100%;max-width:650px;max-height:92vh;overflow-y:auto;border-radius:16px}
@@ -91,173 +103,68 @@ hr{border:none;border-top:1px solid var(--border);margin:15px 0}
 .import-info strong{color:#333}
 .progress{font-size:12px;color:#666;margin-top:10px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
 
-/* ================================
-   PEMILIHAN TARGET KARYAWAN
-================================ */
-.target-picker{
-border:1px solid var(--border);
-border-radius:12px;
-overflow:hidden;
-background:#fff;
+/* PILIH TARGET KARYAWAN */
+.picker-box{
+border:1px solid #ddd;border-radius:12px;overflow:hidden;background:#fff
 }
-.target-picker-top{
-background:#fafafa;
-padding:12px;
-border-bottom:1px solid var(--border);
+.picker-toolbar{
+padding:10px;background:#f8f8f8;border-bottom:1px solid #eee
 }
-.target-picker-top .field{margin-bottom:9px}
-.target-picker-top .field:last-child{margin-bottom:0}
-.target-search{
-width:100%;
-height:42px;
-border:1px solid #ddd;
-border-radius:9px;
-padding:0 12px;
-outline:none;
-background:white;
+.picker-search{margin-bottom:8px}
+.picker-search input{
+width:100%;height:42px;border:1px solid #ddd;border-radius:9px;
+padding:0 12px;outline:none;background:#fff
 }
-.target-search:focus{border-color:var(--merah)}
-.target-filter{
-width:100%;
-height:42px;
-border:1px solid #ddd;
-border-radius:9px;
-padding:0 10px;
-background:white;
+.picker-filter select{
+width:100%;height:40px;border:1px solid #ddd;border-radius:9px;
+padding:0 10px;background:white
 }
-.target-picker-info{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:8px;
-flex-wrap:wrap;
-font-size:11px;
-color:#666;
-margin-top:9px;
+.picker-action-row{
+display:flex;align-items:center;justify-content:space-between;
+gap:7px;flex-wrap:wrap;margin-top:9px
 }
-.target-picker-info strong{color:var(--merah)}
-.target-picker-actions{
-display:flex;
-gap:7px;
-flex-wrap:wrap;
-margin-top:10px;
+.picker-action-row button{font-size:11px;padding:8px 10px}
+.picker-count{font-size:11px;color:#666}
+.picker-list{
+max-height:270px;overflow-y:auto;padding:7px;
+background:#fafafa
 }
-.target-picker-actions button{
-font-size:11px;
-padding:8px 10px;
+.employee-option{
+display:flex;align-items:center;gap:10px;
+padding:11px;border:1px solid #e8e8e8;
+border-radius:10px;background:white;margin-bottom:7px;
+cursor:pointer;transition:.15s
 }
-.target-list{
-max-height:270px;
-overflow-y:auto;
-padding:8px;
-background:#fff;
+.employee-option:last-child{margin-bottom:0}
+.employee-option:hover{border-color:#d99;background:#fffafa}
+.employee-option.selected{border-color:#d90019;background:#fff3f4}
+.employee-option input[type=checkbox]{
+width:18px;height:18px;accent-color:var(--merah);flex-shrink:0
 }
-.target-item{
-display:flex;
-align-items:center;
-gap:10px;
-padding:11px;
-border:1px solid #eee;
-border-radius:10px;
-margin-bottom:7px;
-cursor:pointer;
-transition:.15s;
-background:#fff;
+.employee-info{flex:1;min-width:0}
+.employee-name{font-size:12px;font-weight:bold;overflow-wrap:anywhere}
+.employee-nik{font-size:11px;color:#777;margin-top:3px}
+.employee-dept{font-size:10px;color:var(--merah);margin-top:4px}
+.picker-empty{text-align:center;color:#888;padding:25px 10px;font-size:12px}
+.selected-box{margin-top:12px;border:1px solid #e5e5e5;border-radius:10px;padding:10px;background:#fff}
+.selected-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:5px}
+.selected-heading strong{font-size:12px}
+.selected-heading span{font-size:11px;color:var(--merah);font-weight:bold}
+.selected-list{display:flex;flex-direction:column;gap:6px;max-height:160px;overflow-y:auto}
+.selected-item{
+display:flex;align-items:center;gap:8px;
+padding:8px;background:#f7f7f7;border-radius:8px
 }
-.target-item:last-child{margin-bottom:0}
-.target-item:hover{background:#fff8f8;border-color:#f2c5ca}
-.target-item.selected{
-background:#fff3f4;
-border-color:#e6a0a8;
+.selected-item-info{flex:1;min-width:0}
+.selected-item-name{font-size:11px;font-weight:bold;overflow-wrap:anywhere}
+.selected-item-nik{font-size:10px;color:#777;margin-top:3px}
+.selected-remove{
+border:0;background:#ffe5e8;color:#b00015;
+border-radius:7px;width:28px;height:28px;font-weight:bold;flex-shrink:0
 }
-.target-checkbox{
-width:19px;
-height:19px;
-accent-color:var(--merah);
-flex-shrink:0;
-}
-.target-item-info{flex:1;min-width:0}
-.target-item-name{
-font-size:12px;
-font-weight:bold;
-color:#252525;
-overflow-wrap:anywhere;
-}
-.target-item-nik{
-font-size:11px;
-color:#777;
-margin-top:3px;
-}
-.target-item-dept{
-font-size:10px;
-color:var(--merah);
-background:#fff0f1;
-padding:5px 7px;
-border-radius:20px;
-margin-top:5px;
-display:inline-block;
-}
-.target-item-check{
-font-size:17px;
-color:var(--merah);
-font-weight:bold;
-}
-.target-empty{
-text-align:center;
-padding:22px 12px;
-color:#888;
-font-size:12px;
-}
-.selected-targets{
-margin-top:11px;
-padding:11px;
-border:1px dashed #e1a0a7;
-border-radius:10px;
-background:#fffafa;
-}
-.selected-target-title{
-font-size:12px;
-font-weight:bold;
-margin-bottom:9px;
-color:#333;
-}
-.selected-target-chips{
-display:flex;
-flex-wrap:wrap;
-gap:7px;
-}
-.target-chip{
-display:flex;
-align-items:center;
-gap:6px;
-background:#fff0f1;
-border:1px solid #f1c4ca;
-border-radius:20px;
-padding:6px 8px;
-max-width:100%;
-}
-.target-chip-text{
-font-size:10px;
-color:#a00012;
-overflow-wrap:anywhere;
-}
-.target-chip-remove{
-border:none;
-background:#d90019;
-color:white;
-width:19px;
-height:19px;
-border-radius:50%;
-font-size:13px;
-line-height:1;
-flex-shrink:0;
-}
-.target-hint{
-font-size:10px;
-color:#777;
-line-height:1.6;
-margin-top:8px;
-}
+.selected-empty{font-size:11px;color:#888;text-align:center;padding:10px}
+.target-hint{font-size:10px;color:#777;line-height:1.5;margin-top:7px}
+
 @media(max-width:600px){
 .header{padding:13px}
 .header-title h1{font-size:15px}
@@ -275,9 +182,10 @@ margin-top:8px;
 .field.full{grid-column:auto}
 .modal{max-height:95vh}
 .btn-back{padding:8px}
-.target-picker-top{padding:10px}
-.target-list{max-height:230px}
-.target-item{padding:10px}
+.pagination{justify-content:center}
+.pagination-info{width:100%;text-align:center}
+.pagination-buttons{justify-content:center}
+.picker-list{max-height:230px}
 }
 </style>
 </head>
@@ -352,6 +260,15 @@ margin-top:8px;
 </tbody>
 </table>
 </div>
+
+<div class="pagination" id="pagination">
+<div class="pagination-info" id="paginationInfo">Menampilkan 0 data</div>
+<div class="pagination-buttons">
+<button class="btn btn-secondary btn-small" id="btnPrev" disabled>← Sebelumnya</button>
+<span class="page-number" id="pageNumber">1 / 1</span>
+<button class="btn btn-secondary btn-small" id="btnNext" disabled>Berikutnya →</button>
+</div>
+</div>
 </div>
 </main>
 
@@ -362,7 +279,7 @@ margin-top:8px;
 <h2 id="judulModal">Tambah Karyawan</h2>
 <button type="button" class="close" data-close="modalKaryawan">×</button>
 </div>
-<form id="formKaryawan" action="#" onsubmit="event.preventDefault();return false;">
+<form id="formKaryawan" action="#">
 <div class="modal-body">
 <input type="hidden" id="modeForm" value="tambah">
 <input type="hidden" id="idDokumen">
@@ -385,7 +302,7 @@ margin-top:8px;
 
 <div class="field">
 <label>NIK <span class="required">*</span></label>
-<input id="nik" type="text" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Nomor induk karyawan">
+<input id="nik" type="text" required autocomplete="off" placeholder="Nomor induk karyawan">
 <div class="helper">NIK boleh kombinasi huruf dan angka. Contoh: WHW001A atau OP-001.</div>
 </div>
 
@@ -461,6 +378,7 @@ margin-top:8px;
 <h2>Penugasan Karyawan</h2>
 <button type="button" class="close" data-close="modalTugas">×</button>
 </div>
+
 <div class="modal-body">
 
 <div class="info-card">
@@ -476,7 +394,7 @@ margin-top:8px;
 <hr>
 <div class="section-title">Tambah Penugasan Baru</div>
 
-<form id="formTugas" action="#" onsubmit="event.preventDefault();return false;">
+<form id="formTugas" action="#">
 <input type="hidden" id="tugasIdEdit">
 
 <div class="field">
@@ -491,7 +409,7 @@ margin-top:8px;
 <option value="departemen">Departemen</option>
 <option value="nik">Pilih Karyawan</option>
 </select>
-<div class="helper">Pilih siapa yang menjadi target pekerjaan karyawan yang ditugaskan.</div>
+<div class="helper">Tentukan karyawan yang menjadi target pekerjaan pemegang tugas.</div>
 </div>
 
 <div class="field" id="fieldTargetDepartemen" style="display:none">
@@ -504,54 +422,58 @@ margin-top:8px;
 </select>
 </div>
 
-<!-- PEMILIHAN KARYAWAN DENGAN SEARCH -->
-<div class="field" id="fieldTargetNik" style="display:none">
-<label>Pilih Karyawan Target <span class="required">*</span></label>
+<div class="field full" id="fieldTargetNik" style="display:none">
 
-<div class="target-picker">
+<label>Pilih Karyawan Target</label>
 
-<div class="target-picker-top">
+<div class="picker-box">
 
-<div class="field">
-<input type="search"
-id="targetSearch"
-class="target-search"
-placeholder="🔍 Cari nama, NIK, atau departemen...">
+<div class="picker-toolbar">
+
+<div class="picker-search">
+<input type="search" id="targetSearch"
+placeholder="Cari nama, NIK, atau departemen...">
 </div>
 
-<div class="field">
-<select id="targetFilterDepartemen" class="target-filter">
+<div class="picker-filter">
+<select id="targetPickerDepartemen">
 <option value="">Semua Departemen</option>
-<option value="Operasional Pelabuhan">Operasional Pelabuhan</option>
-<option value="Kendaraan Bergerak">Kendaraan Bergerak</option>
-<option value="Safety & Technology">Safety & Technology</option>
+<option>Operasional Pelabuhan</option>
+<option>Kendaraan Bergerak</option>
+<option>Safety & Technology</option>
 </select>
 </div>
 
-<div class="target-picker-info">
-<span>Karyawan ditemukan: <strong id="targetJumlahTampil">0</strong></span>
-<span>Dipilih: <strong id="targetJumlahDipilih">0</strong></span>
-</div>
+<div class="picker-action-row">
+<button type="button" class="btn btn-secondary" id="btnPilihSemuaTarget">
+☑ Pilih Semua Hasil
+</button>
 
-<div class="target-picker-actions">
-<button type="button" class="btn btn-secondary" id="btnPilihSemuaTampil">☑ Pilih Semua yang Tampil</button>
-<button type="button" class="btn btn-secondary" id="btnHapusSemuaPilihan">✕ Hapus Semua Pilihan</button>
-</div>
+<button type="button" class="btn btn-secondary" id="btnHapusPilihanTarget">
+Hapus Pilihan
+</button>
 
-</div>
-
-<div id="targetList" class="target-list">
-<div class="target-empty">Memuat daftar karyawan...</div>
+<span class="picker-count" id="targetCount">0 karyawan dipilih</span>
 </div>
 </div>
 
-<div id="selectedTargetsBox" class="selected-targets" style="display:none">
-<div class="selected-target-title">Karyawan yang Dipilih</div>
-<div id="selectedTargets" class="selected-target-chips"></div>
+<div class="picker-list" id="targetEmployeeList">
+<div class="picker-empty">Memuat daftar karyawan...</div>
+</div>
+</div>
+
+<div class="selected-box">
+<div class="selected-heading">
+<strong>Karyawan Terpilih</strong>
+<span id="selectedTargetCount">0 orang</span>
+</div>
+<div class="selected-list" id="selectedTargetList">
+<div class="selected-empty">Belum ada karyawan dipilih.</div>
+</div>
 </div>
 
 <div class="target-hint">
-Cari menggunakan nama atau NIK. Anda juga dapat membatasi pencarian berdasarkan departemen. Klik karyawan untuk memilih atau membatalkan pilihan.
+Ketik nama atau NIK pada pencarian. Klik karyawan untuk memilih. Anda dapat memilih lebih dari satu karyawan.
 </div>
 </div>
 
@@ -560,8 +482,11 @@ Cari menggunakan nama atau NIK. Anda juga dapat membatasi pencarian berdasarkan 
 <textarea id="keteranganTugas" placeholder="Keterangan penugasan (opsional)"></textarea>
 </div>
 
+<div style="display:flex;gap:8px;flex-wrap:wrap">
 <button type="submit" class="btn btn-primary" id="btnSimpanTugas">Simpan Penugasan</button>
-<button type="button" class="btn btn-secondary" id="btnBatalEditTugas">Batal Edit</button>
+<button type="button" class="btn btn-secondary" id="btnBatalEditTugas" style="display:none">Batal Edit</button>
+</div>
+
 </form>
 </div>
 </div>
@@ -610,7 +535,7 @@ document.getElementById("divisi").value="Terminal Khusus";
 document.getElementById("nik").disabled=false;
 document.getElementById("btnSimpan").disabled=false;
 document.getElementById("btnSimpan").textContent="Simpan Data";
-buka("modalKaryawan");
+bukaModalUI("modalKaryawan");
 setTimeout(()=>document.getElementById("departemen").focus(),200);
 };
 
@@ -619,7 +544,7 @@ const el=document.getElementById(id);
 if(el){el.classList.remove("show");el.style.display="none";}
 };
 
-function buka(id){
+function bukaModalUI(id){
 const el=document.getElementById(id);
 el.style.display="flex";
 el.classList.add("show");
@@ -646,7 +571,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
 collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,
-query,where,serverTimestamp,writeBatch
+serverTimestamp,writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const C_KARYAWAN="karyawan";
@@ -660,7 +585,12 @@ let karyawanAktif=null;
 let tugasAktif=[];
 let superAdmin=false;
 
-/* NIK KARYAWAN TARGET YANG DIPILIH */
+/* PAGINATION */
+const DATA_PER_HALAMAN=5;
+let halamanAktif=1;
+let daftarHasilFilter=[];
+
+/* TARGET PILIHAN */
 let selectedTargetNiks=new Set();
 
 const $=id=>document.getElementById(id);
@@ -704,11 +634,22 @@ el.classList.add("show");
 
 function tanggalExcel(v){
 if(v instanceof Date)return formatTanggal(v);
-if(typeof v==="number" && window.XLSX){
+
+if(typeof v==="number"&&window.XLSX){
 const d=window.XLSX.SSF.parse_date_code(v);
 if(d)return String(d.d).padStart(2,"0")+"/"+String(d.m).padStart(2,"0")+"/"+String(d.y).slice(-2);
 }
-return String(v??"").trim();
+
+let s=String(v??"").trim();
+
+if(/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(s)){
+let p=s.split("/");
+let yy=p[2];
+if(yy.length===4)yy=yy.slice(-2);
+return p[0].padStart(2,"0")+"/"+p[1].padStart(2,"0")+"/"+yy;
+}
+
+return s;
 }
 
 function formatTanggal(d){
@@ -743,24 +684,34 @@ createdAt:serverTimestamp()
 });
 }
 
+/* =========================
+   MUAT DATA KARYAWAN
+========================= */
+
 async function muatKaryawan(){
 tampilLoading();
+
 const snap=await getDocs(collection(db,C_KARYAWAN));
+
 daftarKaryawan=snap.docs.map(d=>({
 ...d.data(),
 nik:d.id
 }));
+
 daftarKaryawan.sort((a,b)=>
 String(a.nama||"").localeCompare(String(b.nama||""),"id")
 );
+
 renderKaryawan();
 }
 
 function renderStatistik(){
 $("totalKaryawan").textContent=daftarKaryawan.length;
+
 $("totalOperasional").textContent=daftarKaryawan.filter(
 k=>k.departemen==="Operasional Pelabuhan"
 ).length;
+
 $("totalLain").textContent=daftarKaryawan.filter(
 k=>k.departemen!=="Operasional Pelabuhan"
 ).length;
@@ -772,23 +723,33 @@ renderStatistik();
 const cari=$("searchInput").value.toLowerCase().trim();
 const departemen=$("filterDepartemen").value;
 
-const hasil=daftarKaryawan.filter(k=>{
+daftarHasilFilter=daftarKaryawan.filter(k=>{
 const cocokCari=[
 k.nik,k.nama,k.jabatan,k.departemen,k.poh
 ].some(v=>String(v||"").toLowerCase().includes(cari));
 
-return cocokCari && (!departemen||k.departemen===departemen);
+return cocokCari&&(!departemen||k.departemen===departemen);
 });
 
-if(!hasil.length){
+/* Jika hasil filter berubah, halaman kembali ke awal */
+const totalHalaman=Math.max(1,Math.ceil(daftarHasilFilter.length/DATA_PER_HALAMAN));
+
+if(halamanAktif>totalHalaman)halamanAktif=totalHalaman;
+if(halamanAktif<1)halamanAktif=1;
+
+const mulai=(halamanAktif-1)*DATA_PER_HALAMAN;
+const hasilHalaman=daftarHasilFilter.slice(mulai,mulai+DATA_PER_HALAMAN);
+
+if(!hasilHalaman.length){
 $("tbodyKaryawan").innerHTML=
 `<tr><td colspan="11" class="empty">Belum ada data karyawan yang sesuai.</td></tr>`;
+renderPagination();
 return;
 }
 
-$("tbodyKaryawan").innerHTML=hasil.map((k,i)=>`
+$("tbodyKaryawan").innerHTML=hasilHalaman.map((k,i)=>`
 <tr>
-<td>${i+1}</td>
+<td>${mulai+i+1}</td>
 <td>
 <div class="nama">${esc(k.nama)}</div>
 <div class="nik">${esc(k.nik)}</div>
@@ -810,7 +771,48 @@ $("tbodyKaryawan").innerHTML=hasil.map((k,i)=>`
 </td>
 </tr>
 `).join("");
+
+renderPagination();
 }
+
+function renderPagination(){
+const total=daftarHasilFilter.length;
+const totalHalaman=Math.max(1,Math.ceil(total/DATA_PER_HALAMAN));
+const awal=total===0?0:(halamanAktif-1)*DATA_PER_HALAMAN+1;
+const akhir=Math.min(halamanAktif*DATA_PER_HALAMAN,total);
+
+$("paginationInfo").textContent=
+"Menampilkan "+awal+"–"+akhir+" dari "+total+" karyawan";
+
+$("pageNumber").textContent=halamanAktif+" / "+totalHalaman;
+$("btnPrev").disabled=halamanAktif<=1;
+$("btnNext").disabled=halamanAktif>=totalHalaman;
+}
+
+$("btnPrev").addEventListener("click",()=>{
+if(halamanAktif>1){
+halamanAktif--;
+renderKaryawan();
+}
+});
+
+$("btnNext").addEventListener("click",()=>{
+const totalHalaman=Math.max(1,Math.ceil(daftarHasilFilter.length/DATA_PER_HALAMAN));
+if(halamanAktif<totalHalaman){
+halamanAktif++;
+renderKaryawan();
+}
+});
+
+$("searchInput").addEventListener("input",()=>{
+halamanAktif=1;
+renderKaryawan();
+});
+
+$("filterDepartemen").addEventListener("change",()=>{
+halamanAktif=1;
+renderKaryawan();
+});
 
 /* =========================
    CEK SUPER ADMIN
@@ -827,8 +829,9 @@ uid:user.uid,
 ...data
 };
 
-return String(data.role||"").toLowerCase()==="super_admin" &&
+return String(data.role||"").toLowerCase()==="super_admin"&&
 String(data.status||"").toLowerCase()==="aktif";
+
 }catch(err){
 console.error(err);
 return false;
@@ -838,9 +841,12 @@ return false;
 function tampilAksesDitolak(pesan){
 $("tbodyKaryawan").innerHTML=
 `<tr><td colspan="11" class="empty">${esc(pesan)}</td></tr>`;
+
 $("btnTambah").disabled=true;
 $("btnImport").disabled=true;
 $("btnExport").disabled=true;
+$("btnPrev").disabled=true;
+$("btnNext").disabled=true;
 }
 
 /* =========================
@@ -872,7 +878,9 @@ $("btnSimpan").textContent="Simpan Perubahan";
 bukaModal("modalKaryawan");
 };
 
-$("formKaryawan").addEventListener("submit",async()=>{
+$("formKaryawan").addEventListener("submit",async e=>{
+e.preventDefault();
+
 if(!superAdmin)return toast("Akses ditolak.");
 
 const btn=$("btnSimpan");
@@ -898,7 +906,7 @@ try{
 const data={
 divisi:"Terminal Khusus",
 departemen:nilai("departemen"),
-nik:nik,
+nik,
 nama:nilai("nama"),
 jabatan:nilai("jabatan"),
 tmk:nilai("tmk"),
@@ -913,6 +921,7 @@ updated_by:penggunaLogin.uid
 
 if(mode==="tambah"){
 const cek=await getDoc(doc(db,C_KARYAWAN,nik));
+
 if(cek.exists()){
 toast("NIK sudah terdaftar. Gunakan NIK lain.");
 btn.disabled=false;
@@ -922,6 +931,7 @@ return;
 
 data.createdAt=serverTimestamp();
 data.created_by=penggunaLogin.uid;
+
 await setDoc(doc(db,C_KARYAWAN,nik),data);
 
 await simpanRiwayat({
@@ -932,6 +942,7 @@ detail:"Menambahkan data karyawan"
 });
 
 toast("Data karyawan berhasil ditambahkan.");
+
 }else{
 await updateDoc(doc(db,C_KARYAWAN,idLama),data);
 
@@ -946,11 +957,16 @@ toast("Data karyawan berhasil diperbarui.");
 }
 
 tutup("modalKaryawan");
+halamanAktif=1;
 await muatKaryawan();
 
 }catch(err){
 console.error(err);
-toast("GAGAL MENYIMPAN: "+(err.code==="permission-denied"?"Akses ditolak Firestore Rules. Periksa izin tulis koleksi karyawan.":err.message));
+toast("GAGAL MENYIMPAN: "+(
+err.code==="permission-denied"
+?"Akses ditolak Firestore Rules. Periksa izin tulis koleksi karyawan."
+:err.message
+));
 }finally{
 btn.disabled=false;
 btn.textContent=mode==="edit"?"Simpan Perubahan":"Simpan Data";
@@ -981,11 +997,139 @@ detail:"Menghapus data karyawan"
 
 toast("Data karyawan berhasil dihapus.");
 await muatKaryawan();
+
 }catch(err){
 console.error(err);
 toast("Gagal menghapus: "+err.message);
 }
 };
+
+/* =========================
+   PILIH TARGET PENUGASAN
+========================= */
+
+function resetPicker(){
+selectedTargetNiks=new Set();
+$("targetSearch").value="";
+$("targetPickerDepartemen").value="";
+renderTargetPicker();
+renderSelectedTarget();
+}
+
+function renderTargetPicker(){
+const cari=$("targetSearch").value.toLowerCase().trim();
+const dept=$("targetPickerDepartemen").value;
+
+const hasil=daftarKaryawan.filter(k=>{
+const cocokCari=[
+k.nama,k.nik,k.departemen,k.jabatan
+].some(v=>String(v||"").toLowerCase().includes(cari));
+
+return cocokCari&&(!dept||k.departemen===dept);
+});
+
+$("targetCount").textContent=selectedTargetNiks.size+" karyawan dipilih";
+
+if(!hasil.length){
+$("targetEmployeeList").innerHTML=
+'<div class="picker-empty">Karyawan tidak ditemukan.</div>';
+return;
+}
+
+$("targetEmployeeList").innerHTML=hasil.map(k=>{
+const dipilih=selectedTargetNiks.has(k.nik);
+
+return `
+<label class="employee-option ${dipilih?"selected":""}">
+<input type="checkbox" data-target-nik="${esc(k.nik)}" ${dipilih?"checked":""}>
+<div class="employee-info">
+<div class="employee-name">${esc(k.nama||"Tanpa Nama")}</div>
+<div class="employee-nik">NIK: ${esc(k.nik)}</div>
+<div class="employee-dept">${esc(k.departemen||"-")}</div>
+</div>
+</label>
+`;
+}).join("");
+
+$("targetEmployeeList").querySelectorAll("[data-target-nik]").forEach(input=>{
+input.addEventListener("change",()=>{
+const nik=input.dataset.targetNik;
+
+if(input.checked){
+selectedTargetNiks.add(nik);
+}else{
+selectedTargetNiks.delete(nik);
+}
+
+renderTargetPicker();
+renderSelectedTarget();
+});
+});
+}
+
+function renderSelectedTarget(){
+const selected=Array.from(selectedTargetNiks);
+
+$("selectedTargetCount").textContent=selected.length+" orang";
+
+if(!selected.length){
+$("selectedTargetList").innerHTML=
+'<div class="selected-empty">Belum ada karyawan dipilih.</div>';
+return;
+}
+
+$("selectedTargetList").innerHTML=selected.map(nik=>{
+const k=daftarKaryawan.find(x=>x.nik===nik);
+
+return `
+<div class="selected-item">
+<div class="selected-item-info">
+<div class="selected-item-name">${esc(k?k.nama:"Karyawan tidak ditemukan")}</div>
+<div class="selected-item-nik">${esc(nik)}${k?" · "+esc(k.departemen||""):""}</div>
+</div>
+<button type="button" class="selected-remove" data-remove-nik="${esc(nik)}" title="Hapus pilihan">×</button>
+</div>
+`;
+}).join("");
+
+$("selectedTargetList").querySelectorAll("[data-remove-nik]").forEach(btn=>{
+btn.addEventListener("click",()=>{
+selectedTargetNiks.delete(btn.dataset.removeNik);
+renderTargetPicker();
+renderSelectedTarget();
+});
+});
+}
+
+$("targetSearch").addEventListener("input",renderTargetPicker);
+$("targetPickerDepartemen").addEventListener("change",renderTargetPicker);
+
+$("btnPilihSemuaTarget").addEventListener("click",()=>{
+const cari=$("targetSearch").value.toLowerCase().trim();
+const dept=$("targetPickerDepartemen").value;
+
+const hasil=daftarKaryawan.filter(k=>{
+const cocokCari=[
+k.nama,k.nik,k.departemen,k.jabatan
+].some(v=>String(v||"").toLowerCase().includes(cari));
+
+return cocokCari&&(!dept||k.departemen===dept);
+});
+
+hasil.forEach(k=>selectedTargetNiks.add(k.nik));
+
+renderTargetPicker();
+renderSelectedTarget();
+
+toast(hasil.length+" karyawan dari hasil pencarian dipilih.");
+});
+
+$("btnHapusPilihanTarget").addEventListener("click",()=>{
+selectedTargetNiks.clear();
+renderTargetPicker();
+renderSelectedTarget();
+toast("Semua pilihan target dihapus.");
+});
 
 /* =========================
    PENUGASAN
@@ -998,12 +1142,7 @@ $("btnSimpanTugas").textContent="Simpan Penugasan";
 $("btnBatalEditTugas").style.display="none";
 $("fieldTargetDepartemen").style.display="none";
 $("fieldTargetNik").style.display="none";
-
-selectedTargetNiks.clear();
-$("targetSearch").value="";
-$("targetFilterDepartemen").value="";
-renderPemilihTarget();
-renderPilihanTarget();
+resetPicker();
 }
 
 $("targetMode").addEventListener("change",()=>{
@@ -1012,8 +1151,8 @@ $("fieldTargetDepartemen").style.display=mode==="departemen"?"block":"none";
 $("fieldTargetNik").style.display=mode==="nik"?"block":"none";
 
 if(mode==="nik"){
-renderPemilihTarget();
-renderPilihanTarget();
+renderTargetPicker();
+renderSelectedTarget();
 }
 });
 
@@ -1033,47 +1172,26 @@ bukaModal("modalTugas");
 await muatTugasKaryawan();
 };
 
-/* =========================
-   MUAT TUGAS KARYAWAN
-========================= */
-
 async function muatTugasKaryawan(){
 $("daftarTugas").innerHTML='<div class="loading">Memuat penugasan...</div>';
 
 try{
 const snap=await getDocs(collection(db,C_TUGAS));
+
 tugasAktif=snap.docs.map(d=>({id:d.id,...d.data()}))
 .filter(t=>normalisasiNIK(t.pemegang_tugas_nik)===normalisasiNIK(karyawanAktif.nik));
 
 renderTugas();
+
 }catch(err){
 console.error(err);
 $("daftarTugas").innerHTML='<div class="empty">Gagal memuat penugasan.</div>';
 }
 }
 
-/* =========================
-   TAMPILKAN TARGET TUGAS
-========================= */
-
 function namaTargetDariNIK(nik){
 const k=daftarKaryawan.find(x=>normalisasiNIK(x.nik)===normalisasiNIK(nik));
 return k?k.nama+" ("+k.nik+")":nik;
-}
-
-function formatTargetTugas(t){
-if(t.target_mode==="departemen"){
-return "Departemen: "+(t.target_departemen||"-");
-}
-
-if(t.target_mode==="nik"){
-const list=Array.isArray(t.target_nik)?t.target_nik:[];
-if(!list.length)return "Karyawan target: -";
-
-return "Karyawan target: "+list.map(namaTargetDariNIK).join(", ");
-}
-
-return "Semua Karyawan";
 }
 
 function renderTugas(){
@@ -1084,7 +1202,18 @@ return;
 
 $("daftarTugas").innerHTML=tugasAktif.map(t=>{
 const status=t.status||"aktif";
-const target=formatTargetTugas(t);
+let target="Semua Karyawan";
+
+if(t.target_mode==="departemen"){
+target="Departemen: "+(t.target_departemen||"-");
+}
+
+if(t.target_mode==="nik"){
+const arr=Array.isArray(t.target_nik)?t.target_nik:[];
+target=arr.length
+?arr.map(namaTargetDariNIK).join(", ")
+:"Belum ada target";
+}
 
 return `
 <div class="task-card">
@@ -1094,139 +1223,13 @@ return `
 <p>Keterangan: ${esc(t.keterangan||"-")}</p>
 <div class="task-actions">
 <button class="btn btn-secondary btn-small" onclick="window.editPenugasan('${esc(t.id)}')">Edit</button>
-${status==="aktif"?`<button class="btn btn-danger btn-small" onclick="window.cabutPenugasan('${esc(t.id)}')">Cabut</button>`:`<button class="btn btn-success btn-small" onclick="window.aktifkanPenugasan('${esc(t.id)}')">Aktifkan</button>`}
+${status==="aktif"
+?`<button class="btn btn-danger btn-small" onclick="window.cabutPenugasan('${esc(t.id)}')">Cabut</button>`
+:`<button class="btn btn-success btn-small" onclick="window.aktifkanPenugasan('${esc(t.id)}')">Aktifkan</button>`}
 </div>
-</div>`;
+</div>
+`;
 }).join("");
-}
-
-/* =========================
-   PEMILIH KARYAWAN TARGET
-========================= */
-
-function renderPemilihTarget(){
-const cari=$("targetSearch").value.toLowerCase().trim();
-const filterDept=$("targetFilterDepartemen").value;
-
-const hasil=daftarKaryawan.filter(k=>{
-const teks=[
-k.nama,
-k.nik,
-k.departemen,
-k.jabatan
-].map(v=>String(v||"").toLowerCase()).join(" ");
-
-const cocokCari=!cari||teks.includes(cari);
-const cocokDept=!filterDept||k.departemen===filterDept;
-
-return cocokCari&&cocokDept;
-});
-
-$("targetJumlahTampil").textContent=hasil.length;
-
-if(!hasil.length){
-$("targetList").innerHTML='<div class="target-empty">Tidak ada karyawan yang sesuai pencarian.</div>';
-return;
-}
-
-$("targetList").innerHTML=hasil.map(k=>{
-const nik=normalisasiNIK(k.nik);
-const terpilih=selectedTargetNiks.has(nik);
-
-return `
-<div class="target-item ${terpilih?"selected":""}" data-target-nik="${esc(nik)}">
-<input type="checkbox" class="target-checkbox" ${terpilih?"checked":""}>
-<div class="target-item-info">
-<div class="target-item-name">${esc(k.nama||"Tanpa Nama")}</div>
-<div class="target-item-nik">NIK: ${esc(k.nik)}</div>
-<span class="target-item-dept">${esc(k.departemen||"Departemen belum diisi")}</span>
-</div>
-<div class="target-item-check">${terpilih?"✓":""}</div>
-</div>`;
-}).join("");
-
-$("targetList").querySelectorAll(".target-item").forEach(item=>{
-item.addEventListener("click",()=>{
-const nik=item.dataset.targetNik;
-if(selectedTargetNiks.has(nik)){
-selectedTargetNiks.delete(nik);
-}else{
-selectedTargetNiks.add(nik);
-}
-renderPemilihTarget();
-renderPilihanTarget();
-});
-});
-}
-
-function renderPilihanTarget(){
-$("targetJumlahDipilih").textContent=selectedTargetNiks.size;
-
-if(!selectedTargetNiks.size){
-$("selectedTargetsBox").style.display="none";
-$("selectedTargets").innerHTML="";
-return;
-}
-
-$("selectedTargetsBox").style.display="block";
-
-const list=[...selectedTargetNiks].map(nik=>{
-const k=daftarKaryawan.find(x=>normalisasiNIK(x.nik)===nik);
-return{
-nik,
-nama:k?k.nama:nik,
-departemen:k?k.departemen:"Data karyawan tidak ditemukan"
-};
-});
-
-$("selectedTargets").innerHTML=list.map(k=>`
-<div class="target-chip">
-<span class="target-chip-text">${esc(k.nama)} · ${esc(k.nik)}</span>
-<button type="button" class="target-chip-remove" data-remove-nik="${esc(k.nik)}" title="Hapus pilihan">×</button>
-</div>
-`).join("");
-
-$("selectedTargets").querySelectorAll("[data-remove-nik]").forEach(btn=>{
-btn.addEventListener("click",()=>{
-selectedTargetNiks.delete(btn.dataset.removeNik);
-renderPemilihTarget();
-renderPilihanTarget();
-});
-});
-}
-
-$("targetSearch").addEventListener("input",renderPemilihTarget);
-$("targetFilterDepartemen").addEventListener("change",renderPemilihTarget);
-
-$("btnPilihSemuaTampil").addEventListener("click",()=>{
-const cari=$("targetSearch").value.toLowerCase().trim();
-const filterDept=$("targetFilterDepartemen").value;
-
-const hasil=daftarKaryawan.filter(k=>{
-const teks=[
-k.nama,k.nik,k.departemen,k.jabatan
-].map(v=>String(v||"").toLowerCase()).join(" ");
-
-return (!cari||teks.includes(cari))&&
-(!filterDept||k.departemen===filterDept);
-});
-
-hasil.forEach(k=>selectedTargetNiks.add(normalisasiNIK(k.nik)));
-renderPemilihTarget();
-renderPilihanTarget();
-
-toast(hasil.length+" karyawan pada daftar pencarian dipilih.");
-});
-
-$("btnHapusSemuaPilihan").addEventListener("click",()=>{
-selectedTargetNiks.clear();
-renderPemilihTarget();
-renderPilihanTarget();
-toast("Semua pilihan target dihapus.");
-});
-
-function ambilTargetNIK(){
-return [...selectedTargetNiks].map(normalisasiNIK).filter(Boolean);
 }
 
 function validasiTarget(mode){
@@ -1234,24 +1237,25 @@ if(mode==="departemen"&&!nilai("targetDepartemen")){
 toast("Departemen target wajib dipilih.");
 return false;
 }
-if(mode==="nik"&&!ambilTargetNIK().length){
+
+if(mode==="nik"&&!selectedTargetNiks.size){
 toast("Pilih minimal satu karyawan target.");
 return false;
 }
+
 return true;
 }
 
-/* =========================
-   SIMPAN PENUGASAN
-========================= */
+$("formTugas").addEventListener("submit",async e=>{
+e.preventDefault();
 
-$("formTugas").addEventListener("submit",async()=>{
 if(!superAdmin)return toast("Akses ditolak.");
 
 const btn=$("btnSimpanTugas");
 if(btn.disabled)return;
 
 const mode=$("targetMode").value;
+
 if(!nilai("namaTugas"))return toast("Nama tugas wajib diisi.");
 if(!validasiTarget(mode))return;
 
@@ -1267,7 +1271,7 @@ pemegang_tugas_nama:karyawanAktif.nama,
 nama_tugas:nilai("namaTugas"),
 target_mode:mode,
 target_departemen:mode==="departemen"?nilai("targetDepartemen"):"",
-target_nik:mode==="nik"?ambilTargetNIK():[],
+target_nik:mode==="nik"?Array.from(selectedTargetNiks):[],
 keterangan:nilai("keteranganTugas"),
 status:"aktif",
 updatedAt:serverTimestamp(),
@@ -1286,9 +1290,11 @@ detail:"Mengubah penugasan "+data.nama_tugas
 });
 
 toast("Penugasan diperbarui.");
+
 }else{
 data.createdAt=serverTimestamp();
 data.created_by=penggunaLogin.uid;
+
 const ref=await addDoc(collection(db,C_TUGAS),data);
 
 await simpanRiwayat({
@@ -1314,10 +1320,6 @@ btn.textContent="Simpan Penugasan";
 }
 });
 
-/* =========================
-   EDIT PENUGASAN
-========================= */
-
 window.editPenugasan=function(id){
 const t=tugasAktif.find(x=>x.id===id);
 if(!t)return;
@@ -1328,32 +1330,21 @@ $("targetMode").value=t.target_mode||"semua";
 $("targetDepartemen").value=t.target_departemen||"";
 $("keteranganTugas").value=t.keterangan||"";
 
-selectedTargetNiks.clear();
-
-if(Array.isArray(t.target_nik)){
-t.target_nik.forEach(nik=>{
-selectedTargetNiks.add(normalisasiNIK(nik));
-});
-}
-
-$("targetSearch").value="";
-$("targetFilterDepartemen").value="";
+selectedTargetNiks=new Set(
+Array.isArray(t.target_nik)?t.target_nik.map(normalisasiNIK):[]
+);
 
 $("fieldTargetDepartemen").style.display=t.target_mode==="departemen"?"block":"none";
 $("fieldTargetNik").style.display=t.target_mode==="nik"?"block":"none";
 
-renderPemilihTarget();
-renderPilihanTarget();
+renderTargetPicker();
+renderSelectedTarget();
 
 $("btnSimpanTugas").textContent="Simpan Perubahan";
 $("btnBatalEditTugas").style.display="inline-block";
 
 $("namaTugas").focus();
 };
-
-/* =========================
-   CABUT PENUGASAN
-========================= */
 
 window.cabutPenugasan=async function(id){
 const t=tugasAktif.find(x=>x.id===id);
@@ -1379,15 +1370,12 @@ detail:"Mencabut penugasan "+t.nama_tugas
 
 toast("Penugasan dicabut.");
 await muatTugasKaryawan();
+
 }catch(err){
 console.error(err);
 toast("Gagal mencabut penugasan: "+err.message);
 }
 };
-
-/* =========================
-   AKTIFKAN PENUGASAN
-========================= */
 
 window.aktifkanPenugasan=async function(id){
 const t=tugasAktif.find(x=>x.id===id);
@@ -1413,18 +1401,12 @@ detail:"Mengaktifkan kembali penugasan "+t.nama_tugas
 
 toast("Penugasan diaktifkan kembali.");
 await muatTugasKaryawan();
+
 }catch(err){
 console.error(err);
 toast("Gagal mengaktifkan penugasan: "+err.message);
 }
 };
-
-/* =========================
-   SEARCH DAN FILTER
-========================= */
-
-$("searchInput").addEventListener("input",renderKaryawan);
-$("filterDepartemen").addEventListener("change",renderKaryawan);
 
 /* =========================
    EXPORT EXCEL
@@ -1433,7 +1415,6 @@ $("filterDepartemen").addEventListener("change",renderKaryawan);
 $("btnExport").addEventListener("click",()=>{
 if(!superAdmin)return toast("Akses ditolak.");
 if(!window.XLSX)return toast("Library Excel belum berhasil dimuat.");
-
 if(!daftarKaryawan.length)return toast("Belum ada data untuk diekspor.");
 
 const rows=daftarKaryawan.map(k=>({
@@ -1471,6 +1452,7 @@ toast("File Excel berhasil dibuat.");
 
 $("btnImport").addEventListener("click",()=>{
 if(!superAdmin)return toast("Akses ditolak.");
+
 $("fileImportModal").value="";
 $("hasilImport").textContent="";
 bukaModal("modalImport");
@@ -1486,51 +1468,62 @@ return String(v||"")
 
 function cariKolom(row,aliases){
 const keys=Object.keys(row);
+
 for(const alias of aliases){
 const target=normalisasiHeader(alias);
 const key=keys.find(k=>normalisasiHeader(k)===target);
 if(key!==undefined)return row[key];
 }
+
 return "";
 }
 
 function normalisasiDepartemen(v){
 const s=String(v||"").trim();
+
 const list=[
 "Operasional Pelabuhan",
 "Kendaraan Bergerak",
 "Safety & Technology"
 ];
+
 return list.find(x=>x.toLowerCase()===s.toLowerCase())||s;
 }
 
 function normalisasiSistemCuti(v){
 const s=String(v||"").trim().toLowerCase();
+
 if(s==="lokal")return"Lokal";
 if(s==="roster")return"Roster";
 if(s==="5:2"||s==="5/2")return"5:2";
+
 return String(v||"").trim();
 }
 
 function normalisasiShift(v){
 const s=String(v||"").trim();
-const list=["Non Shift","Shift 1","Shift 2","Shift 3","Group 1","Group 2","Group 3","Maintenance"];
+
+const list=[
+"Non Shift","Shift 1","Shift 2","Shift 3",
+"Group 1","Group 2","Group 3","Maintenance"
+];
+
 return list.find(x=>x.toLowerCase()===s.toLowerCase())||s;
 }
 
 function buatDataImport(row){
 return{
 nik:normalisasiNIK(cariKolom(row,["NIK","No NIK","Nomor Induk","ID Karyawan"])),
-nama:String(cariKolom(row,["Nama","Nama Karyawan"] )||"").trim(),
+nama:String(cariKolom(row,["Nama","Nama Karyawan"])||"").trim(),
 divisi:"Terminal Khusus",
 departemen:normalisasiDepartemen(cariKolom(row,["Departemen","Department"])),
-jabatan:String(cariKolom(row,["Jabatan","Posisi"] )||"").trim(),
+jabatan:String(cariKolom(row,["Jabatan","Posisi"])||"").trim(),
 tmk:tanggalExcel(cariKolom(row,["TMK","Tanggal Masuk","Tanggal Mulai Kerja"])),
-poh:String(cariKolom(row,["POH","Tempat POH"] )||"").trim(),
+poh:String(cariKolom(row,["POH","Tempat POH"])||"").trim(),
 sistem_cuti:normalisasiSistemCuti(cariKolom(row,["Sistem Cuti","Cuti"])),
 shift_kerja:normalisasiShift(cariKolom(row,["Shift Kerja","Shift"])),
 grade:Number(cariKolom(row,["Grade","Golongan"])),
-nowa:String(cariKolom(row,["NOWA","No WA","WhatsApp","Nomor WhatsApp"] )||"").trim()
+nowa:String(cariKolom(row,["NOWA","No WA","WhatsApp","Nomor WhatsApp"])||"").trim()
 };
 }
 
@@ -1559,10 +1552,9 @@ return;
 
 let berhasil=0,duplikat=0,gagal=0;
 const daftarGagal=[];
-const batch=writeBatch(db);
+let batch=writeBatch(db);
 let operasi=0;
-
-const nikDalamFile=new Set();
+let nikDalamFile=new Set();
 
 for(let i=0;i<rows.length;i++){
 const data=buatDataImport(rows[i]);
@@ -1573,7 +1565,8 @@ daftarGagal.push("Baris "+(i+2)+": NIK atau Nama kosong.");
 continue;
 }
 
-if(!data.departemen||!data.jabatan||!validasiTMK(data.tmk)||!data.sistem_cuti||!data.shift_kerja||!Number.isFinite(data.grade)){
+if(!data.departemen||!data.jabatan||!validasiTMK(data.tmk)||
+!data.sistem_cuti||!data.shift_kerja||!Number.isFinite(data.grade)){
 gagal++;
 daftarGagal.push("Baris "+(i+2)+" ("+data.nik+"): data wajib tidak valid.");
 continue;
@@ -1584,9 +1577,11 @@ duplikat++;
 daftarGagal.push("Baris "+(i+2)+": NIK duplikat dalam file "+data.nik);
 continue;
 }
+
 nikDalamFile.add(data.nik);
 
 const existing=await getDoc(doc(db,C_KARYAWAN,data.nik));
+
 if(existing.exists()){
 duplikat++;
 continue;
@@ -1600,6 +1595,13 @@ data.updated_by=penggunaLogin.uid;
 batch.set(doc(db,C_KARYAWAN,data.nik),data);
 operasi++;
 berhasil++;
+
+/* Batch Firestore maksimal 500 operasi */
+if(operasi>=450){
+await batch.commit();
+batch=writeBatch(db);
+operasi=0;
+}
 }
 
 if(operasi>0)await batch.commit();
@@ -1616,6 +1618,8 @@ await simpanRiwayat({
 aksi:"import_karyawan",
 detail:"Import Excel: "+berhasil+" data berhasil, "+duplikat+" duplikat, "+gagal+" gagal"
 });
+
+halamanAktif=1;
 await muatKaryawan();
 toast("Import selesai. "+berhasil+" data berhasil ditambahkan.");
 }
@@ -1657,8 +1661,6 @@ $("btnExport").disabled=false;
 
 try{
 await muatKaryawan();
-renderPemilihTarget();
-renderPilihanTarget();
 }catch(err){
 console.error(err);
 tampilAksesDitolak("Gagal memuat data karyawan: "+err.message);
