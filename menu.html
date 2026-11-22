@@ -221,7 +221,16 @@ body {
     line-height: 1.6;
 }
 
+#area-menu-tugas {
+    display: none;
+}
+
+#area-menu-tugas.tampil {
+    display: block;
+}
+
 @media (max-width: 360px) {
+
     .menu-grid {
         gap: 8px;
     }
@@ -242,6 +251,7 @@ body {
     .menu-text small {
         font-size: 10px;
     }
+
 }
 </style>
 </head>
@@ -282,11 +292,35 @@ body {
 
 <main class="container" id="menu-container">
 
+    <!-- PROFIL -->
+
     <div id="area-profil"></div>
+
+    <!-- 4 MENU UMUM -->
 
     <div id="area-menu-umum" class="menu-grid"></div>
 
+    <!-- MENU TUGAS DINAMIS -->
+
+    <div id="area-menu-tugas">
+
+        <div class="judul-kelompok">
+            <strong>MENU TUGAS ANDA</strong>
+
+            <small>
+                Menu sesuai penugasan yang diberikan kepada NIK Anda
+            </small>
+        </div>
+
+        <div id="daftar-menu-tugas" class="menu-grid"></div>
+
+    </div>
+
+    <!-- INFORMASI DAN BANTUAN -->
+
     <div id="area-menu-bawah"></div>
+
+    <!-- MENU SUPER ADMIN -->
 
     <div id="area-admin" style="display:none;">
 
@@ -301,6 +335,8 @@ body {
         <div id="area-menu-admin" class="menu-grid"></div>
 
     </div>
+
+    <!-- FOOTER -->
 
     <div class="footer">
         <strong>WAINI</strong>
@@ -348,9 +384,13 @@ import {
 let app;
 
 try {
+
     app = getApp();
+
 } catch (error) {
+
     app = initializeApp(firebaseConfig);
+
 }
 
 const auth = getAuth(app);
@@ -369,14 +409,51 @@ let akunSiap = false;
 
 
 // =====================================
-// 4. MENU BAWAAN KARYAWAN
+// 4. MENU UMUM WAJIB
 // =====================================
 
-const MENU_BAWAAN_KARYAWAN = [
-    "pengajuan_cuti",
-    "saldo_cuti",
-    "riwayat_absensi",
-    "riwayat_cuti"
+const MENU_UMUM_DEFAULT = [
+
+    {
+        kode: "profil",
+        nama: "Profil",
+        halaman: "profil.html",
+        deskripsi: "Informasi profil pribadi",
+        urutan: 1
+    },
+
+    {
+        kode: "pengajuan_cuti",
+        nama: "Pengajuan Cuti",
+        halaman: "pengajuan-cuti.html",
+        deskripsi: "Pengajuan cuti karyawan",
+        urutan: 2
+    },
+
+    {
+        kode: "saldo_cuti",
+        nama: "Saldo Cuti",
+        halaman: "saldo-cuti.html",
+        deskripsi: "Informasi hak dan saldo cuti",
+        urutan: 3
+    },
+
+    {
+        kode: "riwayat_absensi",
+        nama: "Riwayat Absensi",
+        halaman: "riwayat-absensi.html",
+        deskripsi: "Riwayat kehadiran karyawan",
+        urutan: 4
+    },
+
+    {
+        kode: "riwayat_cuti",
+        nama: "Riwayat Cuti",
+        halaman: "riwayat-cuti.html",
+        deskripsi: "Riwayat pengajuan dan cuti",
+        urutan: 5
+    }
+
 ];
 
 
@@ -385,11 +462,13 @@ const MENU_BAWAAN_KARYAWAN = [
 // =====================================
 
 const MENU_ADMIN = [
+
     "data_karyawan",
     "verifikasi_pendaftaran",
     "pengaturan_hak_akses",
     "kelola_akun",
     "pengaturan_sistem"
+
 ];
 
 
@@ -474,13 +553,28 @@ const ikonMenu = {
 
     pengaturan_sistem: `
     <circle cx="12" cy="12" r="3"></circle>
-    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 1.7-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.1h-2.4v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L8 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H6.7v-2.4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L8 8.6l1.7-1.7.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6v-.1h2.4v.1a1.7 1.7 0 0 a1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.7 1.7-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1V14h-.1a1.7 1.7 0 0 0-1.6 1z"></path>
+    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 1.7-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.1h-2.4v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L8 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H6.7v-2.4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L8 8.6l1.7-1.7.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6v-.1h2.4v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 a1.9-.3l.1-.1 1.7 1.7-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1V14h-.1a1.7 1.7 0 0 0-1.6 1z"></path>
+    `,
+
+    tugas: `
+    <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+    <path d="M8 2v4"></path>
+    <path d="M16 2v4"></path>
+    <path d="M3 9h18"></path>
+    <path d="m8 14 2 2 5-5"></path>
+    `,
+
+    default: `
+    <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+    <path d="M8 12h8"></path>
+    <path d="M12 8v8"></path>
     `
+
 };
 
 
 // =====================================
-// 7. NORMALISASI DATA
+// 7. NORMALISASI
 // =====================================
 
 function normalisasiKode(kode) {
@@ -492,20 +586,54 @@ function normalisasiKode(kode) {
 
 }
 
+
 function normalisasiRole(role) {
 
     return normalisasiKode(role);
 
 }
 
+
 function normalisasiArray(data) {
 
-    if (!Array.isArray(data)) return [];
+    if (Array.isArray(data)) {
 
-    return data
-        .filter(item => typeof item === "string")
-        .map(item => normalisasiKode(item))
-        .filter(Boolean);
+        return data
+            .filter(item => item !== null && item !== undefined)
+            .map(item => normalisasiKode(item))
+            .filter(Boolean);
+
+    }
+
+    if (typeof data === "string" && data.trim() !== "") {
+
+        return data
+            .split(",")
+            .map(item => normalisasiKode(item))
+            .filter(Boolean);
+
+    }
+
+    return [];
+
+}
+
+
+function nilaiString(value) {
+
+    return String(value || "").trim();
+
+}
+
+
+function nikPengguna() {
+
+    return nilaiString(
+        penggunaAktif?.nik ||
+        penggunaAktif?.NIK ||
+        penggunaAktif?.nomor_induk ||
+        ""
+    );
 
 }
 
@@ -535,7 +663,7 @@ function buatKartu(menu) {
 
     svg.innerHTML =
         ikonMenu[menu.kode] ||
-        '<circle cx="12" cy="12" r="8"></circle>';
+        ikonMenu.default;
 
     iconBox.appendChild(svg);
 
@@ -569,15 +697,20 @@ function buatKartu(menu) {
             menu.halaman || ""
         ).trim();
 
-        // Alamat khusus verifikasi pendaftaran
+        // Penyesuaian halaman verifikasi
 
         if (menu.kode === "verifikasi_pendaftaran") {
             halaman = "verifikasi-akun.html";
         }
 
+        // Validasi alamat halaman
+
         if (!/^[a-zA-Z0-9_-]+\.html$/.test(halaman)) {
 
-            alert("Alamat halaman menu tidak valid.");
+            alert(
+                "Alamat halaman menu tidak valid.\n\n" +
+                "Kode menu: " + menu.kode
+            );
 
             return;
 
@@ -593,109 +726,512 @@ function buatKartu(menu) {
 
 
 // =====================================
-// 9. PEMERIKSAAN HAK AKSES MENU
+// 9. MEMUAT KONFIGURASI MENU UMUM
 // =====================================
 
-function bolehLihatMenu(menu) {
+async function muatKonfigurasiMenuUmum() {
 
-    const kode = normalisasiKode(menu.kode);
+    const hasil = [...MENU_UMUM_DEFAULT];
 
-    const aksesRole = normalisasiArray(
-        menu.akses_role
-    );
+    try {
 
-    // Super Admin dapat melihat semua menu aktif
+        const snapshot = await getDocs(
+            collection(db, "menu_utama")
+        );
 
-    if (superAdmin) {
-        return true;
-    }
+        const konfigurasi = {};
 
-    // Profil dapat dilihat semua akun aktif
+        snapshot.forEach(dokumen => {
 
-    if (kode === "profil") {
-        return true;
-    }
+            const data = dokumen.data();
 
-    // =================================
-    // EMPAT MENU BAWAAN KARYAWAN
-    // =================================
+            const kode = normalisasiKode(
+                data.kode || dokumen.id
+            );
 
-    if (
-        rolePengguna === "karyawan" &&
-        MENU_BAWAAN_KARYAWAN.includes(kode)
-    ) {
+            konfigurasi[kode] = {
+                id: dokumen.id,
+                ...data,
+                kode
+            };
 
-        // Jika akses_role belum diisi,
-        // menu bawaan dianggap untuk karyawan.
-        // Jika sudah diisi, harus memuat karyawan.
+        });
 
-        if (
-            aksesRole.length > 0 &&
-            !aksesRole.includes("karyawan")
-        ) {
-            return false;
-        }
+        // Firestore hanya mengubah konfigurasi.
+        // Menu umum wajib tidak dapat dihilangkan.
 
-        // Menu bawaan tidak membutuhkan
-        // penugasan hak_akses tambahan.
+        return hasil.map(menuDefault => {
 
-        return true;
+            const dataFirestore =
+                konfigurasi[menuDefault.kode] || {};
 
-    }
+            return {
 
-    // =================================
-    // PEMERIKSAAN ROLE MENU LAIN
-    // =================================
+                ...menuDefault,
 
-    const daftarRolePengguna = [rolePengguna];
+                ...dataFirestore,
 
-    if (
-        [
-            "leader",
-            "leader_absensi",
-            "petugas_absensi"
-        ].includes(rolePengguna)
-    ) {
-        daftarRolePengguna.push("karyawan");
-    }
+                kode: menuDefault.kode,
 
-    // Jika akses_role kosong pada menu selain
-    // menu bawaan, menu tidak diberikan otomatis.
+                // Pastikan menu umum tetap aktif
 
-    const roleDiizinkan = daftarRolePengguna.some(
-        role => aksesRole.includes(role)
-    );
+                aktif: true
 
-    if (!roleDiizinkan) {
-        return false;
-    }
+            };
 
-    // Informasi dan bantuan tidak membutuhkan
-    // penugasan hak akses tambahan.
+        });
 
-    if (
-        kode === "informasi" ||
-        kode === "bantuan"
-    ) {
-        return true;
-    }
+    } catch (error) {
 
-    // Hak akses tambahan hanya diperiksa
-    // jika memang diwajibkan oleh menu.
+        console.warn(
+            "Konfigurasi menu_utama gagal dibaca.",
+            error
+        );
 
-    if (menu.perlu_hak_akses === true) {
+        // Jika Firestore gagal dibaca,
+        // menu umum tetap tersedia.
 
-        return hakAksesPengguna.includes(kode);
+        return hasil;
 
     }
-
-    return true;
 
 }
 
 
 // =====================================
-// 10. MEMUAT MENU FIRESTORE
+// 10. MEMUAT MENU KHUSUS SUPER ADMIN
+// =====================================
+
+async function muatMenuAdmin() {
+
+    if (!superAdmin) {
+        return [];
+    }
+
+    try {
+
+        const snapshot = await getDocs(
+            collection(db, "menu_utama")
+        );
+
+        const hasil = [];
+
+        snapshot.forEach(dokumen => {
+
+            const data = dokumen.data();
+
+            const menu = {
+
+                id: dokumen.id,
+
+                ...data,
+
+                kode: normalisasiKode(
+                    data.kode || dokumen.id
+                )
+
+            };
+
+            if (menu.aktif !== true) {
+                return;
+            }
+
+            const role = normalisasiArray(
+                menu.akses_role
+            );
+
+            const termasukMenuAdmin =
+                MENU_ADMIN.includes(menu.kode) ||
+                role.includes("super_admin");
+
+            if (termasukMenuAdmin) {
+                hasil.push(menu);
+            }
+
+        });
+
+        hasil.sort((a, b) =>
+            Number(a.urutan || 999) -
+            Number(b.urutan || 999)
+        );
+
+        return hasil;
+
+    } catch (error) {
+
+        console.warn(
+            "Gagal memuat menu admin:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+// =====================================
+// 11. MEMERIKSA PENUGASAN NIK
+// =====================================
+
+function penugasanCocokDenganNIK(data) {
+
+    const nik = nikPengguna();
+
+    if (!nik) {
+        return false;
+    }
+
+    // Berbagai nama field NIK
+    // untuk mengantisipasi variasi dokumen.
+
+    const kandidatNIK = [
+
+        data.nik,
+        data.NIK,
+        data.nomor_induk,
+        data.target_nik,
+        data.nik_karyawan,
+        data.nik_penerima,
+        data.karyawan_nik
+
+    ];
+
+    return kandidatNIK.some(value => {
+
+        if (value === undefined || value === null) {
+            return false;
+        }
+
+        return String(value).trim() === nik;
+
+    });
+
+}
+
+
+function penugasanAktif(data) {
+
+    if (data.aktif === false) {
+        return false;
+    }
+
+    const status = normalisasiKode(
+        data.status || "aktif"
+    );
+
+    const statusTidakAktif = [
+
+        "nonaktif",
+        "tidak_aktif",
+        "dicabut",
+        "berakhir",
+        "selesai",
+        "inactive",
+        "disabled"
+
+    ];
+
+    return !statusTidakAktif.includes(status);
+
+}
+
+
+// =====================================
+// 12. MEMBACA PENUGASAN
+// =====================================
+
+async function muatPenugasanKaryawan() {
+
+    try {
+
+        const snapshot = await getDocs(
+            collection(db, "penugasan_karyawan")
+        );
+
+        const penugasan = [];
+
+        snapshot.forEach(dokumen => {
+
+            const data = dokumen.data();
+
+            if (!penugasanAktif(data)) {
+                return;
+            }
+
+            // Super Admin memiliki akses pengelolaan
+            // dan melihat daftar menu tugas aktif.
+
+            if (superAdmin) {
+
+                penugasan.push({
+
+                    id: dokumen.id,
+
+                    ...data
+
+                });
+
+                return;
+
+            }
+
+            // Karyawan hanya mengambil penugasan
+            // yang sesuai NIK miliknya.
+
+            if (penugasanCocokDenganNIK(data)) {
+
+                penugasan.push({
+
+                    id: dokumen.id,
+
+                    ...data
+
+                });
+
+            }
+
+        });
+
+        return penugasan;
+
+    } catch (error) {
+
+        console.error(
+            "Gagal membaca penugasan_karyawan:",
+            error
+        );
+
+        throw error;
+
+    }
+
+}
+
+
+// =====================================
+// 13. MENCARI ID MENU PADA PENUGASAN
+// =====================================
+
+function ambilReferensiMenuPenugasan(data) {
+
+    const referensi = [
+
+        data.menu_id,
+        data.menuId,
+        data.menu_kode,
+        data.kode_menu,
+        data.kode,
+        data.tugas_id,
+        data.tugas_kode
+
+    ];
+
+    const hasil = [];
+
+    referensi.forEach(value => {
+
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim() !== ""
+        ) {
+
+            hasil.push(
+                normalisasiKode(value)
+            );
+
+        }
+
+    });
+
+    return hasil;
+
+}
+
+
+// =====================================
+// 14. MEMUAT MENU TUGAS DINAMIS
+// =====================================
+
+async function muatMenuTugasDinamis() {
+
+    const snapshotMenu = await getDocs(
+        collection(db, "menu_tugas")
+    );
+
+    const semuaMenuTugas = [];
+
+    snapshotMenu.forEach(dokumen => {
+
+        const data = dokumen.data();
+
+        semuaMenuTugas.push({
+
+            id: dokumen.id,
+
+            ...data,
+
+            kode: normalisasiKode(
+                data.kode || dokumen.id
+            )
+
+        });
+
+    });
+
+    // Hanya menu tugas aktif
+
+    const menuAktif = semuaMenuTugas.filter(
+        menu => menu.aktif === true
+    );
+
+    // Baca penugasan
+
+    const penugasan = await muatPenugasanKaryawan();
+
+    // Super Admin dapat melihat menu tugas aktif
+
+    if (superAdmin) {
+
+        return menuAktif.sort((a, b) =>
+            Number(a.urutan || 999) -
+            Number(b.urutan || 999)
+        );
+
+    }
+
+    // =================================
+    // FILTER MENU BERDASARKAN PENUGASAN
+    // =================================
+
+    const menuYangDitugaskan = [];
+
+    menuAktif.forEach(menu => {
+
+        const idMenu = normalisasiKode(menu.id);
+
+        const kodeMenu = normalisasiKode(menu.kode);
+
+        const ditugaskan = penugasan.some(tugas => {
+
+            const referensi =
+                ambilReferensiMenuPenugasan(tugas);
+
+            return referensi.includes(idMenu) ||
+                   referensi.includes(kodeMenu);
+
+        });
+
+        if (ditugaskan) {
+
+            menuYangDitugaskan.push(menu);
+
+        }
+
+    });
+
+    menuYangDitugaskan.sort((a, b) =>
+        Number(a.urutan || 999) -
+        Number(b.urutan || 999)
+    );
+
+    return menuYangDitugaskan;
+
+}
+
+
+// =====================================
+// 15. MEMUAT INFORMASI / BANTUAN
+// =====================================
+
+async function muatMenuInformasi() {
+
+    try {
+
+        const snapshot = await getDocs(
+            collection(db, "menu_utama")
+        );
+
+        const hasil = [];
+
+        snapshot.forEach(dokumen => {
+
+            const data = dokumen.data();
+
+            const menu = {
+
+                id: dokumen.id,
+
+                ...data,
+
+                kode: normalisasiKode(
+                    data.kode || dokumen.id
+                )
+
+            };
+
+            if (menu.aktif !== true) {
+                return;
+            }
+
+            if (
+                menu.kode === "informasi" ||
+                menu.kode === "bantuan"
+            ) {
+
+                hasil.push(menu);
+
+            }
+
+        });
+
+        hasil.sort((a, b) =>
+            Number(a.urutan || 999) -
+            Number(b.urutan || 999)
+        );
+
+        return hasil;
+
+    } catch (error) {
+
+        console.warn(
+            "Menu informasi tidak dapat dimuat:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+// =====================================
+// 16. MENAMPILKAN KARTU MENU
+// =====================================
+
+function tampilkanKartuMenu(
+    daftarMenu,
+    area
+) {
+
+    area.replaceChildren();
+
+    daftarMenu.forEach(menu => {
+
+        const kartu = buatKartu(menu);
+
+        area.appendChild(kartu);
+
+    });
+
+}
+
+
+// =====================================
+// 17. MENAMPILKAN MENU UTAMA
 // =====================================
 
 async function muatMenuFirestore() {
@@ -706,138 +1242,175 @@ async function muatMenuFirestore() {
 
     try {
 
-        const snapshot = await getDocs(
-            collection(db, "menu_utama")
-        );
+        // =================================
+        // AMBIL MENU UMUM
+        // =================================
 
-        const semuaMenu = [];
+        const menuUmum =
+            await muatKonfigurasiMenuUmum();
 
-        snapshot.forEach(dokumen => {
+        // =================================
+        // AMBIL MENU TUGAS DINAMIS
+        // =================================
 
-            const data = dokumen.data();
+        let menuTugas = [];
 
-            semuaMenu.push({
+        try {
 
-                id: dokumen.id,
+            menuTugas =
+                await muatMenuTugasDinamis();
 
-                ...data,
+        } catch (error) {
 
-                kode: normalisasiKode(
-                    data.kode || dokumen.id
-                )
+            console.error(
+                "Menu tugas gagal dimuat:",
+                error
+            );
 
-            });
+        }
 
-        });
+        // =================================
+        // AMBIL MENU INFORMASI
+        // =================================
 
-        // Hanya menu aktif
+        const menuInformasi =
+            await muatMenuInformasi();
 
-        const menuAktif = semuaMenu.filter(
-            menu => menu.aktif === true
-        );
+        // =================================
+        // AMBIL MENU ADMIN
+        // =================================
 
-        // Filter berdasarkan hak akses
+        const menuAdmin =
+            await muatMenuAdmin();
 
-        const menuTampil = menuAktif.filter(
-            menu => bolehLihatMenu(menu)
-        );
+        // =================================
+        // AREA MENU
+        // =================================
 
-        // Urutkan menu
+        const areaProfil =
+            document.getElementById("area-profil");
 
-        menuTampil.sort((a, b) =>
-            Number(a.urutan || 999) -
-            Number(b.urutan || 999)
-        );
+        const areaUmum =
+            document.getElementById("area-menu-umum");
 
-        // Area tampilan
+        const areaTugas =
+            document.getElementById("daftar-menu-tugas");
 
-        const areaProfil = document.getElementById(
-            "area-profil"
-        );
+        const areaMenuTugas =
+            document.getElementById("area-menu-tugas");
 
-        const areaUmum = document.getElementById(
-            "area-menu-umum"
-        );
+        const areaBawah =
+            document.getElementById("area-menu-bawah");
 
-        const areaBawah = document.getElementById(
-            "area-menu-bawah"
-        );
+        const areaAdmin =
+            document.getElementById("area-menu-admin");
 
-        const areaAdmin = document.getElementById(
-            "area-menu-admin"
-        );
+        // Bersihkan tampilan lama
 
         areaProfil.replaceChildren();
+
         areaUmum.replaceChildren();
+
+        areaTugas.replaceChildren();
+
         areaBawah.replaceChildren();
+
         areaAdmin.replaceChildren();
 
         // =================================
-        // MENAMPILKAN MENU
+        // PROFIL
         // =================================
 
-        menuTampil.forEach(menu => {
+        const menuProfil = menuUmum.find(
+            menu => menu.kode === "profil"
+        );
+
+        if (menuProfil) {
+
+            const kartuProfil =
+                buatKartu(menuProfil);
+
+            kartuProfil.classList.add(
+                "menu-profil"
+            );
+
+            areaProfil.appendChild(
+                kartuProfil
+            );
+
+        }
+
+        // =================================
+        // 4 MENU UMUM
+        // =================================
+
+        const menuEmpat = menuUmum.filter(
+            menu => [
+
+                "pengajuan_cuti",
+                "saldo_cuti",
+                "riwayat_absensi",
+                "riwayat_cuti"
+
+            ].includes(menu.kode)
+        );
+
+        tampilkanKartuMenu(
+            menuEmpat,
+            areaUmum
+        );
+
+        // =================================
+        // MENU TUGAS DINAMIS
+        // =================================
+
+        tampilkanKartuMenu(
+            menuTugas,
+            areaTugas
+        );
+
+        areaMenuTugas.classList.toggle(
+            "tampil",
+            menuTugas.length > 0
+        );
+
+        // =================================
+        // INFORMASI DAN BANTUAN
+        // =================================
+
+        menuInformasi.forEach(menu => {
 
             const kartu = buatKartu(menu);
 
-            // PROFIL
+            kartu.classList.add(
+                "menu-bawah"
+            );
 
-            if (menu.kode === "profil") {
-
-                kartu.classList.add("menu-profil");
-
-                areaProfil.appendChild(kartu);
-
-            }
-
-            // INFORMASI DAN BANTUAN
-
-            else if (
-                menu.kode === "informasi" ||
-                menu.kode === "bantuan"
-            ) {
-
-                kartu.classList.add("menu-bawah");
-
-                areaBawah.appendChild(kartu);
-
-            }
-
-            // MENU KHUSUS SUPER ADMIN DINAMIS
-
-            else if (
-                superAdmin &&
-                (
-                    MENU_ADMIN.includes(menu.kode) ||
-                    normalisasiArray(menu.akses_role)
-                        .includes("super_admin")
-                )
-            ) {
-
-                areaAdmin.appendChild(kartu);
-
-            }
-
-            // MENU UMUM
-
-            else {
-
-                areaUmum.appendChild(kartu);
-
-            }
+            areaBawah.appendChild(
+                kartu
+            );
 
         });
 
-        // Tampilkan area admin jika tersedia
+        // =================================
+        // MENU SUPER ADMIN
+        // =================================
+
+        tampilkanKartuMenu(
+            menuAdmin,
+            areaAdmin
+        );
 
         document.getElementById(
             "area-admin"
         ).style.display =
-            superAdmin && areaAdmin.children.length > 0
+            superAdmin && menuAdmin.length > 0
                 ? "block"
                 : "none";
 
-        // Tampilkan halaman
+        // =================================
+        // TAMPILKAN HALAMAN
+        // =================================
 
         document.getElementById(
             "menu-container"
@@ -851,90 +1424,117 @@ async function muatMenuFirestore() {
         // DIAGNOSTIK
         // =================================
 
-        const kodeAktif = menuAktif.map(m => m.kode);
+        console.log(
+            "========== WAINI MENU =========="
+        );
 
-        const kodeTampil = menuTampil.map(m => m.kode);
+        console.log(
+            "NIK:",
+            nikPengguna()
+        );
 
-        console.log("========== WAINI MENU ==========");
+        console.log(
+            "Role:",
+            rolePengguna
+        );
 
-        console.log("Jumlah dokumen:", snapshot.size);
+        console.log(
+            "Super Admin:",
+            superAdmin
+        );
 
-        console.log("Jumlah menu aktif:", menuAktif.length);
+        console.log(
+            "Menu umum:",
+            menuUmum.map(m => m.kode)
+        );
 
-        console.log("Jumlah menu tampil:", menuTampil.length);
+        console.log(
+            "Menu tugas:",
+            menuTugas.map(m => m.kode)
+        );
 
-        console.log("Role pengguna:", rolePengguna);
+        console.log(
+            "Menu admin:",
+            menuAdmin.map(m => m.kode)
+        );
 
-        console.log("Hak akses:", hakAksesPengguna);
+        // =================================
+        // PERINGATAN MENU TUGAS
+        // =================================
 
-        console.log("Super Admin:", superAdmin);
+        if (
+            !superAdmin &&
+            menuTugas.length === 0
+        ) {
 
-        console.log("Menu aktif:", kodeAktif);
-
-        console.log("Menu tampil:", kodeTampil);
-
-        // Periksa apakah empat menu dasar tersedia
-
-        if (rolePengguna === "karyawan") {
-
-            const belumAda = MENU_BAWAAN_KARYAWAN.filter(
-                kode => !kodeAktif.includes(kode)
+            console.log(
+                "Tidak ada menu tugas yang ditugaskan kepada NIK ini."
             );
-
-            if (belumAda.length > 0) {
-
-                console.warn(
-                    "Menu bawaan belum dibuat atau belum aktif:",
-                    belumAda
-                );
-
-                status.style.display = "block";
-
-                status.textContent =
-                    "Perhatian: Menu berikut belum tersedia atau belum aktif di Firestore: " +
-                    belumAda.join(", ");
-
-            }
-
-        }
-
-        // Jika tidak ada menu
-
-        if (menuTampil.length === 0) {
-
-            status.style.display = "block";
-
-            if (snapshot.size === 0) {
-
-                status.textContent =
-                    "Koleksi menu_utama belum memiliki dokumen.";
-
-            } else if (menuAktif.length === 0) {
-
-                status.textContent =
-                    "Belum ada menu aktif di Firestore.";
-
-            } else {
-
-                status.textContent =
-                    "Belum ada menu yang sesuai dengan hak akses akun.";
-
-            }
 
         }
 
     } catch (error) {
 
         console.error(
-            "Gagal membaca menu Firestore:",
+            "Gagal memuat menu WAINI:",
             error
         );
 
         status.style.display = "block";
 
         status.textContent =
-            "Gagal membaca menu dari Firestore. Kode: " +
+            "Gagal memuat menu. " +
+            "Periksa koneksi internet dan Rules Firestore. " +
             (error.code || error.message);
+
+        // =================================
+        // MENU UMUM TETAP DITAMPILKAN
+        // =================================
+
+        const menuFallback =
+            MENU_UMUM_DEFAULT;
+
+        const areaProfil =
+            document.getElementById("area-profil");
+
+        const areaUmum =
+            document.getElementById("area-menu-umum");
+
+        areaProfil.replaceChildren();
+
+        areaUmum.replaceChildren();
+
+        const profil = menuFallback.find(
+            menu => menu.kode === "profil"
+        );
+
+        if (profil) {
+
+            const kartuProfil =
+                buatKartu(profil);
+
+            kartuProfil.classList.add(
+                "menu-profil"
+            );
+
+            areaProfil.appendChild(
+                kartuProfil
+            );
+
+        }
+
+        tampilkanKartuMenu(
+            menuFallback.filter(menu =>
+                menu.kode !== "profil"
+            ),
+            areaUmum
+        );
+
+        document.getElementById(
+            "menu-container"
+        ).classList.add("siap");
+
+        akunSiap = true;
 
     }
 
@@ -942,7 +1542,7 @@ async function muatMenuFirestore() {
 
 
 // =====================================
-// 11. MEMERIKSA DATA PENGGUNA
+// 18. MEMERIKSA DATA PENGGUNA
 // =====================================
 
 async function periksaPengguna(user) {
@@ -959,17 +1559,22 @@ async function periksaPengguna(user) {
             user.uid
         );
 
-        const hasil = await getDoc(referensi);
+        const hasil = await getDoc(
+            referensi
+        );
 
         if (!hasil.exists()) {
 
             alert(
-                "Data pengguna tidak ditemukan. Hubungi Super Admin."
+                "Data pengguna tidak ditemukan. " +
+                "Hubungi Super Admin."
             );
 
             await signOut(auth);
 
-            window.location.replace("index.html");
+            window.location.replace(
+                "index.html"
+            );
 
             return;
 
@@ -977,7 +1582,9 @@ async function periksaPengguna(user) {
 
         const data = hasil.data();
 
-        // Periksa status akun
+        // =================================
+        // PERIKSA STATUS AKUN
+        // =================================
 
         if (
             String(data.status || "")
@@ -986,30 +1593,41 @@ async function periksaPengguna(user) {
         ) {
 
             alert(
-                "Akun belum aktif. Silakan hubungi Super Admin."
+                "Akun belum aktif. " +
+                "Silakan hubungi Super Admin."
             );
 
             await signOut(auth);
 
-            window.location.replace("index.html");
+            window.location.replace(
+                "index.html"
+            );
 
             return;
 
         }
 
-        // Simpan data pengguna
+        // =================================
+        // SIMPAN DATA
+        // =================================
 
         penggunaAktif = data;
 
-        rolePengguna = normalisasiRole(data.role);
-
-        hakAksesPengguna = normalisasiArray(
-            data.hak_akses
+        rolePengguna = normalisasiRole(
+            data.role
         );
 
-        superAdmin = rolePengguna === "super_admin";
+        hakAksesPengguna =
+            normalisasiArray(
+                data.hak_akses
+            );
 
-        // Tampilkan salam
+        superAdmin =
+            rolePengguna === "super_admin";
+
+        // =================================
+        // SALAM PENGGUNA
+        // =================================
 
         const nama =
             data.nama ||
@@ -1028,23 +1646,47 @@ async function periksaPengguna(user) {
             " • " +
             jabatan;
 
-        // Diagnostik pengguna
+        // =================================
+        // DIAGNOSTIK PENGGUNA
+        // =================================
 
-        console.log("========== AKUN WAINI ==========");
+        console.log(
+            "========== AKUN WAINI =========="
+        );
 
-        console.log("Nama:", nama);
+        console.log(
+            "Nama:",
+            nama
+        );
 
-        console.log("Role:", rolePengguna);
+        console.log(
+            "Role:",
+            rolePengguna
+        );
 
-        console.log("Status:", data.status);
+        console.log(
+            "Status:",
+            data.status
+        );
 
-        console.log("NIK:", data.nik);
+        console.log(
+            "NIK:",
+            nikPengguna()
+        );
 
-        console.log("Hak akses:", hakAksesPengguna);
+        console.log(
+            "Hak akses:",
+            hakAksesPengguna
+        );
 
-        console.log("Super Admin:", superAdmin);
+        console.log(
+            "Super Admin:",
+            superAdmin
+        );
 
-        // Muat menu
+        // =================================
+        // MUAT MENU
+        // =================================
 
         await muatMenuFirestore();
 
@@ -1058,7 +1700,7 @@ async function periksaPengguna(user) {
         status.style.display = "block";
 
         status.textContent =
-            "Gagal memeriksa akun. Kode: " +
+            "Gagal memeriksa akun. " +
             (error.code || error.message);
 
     }
@@ -1067,28 +1709,33 @@ async function periksaPengguna(user) {
 
 
 // =====================================
-// 12. PEMERIKSAAN LOGIN
+// 19. PEMERIKSAAN LOGIN
 // =====================================
 
-onAuthStateChanged(auth, async user => {
+onAuthStateChanged(
+    auth,
+    async user => {
 
-    akunSiap = false;
+        akunSiap = false;
 
-    if (!user) {
+        if (!user) {
 
-        window.location.replace("index.html");
+            window.location.replace(
+                "index.html"
+            );
 
-        return;
+            return;
+
+        }
+
+        await periksaPengguna(user);
 
     }
-
-    await periksaPengguna(user);
-
-});
+);
 
 
 // =====================================
-// 13. LOGOUT
+// 20. LOGOUT
 // =====================================
 
 window.bukaMenu = async function() {
@@ -1106,13 +1753,20 @@ window.bukaMenu = async function() {
 
         await signOut(auth);
 
-        window.location.replace("index.html");
+        window.location.replace(
+            "index.html"
+        );
 
     } catch (error) {
 
-        console.error("Logout gagal:", error);
+        console.error(
+            "Logout gagal:",
+            error
+        );
 
-        alert("Gagal keluar. Silakan coba kembali.");
+        alert(
+            "Gagal keluar. Silakan coba kembali."
+        );
 
     }
 
