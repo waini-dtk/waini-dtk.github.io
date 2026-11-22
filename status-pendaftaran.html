@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
 <title>Status Pendaftaran - WAINI</title>
 
 <style>
@@ -210,8 +212,6 @@ body {
     background: #eee;
 }
 
-/* STATUS PEMUATAN */
-
 .loading,
 .empty,
 .error-message {
@@ -256,6 +256,7 @@ body {
 <header class="header">
 
     <div class="brand">
+
         <div class="logo">♙</div>
 
         <div class="brand-name">
@@ -264,6 +265,7 @@ body {
         </div>
 
         <div class="online">ONLINE</div>
+
     </div>
 
     <h1>Status Pendaftaran</h1>
@@ -280,8 +282,6 @@ body {
         <span>5 Pendaftar Terbaru</span>
         <span class="latest">Terbaru</span>
     </div>
-
-    <!-- TEMPAT DATA PENDAFTAR -->
 
     <div id="daftarPendaftar">
 
@@ -304,9 +304,6 @@ body {
     </button>
 
 </main>
-
-
-<!-- FIREBASE -->
 
 <script type="module">
 
@@ -373,13 +370,17 @@ function formatTanggal(data) {
     }
 
     if (!tanggal || isNaN(tanggal.getTime())) {
+
         return "Tanggal tidak tersedia";
+
     }
 
     return tanggal.toLocaleDateString("id-ID", {
+
         day: "numeric",
         month: "long",
         year: "numeric"
+
     });
 
 }
@@ -402,10 +403,12 @@ function informasiStatus(status) {
     ) {
 
         return {
+
             label: "Disetujui",
             kelas: "approved",
             ikon: "✓",
             warna: "#16a34a"
+
         };
 
     }
@@ -416,19 +419,23 @@ function informasiStatus(status) {
     ) {
 
         return {
+
             label: "Ditolak",
             kelas: "rejected",
             ikon: "✕",
             warna: "#dc2626"
+
         };
 
     }
 
     return {
+
         label: "Menunggu Verifikasi",
         kelas: "waiting",
         ikon: "◷",
         warna: "#d97706"
+
     };
 
 }
@@ -608,14 +615,20 @@ async function muatPendaftaran() {
 
     try {
 
-        const referensi =
-            collection(db, "status_pendaftaran_public");
+        const referensi = collection(
+            db,
+            "status_pendaftaran_public"
+        );
 
 
         const pencarian = query(
+
             referensi,
+
             orderBy("createdAt", "desc"),
+
             limit(5)
+
         );
 
 
