@@ -90,6 +90,174 @@ hr{border:none;border-top:1px solid var(--border);margin:15px 0}
 .import-info{background:#f5f7f9;border-radius:10px;padding:12px;font-size:12px;line-height:1.7;color:#555;margin-bottom:12px}
 .import-info strong{color:#333}
 .progress{font-size:12px;color:#666;margin-top:10px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* ================================
+   PEMILIHAN TARGET KARYAWAN
+================================ */
+.target-picker{
+border:1px solid var(--border);
+border-radius:12px;
+overflow:hidden;
+background:#fff;
+}
+.target-picker-top{
+background:#fafafa;
+padding:12px;
+border-bottom:1px solid var(--border);
+}
+.target-picker-top .field{margin-bottom:9px}
+.target-picker-top .field:last-child{margin-bottom:0}
+.target-search{
+width:100%;
+height:42px;
+border:1px solid #ddd;
+border-radius:9px;
+padding:0 12px;
+outline:none;
+background:white;
+}
+.target-search:focus{border-color:var(--merah)}
+.target-filter{
+width:100%;
+height:42px;
+border:1px solid #ddd;
+border-radius:9px;
+padding:0 10px;
+background:white;
+}
+.target-picker-info{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+flex-wrap:wrap;
+font-size:11px;
+color:#666;
+margin-top:9px;
+}
+.target-picker-info strong{color:var(--merah)}
+.target-picker-actions{
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+margin-top:10px;
+}
+.target-picker-actions button{
+font-size:11px;
+padding:8px 10px;
+}
+.target-list{
+max-height:270px;
+overflow-y:auto;
+padding:8px;
+background:#fff;
+}
+.target-item{
+display:flex;
+align-items:center;
+gap:10px;
+padding:11px;
+border:1px solid #eee;
+border-radius:10px;
+margin-bottom:7px;
+cursor:pointer;
+transition:.15s;
+background:#fff;
+}
+.target-item:last-child{margin-bottom:0}
+.target-item:hover{background:#fff8f8;border-color:#f2c5ca}
+.target-item.selected{
+background:#fff3f4;
+border-color:#e6a0a8;
+}
+.target-checkbox{
+width:19px;
+height:19px;
+accent-color:var(--merah);
+flex-shrink:0;
+}
+.target-item-info{flex:1;min-width:0}
+.target-item-name{
+font-size:12px;
+font-weight:bold;
+color:#252525;
+overflow-wrap:anywhere;
+}
+.target-item-nik{
+font-size:11px;
+color:#777;
+margin-top:3px;
+}
+.target-item-dept{
+font-size:10px;
+color:var(--merah);
+background:#fff0f1;
+padding:5px 7px;
+border-radius:20px;
+margin-top:5px;
+display:inline-block;
+}
+.target-item-check{
+font-size:17px;
+color:var(--merah);
+font-weight:bold;
+}
+.target-empty{
+text-align:center;
+padding:22px 12px;
+color:#888;
+font-size:12px;
+}
+.selected-targets{
+margin-top:11px;
+padding:11px;
+border:1px dashed #e1a0a7;
+border-radius:10px;
+background:#fffafa;
+}
+.selected-target-title{
+font-size:12px;
+font-weight:bold;
+margin-bottom:9px;
+color:#333;
+}
+.selected-target-chips{
+display:flex;
+flex-wrap:wrap;
+gap:7px;
+}
+.target-chip{
+display:flex;
+align-items:center;
+gap:6px;
+background:#fff0f1;
+border:1px solid #f1c4ca;
+border-radius:20px;
+padding:6px 8px;
+max-width:100%;
+}
+.target-chip-text{
+font-size:10px;
+color:#a00012;
+overflow-wrap:anywhere;
+}
+.target-chip-remove{
+border:none;
+background:#d90019;
+color:white;
+width:19px;
+height:19px;
+border-radius:50%;
+font-size:13px;
+line-height:1;
+flex-shrink:0;
+}
+.target-hint{
+font-size:10px;
+color:#777;
+line-height:1.6;
+margin-top:8px;
+}
 @media(max-width:600px){
 .header{padding:13px}
 .header-title h1{font-size:15px}
@@ -107,6 +275,9 @@ hr{border:none;border-top:1px solid var(--border);margin:15px 0}
 .field.full{grid-column:auto}
 .modal{max-height:95vh}
 .btn-back{padding:8px}
+.target-picker-top{padding:10px}
+.target-list{max-height:230px}
+.target-item{padding:10px}
 }
 </style>
 </head>
@@ -318,12 +489,13 @@ hr{border:none;border-top:1px solid var(--border);margin:15px 0}
 <select id="targetMode" required>
 <option value="semua">Semua Karyawan</option>
 <option value="departemen">Departemen</option>
-<option value="nik">NIK Tertentu</option>
+<option value="nik">Pilih Karyawan</option>
 </select>
+<div class="helper">Pilih siapa yang menjadi target pekerjaan karyawan yang ditugaskan.</div>
 </div>
 
 <div class="field" id="fieldTargetDepartemen" style="display:none">
-<label>Departemen Target</label>
+<label>Departemen Target <span class="required">*</span></label>
 <select id="targetDepartemen">
 <option value="">Pilih Departemen</option>
 <option>Operasional Pelabuhan</option>
@@ -332,10 +504,55 @@ hr{border:none;border-top:1px solid var(--border);margin:15px 0}
 </select>
 </div>
 
+<!-- PEMILIHAN KARYAWAN DENGAN SEARCH -->
 <div class="field" id="fieldTargetNik" style="display:none">
-<label>Daftar NIK Target</label>
-<textarea id="targetNik" placeholder="Masukkan NIK, pisahkan dengan koma atau baris baru"></textarea>
-<div class="helper">Contoh: WHW001A, OP-002, KRY2026B</div>
+<label>Pilih Karyawan Target <span class="required">*</span></label>
+
+<div class="target-picker">
+
+<div class="target-picker-top">
+
+<div class="field">
+<input type="search"
+id="targetSearch"
+class="target-search"
+placeholder="🔍 Cari nama, NIK, atau departemen...">
+</div>
+
+<div class="field">
+<select id="targetFilterDepartemen" class="target-filter">
+<option value="">Semua Departemen</option>
+<option value="Operasional Pelabuhan">Operasional Pelabuhan</option>
+<option value="Kendaraan Bergerak">Kendaraan Bergerak</option>
+<option value="Safety & Technology">Safety & Technology</option>
+</select>
+</div>
+
+<div class="target-picker-info">
+<span>Karyawan ditemukan: <strong id="targetJumlahTampil">0</strong></span>
+<span>Dipilih: <strong id="targetJumlahDipilih">0</strong></span>
+</div>
+
+<div class="target-picker-actions">
+<button type="button" class="btn btn-secondary" id="btnPilihSemuaTampil">☑ Pilih Semua yang Tampil</button>
+<button type="button" class="btn btn-secondary" id="btnHapusSemuaPilihan">✕ Hapus Semua Pilihan</button>
+</div>
+
+</div>
+
+<div id="targetList" class="target-list">
+<div class="target-empty">Memuat daftar karyawan...</div>
+</div>
+</div>
+
+<div id="selectedTargetsBox" class="selected-targets" style="display:none">
+<div class="selected-target-title">Karyawan yang Dipilih</div>
+<div id="selectedTargets" class="selected-target-chips"></div>
+</div>
+
+<div class="target-hint">
+Cari menggunakan nama atau NIK. Anda juga dapat membatasi pencarian berdasarkan departemen. Klik karyawan untuk memilih atau membatalkan pilihan.
+</div>
 </div>
 
 <div class="field">
@@ -442,6 +659,9 @@ let daftarKaryawan=[];
 let karyawanAktif=null;
 let tugasAktif=[];
 let superAdmin=false;
+
+/* NIK KARYAWAN TARGET YANG DIPILIH */
+let selectedTargetNiks=new Set();
 
 const $=id=>document.getElementById(id);
 
@@ -613,7 +833,6 @@ String(data.status||"").toLowerCase()==="aktif";
 console.error(err);
 return false;
 }
-
 }
 
 function tampilAksesDitolak(pesan){
@@ -779,12 +998,23 @@ $("btnSimpanTugas").textContent="Simpan Penugasan";
 $("btnBatalEditTugas").style.display="none";
 $("fieldTargetDepartemen").style.display="none";
 $("fieldTargetNik").style.display="none";
+
+selectedTargetNiks.clear();
+$("targetSearch").value="";
+$("targetFilterDepartemen").value="";
+renderPemilihTarget();
+renderPilihanTarget();
 }
 
 $("targetMode").addEventListener("change",()=>{
 const mode=$("targetMode").value;
 $("fieldTargetDepartemen").style.display=mode==="departemen"?"block":"none";
 $("fieldTargetNik").style.display=mode==="nik"?"block":"none";
+
+if(mode==="nik"){
+renderPemilihTarget();
+renderPilihanTarget();
+}
 });
 
 $("btnBatalEditTugas").addEventListener("click",resetFormTugas);
@@ -803,6 +1033,10 @@ bukaModal("modalTugas");
 await muatTugasKaryawan();
 };
 
+/* =========================
+   MUAT TUGAS KARYAWAN
+========================= */
+
 async function muatTugasKaryawan(){
 $("daftarTugas").innerHTML='<div class="loading">Memuat penugasan...</div>';
 
@@ -818,6 +1052,30 @@ $("daftarTugas").innerHTML='<div class="empty">Gagal memuat penugasan.</div>';
 }
 }
 
+/* =========================
+   TAMPILKAN TARGET TUGAS
+========================= */
+
+function namaTargetDariNIK(nik){
+const k=daftarKaryawan.find(x=>normalisasiNIK(x.nik)===normalisasiNIK(nik));
+return k?k.nama+" ("+k.nik+")":nik;
+}
+
+function formatTargetTugas(t){
+if(t.target_mode==="departemen"){
+return "Departemen: "+(t.target_departemen||"-");
+}
+
+if(t.target_mode==="nik"){
+const list=Array.isArray(t.target_nik)?t.target_nik:[];
+if(!list.length)return "Karyawan target: -";
+
+return "Karyawan target: "+list.map(namaTargetDariNIK).join(", ");
+}
+
+return "Semua Karyawan";
+}
+
 function renderTugas(){
 if(!tugasAktif.length){
 $("daftarTugas").innerHTML='<div class="empty">Belum ada penugasan untuk karyawan ini.</div>';
@@ -826,9 +1084,7 @@ return;
 
 $("daftarTugas").innerHTML=tugasAktif.map(t=>{
 const status=t.status||"aktif";
-let target="Semua Karyawan";
-if(t.target_mode==="departemen")target="Departemen: "+(t.target_departemen||"-");
-if(t.target_mode==="nik")target="NIK Target: "+(Array.isArray(t.target_nik)?t.target_nik.join(", "):"-");
+const target=formatTargetTugas(t);
 
 return `
 <div class="task-card">
@@ -844,11 +1100,133 @@ ${status==="aktif"?`<button class="btn btn-danger btn-small" onclick="window.cab
 }).join("");
 }
 
+/* =========================
+   PEMILIH KARYAWAN TARGET
+========================= */
+
+function renderPemilihTarget(){
+const cari=$("targetSearch").value.toLowerCase().trim();
+const filterDept=$("targetFilterDepartemen").value;
+
+const hasil=daftarKaryawan.filter(k=>{
+const teks=[
+k.nama,
+k.nik,
+k.departemen,
+k.jabatan
+].map(v=>String(v||"").toLowerCase()).join(" ");
+
+const cocokCari=!cari||teks.includes(cari);
+const cocokDept=!filterDept||k.departemen===filterDept;
+
+return cocokCari&&cocokDept;
+});
+
+$("targetJumlahTampil").textContent=hasil.length;
+
+if(!hasil.length){
+$("targetList").innerHTML='<div class="target-empty">Tidak ada karyawan yang sesuai pencarian.</div>';
+return;
+}
+
+$("targetList").innerHTML=hasil.map(k=>{
+const nik=normalisasiNIK(k.nik);
+const terpilih=selectedTargetNiks.has(nik);
+
+return `
+<div class="target-item ${terpilih?"selected":""}" data-target-nik="${esc(nik)}">
+<input type="checkbox" class="target-checkbox" ${terpilih?"checked":""}>
+<div class="target-item-info">
+<div class="target-item-name">${esc(k.nama||"Tanpa Nama")}</div>
+<div class="target-item-nik">NIK: ${esc(k.nik)}</div>
+<span class="target-item-dept">${esc(k.departemen||"Departemen belum diisi")}</span>
+</div>
+<div class="target-item-check">${terpilih?"✓":""}</div>
+</div>`;
+}).join("");
+
+$("targetList").querySelectorAll(".target-item").forEach(item=>{
+item.addEventListener("click",()=>{
+const nik=item.dataset.targetNik;
+if(selectedTargetNiks.has(nik)){
+selectedTargetNiks.delete(nik);
+}else{
+selectedTargetNiks.add(nik);
+}
+renderPemilihTarget();
+renderPilihanTarget();
+});
+});
+}
+
+function renderPilihanTarget(){
+$("targetJumlahDipilih").textContent=selectedTargetNiks.size;
+
+if(!selectedTargetNiks.size){
+$("selectedTargetsBox").style.display="none";
+$("selectedTargets").innerHTML="";
+return;
+}
+
+$("selectedTargetsBox").style.display="block";
+
+const list=[...selectedTargetNiks].map(nik=>{
+const k=daftarKaryawan.find(x=>normalisasiNIK(x.nik)===nik);
+return{
+nik,
+nama:k?k.nama:nik,
+departemen:k?k.departemen:"Data karyawan tidak ditemukan"
+};
+});
+
+$("selectedTargets").innerHTML=list.map(k=>`
+<div class="target-chip">
+<span class="target-chip-text">${esc(k.nama)} · ${esc(k.nik)}</span>
+<button type="button" class="target-chip-remove" data-remove-nik="${esc(k.nik)}" title="Hapus pilihan">×</button>
+</div>
+`).join("");
+
+$("selectedTargets").querySelectorAll("[data-remove-nik]").forEach(btn=>{
+btn.addEventListener("click",()=>{
+selectedTargetNiks.delete(btn.dataset.removeNik);
+renderPemilihTarget();
+renderPilihanTarget();
+});
+});
+}
+
+$("targetSearch").addEventListener("input",renderPemilihTarget);
+$("targetFilterDepartemen").addEventListener("change",renderPemilihTarget);
+
+$("btnPilihSemuaTampil").addEventListener("click",()=>{
+const cari=$("targetSearch").value.toLowerCase().trim();
+const filterDept=$("targetFilterDepartemen").value;
+
+const hasil=daftarKaryawan.filter(k=>{
+const teks=[
+k.nama,k.nik,k.departemen,k.jabatan
+].map(v=>String(v||"").toLowerCase()).join(" ");
+
+return (!cari||teks.includes(cari))&&
+(!filterDept||k.departemen===filterDept);
+});
+
+hasil.forEach(k=>selectedTargetNiks.add(normalisasiNIK(k.nik)));
+renderPemilihTarget();
+renderPilihanTarget();
+
+toast(hasil.length+" karyawan pada daftar pencarian dipilih.");
+});
+
+$("btnHapusSemuaPilihan").addEventListener("click",()=>{
+selectedTargetNiks.clear();
+renderPemilihTarget();
+renderPilihanTarget();
+toast("Semua pilihan target dihapus.");
+});
+
 function ambilTargetNIK(){
-return $("targetNik").value
-.split(/[,;\n]+/)
-.map(x=>normalisasiNIK(x))
-.filter(Boolean);
+return [...selectedTargetNiks].map(normalisasiNIK).filter(Boolean);
 }
 
 function validasiTarget(mode){
@@ -857,11 +1235,15 @@ toast("Departemen target wajib dipilih.");
 return false;
 }
 if(mode==="nik"&&!ambilTargetNIK().length){
-toast("Masukkan minimal satu NIK target.");
+toast("Pilih minimal satu karyawan target.");
 return false;
 }
 return true;
 }
+
+/* =========================
+   SIMPAN PENUGASAN
+========================= */
 
 $("formTugas").addEventListener("submit",async()=>{
 if(!superAdmin)return toast("Akses ditolak.");
@@ -893,8 +1275,8 @@ updated_by:penggunaLogin.uid
 };
 
 if(idEdit){
-const lama=tugasAktif.find(x=>x.id===idEdit);
 await updateDoc(doc(db,C_TUGAS,idEdit),data);
+
 await simpanRiwayat({
 aksi:"edit_penugasan",
 nik_karyawan:karyawanAktif.nik,
@@ -902,11 +1284,13 @@ nama_karyawan:karyawanAktif.nama,
 id_penugasan:idEdit,
 detail:"Mengubah penugasan "+data.nama_tugas
 });
+
 toast("Penugasan diperbarui.");
 }else{
 data.createdAt=serverTimestamp();
 data.created_by=penggunaLogin.uid;
 const ref=await addDoc(collection(db,C_TUGAS),data);
+
 await simpanRiwayat({
 aksi:"tambah_penugasan",
 nik_karyawan:karyawanAktif.nik,
@@ -914,6 +1298,7 @@ nama_karyawan:karyawanAktif.nama,
 id_penugasan:ref.id,
 detail:"Menambahkan penugasan "+data.nama_tugas
 });
+
 toast("Penugasan berhasil ditambahkan.");
 }
 
@@ -929,6 +1314,10 @@ btn.textContent="Simpan Penugasan";
 }
 });
 
+/* =========================
+   EDIT PENUGASAN
+========================= */
+
 window.editPenugasan=function(id){
 const t=tugasAktif.find(x=>x.id===id);
 if(!t)return;
@@ -937,16 +1326,34 @@ $("tugasIdEdit").value=t.id;
 $("namaTugas").value=t.nama_tugas||"";
 $("targetMode").value=t.target_mode||"semua";
 $("targetDepartemen").value=t.target_departemen||"";
-$("targetNik").value=Array.isArray(t.target_nik)?t.target_nik.join(", "):"";
 $("keteranganTugas").value=t.keterangan||"";
+
+selectedTargetNiks.clear();
+
+if(Array.isArray(t.target_nik)){
+t.target_nik.forEach(nik=>{
+selectedTargetNiks.add(normalisasiNIK(nik));
+});
+}
+
+$("targetSearch").value="";
+$("targetFilterDepartemen").value="";
 
 $("fieldTargetDepartemen").style.display=t.target_mode==="departemen"?"block":"none";
 $("fieldTargetNik").style.display=t.target_mode==="nik"?"block":"none";
+
+renderPemilihTarget();
+renderPilihanTarget();
+
 $("btnSimpanTugas").textContent="Simpan Perubahan";
 $("btnBatalEditTugas").style.display="inline-block";
 
 $("namaTugas").focus();
 };
+
+/* =========================
+   CABUT PENUGASAN
+========================= */
 
 window.cabutPenugasan=async function(id){
 const t=tugasAktif.find(x=>x.id===id);
@@ -977,6 +1384,10 @@ console.error(err);
 toast("Gagal mencabut penugasan: "+err.message);
 }
 };
+
+/* =========================
+   AKTIFKAN PENUGASAN
+========================= */
 
 window.aktifkanPenugasan=async function(id){
 const t=tugasAktif.find(x=>x.id===id);
@@ -1246,6 +1657,8 @@ $("btnExport").disabled=false;
 
 try{
 await muatKaryawan();
+renderPemilihTarget();
+renderPilihanTarget();
 }catch(err){
 console.error(err);
 tampilAksesDitolak("Gagal memuat data karyawan: "+err.message);
