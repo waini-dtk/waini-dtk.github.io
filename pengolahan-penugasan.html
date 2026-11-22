@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#991b1b">
-<title>Penugasan & Hak Akses | WAINI</title>
+<title>Pengolahan Penugasan - WAINI</title>
 
 <style>
 * {
@@ -26,64 +27,108 @@ header {
     padding: 20px 16px;
 }
 
-header h1 {
-    font-size: 21px;
-    margin-bottom: 6px;
+.header-inner {
+    max-width: 1100px;
+    margin: auto;
 }
 
-header p {
+.header-title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.header-subtitle {
     font-size: 13px;
     opacity: .9;
-    line-height: 1.5;
+    margin-top: 6px;
+}
+
+.header-info {
+    margin-top: 12px;
+    font-size: 12px;
+    opacity: .9;
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1100px;
     margin: auto;
     padding: 14px;
 }
 
 .card {
     background: white;
-    border-radius: 13px;
+    border-radius: 14px;
     padding: 16px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
 
-.card h2 {
+.card-title {
     font-size: 17px;
+    font-weight: bold;
     margin-bottom: 14px;
     color: #991b1b;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.summary-card {
+    background: white;
+    padding: 14px 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 7px rgba(0,0,0,.05);
+    text-align: center;
+}
+
+.summary-number {
+    font-size: 23px;
+    font-weight: bold;
+    color: #991b1b;
+}
+
+.summary-label {
+    font-size: 11px;
+    color: #666;
+    margin-top: 5px;
 }
 
 label {
     display: block;
     font-size: 13px;
     font-weight: bold;
-    margin-bottom: 6px;
+    margin: 12px 0 6px;
 }
 
 input, select, textarea {
     width: 100%;
-    border: 1px solid #d5d8dd;
+    padding: 11px 12px;
+    border: 1px solid #d5d5d5;
     border-radius: 9px;
-    padding: 11px;
     font-size: 14px;
     background: white;
-    margin-bottom: 12px;
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #991b1b;
+    box-shadow: 0 0 0 2px rgba(153,27,27,.08);
 }
 
 textarea {
-    resize: vertical;
     min-height: 75px;
+    resize: vertical;
 }
 
 button {
     border: none;
     border-radius: 9px;
     padding: 11px 14px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -99,21 +144,21 @@ button:disabled {
 }
 
 .btn-secondary {
-    background: #e5e7eb;
-    color: #222;
+    background: #eee;
+    color: #333;
 }
 
-.btn-green {
+.btn-success {
     background: #15803d;
     color: white;
 }
 
-.btn-orange {
-    background: #f59e0b;
-    color: #222;
+.btn-warning {
+    background: #d97706;
+    color: white;
 }
 
-.btn-red {
+.btn-danger {
     background: #dc2626;
     color: white;
 }
@@ -125,186 +170,174 @@ button:disabled {
 
 .button-row {
     display: flex;
-    gap: 8px;
     flex-wrap: wrap;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
+    margin-top: 14px;
 }
 
 .info-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
     padding: 12px;
-    border-radius: 10px;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    font-size: 13px;
+    border-radius: 9px;
+    font-size: 12px;
     line-height: 1.6;
+    margin: 12px 0;
+}
+
+.success-box {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    padding: 12px;
+    border-radius: 9px;
+    font-size: 13px;
     margin-bottom: 12px;
 }
 
-.info-blue {
-    background: #eff6ff;
-    border-color: #bfdbfe;
-}
-
-.info-green {
-    background: #f0fdf4;
-    border-color: #bbf7d0;
-}
-
-.info-yellow {
-    background: #fffbeb;
-    border-color: #fde68a;
+.error-box {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 12px;
+    border-radius: 9px;
+    font-size: 13px;
+    margin-bottom: 12px;
 }
 
 .hidden {
     display: none !important;
 }
 
-.employee-area {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 12px;
-}
-
-.employee-area-header {
+.employee-result {
+    border: 1px solid #e5e5e5;
     padding: 10px;
-    background: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
+    border-radius: 9px;
+    margin-top: 7px;
+    background: white;
 }
 
-.employee-list {
-    max-height: 320px;
+.employee-result strong {
+    font-size: 13px;
+    display: block;
+}
+
+.employee-result small {
+    display: block;
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.employee-result button {
+    margin-top: 8px;
+}
+
+.selected-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.target-list {
+    max-height: 300px;
     overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    margin-top: 8px;
 }
 
-.employee-item {
+.target-item {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 10px;
-    padding: 11px;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
 }
 
-.employee-item:last-child {
+.target-item:last-child {
     border-bottom: none;
 }
 
-.employee-item input {
+.target-item input {
     width: 18px;
     height: 18px;
-    margin: 2px 0 0;
     flex-shrink: 0;
 }
 
-.employee-info {
+.target-item span {
     flex: 1;
-    min-width: 0;
 }
 
-.employee-name {
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 1.4;
-}
-
-.employee-detail {
-    font-size: 11px;
+.target-item small {
+    display: block;
     color: #666;
+    font-size: 11px;
     margin-top: 3px;
-    line-height: 1.5;
 }
 
-.selected-info {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-bottom: 10px;
-}
-
-.assignment-item {
-    border: 1px solid #e5e7eb;
+.list-card {
+    border: 1px solid #e5e5e5;
     border-radius: 11px;
     padding: 13px;
     margin-bottom: 10px;
     background: white;
 }
 
-.assignment-title {
+.list-name {
     font-size: 15px;
     font-weight: bold;
-    margin-bottom: 6px;
-}
-
-.assignment-detail {
-    font-size: 12px;
-    color: #555;
-    line-height: 1.7;
-}
-
-.badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: bold;
-    margin-top: 7px;
-}
-
-.badge-active {
-    color: #166534;
-    background: #dcfce7;
-}
-
-.badge-revoked {
-    color: #991b1b;
-    background: #fee2e2;
-}
-
-.assignment-actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 11px;
-}
-
-.status {
-    padding: 11px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-bottom: 12px;
-    display: none;
     line-height: 1.5;
 }
 
-.status.success {
-    display: block;
+.list-detail {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.7;
+    margin-top: 6px;
+}
+
+.status {
+    display: inline-block;
+    border-radius: 30px;
+    padding: 5px 9px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.status-aktif {
     background: #dcfce7;
     color: #166534;
 }
 
-.status.error {
-    display: block;
+.status-dicabut {
     background: #fee2e2;
     color: #991b1b;
 }
 
-.status.loading {
-    display: block;
-    background: #fef3c7;
-    color: #92400e;
+.status-nonaktif {
+    background: #eee;
+    color: #555;
 }
 
-.counter {
-    font-size: 12px;
-    color: #666;
-    margin: 8px 0;
+.empty {
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+    padding: 22px 10px;
+}
+
+.loading {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+    font-size: 13px;
 }
 
 hr {
@@ -313,25 +346,38 @@ hr {
     margin: 14px 0;
 }
 
-.empty {
-    text-align: center;
-    color: #777;
-    font-size: 13px;
-    padding: 25px 10px;
-}
-
-.top-actions {
+.search-row {
     display: flex;
-    justify-content: space-between;
     gap: 8px;
-    align-items: center;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
 }
 
-@media(min-width:650px) {
-    .grid {
-        grid-template-columns: 1fr 1fr;
+.search-row input {
+    flex: 1;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 14px;
+    }
+
+    .header-title {
+        font-size: 20px;
+    }
+
+    .summary-number {
+        font-size: 20px;
+    }
+
+    .summary-label {
+        font-size: 10px;
+    }
+
+    .button-row button {
+        flex: 1;
     }
 }
 </style>
@@ -340,122 +386,129 @@ hr {
 <body>
 
 <header>
-    <h1>Penugasan & Hak Akses</h1>
-    <p>Pengelolaan petugas, jenis tugas, dan karyawan yang menjadi tanggung jawabnya.</p>
+    <div class="header-inner">
+        <div class="header-title">📋 Pengolahan Penugasan</div>
+        <div class="header-subtitle">
+            WAINI - Wadah Informasi Internal Divisi Terminal Khusus
+        </div>
+        <div class="header-info" id="infoPengguna">
+            Memeriksa akun...
+        </div>
+    </div>
 </header>
 
 <div class="container">
 
-    <div id="statusGlobal" class="status"></div>
+    <div id="pesanGlobal"></div>
 
     <!-- RINGKASAN -->
-    <div class="card">
-        <h2>Ringkasan Penugasan</h2>
+    <div class="summary">
+        <div class="summary-card">
+            <div class="summary-number" id="jumlahAktif">0</div>
+            <div class="summary-label">Penugasan Aktif</div>
+        </div>
 
-        <div class="grid">
-            <div class="info-box">
-                <strong>Penugasan Aktif</strong><br>
-                <span id="jumlahAktif">0</span>
-            </div>
+        <div class="summary-card">
+            <div class="summary-number" id="jumlahDicabut">0</div>
+            <div class="summary-label">Dicabut</div>
+        </div>
 
-            <div class="info-box info-blue">
-                <strong>Penugasan Dicabut</strong><br>
-                <span id="jumlahDicabut">0</span>
-            </div>
-
-            <div class="info-box info-green">
-                <strong>Jumlah Petugas</strong><br>
-                <span id="jumlahPetugas">0</span>
-            </div>
-
-            <div class="info-box info-yellow">
-                <strong>Jumlah Karyawan</strong><br>
-                <span id="jumlahKaryawan">0</span>
-            </div>
+        <div class="summary-card">
+            <div class="summary-number" id="jumlahKaryawan">0</div>
+            <div class="summary-label">Data Karyawan</div>
         </div>
     </div>
 
     <!-- FORM PENUGASAN -->
     <div class="card">
-        <h2 id="judulForm">Buat Penugasan Baru</h2>
-
-        <div id="infoEdit" class="info-box info-yellow hidden">
-            Anda sedang mengedit penugasan. Perubahan akan disimpan pada penugasan yang sama.
+        <div class="card-title" id="judulForm">
+            ➕ Buat Penugasan Baru
         </div>
 
-        <label>Nama / Jenis Tugas</label>
-        <input type="text" id="namaTugas"
-            placeholder="Contoh: Verifikator Cuti">
-
-        <label>Petugas yang Ditunjuk</label>
-        <input type="text" id="cariPetugas"
-            placeholder="Cari petugas berdasarkan NIK atau nama...">
-
-        <div id="hasilPetugas" class="employee-area hidden">
-            <div class="employee-list" id="daftarPetugas"></div>
+        <div id="peringatanAturan" class="info-box">
+            Pengelolaan penugasan dilakukan oleh Super Admin.
+            Setiap penugasan memiliki pemegang tugas dan target
+            karyawan masing-masing.
         </div>
 
-        <div id="petugasTerpilih" class="selected-info hidden"></div>
+        <input type="hidden" id="editId">
 
-        <label>Cakupan Karyawan yang Ditangani</label>
+        <label>Nama Tugas / Jabatan Penugasan</label>
+        <input
+            type="text"
+            id="namaTugas"
+            placeholder="Contoh: Verifikator Cuti"
+        >
 
-        <select id="modeTarget">
-            <option value="nik">Karyawan dipilih satu per satu</option>
-            <option value="departemen">Seluruh karyawan departemen tertentu</option>
-            <option value="semua">Seluruh karyawan</option>
+        <label>Pemegang Tugas</label>
+        <input
+            type="text"
+            id="cariPemegang"
+            placeholder="Cari nama atau NIK pemegang tugas..."
+            autocomplete="off"
+        >
+
+        <div id="hasilPemegang"></div>
+
+        <div id="pemegangTerpilih" class="selected-box hidden"></div>
+
+        <input type="hidden" id="pemegangNik">
+        <input type="hidden" id="pemegangNama">
+
+        <label>Target Penugasan</label>
+        <select id="targetMode">
+            <option value="semua">Semua Karyawan</option>
+            <option value="departemen">Departemen Tertentu</option>
+            <option value="nik">Karyawan yang Dipilih</option>
         </select>
 
-        <div id="areaDepartemen" class="hidden">
-            <label>Departemen Target</label>
-            <select id="departemenTarget">
-                <option value="">Pilih Departemen</option>
+        <div id="targetDepartemenBox" class="hidden">
+            <label>Pilih Departemen</label>
+            <select id="targetDepartemen">
+                <option value="">-- Pilih Departemen --</option>
+                <option value="Operasional Pelabuhan">Operasional Pelabuhan</option>
+                <option value="Kendaraan Bergerak">Kendaraan Bergerak</option>
+                <option value="Safety & Technology">Safety & Technology</option>
             </select>
         </div>
 
-        <div id="areaTargetNik">
+        <div id="targetNikBox" class="hidden">
             <label>Cari Karyawan Target</label>
-            <input type="text" id="cariTarget"
-                placeholder="Cari NIK atau nama karyawan...">
+            <input
+                type="text"
+                id="cariTarget"
+                placeholder="Masukkan nama atau NIK..."
+            >
 
-            <label>Filter Departemen</label>
-            <select id="filterDepartemen">
-                <option value="">Semua Departemen</option>
-            </select>
+            <div class="button-row">
+                <button type="button" class="btn-secondary btn-small"
+                    id="pilihSemuaTarget">
+                    Pilih Semua Hasil
+                </button>
 
-            <div class="employee-area">
-                <div class="employee-area-header">
-                    <div class="button-row">
-                        <button type="button" class="btn-secondary btn-small"
-                            id="pilihSemua">
-                            Pilih Semua Hasil
-                        </button>
-
-                        <button type="button" class="btn-secondary btn-small"
-                            id="hapusPilihan">
-                            Hapus Pilihan
-                        </button>
-                    </div>
-
-                    <div class="counter" id="counterTarget">
-                        0 karyawan ditampilkan
-                    </div>
-                </div>
-
-                <div class="employee-list" id="daftarTarget"></div>
+                <button type="button" class="btn-secondary btn-small"
+                    id="hapusSemuaTarget">
+                    Hapus Pilihan
+                </button>
             </div>
 
-            <div id="infoTargetTerpilih" class="selected-info">
-                0 karyawan dipilih
+            <div id="hasilTarget" class="target-list"></div>
+
+            <div class="selected-box">
+                Target dipilih:
+                <strong id="jumlahTargetDipilih">0</strong> karyawan
             </div>
         </div>
 
-        <label>Keterangan Penugasan</label>
-        <textarea id="keterangan"
-            placeholder="Keterangan tambahan, tugas khusus, atau batasan..."></textarea>
+        <label>Keterangan (Opsional)</label>
+        <textarea
+            id="keterangan"
+            placeholder="Keterangan penugasan..."
+        ></textarea>
 
         <div class="button-row">
             <button type="button" class="btn-primary" id="btnSimpan">
-                Simpan Penugasan
+                💾 Simpan Penugasan
             </button>
 
             <button type="button" class="btn-secondary hidden" id="btnBatalEdit">
@@ -466,42 +519,40 @@ hr {
 
     <!-- DAFTAR PENUGASAN -->
     <div class="card">
-        <h2>Daftar Penugasan</h2>
+        <div class="card-title">📑 Daftar Penugasan</div>
 
-        <label>Cari Penugasan</label>
-        <input type="text" id="cariPenugasan"
-            placeholder="Cari nama petugas, tugas, atau NIK...">
+        <input
+            type="text"
+            id="cariPenugasan"
+            placeholder="Cari tugas, pemegang, target..."
+        >
 
-        <label>Filter Status</label>
-        <select id="filterStatus">
-            <option value="aktif">Penugasan Aktif</option>
-            <option value="semua">Semua Penugasan</option>
-            <option value="dicabut">Penugasan Dicabut</option>
-        </select>
-
-        <div id="daftarPenugasan"></div>
+        <div id="daftarPenugasan" class="loading">
+            Memuat penugasan...
+        </div>
     </div>
 
     <!-- RIWAYAT -->
     <div class="card">
-        <h2>Riwayat Perubahan Penugasan</h2>
+        <div class="card-title">🕘 Riwayat Penugasan Terbaru</div>
 
-        <label>Cari Riwayat</label>
-        <input type="text" id="cariRiwayat"
-            placeholder="Cari petugas, NIK, atau jenis tugas...">
-
-        <div class="counter">
-            Riwayat yang dimuat: maksimal 5 data terbaru
+        <div class="info-box">
+            Menampilkan maksimal 5 riwayat terbaru untuk mempercepat loading.
         </div>
 
-        <div id="daftarRiwayat"></div>
+        <div id="daftarRiwayat" class="loading">
+            Memuat riwayat...
+        </div>
     </div>
 
 </div>
 
 <script type="module">
 
-import { auth, db } from "./firebase.js";
+import {
+    auth,
+    db
+} from "./firebase.js";
 
 import {
     onAuthStateChanged
@@ -517,73 +568,40 @@ import {
     serverTimestamp,
     query,
     orderBy,
-    limit,
-    writeBatch
+    limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-/* =========================================
-   VARIABEL
-========================================= */
-
-let userLogin = null;
-let dataPenggunaLogin = null;
+// ======================================================
+// VARIABEL GLOBAL
+// ======================================================
 
 let semuaKaryawan = [];
 let semuaPenugasan = [];
-let semuaRiwayat = [];
 
-let petugasTerpilih = null;
+let pemegangTerpilih = null;
 let targetTerpilih = new Set();
 
-let modeEdit = false;
-let idEdit = null;
-let dataEdit = null;
+let penggunaLogin = null;
+let uidLogin = null;
 
 let sedangMenyimpan = false;
 
 
-/* =========================================
-   ELEMEN
-========================================= */
+// ======================================================
+// ELEMENT
+// ======================================================
 
-const statusGlobal = document.getElementById("statusGlobal");
-
-const namaTugas = document.getElementById("namaTugas");
-const cariPetugas = document.getElementById("cariPetugas");
-const hasilPetugas = document.getElementById("hasilPetugas");
-const daftarPetugas = document.getElementById("daftarPetugas");
-const petugasTerpilihBox = document.getElementById("petugasTerpilih");
-
-const modeTarget = document.getElementById("modeTarget");
-const areaDepartemen = document.getElementById("areaDepartemen");
-const departemenTarget = document.getElementById("departemenTarget");
-
-const areaTargetNik = document.getElementById("areaTargetNik");
-const cariTarget = document.getElementById("cariTarget");
-const filterDepartemen = document.getElementById("filterDepartemen");
-const daftarTarget = document.getElementById("daftarTarget");
-const counterTarget = document.getElementById("counterTarget");
-const infoTargetTerpilih = document.getElementById("infoTargetTerpilih");
-
-const keterangan = document.getElementById("keterangan");
-
-const btnSimpan = document.getElementById("btnSimpan");
-const btnBatalEdit = document.getElementById("btnBatalEdit");
-const judulForm = document.getElementById("judulForm");
-const infoEdit = document.getElementById("infoEdit");
-
-const daftarPenugasan = document.getElementById("daftarPenugasan");
-const cariPenugasan = document.getElementById("cariPenugasan");
-const filterStatus = document.getElementById("filterStatus");
-
-const daftarRiwayat = document.getElementById("daftarRiwayat");
-const cariRiwayat = document.getElementById("cariRiwayat");
+const el = id => document.getElementById(id);
 
 
-/* =========================================
-   UTILITAS
-========================================= */
+// ======================================================
+// FUNGSI UMUM
+// ======================================================
+
+function normalisasi(value) {
+    return String(value ?? "").trim().toLowerCase();
+}
 
 function escapeHTML(value) {
     return String(value ?? "")
@@ -594,162 +612,130 @@ function escapeHTML(value) {
         .replaceAll("'", "&#039;");
 }
 
-function normalisasi(value) {
-    return String(value ?? "").toLowerCase().trim();
+function getNik(data) {
+    return String(
+        data.nik ??
+        data.NIK ??
+        data.nomor_induk ??
+        ""
+    ).trim();
+}
+
+function getNama(data) {
+    return String(
+        data.nama ??
+        data.Nama ??
+        data.name ??
+        ""
+    ).trim();
+}
+
+function getDepartemen(data) {
+    return String(
+        data.departemen ??
+        data.department ??
+        ""
+    ).trim();
+}
+
+function getDivisi(data) {
+    return String(
+        data.divisi ??
+        ""
+    ).trim();
 }
 
 function tanggal(value) {
     if (!value) return "-";
 
     try {
-        let d = value.toDate ? value.toDate() : new Date(value);
+        let d;
+
+        if (value.toDate) {
+            d = value.toDate();
+        } else {
+            d = new Date(value);
+        }
 
         if (isNaN(d.getTime())) return "-";
 
         return d.toLocaleString("id-ID", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
+            dateStyle: "short",
+            timeStyle: "short"
         });
-
     } catch {
         return "-";
     }
 }
 
-function tampilStatus(pesan, jenis = "loading") {
-    statusGlobal.className = "status " + jenis;
-    statusGlobal.textContent = pesan;
-    statusGlobal.style.display = "block";
+function waktuData(data) {
+    const t =
+        data.updatedAt ||
+        data.createdAt ||
+        data.waktu;
+
+    if (!t) return 0;
+
+    if (t.toMillis) return t.toMillis();
+
+    const d = new Date(t);
+
+    return isNaN(d.getTime()) ? 0 : d.getTime();
 }
 
-function sembunyikanStatus() {
-    statusGlobal.style.display = "none";
+function tampilPesan(pesan, tipe = "info") {
+    const warna = tipe === "error"
+        ? "error-box"
+        : tipe === "success"
+            ? "success-box"
+            : "info-box";
+
+    el("pesanGlobal").innerHTML = `
+        <div class="${warna}">
+            ${escapeHTML(pesan)}
+        </div>
+    `;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
-function nikKaryawan(k) {
-    return String(k.nik || k.id || "");
+function hapusPesan() {
+    el("pesanGlobal").innerHTML = "";
 }
 
-function namaKaryawan(k) {
-    return String(k.nama || "");
+function statusLabel(status) {
+    return status === "aktif"
+        ? "AKTIF"
+        : "DICABUT";
 }
 
-function departemenKaryawan(k) {
-    return String(k.departemen || "");
-}
-
-function jabatanKaryawan(k) {
-    return String(k.jabatan || "");
-}
-
-function cariKaryawanNik(nik) {
-    return semuaKaryawan.find(k => nikKaryawan(k) === String(nik));
-}
-
-function namaDariNik(nik) {
-    const k = cariKaryawanNik(nik);
-    return k ? namaKaryawan(k) : "-";
-}
-
-function getPetugasNik(data) {
-    return String(
-        data.pemegang_tugas_nik ||
-        data.penerima_nik ||
-        data.petugas_nik ||
-        ""
-    );
-}
-
-function getPetugasNama(data) {
-    return String(
-        data.pemegang_tugas_nama ||
-        data.penerima_nama ||
-        data.petugas_nama ||
-        ""
-    );
-}
-
-function getNamaTugas(data) {
-    return String(data.nama_tugas || data.jenis_tugas || "");
-}
-
-function getTargetNik(data) {
-    return Array.isArray(data.target_nik)
-        ? data.target_nik.map(String)
-        : [];
-}
-
-function getStatus(data) {
-    return String(data.status || "aktif");
-}
-
-function getMode(data) {
-    return String(data.target_mode || "nik");
-}
-
-function getKeterangan(data) {
-    return String(data.keterangan || "");
-}
-
-
-/* =========================================
-   PERLUAS TARGET PENUGASAN
-   Mendukung:
-   - target NIK tertentu
-   - seluruh departemen
-   - seluruh karyawan
-========================================= */
-
-function perluasTarget(data) {
-
-    const mode = getMode(data);
-
-    if (mode === "semua") {
-        return semuaKaryawan.map(nikKaryawan).filter(Boolean);
+function targetLabel(data) {
+    if (data.target_mode === "semua") {
+        return "Semua Karyawan";
     }
 
-    if (mode === "departemen") {
-        const dep = String(data.target_departemen || "");
-
-        return semuaKaryawan
-            .filter(k => departemenKaryawan(k) === dep)
-            .map(nikKaryawan)
-            .filter(Boolean);
+    if (data.target_mode === "departemen") {
+        return data.target_departemen || "-";
     }
 
-    return getTargetNik(data);
+    if (data.target_mode === "nik") {
+        const jumlah = Array.isArray(data.target_nik)
+            ? data.target_nik.length
+            : 0;
+
+        return jumlah + " Karyawan Pilihan";
+    }
+
+    return "-";
 }
 
 
-function getTargetText(data) {
-
-    const mode = getMode(data);
-
-    if (mode === "semua") {
-        return "Semua Karyawan (" + semuaKaryawan.length + ")";
-    }
-
-    if (mode === "departemen") {
-
-        const jumlah = semuaKaryawan.filter(
-            k => departemenKaryawan(k) === data.target_departemen
-        ).length;
-
-        return "Departemen: " +
-            (data.target_departemen || "-") +
-            " (" + jumlah + " karyawan)";
-    }
-
-    return getTargetNik(data).length + " Karyawan";
-}
-
-
-/* =========================================
-   AUTH
-========================================= */
+// ======================================================
+// LOGIN & HAK AKSES
+// ======================================================
 
 onAuthStateChanged(auth, async user => {
 
@@ -758,24 +744,28 @@ onAuthStateChanged(auth, async user => {
         return;
     }
 
-    userLogin = user;
+    uidLogin = user.uid;
 
     try {
 
-        const snap = await getDoc(doc(db, "pengguna", user.uid));
+        const snapPengguna = await getDoc(
+            doc(db, "pengguna", user.uid)
+        );
 
-        if (!snap.exists()) {
-            tampilStatus("Data pengguna tidak ditemukan.", "error");
+        if (!snapPengguna.exists()) {
+            tampilPesan("Data pengguna tidak ditemukan.", "error");
             return;
         }
 
-        dataPenggunaLogin = snap.data();
+        penggunaLogin = snapPengguna.data();
 
-        if (
-            dataPenggunaLogin.status !== "aktif" ||
-            dataPenggunaLogin.role !== "super_admin"
-        ) {
-            tampilStatus(
+        if (penggunaLogin.status !== "aktif") {
+            tampilPesan("Akun Anda belum aktif.", "error");
+            return;
+        }
+
+        if (penggunaLogin.role !== "super_admin") {
+            tampilPesan(
                 "Halaman ini hanya dapat diakses Super Admin.",
                 "error"
             );
@@ -787,13 +777,17 @@ onAuthStateChanged(auth, async user => {
             return;
         }
 
+        el("infoPengguna").textContent =
+            "Login sebagai Super Admin: " +
+            (penggunaLogin.nama || penggunaLogin.nik || user.email || "");
+
         await muatSemuaData();
 
     } catch (error) {
 
         console.error(error);
 
-        tampilStatus(
+        tampilPesan(
             "Gagal memeriksa akun: " + error.message,
             "error"
         );
@@ -801,365 +795,274 @@ onAuthStateChanged(auth, async user => {
 });
 
 
-/* =========================================
-   LOAD DATA
-   RIWAYAT DIBATASI 5 DATA TERBARU
-========================================= */
+// ======================================================
+// MEMUAT DATA
+// ======================================================
 
 async function muatSemuaData() {
 
-    tampilStatus("Memuat data WAINI...", "loading");
+    el("daftarPenugasan").innerHTML =
+        '<div class="loading">Memuat data...</div>';
+
+    el("daftarRiwayat").innerHTML =
+        '<div class="loading">Memuat riwayat...</div>';
 
     try {
 
-        const qRiwayat = query(
-            collection(db, "riwayat_penugasan"),
-            orderBy("createdAt", "desc"),
-            limit(5)
+        // DATA KARYAWAN
+        const snapKaryawan = await getDocs(
+            collection(db, "karyawan")
         );
-
-        const [snapKaryawan, snapPenugasan, snapRiwayat] =
-            await Promise.all([
-                getDocs(collection(db, "karyawan")),
-                getDocs(collection(db, "penugasan")),
-                getDocs(qRiwayat)
-            ]);
 
         semuaKaryawan = snapKaryawan.docs.map(d => ({
             id: d.id,
             ...d.data()
         }));
 
+        // DATA PENUGASAN
+        const snapPenugasan = await getDocs(
+            collection(db, "penugasan")
+        );
+
         semuaPenugasan = snapPenugasan.docs.map(d => ({
             id: d.id,
             ...d.data()
         }));
 
-        semuaRiwayat = snapRiwayat.docs.map(d => ({
-            id: d.id,
-            ...d.data()
-        }));
-
-        semuaKaryawan.sort((a, b) =>
-            namaKaryawan(a).localeCompare(namaKaryawan(b), "id")
+        semuaPenugasan.sort((a, b) =>
+            waktuData(b) - waktuData(a)
         );
 
-        semuaPenugasan.sort((a, b) => {
-            const ta = a.updatedAt?.seconds || a.createdAt?.seconds || 0;
-            const tb = b.updatedAt?.seconds || b.createdAt?.seconds || 0;
-            return tb - ta;
-        });
+        el("jumlahKaryawan").textContent =
+            semuaKaryawan.length;
 
-        isiFilterDepartemen();
+        hitungRingkasan();
 
-        renderTarget();
-        renderPenugasan();
-        renderRiwayat();
-        renderRingkasan();
+        tampilkanPenugasan();
 
-        sembunyikanStatus();
+        await muatRiwayat();
 
     } catch (error) {
 
         console.error(error);
 
-        tampilStatus(
-            "Gagal memuat data. Periksa Rules Firestore. " +
-            error.message,
-            "error"
-        );
+        el("daftarPenugasan").innerHTML =
+            '<div class="error-box">Gagal memuat penugasan: ' +
+            escapeHTML(error.message) + '</div>';
+
+        el("daftarRiwayat").innerHTML =
+            '<div class="error-box">Gagal memuat riwayat.</div>';
     }
 }
 
 
-/* =========================================
-   DEPARTEMEN
-========================================= */
+// ======================================================
+// RINGKASAN
+// ======================================================
 
-function daftarDepartemen() {
+function hitungRingkasan() {
 
-    const hasil = new Set();
+    const aktif = semuaPenugasan.filter(
+        d => d.status === "aktif"
+    ).length;
 
-    semuaKaryawan.forEach(k => {
-        if (departemenKaryawan(k)) {
-            hasil.add(departemenKaryawan(k));
-        }
-    });
+    const dicabut = semuaPenugasan.filter(
+        d => d.status === "dicabut"
+    ).length;
 
-    return [...hasil].sort((a, b) => a.localeCompare(b, "id"));
-}
-
-function isiFilterDepartemen() {
-
-    const daftar = daftarDepartemen();
-
-    filterDepartemen.innerHTML =
-        '<option value="">Semua Departemen</option>';
-
-    departemenTarget.innerHTML =
-        '<option value="">Pilih Departemen</option>';
-
-    daftar.forEach(dep => {
-
-        const opt1 = document.createElement("option");
-        opt1.value = dep;
-        opt1.textContent = dep;
-        filterDepartemen.appendChild(opt1);
-
-        const opt2 = document.createElement("option");
-        opt2.value = dep;
-        opt2.textContent = dep;
-        departemenTarget.appendChild(opt2);
-    });
+    el("jumlahAktif").textContent = aktif;
+    el("jumlahDicabut").textContent = dicabut;
 }
 
 
-/* =========================================
-   PETUGAS
-========================================= */
+// ======================================================
+// PENCARIAN PEMEGANG TUGAS
+// ======================================================
 
-cariPetugas.addEventListener("input", renderPetugas);
+el("cariPemegang").addEventListener("input", function() {
 
-function renderPetugas() {
+    const kata = normalisasi(this.value);
 
-    const keyword = normalisasi(cariPetugas.value);
+    pemegangTerpilih = null;
 
-    if (!keyword) {
-        hasilPetugas.classList.add("hidden");
-        daftarPetugas.innerHTML = "";
+    el("pemegangNik").value = "";
+    el("pemegangNama").value = "";
+
+    el("pemegangTerpilih").classList.add("hidden");
+
+    if (!kata) {
+        el("hasilPemegang").innerHTML = "";
         return;
     }
 
     const hasil = semuaKaryawan.filter(k => {
 
-        const teks = normalisasi(
-            nikKaryawan(k) + " " +
-            namaKaryawan(k) + " " +
-            departemenKaryawan(k) + " " +
-            jabatanKaryawan(k)
-        );
+        const nik = normalisasi(getNik(k));
+        const nama = normalisasi(getNama(k));
 
-        return teks.includes(keyword);
+        return nik.includes(kata) || nama.includes(kata);
 
-    }).slice(0, 30);
-
-    hasilPetugas.classList.remove("hidden");
+    }).slice(0, 15);
 
     if (!hasil.length) {
-        daftarPetugas.innerHTML =
-            '<div class="empty">Petugas tidak ditemukan.</div>';
-        return;
-    }
 
-    daftarPetugas.innerHTML = hasil.map(k => {
-
-        const nik = nikKaryawan(k);
-
-        return `
-            <div class="employee-item">
-                <div class="employee-info">
-                    <div class="employee-name">
-                        ${escapeHTML(namaKaryawan(k))}
-                    </div>
-
-                    <div class="employee-detail">
-                        NIK: ${escapeHTML(nik)}<br>
-                        ${escapeHTML(departemenKaryawan(k))}<br>
-                        ${escapeHTML(jabatanKaryawan(k))}
-                    </div>
-
-                    <button
-                        type="button"
-                        class="btn-primary btn-small"
-                        style="margin-top:8px"
-                        data-pilih-petugas="${escapeHTML(nik)}"
-                    >
-                        Pilih Petugas
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join("");
-}
-
-daftarPetugas.addEventListener("click", event => {
-
-    const btn = event.target.closest("[data-pilih-petugas]");
-
-    if (!btn) return;
-
-    const nik = btn.dataset.pilihPetugas;
-
-    petugasTerpilih = cariKaryawanNik(nik);
-
-    renderPetugasTerpilih();
-
-    hasilPetugas.classList.add("hidden");
-    cariPetugas.value = "";
-});
-
-
-function renderPetugasTerpilih() {
-
-    if (!petugasTerpilih) {
-        petugasTerpilihBox.classList.add("hidden");
-        petugasTerpilihBox.innerHTML = "";
-        return;
-    }
-
-    petugasTerpilihBox.classList.remove("hidden");
-
-    petugasTerpilihBox.innerHTML = `
-        <strong>Petugas Terpilih</strong><br>
-        ${escapeHTML(namaKaryawan(petugasTerpilih))}<br>
-        <small>
-            NIK: ${escapeHTML(nikKaryawan(petugasTerpilih))}<br>
-            ${escapeHTML(departemenKaryawan(petugasTerpilih))}
-        </small>
-
-        <br><br>
-
-        <button
-            type="button"
-            class="btn-red btn-small"
-            id="btnHapusPetugas"
-        >
-            Ganti Petugas
-        </button>
-    `;
-}
-
-petugasTerpilihBox.addEventListener("click", event => {
-
-    if (event.target.id === "btnHapusPetugas") {
-
-        petugasTerpilih = null;
-
-        renderPetugasTerpilih();
-
-        cariPetugas.focus();
-    }
-});
-
-
-/* =========================================
-   MODE TARGET
-========================================= */
-
-modeTarget.addEventListener("change", aturModeTarget);
-
-function aturModeTarget() {
-
-    const mode = modeTarget.value;
-
-    areaDepartemen.classList.toggle("hidden", mode !== "departemen");
-
-    areaTargetNik.classList.toggle("hidden", mode !== "nik");
-
-    if (mode !== "nik") {
-        targetTerpilih.clear();
-        renderTarget();
-    }
-}
-
-
-/* =========================================
-   TARGET KARYAWAN
-========================================= */
-
-cariTarget.addEventListener("input", renderTarget);
-filterDepartemen.addEventListener("change", renderTarget);
-
-function karyawanTargetTerfilter() {
-
-    const keyword = normalisasi(cariTarget.value);
-    const departemen = filterDepartemen.value;
-
-    return semuaKaryawan.filter(k => {
-
-        if (
-            departemen &&
-            departemenKaryawan(k) !== departemen
-        ) {
-            return false;
-        }
-
-        if (!keyword) return true;
-
-        const teks = normalisasi(
-            nikKaryawan(k) + " " +
-            namaKaryawan(k) + " " +
-            departemenKaryawan(k) + " " +
-            jabatanKaryawan(k)
-        );
-
-        return teks.includes(keyword);
-    });
-}
-
-function renderTarget() {
-
-    const mode = modeTarget.value;
-
-    if (mode !== "nik") {
-
-        daftarTarget.innerHTML = "";
-        counterTarget.textContent = "";
-
-        infoTargetTerpilih.textContent =
-            mode === "semua"
-                ? "Target: seluruh karyawan."
-                : "Target: seluruh karyawan departemen yang dipilih.";
-
-        return;
-    }
-
-    const hasil = karyawanTargetTerfilter();
-
-    counterTarget.textContent =
-        hasil.length + " karyawan ditampilkan";
-
-    infoTargetTerpilih.textContent =
-        targetTerpilih.size + " karyawan dipilih";
-
-    if (!hasil.length) {
-        daftarTarget.innerHTML =
+        el("hasilPemegang").innerHTML =
             '<div class="empty">Karyawan tidak ditemukan.</div>';
+
         return;
     }
 
-    daftarTarget.innerHTML = hasil.map(k => {
+    el("hasilPemegang").innerHTML = hasil.map(k => `
+        <div class="employee-result">
+            <strong>${escapeHTML(getNama(k))}</strong>
 
-        const nik = nikKaryawan(k);
+            <small>
+                NIK: ${escapeHTML(getNik(k))}
+                <br>
+                ${escapeHTML(getDepartemen(k))}
+            </small>
+
+            <button
+                class="btn-primary btn-small"
+                data-pilih-pemegang="${escapeHTML(getNik(k))}">
+                Pilih Pemegang
+            </button>
+        </div>
+    `).join("");
+
+});
+
+el("hasilPemegang").addEventListener("click", function(e) {
+
+    const tombol = e.target.closest("[data-pilih-pemegang]");
+
+    if (!tombol) return;
+
+    const nik = tombol.dataset.pilihPemegang;
+
+    const k = semuaKaryawan.find(
+        d => getNik(d) === nik
+    );
+
+    if (!k) return;
+
+    pemegangTerpilih = k;
+
+    el("pemegangNik").value = getNik(k);
+    el("pemegangNama").value = getNama(k);
+
+    el("cariPemegang").value =
+        getNama(k) + " - " + getNik(k);
+
+    el("hasilPemegang").innerHTML = "";
+
+    el("pemegangTerpilih").innerHTML = `
+        <strong>Pemegang tugas:</strong><br>
+        ${escapeHTML(getNama(k))}<br>
+        NIK: ${escapeHTML(getNik(k))}<br>
+        Departemen: ${escapeHTML(getDepartemen(k))}
+    `;
+
+    el("pemegangTerpilih").classList.remove("hidden");
+});
+
+
+// ======================================================
+// MODE TARGET
+// ======================================================
+
+el("targetMode").addEventListener("change", function() {
+
+    el("targetDepartemenBox").classList.toggle(
+        "hidden",
+        this.value !== "departemen"
+    );
+
+    el("targetNikBox").classList.toggle(
+        "hidden",
+        this.value !== "nik"
+    );
+
+    if (this.value !== "nik") {
+        targetTerpilih.clear();
+        el("jumlahTargetDipilih").textContent = "0";
+        el("hasilTarget").innerHTML = "";
+    }
+
+});
+
+
+// ======================================================
+// PENCARIAN TARGET
+// ======================================================
+
+el("cariTarget").addEventListener("input", tampilkanTarget);
+
+function tampilkanTarget() {
+
+    const kata = normalisasi(el("cariTarget").value);
+
+    let hasil = semuaKaryawan;
+
+    if (kata) {
+
+        hasil = hasil.filter(k => {
+
+            return normalisasi(getNik(k)).includes(kata)
+                || normalisasi(getNama(k)).includes(kata)
+                || normalisasi(getDepartemen(k)).includes(kata);
+
+        });
+    }
+
+    hasil = hasil.slice(0, 100);
+
+    if (!hasil.length) {
+
+        el("hasilTarget").innerHTML =
+            '<div class="empty">Karyawan tidak ditemukan.</div>';
+
+        return;
+    }
+
+    el("hasilTarget").innerHTML = hasil.map(k => {
+
+        const nik = getNik(k);
         const checked = targetTerpilih.has(nik);
 
         return `
-            <label class="employee-item">
+            <label class="target-item">
                 <input
                     type="checkbox"
                     data-target-nik="${escapeHTML(nik)}"
                     ${checked ? "checked" : ""}
                 >
 
-                <div class="employee-info">
-                    <div class="employee-name">
-                        ${escapeHTML(namaKaryawan(k))}
-                    </div>
+                <span>
+                    <strong>${escapeHTML(getNama(k))}</strong>
 
-                    <div class="employee-detail">
-                        NIK: ${escapeHTML(nik)}<br>
-                        Departemen: ${escapeHTML(departemenKaryawan(k))}<br>
-                        Jabatan: ${escapeHTML(jabatanKaryawan(k))}
-                    </div>
-                </div>
+                    <small>
+                        NIK: ${escapeHTML(nik)}
+                        | ${escapeHTML(getDepartemen(k))}
+                    </small>
+                </span>
             </label>
         `;
+
     }).join("");
+
+    el("jumlahTargetDipilih").textContent =
+        targetTerpilih.size;
 }
 
-daftarTarget.addEventListener("change", event => {
 
-    const checkbox = event.target.closest("[data-target-nik]");
+// ======================================================
+// CHECKBOX TARGET
+// ======================================================
+
+el("hasilTarget").addEventListener("change", function(e) {
+
+    const checkbox = e.target.closest("[data-target-nik]");
 
     if (!checkbox) return;
 
@@ -1171,528 +1074,212 @@ daftarTarget.addEventListener("change", event => {
         targetTerpilih.delete(nik);
     }
 
-    renderTarget();
+    el("jumlahTargetDipilih").textContent =
+        targetTerpilih.size;
 });
 
-document.getElementById("pilihSemua").addEventListener("click", () => {
 
-    const hasil = karyawanTargetTerfilter();
+// ======================================================
+// PILIH SEMUA TARGET YANG DITAMPILKAN
+// ======================================================
+
+el("pilihSemuaTarget").addEventListener("click", function() {
+
+    const kata = normalisasi(el("cariTarget").value);
+
+    let hasil = semuaKaryawan.filter(k => {
+
+        if (!kata) return true;
+
+        return normalisasi(getNik(k)).includes(kata)
+            || normalisasi(getNama(k)).includes(kata)
+            || normalisasi(getDepartemen(k)).includes(kata);
+
+    }).slice(0, 100);
 
     hasil.forEach(k => {
-        targetTerpilih.add(nikKaryawan(k));
+        targetTerpilih.add(getNik(k));
     });
 
-    renderTarget();
+    tampilkanTarget();
 });
 
-document.getElementById("hapusPilihan").addEventListener("click", () => {
+
+// ======================================================
+// HAPUS PILIHAN TARGET
+// ======================================================
+
+el("hapusSemuaTarget").addEventListener("click", function() {
 
     targetTerpilih.clear();
 
-    renderTarget();
+    tampilkanTarget();
 });
 
 
-/* =========================================
-   SISTEM AKSES KARYAWAN
-   ID DOKUMEN:
-   NIK_PETUGAS__NIK_TARGET
+// ======================================================
+// MENYUSUN DATA TARGET
+// ======================================================
 
-   Satu dokumen akses untuk satu pasangan
-   petugas dan target.
+function ambilDataTarget() {
 
-   Jika satu pasangan memiliki beberapa
-   penugasan, akses tetap aktif selama
-   minimal satu penugasan aktif.
-========================================= */
+    const mode = el("targetMode").value;
 
-function idAksesKaryawan(petugasNik, targetNik) {
-    return String(petugasNik) + "__" + String(targetNik);
-}
+    if (mode === "semua") {
 
-
-function daftarPasanganDariPenugasan(data) {
-
-    const hasil = [];
-
-    const petugasNik = getPetugasNik(data);
-
-    if (!petugasNik) return hasil;
-
-    const targets = perluasTarget(data);
-
-    targets.forEach(targetNik => {
-
-        if (!targetNik) return;
-
-        hasil.push({
-            petugas_nik: petugasNik,
-            target_nik: String(targetNik)
-        });
-    });
-
-    return hasil;
-}
-
-
-function pasanganKey(petugasNik, targetNik) {
-    return petugasNik + "__" + targetNik;
-}
-
-
-function kumpulkanPasangan(data) {
-
-    const set = new Set();
-
-    if (!data) return set;
-
-    daftarPasanganDariPenugasan(data).forEach(p => {
-        set.add(pasanganKey(p.petugas_nik, p.target_nik));
-    });
-
-    return set;
-}
-
-
-/*
-Mengambil pasangan dari penugasan lama
-dan penugasan baru, sehingga target yang
-dihapus juga ikut diperbarui izinnya.
-*/
-
-function pasanganTerpengaruh(dataLama, dataBaru) {
-
-    const hasil = new Set();
-
-    kumpulkanPasangan(dataLama).forEach(x => hasil.add(x));
-    kumpulkanPasangan(dataBaru).forEach(x => hasil.add(x));
-
-    return hasil;
-}
-
-
-/*
-Memeriksa apakah pasangan petugas-target
-masih mempunyai penugasan aktif.
-
-Jika masih ada:
-    status akses = aktif
-
-Jika sudah tidak ada:
-    status akses = dicabut
-*/
-
-function penugasanAktifUntukPasangan(petugasNik, targetNik) {
-
-    return semuaPenugasan.filter(p => {
-
-        if (getStatus(p) !== "aktif") return false;
-
-        if (getPetugasNik(p) !== petugasNik) return false;
-
-        return perluasTarget(p).includes(targetNik);
-    });
-}
-
-
-/*
-Sinkronisasi dokumen akses_karyawan.
-
-Dokumen akses dibuat otomatis ketika
-penugasan dibuat.
-
-Dokumen akses dinonaktifkan ketika
-semua penugasan pasangan dicabut.
-
-Dokumen tidak dihapus agar rekam akses
-tetap tersedia.
-*/
-
-async function sinkronkanAksesPasangan(pasanganSet) {
-
-    if (!pasanganSet || pasanganSet.size === 0) {
-        return;
+        return {
+            target_mode: "semua",
+            target_departemen: "",
+            target_nik: []
+        };
     }
 
-    tampilStatus(
-        "Memperbarui izin akses karyawan...",
-        "loading"
-    );
+    if (mode === "departemen") {
 
-    const daftarPerubahan = [];
+        const departemen = el("targetDepartemen").value;
 
-    for (const key of pasanganSet) {
-
-        const bagian = key.split("__");
-
-        const petugasNik = bagian[0];
-        const targetNik = bagian.slice(1).join("__");
-
-        if (!petugasNik || !targetNik) continue;
-
-        const id = idAksesKaryawan(petugasNik, targetNik);
-
-        const ref = doc(db, "akses_karyawan", id);
-
-        const snap = await getDoc(ref);
-
-        const tugasAktif = penugasanAktifUntukPasangan(
-            petugasNik,
-            targetNik
-        );
-
-        const masihAktif = tugasAktif.length > 0;
-
-        /*
-        Jika belum pernah ada dokumen akses
-        dan pasangan tidak memiliki tugas aktif,
-        tidak perlu membuat dokumen dicabut.
-        */
-
-        if (!snap.exists() && !masihAktif) {
-            continue;
+        if (!departemen) {
+            throw new Error("Silakan pilih departemen target.");
         }
 
-        let tugasTerpilih = tugasAktif[0] || null;
-
-        const dataAkses = {
-
-            petugas_nik: petugasNik,
-
-            target_nik: targetNik,
-
-            penugasan_id: tugasTerpilih
-                ? tugasTerpilih.id
-                : (snap.exists()
-                    ? snap.data().penugasan_id || ""
-                    : ""),
-
-            nama_tugas: tugasTerpilih
-                ? getNamaTugas(tugasTerpilih)
-                : (snap.exists()
-                    ? snap.data().nama_tugas || ""
-                    : ""),
-
-            status: masihAktif ? "aktif" : "dicabut",
-
-            updatedAt: serverTimestamp()
+        return {
+            target_mode: "departemen",
+            target_departemen: departemen,
+            target_nik: []
         };
-
-        daftarPerubahan.push({
-            ref,
-            data: dataAkses,
-            exists: snap.exists()
-        });
     }
 
-    /*
-    Firestore batch dibatasi 500 operasi.
-    Kita gunakan maksimal 400 per batch.
-    */
+    if (mode === "nik") {
 
-    const MAX_BATCH = 400;
+        if (targetTerpilih.size === 0) {
+            throw new Error("Silakan pilih karyawan target.");
+        }
 
-    for (let i = 0; i < daftarPerubahan.length; i += MAX_BATCH) {
-
-        const potongan = daftarPerubahan.slice(i, i + MAX_BATCH);
-
-        const batch = writeBatch(db);
-
-        potongan.forEach(item => {
-
-            batch.set(
-                item.ref,
-                item.data,
-                { merge: false }
-            );
-        });
-
-        await batch.commit();
+        return {
+            target_mode: "nik",
+            target_departemen: "",
+            target_nik: Array.from(targetTerpilih)
+        };
     }
+
+    throw new Error("Mode target tidak valid.");
 }
 
 
-/* =========================================
-   RIWAYAT AUDIT
-========================================= */
+// ======================================================
+// SIMPAN PENUGASAN
+// ======================================================
 
-async function catatRiwayat({
-    aksi,
-    penugasanId,
-    nikPetugas,
-    namaPetugas,
-    namaTugas,
-    detail
-}) {
-
-    await addDoc(collection(db, "riwayat_penugasan"), {
-
-        aksi: aksi,
-
-        penugasan_id: penugasanId || "",
-
-        pemegang_tugas_nik: nikPetugas || "",
-        pemegang_tugas_nama: namaPetugas || "",
-
-        nama_tugas: namaTugas || "",
-
-        detail: detail || "",
-
-        actor_uid: userLogin.uid,
-
-        actor_nik: dataPenggunaLogin?.nik || "",
-
-        actor_nama: dataPenggunaLogin?.nama || "",
-
-        waktu: serverTimestamp(),
-        createdAt: serverTimestamp()
-    });
-}
-
-
-/* =========================================
-   SIMPAN PENUGASAN
-========================================= */
-
-btnSimpan.addEventListener("click", simpanPenugasan);
+el("btnSimpan").addEventListener("click", simpanPenugasan);
 
 async function simpanPenugasan() {
 
     if (sedangMenyimpan) return;
 
-    const tugas = namaTugas.value.trim();
-
-    if (!tugas) {
-        tampilStatus("Nama tugas wajib diisi.", "error");
-        namaTugas.focus();
-        return;
-    }
-
-    if (!petugasTerpilih) {
-        tampilStatus(
-            "Silakan pilih petugas terlebih dahulu.",
-            "error"
-        );
-        cariPetugas.focus();
-        return;
-    }
-
-    const mode = modeTarget.value;
-
-    let targetNik = [];
-    let targetDep = "";
-
-    if (mode === "nik") {
-
-        targetNik = [...targetTerpilih];
-
-        if (!targetNik.length) {
-            tampilStatus(
-                "Pilih minimal satu karyawan target.",
-                "error"
-            );
-            return;
-        }
-
-    } else if (mode === "departemen") {
-
-        targetDep = departemenTarget.value;
-
-        if (!targetDep) {
-            tampilStatus(
-                "Pilih departemen target.",
-                "error"
-            );
-            return;
-        }
-
-        const jumlahTarget = semuaKaryawan.filter(
-            k => departemenKaryawan(k) === targetDep
-        ).length;
-
-        if (jumlahTarget === 0) {
-            tampilStatus(
-                "Departemen tersebut tidak memiliki karyawan.",
-                "error"
-            );
-            return;
-        }
-
-    } else if (mode === "semua") {
-
-        if (!semuaKaryawan.length) {
-            tampilStatus(
-                "Data karyawan belum tersedia.",
-                "error"
-            );
-            return;
-        }
-    }
-
-    sedangMenyimpan = true;
-    btnSimpan.disabled = true;
-
-    tampilStatus("Menyimpan penugasan...", "loading");
+    hapusPesan();
 
     try {
 
-        const nikPetugas = nikKaryawan(petugasTerpilih);
-        const namaPetugas = namaKaryawan(petugasTerpilih);
+        const namaTugas = el("namaTugas").value.trim();
+
+        const nikPemegang = el("pemegangNik").value.trim();
+        const namaPemegang = el("pemegangNama").value.trim();
+
+        const editId = el("editId").value.trim();
+
+        if (!namaTugas) {
+            throw new Error("Nama tugas wajib diisi.");
+        }
+
+        if (!nikPemegang || !namaPemegang) {
+            throw new Error("Silakan pilih pemegang tugas.");
+        }
+
+        const dataTarget = ambilDataTarget();
 
         const data = {
 
-            pemegang_tugas_nik: nikPetugas,
-            pemegang_tugas_nama: namaPetugas,
+            pemegang_tugas_nik: nikPemegang,
+            pemegang_tugas_nama: namaPemegang,
 
-            nama_tugas: tugas,
+            nama_tugas: namaTugas,
 
-            target_mode: mode,
+            ...dataTarget,
 
-            target_departemen: targetDep,
-
-            target_nik: targetNik,
-
-            keterangan: keterangan.value.trim(),
+            keterangan: el("keterangan").value.trim(),
 
             status: "aktif",
 
             updatedAt: serverTimestamp(),
-            updated_by: userLogin.uid,
 
-            updated_by_nik: dataPenggunaLogin?.nik || "",
-            updated_by_nama: dataPenggunaLogin?.nama || ""
+            updated_by: uidLogin,
+
+            updated_by_nik: penggunaLogin.nik || "",
+
+            updated_by_nama: penggunaLogin.nama || ""
         };
 
-        let penugasanId = "";
+        sedangMenyimpan = true;
 
-        let pasanganTerpengaruh = new Set();
+        el("btnSimpan").disabled = true;
 
-        if (modeEdit && idEdit) {
+        el("btnSimpan").textContent =
+            "Menyimpan...";
 
-            const sebelumnya = dataEdit;
+        let idPenugasan = "";
 
-            /*
-            Pasangan target lama perlu disinkronkan
-            karena sebagian mungkin tidak lagi
-            menjadi target penugasan.
-            */
+        let dataSebelumnya = null;
 
-            pasanganTerpengaruh = pasanganTerpengaruh(
-                sebelumnya,
-                data
-            );
+        if (editId) {
 
-            await updateDoc(
-                doc(db, "penugasan", idEdit),
-                data
-            );
+            const ref = doc(db, "penugasan", editId);
 
-            penugasanId = idEdit;
+            const snap = await getDoc(ref);
 
-            /*
-            Perbarui cache lokal agar proses
-            sinkronisasi menghitung data terbaru.
-            */
+            if (!snap.exists()) {
+                throw new Error("Data penugasan tidak ditemukan.");
+            }
 
-            semuaPenugasan = semuaPenugasan.map(p =>
-                p.id === idEdit
-                    ? { ...p, ...data }
-                    : p
-            );
+            dataSebelumnya = snap.data();
 
-            /*
-            Tambahkan pasangan target baru.
-            */
+            // Status tidak diubah saat edit biasa.
+            data.status = dataSebelumnya.status || "aktif";
 
-            kumpulkanPasangan(data).forEach(x =>
-                pasanganTerpengaruh.add(x)
-            );
+            await updateDoc(ref, data);
 
-            /*
-            Sinkronisasi izin akses.
-            */
+            idPenugasan = editId;
 
-            await sinkronkanAksesPasangan(
-                pasanganTerpengaruh
-            );
-
-            await catatRiwayat({
-
-                aksi: "edit",
-
-                penugasanId,
-
-                nikPetugas,
-
-                namaPetugas,
-
-                namaTugas: tugas,
-
-                detail:
-                    "Penugasan diperbarui. " +
-                    "Target: " + getTargetText(data) +
-                    ". Sebelumnya: " + getTargetText(sebelumnya)
-            });
-
-            tampilStatus(
-                "Penugasan dan izin akses berhasil diperbarui.",
-                "success"
+            await simpanRiwayat(
+                "edit",
+                idPenugasan,
+                dataSebelumnya,
+                data,
+                "Penugasan diperbarui"
             );
 
         } else {
 
             data.createdAt = serverTimestamp();
-            data.created_by = userLogin.uid;
-            data.created_by_nik = dataPenggunaLogin?.nik || "";
-            data.created_by_nama = dataPenggunaLogin?.nama || "";
 
-            const ref = await addDoc(
+            data.created_by = uidLogin;
+
+            data.created_by_nik = penggunaLogin.nik || "";
+
+            data.created_by_nama = penggunaLogin.nama || "";
+
+            const refBaru = await addDoc(
                 collection(db, "penugasan"),
                 data
             );
 
-            penugasanId = ref.id;
+            idPenugasan = refBaru.id;
 
-            /*
-            Tambahkan data baru ke cache lokal
-            agar sinkronisasi dapat menghitungnya.
-            */
-
-            semuaPenugasan.push({
-                id: ref.id,
-                ...data
-            });
-
-            pasanganTerpengaruh = kumpulkanPasangan(data);
-
-            /*
-            Buat izin akses otomatis.
-            */
-
-            await sinkronkanAksesPasangan(
-                pasanganTerpengaruh
-            );
-
-            await catatRiwayat({
-
-                aksi: "buat",
-
-                penugasanId,
-
-                nikPetugas,
-
-                namaPetugas,
-
-                namaTugas: tugas,
-
-                detail:
-                    "Penugasan baru dibuat. Target: " +
-                    getTargetText(data)
-            });
-
-            tampilStatus(
-                "Penugasan dan izin akses berhasil dibuat.",
-                "success"
+            await simpanRiwayat(
+                "buat",
+                idPenugasan,
+                null,
+                data,
+                "Penugasan baru dibuat"
             );
         }
 
@@ -1700,75 +1287,166 @@ async function simpanPenugasan() {
 
         await muatSemuaData();
 
+        tampilPesan(
+            editId
+                ? "Penugasan berhasil diperbarui."
+                : "Penugasan berhasil dibuat.",
+            "success"
+        );
+
     } catch (error) {
 
         console.error(error);
 
-        tampilStatus(
-            "Gagal menyimpan. " +
-            error.message +
-            ". Periksa Rules Firestore dan koneksi internet.",
+        tampilPesan(
+            "Gagal menyimpan penugasan: " + error.message,
             "error"
         );
 
     } finally {
 
         sedangMenyimpan = false;
-        btnSimpan.disabled = false;
+
+        el("btnSimpan").disabled = false;
+
+        el("btnSimpan").textContent =
+            "💾 Simpan Penugasan";
     }
 }
 
 
-/* =========================================
-   EDIT PENUGASAN
-========================================= */
+// ======================================================
+// RIWAYAT PENUGASAN
+// ======================================================
+
+async function simpanRiwayat(
+    aksi,
+    penugasanId,
+    dataLama,
+    dataBaru,
+    detail
+) {
+
+    const data = dataBaru || dataLama || {};
+
+    await addDoc(
+        collection(db, "riwayat_penugasan"),
+        {
+
+            aksi,
+
+            penugasan_id: penugasanId,
+
+            pemegang_tugas_nik:
+                data.pemegang_tugas_nik || "",
+
+            pemegang_tugas_nama:
+                data.pemegang_tugas_nama || "",
+
+            nama_tugas:
+                data.nama_tugas || "",
+
+            target_mode:
+                data.target_mode || "",
+
+            target_departemen:
+                data.target_departemen || "",
+
+            target_nik:
+                data.target_nik || [],
+
+            status:
+                data.status || "",
+
+            detail,
+
+            actor_uid: uidLogin,
+
+            actor_nik: penggunaLogin.nik || "",
+
+            actor_nama: penggunaLogin.nama || "",
+
+            waktu: serverTimestamp(),
+
+            createdAt: serverTimestamp()
+        }
+    );
+}
+
+
+// ======================================================
+// EDIT PENUGASAN
+// ======================================================
 
 function editPenugasan(id) {
 
-    const data = semuaPenugasan.find(p => p.id === id);
+    const data = semuaPenugasan.find(d => d.id === id);
 
     if (!data) return;
 
-    if (getStatus(data) !== "aktif") {
-        tampilStatus(
-            "Penugasan yang dicabut tidak dapat diedit. Aktifkan kembali jika diperlukan.",
-            "error"
-        );
-        return;
-    }
+    el("editId").value = id;
 
-    modeEdit = true;
-    idEdit = id;
-    dataEdit = data;
+    el("namaTugas").value =
+        data.nama_tugas || "";
 
-    namaTugas.value = getNamaTugas(data);
+    el("pemegangNik").value =
+        data.pemegang_tugas_nik || "";
 
-    const nik = getPetugasNik(data);
+    el("pemegangNama").value =
+        data.pemegang_tugas_nama || "";
 
-    petugasTerpilih = cariKaryawanNik(nik) || {
-        nik: nik,
-        nama: getPetugasNama(data)
+    el("cariPemegang").value =
+        (data.pemegang_tugas_nama || "") +
+        " - " +
+        (data.pemegang_tugas_nik || "");
+
+    pemegangTerpilih = semuaKaryawan.find(
+        k => getNik(k) === data.pemegang_tugas_nik
+    ) || {
+        nik: data.pemegang_tugas_nik,
+        nama: data.pemegang_tugas_nama
     };
 
-    renderPetugasTerpilih();
+    el("pemegangTerpilih").innerHTML = `
+        <strong>Pemegang tugas:</strong><br>
+        ${escapeHTML(data.pemegang_tugas_nama || "-")}<br>
+        NIK: ${escapeHTML(data.pemegang_tugas_nik || "-")}
+    `;
 
-    modeTarget.value = getMode(data);
+    el("pemegangTerpilih").classList.remove("hidden");
 
-    aturModeTarget();
+    el("targetMode").value =
+        data.target_mode || "semua";
 
-    departemenTarget.value = data.target_departemen || "";
+    el("targetDepartemen").value =
+        data.target_departemen || "";
 
-    targetTerpilih = new Set(getTargetNik(data));
+    targetTerpilih = new Set(
+        Array.isArray(data.target_nik)
+            ? data.target_nik
+            : []
+    );
 
-    keterangan.value = getKeterangan(data);
+    el("cariTarget").value = "";
 
-    renderTarget();
+    el("targetMode").dispatchEvent(
+        new Event("change")
+    );
 
-    judulForm.textContent = "Edit Penugasan";
-    infoEdit.classList.remove("hidden");
+    if (data.target_mode === "nik") {
+        tampilkanTarget();
+    }
 
-    btnSimpan.textContent = "Simpan Perubahan";
-    btnBatalEdit.classList.remove("hidden");
+    el("keterangan").value =
+        data.keterangan || "";
+
+    el("judulForm").textContent =
+        "✏️ Edit Penugasan";
+
+    el("btnSimpan").textContent =
+        "💾 Simpan Perubahan";
+
+    el("btnBatalEdit").classList.remove("hidden");
 
     window.scrollTo({
         top: 0,
@@ -1777,472 +1455,390 @@ function editPenugasan(id) {
 }
 
 
-/* =========================================
-   BATAL EDIT / RESET
-========================================= */
+// ======================================================
+// BATAL EDIT
+// ======================================================
 
-btnBatalEdit.addEventListener("click", resetForm);
+el("btnBatalEdit").addEventListener("click", resetForm);
 
 function resetForm() {
 
-    modeEdit = false;
-    idEdit = null;
-    dataEdit = null;
+    el("editId").value = "";
 
-    namaTugas.value = "";
+    el("namaTugas").value = "";
 
-    cariPetugas.value = "";
-    petugasTerpilih = null;
-    renderPetugasTerpilih();
+    el("cariPemegang").value = "";
 
-    modeTarget.value = "nik";
-    departemenTarget.value = "";
+    el("pemegangNik").value = "";
+
+    el("pemegangNama").value = "";
+
+    el("hasilPemegang").innerHTML = "";
+
+    el("pemegangTerpilih").innerHTML = "";
+
+    el("pemegangTerpilih").classList.add("hidden");
+
+    el("targetMode").value = "semua";
+
+    el("targetDepartemen").value = "";
+
+    el("cariTarget").value = "";
+
+    el("hasilTarget").innerHTML = "";
+
+    el("jumlahTargetDipilih").textContent = "0";
+
+    el("keterangan").value = "";
 
     targetTerpilih.clear();
 
-    cariTarget.value = "";
-    filterDepartemen.value = "";
+    pemegangTerpilih = null;
 
-    keterangan.value = "";
+    el("targetMode").dispatchEvent(
+        new Event("change")
+    );
 
-    aturModeTarget();
-    renderTarget();
+    el("judulForm").textContent =
+        "➕ Buat Penugasan Baru";
 
-    judulForm.textContent = "Buat Penugasan Baru";
+    el("btnSimpan").textContent =
+        "💾 Simpan Penugasan";
 
-    infoEdit.classList.add("hidden");
-
-    btnSimpan.textContent = "Simpan Penugasan";
-
-    btnBatalEdit.classList.add("hidden");
+    el("btnBatalEdit").classList.add("hidden");
 }
 
 
-/* =========================================
-   CABUT PENUGASAN
-   Izin target otomatis dinonaktifkan
-   jika tidak ada tugas aktif lainnya.
-========================================= */
+// ======================================================
+// CABUT / AKTIFKAN PENUGASAN
+// ======================================================
 
-async function cabutPenugasan(id) {
+async function ubahStatusPenugasan(id, statusBaru) {
 
-    const data = semuaPenugasan.find(p => p.id === id);
+    const data = semuaPenugasan.find(
+        d => d.id === id
+    );
 
     if (!data) return;
 
-    if (getStatus(data) !== "aktif") {
-        alert("Penugasan ini sudah dicabut.");
-        return;
-    }
+    const pertanyaan = statusBaru === "dicabut"
+        ? "Yakin ingin mencabut penugasan ini?"
+        : "Aktifkan kembali penugasan ini?";
 
-    const konfirmasi = confirm(
-        "Cabut penugasan ini?\n\n" +
-        "Petugas: " + getPetugasNama(data) + "\n" +
-        "Tugas: " + getNamaTugas(data) + "\n\n" +
-        "Data penugasan tidak akan dihapus."
-    );
-
-    if (!konfirmasi) return;
+    if (!confirm(pertanyaan)) return;
 
     try {
 
-        tampilStatus("Mencabut penugasan...", "loading");
-
-        const pasangan = kumpulkanPasangan(data);
+        const dataLama = { ...data };
 
         await updateDoc(
             doc(db, "penugasan", id),
             {
-                status: "dicabut",
-
-                revokedAt: serverTimestamp(),
-                revoked_by: userLogin.uid,
-
-                revoked_by_nik: dataPenggunaLogin?.nik || "",
-                revoked_by_nama: dataPenggunaLogin?.nama || "",
+                status: statusBaru,
 
                 updatedAt: serverTimestamp(),
-                updated_by: userLogin.uid
+
+                updated_by: uidLogin,
+
+                updated_by_nik: penggunaLogin.nik || "",
+
+                updated_by_nama: penggunaLogin.nama || ""
             }
         );
 
-        /*
-        Update cache sebelum sinkronisasi akses.
-        */
+        const dataBaru = {
+            ...dataLama,
+            status: statusBaru
+        };
 
-        semuaPenugasan = semuaPenugasan.map(p =>
-            p.id === id
-                ? { ...p, status: "dicabut" }
-                : p
-        );
-
-        /*
-        Sinkronkan semua pasangan petugas-target.
-        Jika masih memiliki tugas aktif lain,
-        izin tidak akan dicabut.
-        */
-
-        await sinkronkanAksesPasangan(pasangan);
-
-        await catatRiwayat({
-
-            aksi: "cabut",
-
-            penugasanId: id,
-
-            nikPetugas: getPetugasNik(data),
-
-            namaPetugas: getPetugasNama(data),
-
-            namaTugas: getNamaTugas(data),
-
-            detail: "Penugasan dicabut. " + getTargetText(data)
-        });
-
-        tampilStatus(
-            "Penugasan dicabut dan izin akses telah diperbarui.",
-            "success"
+        await simpanRiwayat(
+            statusBaru === "dicabut"
+                ? "cabut"
+                : "aktifkan",
+            id,
+            dataLama,
+            dataBaru,
+            statusBaru === "dicabut"
+                ? "Penugasan dicabut"
+                : "Penugasan diaktifkan kembali"
         );
 
         await muatSemuaData();
+
+        tampilPesan(
+            statusBaru === "dicabut"
+                ? "Penugasan berhasil dicabut."
+                : "Penugasan berhasil diaktifkan kembali.",
+            "success"
+        );
 
     } catch (error) {
 
         console.error(error);
 
-        tampilStatus(
-            "Gagal mencabut penugasan: " + error.message,
+        tampilPesan(
+            "Gagal mengubah status: " + error.message,
             "error"
         );
     }
 }
 
 
-/* =========================================
-   AKTIFKAN KEMBALI
-   Izin akses target otomatis diaktifkan.
-========================================= */
+// ======================================================
+// MENAMPILKAN DAFTAR PENUGASAN
+// ======================================================
 
-async function aktifkanPenugasan(id) {
+el("cariPenugasan").addEventListener(
+    "input",
+    tampilkanPenugasan
+);
 
-    const data = semuaPenugasan.find(p => p.id === id);
+function tampilkanPenugasan() {
 
-    if (!data) return;
-
-    const konfirmasi = confirm(
-        "Aktifkan kembali penugasan ini?"
+    const kata = normalisasi(
+        el("cariPenugasan").value
     );
 
-    if (!konfirmasi) return;
+    let hasil = semuaPenugasan;
 
-    try {
+    if (kata) {
 
-        tampilStatus("Mengaktifkan penugasan...", "loading");
+        hasil = hasil.filter(d => {
 
-        const pasangan = kumpulkanPasangan(data);
+            return normalisasi(d.nama_tugas).includes(kata)
+                || normalisasi(d.pemegang_tugas_nama).includes(kata)
+                || normalisasi(d.pemegang_tugas_nik).includes(kata)
+                || normalisasi(d.target_departemen).includes(kata)
+                || normalisasi(targetLabel(d)).includes(kata);
 
-        await updateDoc(
-            doc(db, "penugasan", id),
-            {
-                status: "aktif",
-
-                reactivatedAt: serverTimestamp(),
-                reactivated_by: userLogin.uid,
-
-                updatedAt: serverTimestamp(),
-                updated_by: userLogin.uid
-            }
-        );
-
-        /*
-        Update cache lokal agar izin
-        dapat dihitung dari status terbaru.
-        */
-
-        semuaPenugasan = semuaPenugasan.map(p =>
-            p.id === id
-                ? { ...p, status: "aktif" }
-                : p
-        );
-
-        await sinkronkanAksesPasangan(pasangan);
-
-        await catatRiwayat({
-
-            aksi: "aktifkan_kembali",
-
-            penugasanId: id,
-
-            nikPetugas: getPetugasNik(data),
-
-            namaPetugas: getPetugasNama(data),
-
-            namaTugas: getNamaTugas(data),
-
-            detail: "Penugasan diaktifkan kembali. " +
-                getTargetText(data)
         });
-
-        tampilStatus(
-            "Penugasan dan izin akses berhasil diaktifkan kembali.",
-            "success"
-        );
-
-        await muatSemuaData();
-
-    } catch (error) {
-
-        console.error(error);
-
-        tampilStatus(
-            "Gagal mengaktifkan: " + error.message,
-            "error"
-        );
     }
-}
 
+    if (!hasil.length) {
 
-/* =========================================
-   DAFTAR PENUGASAN
-========================================= */
-
-cariPenugasan.addEventListener("input", renderPenugasan);
-filterStatus.addEventListener("change", renderPenugasan);
-
-function renderPenugasan() {
-
-    const keyword = normalisasi(cariPenugasan.value);
-    const statusFilter = filterStatus.value;
-
-    let data = semuaPenugasan.filter(p => {
-
-        const status = getStatus(p);
-
-        if (
-            statusFilter === "aktif" &&
-            status !== "aktif"
-        ) {
-            return false;
-        }
-
-        if (
-            statusFilter === "dicabut" &&
-            status !== "dicabut"
-        ) {
-            return false;
-        }
-
-        if (!keyword) return true;
-
-        const teks = normalisasi(
-            getPetugasNik(p) + " " +
-            getPetugasNama(p) + " " +
-            getNamaTugas(p) + " " +
-            getKeterangan(p)
-        );
-
-        return teks.includes(keyword);
-    });
-
-    if (!data.length) {
-
-        daftarPenugasan.innerHTML =
-            '<div class="empty">Tidak ada penugasan ditemukan.</div>';
+        el("daftarPenugasan").innerHTML =
+            '<div class="empty">Belum ada data penugasan.</div>';
 
         return;
     }
 
-    daftarPenugasan.innerHTML = data.map(p => {
+    el("daftarPenugasan").innerHTML = hasil.map(d => {
 
-        const aktif = getStatus(p) === "aktif";
+        const aktif = d.status === "aktif";
 
         return `
-            <div class="assignment-item">
+            <div class="list-card">
 
-                <div class="assignment-title">
-                    ${escapeHTML(getNamaTugas(p))}
+                <div class="list-name">
+                    ${escapeHTML(d.nama_tugas || "-")}
                 </div>
 
-                <div class="assignment-detail">
-                    <strong>Petugas:</strong>
-                    ${escapeHTML(getPetugasNama(p))}<br>
+                <div class="list-detail">
 
-                    <strong>NIK Petugas:</strong>
-                    ${escapeHTML(getPetugasNik(p))}<br>
+                    <strong>Pemegang:</strong>
+                    ${escapeHTML(d.pemegang_tugas_nama || "-")}
+                    <br>
+
+                    <strong>NIK:</strong>
+                    ${escapeHTML(d.pemegang_tugas_nik || "-")}
+                    <br>
 
                     <strong>Target:</strong>
-                    ${escapeHTML(getTargetText(p))}<br>
+                    ${escapeHTML(targetLabel(d))}
+                    <br>
 
                     <strong>Keterangan:</strong>
-                    ${escapeHTML(getKeterangan(p) || "-")}<br>
+                    ${escapeHTML(d.keterangan || "-")}
+                    <br>
 
-                    <strong>Dibuat:</strong>
-                    ${tanggal(p.createdAt)}
+                    <strong>Diperbarui:</strong>
+                    ${tanggal(d.updatedAt || d.createdAt)}
                 </div>
 
-                <span class="badge ${aktif ? "badge-active" : "badge-revoked"}">
-                    ${aktif ? "AKTIF" : "DICABUT"}
+                <span class="status ${aktif ? "status-aktif" : "status-dicabut"}">
+                    ${statusLabel(d.status)}
                 </span>
 
-                <div class="assignment-actions">
+                <div class="button-row">
+
+                    <button
+                        class="btn-primary btn-small"
+                        data-edit="${escapeHTML(d.id)}">
+                        ✏️ Edit
+                    </button>
 
                     ${
                         aktif
                         ? `
                             <button
-                                class="btn-orange btn-small"
-                                data-edit="${escapeHTML(p.id)}"
-                            >
-                                Edit
-                            </button>
-
-                            <button
-                                class="btn-red btn-small"
-                                data-cabut="${escapeHTML(p.id)}"
-                            >
-                                Cabut Tugas
+                                class="btn-danger btn-small"
+                                data-cabut="${escapeHTML(d.id)}">
+                                🚫 Cabut
                             </button>
                         `
                         : `
                             <button
-                                class="btn-green btn-small"
-                                data-aktifkan="${escapeHTML(p.id)}"
-                            >
-                                Aktifkan Kembali
+                                class="btn-success btn-small"
+                                data-aktifkan="${escapeHTML(d.id)}">
+                                ♻️ Aktifkan
                             </button>
                         `
                     }
 
                 </div>
-
             </div>
         `;
+
     }).join("");
 }
 
-daftarPenugasan.addEventListener("click", async event => {
 
-    const edit = event.target.closest("[data-edit]");
-    const cabut = event.target.closest("[data-cabut]");
-    const aktifkan = event.target.closest("[data-aktifkan]");
+// ======================================================
+// EVENT DAFTAR PENUGASAN
+// ======================================================
 
-    if (edit) {
-        editPenugasan(edit.dataset.edit);
-        return;
+el("daftarPenugasan").addEventListener(
+    "click",
+    async function(e) {
+
+        const edit = e.target.closest("[data-edit]");
+
+        const cabut = e.target.closest("[data-cabut]");
+
+        const aktifkan = e.target.closest("[data-aktifkan]");
+
+        if (edit) {
+            editPenugasan(edit.dataset.edit);
+            return;
+        }
+
+        if (cabut) {
+            await ubahStatusPenugasan(
+                cabut.dataset.cabut,
+                "dicabut"
+            );
+            return;
+        }
+
+        if (aktifkan) {
+            await ubahStatusPenugasan(
+                aktifkan.dataset.aktifkan,
+                "aktif"
+            );
+        }
     }
-
-    if (cabut) {
-        await cabutPenugasan(cabut.dataset.cabut);
-        return;
-    }
-
-    if (aktifkan) {
-        await aktifkanPenugasan(aktifkan.dataset.aktifkan);
-    }
-});
+);
 
 
-/* =========================================
-   RIWAYAT
-   HANYA 5 DATA TERBARU DARI FIRESTORE
-========================================= */
+// ======================================================
+// MEMUAT 5 RIWAYAT TERBARU
+// ======================================================
 
-cariRiwayat.addEventListener("input", renderRiwayat);
+async function muatRiwayat() {
 
-function renderRiwayat() {
+    try {
 
-    const keyword = normalisasi(cariRiwayat.value);
-
-    const data = semuaRiwayat.filter(r => {
-
-        if (!keyword) return true;
-
-        const teks = normalisasi(
-            r.nama_tugas + " " +
-            r.pemegang_tugas_nama + " " +
-            r.pemegang_tugas_nik + " " +
-            r.actor_nama + " " +
-            r.actor_nik + " " +
-            r.aksi + " " +
-            r.detail
+        const q = query(
+            collection(db, "riwayat_penugasan"),
+            orderBy("createdAt", "desc"),
+            limit(5)
         );
 
-        return teks.includes(keyword);
-    });
+        const snap = await getDocs(q);
+
+        const riwayat = snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+        }));
+
+        tampilkanRiwayat(riwayat);
+
+    } catch (error) {
+
+        console.error(error);
+
+        el("daftarRiwayat").innerHTML = `
+            <div class="error-box">
+                Riwayat tidak dapat dimuat.
+                ${escapeHTML(error.message)}
+            </div>
+        `;
+    }
+}
+
+
+// ======================================================
+// TAMPILKAN RIWAYAT
+// ======================================================
+
+function tampilkanRiwayat(data) {
 
     if (!data.length) {
 
-        daftarRiwayat.innerHTML =
-            '<div class="empty">Belum ada riwayat perubahan.</div>';
+        el("daftarRiwayat").innerHTML =
+            '<div class="empty">Belum ada riwayat.</div>';
 
         return;
     }
 
-    daftarRiwayat.innerHTML = data.map(r => {
+    el("daftarRiwayat").innerHTML = data.map(d => {
+
+        let aksi = d.aksi || "-";
+
+        let labelAksi = {
+            buat: "🆕 Penugasan dibuat",
+            edit: "✏️ Penugasan diubah",
+            cabut: "🚫 Penugasan dicabut",
+            aktifkan: "♻️ Penugasan diaktifkan"
+        };
 
         return `
-            <div class="assignment-item">
+            <div class="list-card">
 
-                <div class="assignment-title">
-                    ${escapeHTML(r.nama_tugas || "-")}
+                <div class="list-name">
+                    ${escapeHTML(labelAksi[aksi] || aksi)}
                 </div>
 
-                <div class="assignment-detail">
-                    <strong>Aktivitas:</strong>
-                    ${escapeHTML(r.aksi || "-")}<br>
+                <div class="list-detail">
 
-                    <strong>Petugas:</strong>
-                    ${escapeHTML(r.pemegang_tugas_nama || "-")}<br>
+                    <strong>Tugas:</strong>
+                    ${escapeHTML(d.nama_tugas || "-")}
+                    <br>
 
-                    <strong>NIK Petugas:</strong>
-                    ${escapeHTML(r.pemegang_tugas_nik || "-")}<br>
+                    <strong>Pemegang:</strong>
+                    ${escapeHTML(d.pemegang_tugas_nama || "-")}
+                    <br>
 
-                    <strong>Pelaksana Perubahan:</strong>
-                    ${escapeHTML(r.actor_nama || "-")}<br>
+                    <strong>NIK:</strong>
+                    ${escapeHTML(d.pemegang_tugas_nik || "-")}
+                    <br>
 
-                    <strong>Waktu:</strong>
-                    ${tanggal(r.waktu || r.createdAt)}<br>
+                    <strong>Target:</strong>
+                    ${escapeHTML(targetLabel(d))}
+                    <br>
 
                     <strong>Detail:</strong>
-                    ${escapeHTML(r.detail || "-")}
+                    ${escapeHTML(d.detail || "-")}
+                    <br>
+
+                    <strong>Pelaksana:</strong>
+                    ${escapeHTML(d.actor_nama || "-")}
+                    <br>
+
+                    <strong>Waktu:</strong>
+                    ${tanggal(d.createdAt || d.waktu)}
                 </div>
 
             </div>
         `;
+
     }).join("");
 }
 
 
-/* =========================================
-   RINGKASAN
-========================================= */
-
-function renderRingkasan() {
-
-    const aktif = semuaPenugasan.filter(
-        p => getStatus(p) === "aktif"
-    );
-
-    const dicabut = semuaPenugasan.filter(
-        p => getStatus(p) === "dicabut"
-    );
-
-    const petugas = new Set(
-        aktif.map(p => getPetugasNik(p)).filter(Boolean)
-    );
-
-    document.getElementById("jumlahAktif").textContent =
-        aktif.length;
-
-    document.getElementById("jumlahDicabut").textContent =
-        dicabut.length;
-
-    document.getElementById("jumlahPetugas").textContent =
-        petugas.size;
-
-    document.getElementById("jumlahKaryawan").textContent =
-        semuaKaryawan.length;
-}
+// ======================================================
+// SELESAI
+// ======================================================
 
 </script>
 
