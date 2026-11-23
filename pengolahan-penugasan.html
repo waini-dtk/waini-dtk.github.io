@@ -464,7 +464,6 @@ hr {
 
     <div id="pesanGlobal"></div>
 
-    <!-- RINGKASAN -->
     <div class="summary">
 
         <div class="summary-card">
@@ -484,7 +483,6 @@ hr {
 
     </div>
 
-    <!-- FORM PENUGASAN -->
     <div class="card">
 
         <div class="card-title" id="judulForm">
@@ -500,7 +498,6 @@ hr {
 
         <input type="hidden" id="editId">
 
-        <!-- PEMEGANG TUGAS -->
         <label>Pemegang Tugas</label>
 
         <input
@@ -517,7 +514,6 @@ hr {
         <input type="hidden" id="pemegangNik">
         <input type="hidden" id="pemegangNama">
 
-        <!-- PILIH MENU TUGAS -->
         <label>Daftar Menu Tugas</label>
 
         <input
@@ -536,7 +532,6 @@ hr {
             Tugas dipilih: <strong id="jumlahTugasDipilih">0</strong>
         </div>
 
-        <!-- LINGKUP -->
         <label>Lingkup Penugasan</label>
 
         <select id="targetMode">
@@ -616,7 +611,6 @@ hr {
 
     </div>
 
-    <!-- DAFTAR PENUGASAN -->
     <div class="card">
 
         <div class="card-title">
@@ -635,7 +629,6 @@ hr {
 
     </div>
 
-    <!-- RIWAYAT -->
     <div class="card">
 
         <div class="card-title">
@@ -672,6 +665,7 @@ import {
     doc,
     addDoc,
     updateDoc,
+    setDoc,
     serverTimestamp,
     query,
     orderBy,
@@ -769,6 +763,13 @@ function getMenuKode(menuId) {
     return menu
         ? menu.kode
         : menuId || "-";
+}
+
+function getMenuData(menuId) {
+
+    return semuaMenuTugas.find(
+        m => m.id === menuId || m.kode === menuId
+    ) || {};
 }
 
 function tanggal(value) {
@@ -891,7 +892,6 @@ function bacaLingkup(value) {
 
     } catch {
 
-        // Mendukung data lama berupa string "semua"
         if (value === "semua") {
             return {
                 mode: "semua",
@@ -907,6 +907,265 @@ function bacaLingkup(value) {
         departemen: "",
         nik: []
     };
+}
+
+
+// ======================================================
+// MENENTUKAN TARGET NIK DARI LINGKUP
+// ======================================================
+
+function nikDariLingkup(lingkup) {
+
+    const data = bacaLingkup(lingkup);
+
+    let hasil = [];
+
+    if (data.mode === "semua") {
+
+        hasil = semuaKaryawan.map(getNik);
+
+    } else if (data.mode === "departemen") {
+
+        hasil = semuaKaryawan
+            .filter(k =>
+                normalisasi(getDepartemen(k)) ===
+                normalisasi(data.departemen)
+            )
+            .map(getNik);
+
+    } else if (data.mode === "nik") {
+
+        hasil = Array.isArray(data.nik)
+            ? data.nik
+            : [];
+
+    }
+
+    return [
+        ...new Set(
+            hasil
+                .map(n => String(n || "").trim())
+                .filter(Boolean)
+        )
+    ];
+}
+
+
+// ======================================================
+// MENENTUKAN TUGAS ABSENSI
+// ======================================================
+
+function tugasAdalahAbsensi(data) {
+
+    const menu = getMenuData(data.menu_id);
+
+    const nama = normalisasi(menu.nama);
+    const kode = normalisasi(menu.kode);
+    const halaman = normalisasi(menu.halaman);
+
+    return nama.includes("absensi")
+        || kode.includes("absensi")
+        || halaman.includes("pengelolaan_absensi")
+        || halaman.includes("absensi");
+}
+
+
+// ======================================================
+// MENENTUKAN PENUGASAN TERBAIK UNTUK AKSES
+// ======================================================
+
+function pilihPenugasanUntukAkses(daftar) {
+
+    if (!daftar.length) return null;
+
+    // Prioritas penugasan absensi.
+    const absensi = daftar.find(tugasAdalahAbsensi);
+
+    if (absensi) return absensi;
+
+    // Jika tidak ada tugas absensi,
+    // pilih penugasan terbaru.
+    return daftar.sort(
+        (a, b) => waktuData(b) - waktuData(a)
+    )[0];
+}
+
+
+// ======================================================
+// SINKRONISASI AKSES KARYAWAN
+// ======================================================
+//
+// ID DOKUMEN:
+// NIK_PETUGAS__NIK_TARGET
+//
+// Field mengikuti Firestore Rules:
+// petugas_nik
+// target_nik
+// penugasan_id
+// nama_tugas
+// status
+// updatedAt
+//
+// ======================================================
+
+async function sinkronkanAksesPetugas(petugasNik) {
+
+    if (!petugasNik) {
+        throw new Error("NIK petugas tidak ditemukan.");
+    }
+
+    // Baca ulang penugasan dari Firestore
+    // agar sinkronisasi menggunakan data terbaru.
+
+    const snapTugas = await getDocs(
+        collection(db, "penugasan_karyawan")
+    );
+
+    const tugasPetugas = snapTugas.docs.map(d => ({
+        id: d.id,
+        ...d.data()
+    })).filter(d =>
+        String(d.nik || "").trim() ===
+        String(petugasNik).trim()
+    );
+
+    // Ambil penugasan aktif milik petugas.
+    const tugasAktif = tugasPetugas.filter(
+        d => d.aktif === true
+    );
+
+    // Bentuk daftar target dari seluruh tugas aktif.
+    const daftarTargetAktif = new Set();
+
+    tugasAktif.forEach(tugas => {
+
+        const target = nikDariLingkup(tugas.lingkup);
+
+        target.forEach(nik => {
+            daftarTargetAktif.add(nik);
+        });
+
+    });
+
+    // Baca akses_karyawan yang sudah pernah dibuat
+    // oleh petugas tersebut.
+    const snapAkses = await getDocs(
+        query(
+            collection(db, "akses_karyawan"),
+            where("petugas_nik", "==", petugasNik)
+        )
+    );
+
+    const aksesLama = snapAkses.docs.map(d => ({
+        id: d.id,
+        ...d.data()
+    }));
+
+    // Target yang perlu disinkronkan:
+    // target aktif + target yang pernah mempunyai akses.
+    const semuaTarget = new Set([
+        ...daftarTargetAktif,
+        ...aksesLama.map(d => d.target_nik)
+    ]);
+
+    let berhasil = 0;
+
+    for (const targetNik of semuaTarget) {
+
+        if (!targetNik) continue;
+
+        // Cari seluruh penugasan aktif
+        // yang mencakup target ini.
+        const tugasYangMencakupTarget =
+            tugasAktif.filter(tugas => {
+
+                const targetTugas =
+                    nikDariLingkup(tugas.lingkup);
+
+                return targetTugas.includes(targetNik);
+            });
+
+        // Tentukan apakah akses masih diperlukan.
+        const masihAdaTugas =
+            tugasYangMencakupTarget.length > 0;
+
+        const tugasPilihan =
+            pilihPenugasanUntukAkses(
+                tugasYangMencakupTarget
+            );
+
+        const idAkses =
+            `${petugasNik}__${targetNik}`;
+
+        const refAkses = doc(
+            db,
+            "akses_karyawan",
+            idAkses
+        );
+
+        if (masihAdaTugas && tugasPilihan) {
+
+            // AKTIFKAN / PERBARUI AKSES
+            await setDoc(
+                refAkses,
+                {
+                    petugas_nik: petugasNik,
+
+                    target_nik: targetNik,
+
+                    penugasan_id: tugasPilihan.id,
+
+                    nama_tugas:
+                        getMenuNama(tugasPilihan.menu_id),
+
+                    status: "aktif",
+
+                    updatedAt: serverTimestamp()
+                },
+                {
+                    merge: true
+                }
+            );
+
+        } else {
+
+            // CABUT AKSES
+            // Jika dokumen pernah dibuat,
+            // statusnya menjadi dicabut.
+            const aksesAda = aksesLama.find(
+                d => d.id === idAkses
+            );
+
+            if (aksesAda) {
+
+                await setDoc(
+                    refAkses,
+                    {
+                        petugas_nik: petugasNik,
+
+                        target_nik: targetNik,
+
+                        penugasan_id:
+                            aksesAda.penugasan_id || "",
+
+                        nama_tugas:
+                            aksesAda.nama_tugas || "",
+
+                        status: "dicabut",
+
+                        updatedAt: serverTimestamp()
+                    },
+                    {
+                        merge: true
+                    }
+                );
+            }
+        }
+
+        berhasil++;
+    }
+
+    return berhasil;
 }
 
 
@@ -930,10 +1189,12 @@ onAuthStateChanged(auth, async user => {
         );
 
         if (!snapPengguna.exists()) {
+
             tampilPesan(
                 "Data pengguna tidak ditemukan.",
                 "error"
             );
+
             return;
         }
 
@@ -1634,8 +1895,24 @@ async function simpanPenugasan() {
         el("btnSimpan").textContent =
             "Menyimpan...";
 
-
         let jumlahBerhasil = 0;
+
+        // NIK petugas lama juga disinkronkan
+        // jika pemegang tugas berubah ketika edit.
+        const petugasPerluSinkron = new Set();
+
+        petugasPerluSinkron.add(nikPemegang);
+
+        if (editId) {
+
+            const dataEdit = semuaPenugasan.find(
+                d => d.id === editId
+            );
+
+            if (dataEdit && dataEdit.nik) {
+                petugasPerluSinkron.add(dataEdit.nik);
+            }
+        }
 
 
         // SIMPAN SATU DOKUMEN UNTUK SETIAP MENU
@@ -1745,13 +2022,29 @@ async function simpanPenugasan() {
         }
 
 
+        // ==================================================
+        // SINKRONKAN AKSES KARYAWAN OTOMATIS
+        // ==================================================
+
+        let jumlahAksesDisinkron = 0;
+
+        for (const nikPetugas of petugasPerluSinkron) {
+
+            jumlahAksesDisinkron +=
+                await sinkronkanAksesPetugas(
+                    nikPetugas
+                );
+        }
+
+
         resetForm();
 
         await muatSemuaData();
 
         tampilPesan(
             jumlahBerhasil +
-            " penugasan berhasil disimpan.",
+            " penugasan berhasil disimpan. " +
+            "Akses karyawan berhasil disinkronkan.",
             "success"
         );
 
@@ -1760,8 +2053,9 @@ async function simpanPenugasan() {
         console.error(error);
 
         tampilPesan(
-            "Gagal menyimpan penugasan: " +
-            error.message,
+            "Proses penyimpanan/sinkronisasi gagal: " +
+            error.message +
+            ". Periksa data penugasan dan akses_karyawan.",
             "error"
         );
 
@@ -2054,12 +2348,20 @@ async function ubahStatusPenugasan(
                 : "Penugasan dicabut"
         );
 
+
+        // ==================================================
+        // SINKRONKAN AKSES SETELAH CABUT / AKTIFKAN
+        // ==================================================
+
+        await sinkronkanAksesPetugas(data.nik);
+
+
         await muatSemuaData();
 
         tampilPesan(
             statusBaru
-                ? "Penugasan berhasil diaktifkan."
-                : "Penugasan berhasil dicabut.",
+                ? "Penugasan berhasil diaktifkan dan akses karyawan disinkronkan."
+                : "Penugasan berhasil dicabut dan akses karyawan disinkronkan.",
             "success"
         );
 
@@ -2068,7 +2370,7 @@ async function ubahStatusPenugasan(
         console.error(error);
 
         tampilPesan(
-            "Gagal mengubah status: " +
+            "Gagal mengubah status atau sinkronisasi akses: " +
             error.message,
             "error"
         );
