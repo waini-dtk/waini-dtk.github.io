@@ -3,7 +3,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#8d171d">
 <title>Pengelolaan Absensi - WAINI</title>
 
@@ -19,18 +19,19 @@ main{max-width:1200px;margin:auto;padding:14px}
 .headline{display:flex;gap:10px;margin:10px 0 15px;align-items:center}
 .headline .icon{font-size:29px}
 .headline h2{font-size:21px;margin-bottom:4px}
-.headline p{font-size:12px;color:#687385;line-height:1.5}
-.period{background:#fbe9eb;border:1px solid #f4c9cd;border-radius:12px;padding:13px;margin:12px 0}
+.headline p,.note{font-size:12px;color:#687385;line-height:1.6}
+.period,.scope,.legend,.summary,.recap-card,.loading,.error{border-radius:11px;padding:13px;margin:12px 0}
+.period{background:#fbe9eb;border:1px solid #f4c9cd}
 .period b{display:block;color:#81151d;margin-bottom:6px;font-size:13px}
 .period span{font-size:14px;font-weight:bold}
 .tabs{display:flex;gap:6px;overflow-x:auto;margin:14px 0}
 .tab{border:1px solid #ddd;background:white;color:#424b5b;border-radius:9px;padding:11px 13px;font-weight:bold;white-space:nowrap}
 .tab.active{background:#8d171d;color:white}
-.scope{background:#e7f1ff;border:1px solid #b8d5ff;border-radius:11px;padding:12px;margin:12px 0;font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.scope{background:#e7f1ff;border:1px solid #b8d5ff;font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
 label{font-size:12px;font-weight:bold;display:block;margin-bottom:6px}
 input,select,button{font:inherit}
-input[type=date],input[type=search],select{width:100%;padding:10px;border:1px solid #d6dce5;border-radius:9px;background:white;color:#202938}
+input[type=date],input[type=search],input[type=text],select{width:100%;padding:10px;border:1px solid #d6dce5;border-radius:9px;background:white;color:#202938}
 .mode{display:flex;background:#eee;border-radius:10px;padding:3px}
 .mode button{flex:1;border:0;background:transparent;padding:8px;border-radius:8px;font-size:12px}
 .mode button.selected{background:#8d171d;color:white}
@@ -38,31 +39,29 @@ input[type=date],input[type=search],select{width:100%;padding:10px;border:1px so
 table{border-collapse:collapse;width:100%;min-width:1000px;font-size:12px}
 th{background:#8d171d;color:white;text-align:left;padding:10px;white-space:nowrap;position:sticky;top:0;z-index:2}
 td{padding:8px;border-bottom:1px solid #e8ebf0;vertical-align:middle;white-space:nowrap}
-select.status{min-width:170px;padding:8px;border-radius:8px;font-size:12px}
+select.status{min-width:180px;padding:8px;font-size:12px}
 .noteInput{min-width:140px;padding:8px;border:1px solid #ddd;border-radius:7px}
 .chip{display:inline-block;padding:4px 8px;border-radius:30px;background:#e6eefc;font-weight:bold}
-.legend{background:#fff8e9;border:1px solid #f2d9a8;border-radius:10px;padding:12px;margin:12px 0;font-size:12px;line-height:1.8}
+.legend{background:#fff8e9;border:1px solid #f2d9a8;font-size:12px;line-height:1.9}
 .legend .chip{margin:2px;background:white;border:1px solid #ead6a8}
-.summary{border:1px solid #ead1d3;background:white;border-radius:12px;overflow:hidden;margin:14px 0}
+.summary{border:1px solid #ead1d3;background:white;overflow:hidden;padding:0}
 .summary h3{background:#8d171d;color:white;padding:11px;font-size:14px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr)}
 .stat{padding:12px;border-bottom:1px solid #eee;border-right:1px solid #eee}
 .stat span{display:block;color:#647084;font-size:12px;margin-bottom:5px}
 .stat strong{font-size:19px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-.btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:11px 13px;font-weight:bold;cursor:pointer;font-size:12px}
+.btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:11px 13px;font-weight:bold;font-size:12px}
 .btn.primary{background:#8d171d;color:white}
-.btn:disabled{opacity:.5}
-.note{font-size:12px;color:#687385;margin:8px 0;line-height:1.6}
 .hidden{display:none!important}
-.recap-card{background:white;border:1px solid #e0e4eb;border-radius:10px;padding:12px;margin:8px 0}
+.recap-card{background:white;border:1px solid #e0e4eb}
 .recap-card h4{margin-bottom:8px}
-.loading{background:white;border:1px solid #ddd;border-radius:10px;padding:20px;margin:10px 0;text-align:center}
-.error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;padding:12px;border-radius:10px;line-height:1.6;overflow-wrap:anywhere}
-.success{background:#e6f7ed;color:#176b38;border:1px solid #a9dfbd;padding:12px;border-radius:10px;margin:10px 0}
+.badge{display:inline-block;padding:4px 8px;background:#e7f1ff;border-radius:20px;font-size:11px}
+.loading{background:white;border:1px solid #ddd;text-align:center}
+.error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;line-height:1.6;overflow-wrap:anywhere}
 footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 @media(min-width:700px){.stats{grid-template-columns:repeat(5,1fr)}.controls{grid-template-columns:1fr 1fr 1fr}}
-@media print{header,.tabs,.controls,.search,.actions,.legend,footer{display:none!important}body{background:white}main{max-width:none;padding:0}.table-wrap{max-height:none;overflow:visible}table{min-width:0;font-size:8px}th{position:static}}
+@media print{header,.tabs,.controls,.actions,.legend,footer{display:none!important}body{background:white}main{max-width:none;padding:0}.table-wrap{max-height:none;overflow:visible}table{min-width:0;font-size:8px}th{position:static}}
 </style>
 </head>
 
@@ -83,13 +82,12 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 <div class="icon">🗓️</div>
 <div>
 <h2>Pengelolaan Absensi</h2>
-<p>Pengisian absensi karyawan sesuai lingkup penugasan.</p>
+<p>Pengisian absensi sesuai lingkup penugasan.</p>
 </div>
 </div>
 
 <div id="loading" class="loading">⏳ Menghubungkan ke Firebase...</div>
 <div id="errorBox" class="hidden"></div>
-<div id="messageBox"></div>
 
 <div id="app" class="hidden">
 
@@ -108,19 +106,13 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 <section id="inputPanel">
 
 <div class="scope">
-<div>
-<b>Lingkup Penugasan</b><br>
-<span id="scopeText"></span>
-</div>
-<div>
-<b id="employeeCount">0 Karyawan</b><br>
-<small>Data karyawan WAINI</small>
-</div>
+<div><b>Lingkup Penugasan</b><br><span id="scopeText"></span></div>
+<div><b id="employeeCount">0 Karyawan</b><br><small>Data karyawan WAINI</small></div>
 </div>
 
 <div class="controls">
 <div>
-<label for="datePick">Tanggal Absensi</label>
+<label>Tanggal Absensi</label>
 <input type="date" id="datePick">
 </div>
 <div>
@@ -131,7 +123,7 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 </div>
 </div>
 <div>
-<label for="search">Cari Karyawan</label>
+<label>Cari Karyawan</label>
 <input type="search" id="search" placeholder="Nama / NIK / Divisi">
 </div>
 </div>
@@ -140,12 +132,10 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 <table>
 <thead>
 <tr>
-<th>No</th><th>NIK</th><th>Nama</th>
-<th>Divisi</th><th>Departemen</th>
-<th>Jabatan</th><th>TMK</th>
-<th>POH</th><th>Sistem Cuti</th>
-<th>Jadwal</th><th>Status Absensi</th>
-<th>Keterangan</th>
+<th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th>
+<th>Departemen</th><th>Jabatan</th><th>TMK</th>
+<th>POH</th><th>Sistem Cuti</th><th>Jadwal</th>
+<th>Status Absensi</th><th>Keterangan</th>
 </tr>
 </thead>
 <tbody id="rows"></tbody>
@@ -168,13 +158,15 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 </div>
 
 <div class="actions">
+<button class="btn" id="reset">↺ Kosongkan Input</button>
 <button class="btn primary" id="save">💾 Simpan ke Firebase</button>
 <button class="btn" id="excel">📥 Download Excel</button>
 <button class="btn" id="print">🖨️ Cetak / PDF</button>
 </div>
 
 <p class="note">
-Data absensi disimpan langsung ke Firestore. Data tidak lagi menggunakan localStorage.
+Data absensi disimpan ke Firestore collection data_absensi.
+Setiap perubahan dicatat pada riwayat_perubahan_absensi.
 </p>
 
 <div class="summary">
@@ -187,7 +179,6 @@ Data absensi disimpan langsung ke Firestore. Data tidak lagi menggunakan localSt
 <div class="stat"><span>Persentase Kode 1</span><strong id="percent">0%</strong></div>
 </div>
 </div>
-
 </section>
 
 <section id="recapPanel" class="hidden">
@@ -195,22 +186,18 @@ Data absensi disimpan langsung ke Firestore. Data tidak lagi menggunakan localSt
 <b>Rekap Periode 11–10</b>
 <span id="recapPeriod"></span>
 </div>
-
 <div class="recap-card">
 <h4>Rekapitulasi Kehadiran</h4>
-<p class="note">Data rekap dibaca dari absensi harian Firestore.</p>
+<p class="note">Rekap berdasarkan data absensi dari Firebase.</p>
 </div>
-
 <div class="table-wrap">
 <table>
 <thead id="recapHead"></thead>
 <tbody id="recapRows"></tbody>
 </table>
 </div>
-
 <div class="actions">
-<button class="btn primary" id="recapSave">💾 Simpan Rekap Firebase</button>
-<button class="btn" id="recapExcel">📥 Download Rekap Excel</button>
+<button class="btn primary" id="recapExcel">📥 Download Rekap Excel</button>
 <button class="btn" id="recapPrint">🖨️ Cetak Rekap</button>
 </div>
 </section>
@@ -225,7 +212,7 @@ Data absensi disimpan langsung ke Firestore. Data tidak lagi menggunakan localSt
 </div>
 </main>
 
-<footer>WAINI • Pengelolaan Absensi • Firestore</footer>
+<footer>WAINI • Pengelolaan Absensi • Firebase</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -233,14 +220,13 @@ Data absensi disimpan langsung ke Firestore. Data tidak lagi menggunakan localSt
 
 import {auth,db} from "./firebase.js";
 
-import {onAuthStateChanged} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {onAuthStateChanged}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
 collection,doc,getDoc,getDocs,query,where,
-setDoc,writeBatch,serverTimestamp,limit
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+setDoc,addDoc,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =========================================
    VARIABEL
@@ -248,64 +234,79 @@ setDoc,writeBatch,serverTimestamp,limit
 
 const $=id=>document.getElementById(id);
 
-let staff=[];
-let authorizedStaff=[];
-let values={};
-let notes={};
-let originalValues={};
-let originalNotes={};
-let dailyRecords={};
-let currentDate="";
-let currentPeriod={};
 let currentUser=null;
 let currentProfile=null;
 let currentNik="";
 let currentRole="";
 let isSuperAdmin=false;
+
+let staff=[];
+let authorizedStaff=[];
 let assignmentList=[];
+let attendanceAssignments=[];
+let authorizedAccess=[];
+let accessByNik={};
+
+let values={};
+let notes={};
+let savedRecords={};
+let historyRecords=[];
+
+let currentDate="";
+let currentPeriod={};
+let currentPeriodId="";
 let attendanceMenu=null;
+let attendanceCodes=[];
 let currentMode="individual";
 let loadingStage="Memulai aplikasi";
-let busy=false;
 
-const codes=[
-["","— Pilih Kode —"],
-["1","1 - Masuk"],
-["1A","1A - Perjalanan Dinas"],
-["2","2 - Cuti"],
-["3","3 - Sakit"],
-["4","4 - Ijin Resmi"],
-["4A","4A - Panggilan Negara"],
-["4B","4B - Libur Nasional"],
-["5","5 - Terlambat / Pulang Cepat"],
-["6","6 - Masuk Libur Nasional"],
-["7","7 - LWOP"],
-["9","9 - Mangki"]
+const rows=$("rows");
+
+/* =========================================
+   KODE ABSENSI CADANGAN
+========================================= */
+
+const defaultCodes=[
+["1","Masuk","Hadir"],
+["1A","Perjalanan Dinas","Hadir"],
+["2","Cuti","Cuti"],
+["3","Sakit dengan Surat Dokter","Izin"],
+["4","Ijin Resmi","Izin"],
+["4A","Panggilan Negara","Izin"],
+["4B","Libur Nasional","Libur"],
+["5","Terlambat / Pulang Cepat","Hadir"],
+["6","Masuk Kerja pada Libur Nasional","Hadir"],
+["7","LWOP","Tidak Hadir"],
+["9","Mangki","Tidak Hadir"]
 ];
+
+/* =========================================
+   BANTUAN
+========================================= */
 
 function firstValue(obj,keys,fallback=""){
 for(const key of keys){
-const value=obj?.[key];
-if(value!==undefined&&value!==null&&value!=="")return value;
+const v=obj?.[key];
+if(v!==undefined&&v!==null&&v!=="")return v;
 }
 return fallback;
 }
 
-function normalize(value){
-return String(value??"").trim().toLowerCase();
+function normalize(v){
+return String(v??"").trim().toLowerCase();
 }
 
-function normalizeNik(value){
-return String(value??"").trim();
+function normalizeNik(v){
+return String(v??"").trim();
 }
 
-function activeStatus(value){
-if(value===true)return true;
-return ["aktif","active","1","true","ya","yes"].includes(normalize(value));
+function activeStatus(v){
+if(v===true)return true;
+return ["aktif","active","1","true","ya","yes"].includes(normalize(v));
 }
 
-function escapeHTML(text){
-return String(text??"")
+function escapeHTML(v){
+return String(v??"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
@@ -313,48 +314,41 @@ return String(text??"")
 .replace(/'/g,"&#039;");
 }
 
-function showMessage(message,type="success"){
-$("messageBox").innerHTML=
-`<div class="${type}">${escapeHTML(message)}</div>`;
-window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function setBusy(state){
-busy=state;
-["save","recapSave","excel","recapExcel"].forEach(id=>{
-$(id).disabled=state;
-});
-if(state)$("loading").classList.remove("hidden");
-else $("loading").classList.add("hidden");
-}
-
-function formatDate(date){
-if(!date)return "";
-const d=new Date(date+"T00:00:00");
+function formatDate(v){
+if(!v)return "";
+const d=new Date(v+"T00:00:00");
 return d.toLocaleDateString("id-ID",{
 day:"numeric",month:"long",year:"numeric"
 });
 }
 
-function formatShort(date){
-if(!date)return "";
-const d=new Date(date+"T00:00:00");
-return d.toLocaleDateString("id-ID",{
+function formatShort(v){
+if(!v)return "";
+return new Date(v+"T00:00:00").toLocaleDateString("id-ID",{
 day:"2-digit",month:"2-digit"
 });
 }
 
-function toISO(date){
+function toISO(d){
 return [
-date.getFullYear(),
-String(date.getMonth()+1).padStart(2,"0"),
-String(date.getDate()).padStart(2,"0")
+d.getFullYear(),
+String(d.getMonth()+1).padStart(2,"0"),
+String(d.getDate()).padStart(2,"0")
 ].join("-");
 }
+
+function dataKey(date,nik){
+return date+"_"+nik;
+}
+
+/* =========================================
+   PERIODE 11 SAMPAI 10
+========================================= */
 
 function getPeriod(dateString){
 const d=new Date(dateString+"T00:00:00");
 let start,end;
+
 if(d.getDate()>=11){
 start=new Date(d.getFullYear(),d.getMonth(),11);
 end=new Date(d.getFullYear(),d.getMonth()+1,10);
@@ -362,7 +356,12 @@ end=new Date(d.getFullYear(),d.getMonth()+1,10);
 start=new Date(d.getFullYear(),d.getMonth()-1,11);
 end=new Date(d.getFullYear(),d.getMonth(),10);
 }
+
 return {start:toISO(start),end:toISO(end)};
+}
+
+function getPeriodId(start){
+return start.substring(0,7);
 }
 
 function getDates(start,end){
@@ -376,20 +375,16 @@ d.setDate(d.getDate()+1);
 return result;
 }
 
-/* ID DOKUMEN ABSENSI:
-   NIK_TANGGAL
-*/
-
-function dataKey(date,nik){
-return normalizeNik(nik)+"_"+date;
-}
-
 function updatePeriod(){
 currentPeriod=getPeriod(currentDate);
+currentPeriodId=getPeriodId(currentPeriod.start);
+
 $("periodText").textContent=
 formatDate(currentPeriod.start)+" – "+formatDate(currentPeriod.end);
+
 $("periodInfo").textContent=
-"Periode absensi otomatis tanggal 11 sampai tanggal 10.";
+"ID periode: "+currentPeriodId+" • Periode otomatis tanggal 11 sampai 10.";
+
 $("recapPeriod").textContent=
 formatShort(currentPeriod.start)+" – "+formatShort(currentPeriod.end);
 }
@@ -401,9 +396,7 @@ formatShort(currentPeriod.start)+" – "+formatShort(currentPeriod.end);
 async function getUserProfile(user){
 loadingStage="Membaca profil pengguna";
 const snap=await getDoc(doc(db,"pengguna",user.uid));
-if(!snap.exists()){
-throw new Error("Profil pengguna tidak ditemukan pada collection pengguna.");
-}
+if(!snap.exists())throw new Error("Profil pengguna tidak ditemukan.");
 return snap.data();
 }
 
@@ -411,21 +404,11 @@ return snap.data();
    MENU TUGAS
 ========================================= */
 
-function getMenuIdentifiers(menuData,menuDocId){
-return [
-menuDocId,menuData.menu_id,menuData.menu_kode,
-menuData.kode_menu,menuData.kode,menuData.tugas_id,
-menuData.tugas_kode,menuData.id,menuData.halaman,
-menuData.link,menuData.url
-].filter(Boolean).map(String);
-}
-
 function isAttendanceMenu(data,id){
 const text=[
-id,data.nama,data.judul,data.menu_id,
-data.menu_kode,data.kode_menu,data.kode,
-data.tugas_id,data.tugas_kode,data.halaman,
-data.link,data.url
+id,data.nama,data.judul,data.menu_id,data.menu_kode,
+data.kode_menu,data.kode,data.tugas_id,data.tugas_kode,
+data.halaman,data.link,data.url
 ].join(" ").toLowerCase();
 
 return text.includes("absensi")||
@@ -433,19 +416,30 @@ text.includes("pengelolaan_absensi")||
 text.includes("pengelolaan-absensi");
 }
 
-function menuIsActive(menu){
-return activeStatus(firstValue(menu,["aktif","status","active"],true));
-}
-
 async function loadAttendanceMenu(){
 loadingStage="Membaca menu_tugas";
 const snap=await getDocs(collection(db,"menu_tugas"));
-const menus=snap.docs.map(d=>({id:d.id,...d.data()}));
-return menus.find(m=>menuIsActive(m)&&isAttendanceMenu(m,m.id))||null;
+
+const menus=snap.docs.map(d=>({
+id:d.id,...d.data()
+}));
+
+return menus.find(m=>
+activeStatus(firstValue(m,["aktif","status","active"],true))
+&&isAttendanceMenu(m,m.id)
+)||null;
+}
+
+function getMenuIdentifiers(menu){
+return [
+menu.id,menu.menu_id,menu.menu_kode,menu.kode_menu,
+menu.kode,menu.tugas_id,menu.tugas_kode,
+menu.id,menu.halaman,menu.link,menu.url
+].filter(Boolean).map(normalize);
 }
 
 /* =========================================
-   PENUGASAN
+   PENUGASAN PETUGAS
 ========================================= */
 
 async function loadAssignments(nik){
@@ -463,20 +457,11 @@ return activeStatus(firstValue(a,["aktif","status","active"],true));
 }
 
 function assignmentMatchesMenu(a,menu){
-if(!menu)return false;
-const assignmentMenu=firstValue(a,[
+const id=firstValue(a,[
 "menu_id","menu_kode","kode_menu","kode",
 "tugas_id","tugas_kode","menu_tugas_id"
 ],"");
-if(!assignmentMenu)return false;
-return getMenuIdentifiers(menu,menu.id)
-.map(normalize).includes(normalize(assignmentMenu));
-}
-
-function getAttendanceAssignments(assignments,menu){
-return assignments.filter(a=>
-assignmentIsActive(a)&&assignmentMatchesMenu(a,menu)
-);
+return !!id&&getMenuIdentifiers(menu).includes(normalize(id));
 }
 
 /* =========================================
@@ -494,11 +479,9 @@ return snap.docs.map(d=>({id:d.id,...d.data()}));
 }
 
 function getAuthorizedAccess(accessList,assignments){
-return accessList.filter(access=>
-normalize(access.status)==="aktif"&&
-assignments.some(a=>
-normalize(a.id)===normalize(access.penugasan_id)
-)
+return accessList.filter(a=>
+normalize(a.status)==="aktif"&&
+assignments.some(x=>x.id===a.penugasan_id)
 );
 }
 
@@ -506,23 +489,14 @@ normalize(a.id)===normalize(access.penugasan_id)
    DATA KARYAWAN
 ========================================= */
 
-function isEmployeeActive(data){
-const status=firstValue(data,[
-"status","status_karyawan","status_kerja","aktif","active"
-],"aktif");
-return activeStatus(status);
-}
-
 function mapEmployee(id,data){
 return {
-nik:normalizeNik(firstValue(data,[
-"nik","NIK","nomor_induk","no_induk"
-],id)),
+nik:normalizeNik(firstValue(data,["nik","NIK","nomor_induk"],id)),
 name:firstValue(data,["nama","nama_karyawan","name","Nama"],"Tanpa Nama"),
 div:firstValue(data,["divisi","division","nama_divisi"],"-"),
 dept:firstValue(data,["departemen","department","nama_departemen"],"-"),
 jabatan:firstValue(data,["jabatan","position","nama_jabatan"],"-"),
-tmk:firstValue(data,["tmk","tanggal_masuk","tgl_masuk","masa_kerja"],""),
+tmk:firstValue(data,["tmk","tanggal_masuk","tgl_masuk"],""),
 poh:firstValue(data,["poh","place_of_hire","lokasi","lokasi_kerja"],"-"),
 cuti:firstValue(data,["sistem_cuti","sistem cuti","cuti","jenis_cuti"],"-"),
 sched:firstValue(data,["jadwal","schedule","shift"],"-"),
@@ -534,87 +508,189 @@ async function loadEmployeesForSuperAdmin(){
 loadingStage="Membaca seluruh karyawan";
 const snap=await getDocs(collection(db,"karyawan"));
 const result=[];
+
 snap.forEach(d=>{
 const data=d.data();
-if(isEmployeeActive(data))result.push(mapEmployee(d.id,data));
+if(activeStatus(firstValue(data,[
+"status","status_karyawan","status_kerja","aktif","active"
+],"aktif"))){
+result.push(mapEmployee(d.id,data));
+}
 });
 return result;
 }
 
 async function loadEmployeesByAccess(accessList){
 const result=[];
-const uniqueNiks=new Set();
+const unique=new Map();
 
 accessList.forEach(a=>{
 const nik=normalizeNik(a.target_nik);
-if(nik)uniqueNiks.add(nik);
+if(nik&&!unique.has(nik))unique.set(nik,a);
 });
 
-for(const nik of uniqueNiks){
+for(const [nik,access] of unique){
 loadingStage="Membaca data karyawan NIK "+nik;
+
 const snap=await getDoc(doc(db,"karyawan",nik));
 if(!snap.exists())continue;
+
 const data=snap.data();
-if(isEmployeeActive(data))result.push(mapEmployee(snap.id,data));
+if(!activeStatus(firstValue(data,[
+"status","status_karyawan","status_kerja","aktif","active"
+],"aktif")))continue;
+
+const employee=mapEmployee(snap.id,data);
+employee.penugasan_id=access.penugasan_id;
+employee.akses_id=access.id;
+employee.petugas_nik=access.petugas_nik;
+
+result.push(employee);
+accessByNik[nik]=access;
 }
+
 return result;
 }
 
-function describeAssignments(assignments){
-return assignments.map(a=>
-firstValue(a,["nama_tugas","nama","judul"],"Pengelolaan Absensi")
-).join(" | ");
+/* =========================================
+   MASTER KODE ABSENSI
+========================================= */
+
+async function loadCodes(){
+loadingStage="Membaca master_kode_absensi";
+
+const snap=await getDocs(collection(db,"master_kode_absensi"));
+
+if(snap.empty){
+attendanceCodes=defaultCodes;
+return;
+}
+
+attendanceCodes=snap.docs
+.map(d=>{
+const x=d.data();
+return {
+kode:String(x.kode||d.id),
+nama:x.nama||d.id,
+kategori:x.kategori||"-",
+aktif:x.aktif===true
+};
+})
+.filter(x=>x.aktif)
+.map(x=>[x.kode,x.nama,x.kategori]);
+
+if(!attendanceCodes.length){
+throw new Error("Tidak ada kode absensi aktif pada master_kode_absensi.");
+}
 }
 
 /* =========================================
-   MEMBACA ABSENSI DARI FIRESTORE
+   MEMBACA DATA ABSENSI FIRESTORE
 ========================================= */
 
-async function loadDailyFromFirestore(){
+async function loadAttendanceFromFirebase(){
 
 loadingStage="Membaca data_absensi dari Firebase";
 
 values={};
 notes={};
-originalValues={};
-originalNotes={};
-dailyRecords={};
+savedRecords={};
 
-for(const s of authorizedStaff){
+function processRecord(d){
+const data=d.data();
 
-const id=dataKey(currentDate,s.nik);
-const snap=await getDoc(doc(db,"data_absensi",id));
+if(!data.tanggal||!data.nik)return;
 
-if(!snap.exists())continue;
+if(
+data.tanggal<currentPeriod.start||
+data.tanggal>currentPeriod.end
+)return;
 
-const data=snap.data();
+const key=dataKey(data.tanggal,data.nik);
 
-values[id]=String(data.kode_absensi??"");
-notes[id]=String(data.keterangan??"");
-
-originalValues[id]=values[id];
-originalNotes[id]=notes[id];
-dailyRecords[id]=data;
+values[key]=data.kode||"";
+notes[key]=data.keterangan||"";
+savedRecords[key]={
+id:d.id,
+...data
+};
 }
 
-render();
+if(isSuperAdmin){
+
+const snap=await getDocs(collection(db,"data_absensi"));
+snap.forEach(processRecord);
+
+}else{
+
+for(const employee of authorizedStaff){
+
+const q=query(
+collection(db,"data_absensi"),
+where("nik","==",employee.nik)
+);
+
+const snap=await getDocs(q);
+snap.forEach(processRecord);
+}
+}
 }
 
 /* =========================================
-   MENAMPILKAN ABSENSI
+   MEMBACA PERIODE FIRESTORE
+========================================= */
+
+async function validateActivePeriod(){
+
+loadingStage="Memeriksa periode_absensi";
+
+const ref=doc(db,"periode_absensi",currentPeriodId);
+const snap=await getDoc(ref);
+
+if(!snap.exists()){
+throw new Error(
+"Dokumen periode_absensi/"+currentPeriodId+
+" tidak ditemukan. Buat atau periksa dokumen periode tersebut."
+);
+}
+
+const data=snap.data();
+
+if(data.status!=="aktif"){
+throw new Error(
+"Periode "+currentPeriodId+" tidak aktif. Status: "+data.status
+);
+}
+
+if(
+data.tanggal_mulai&&data.tanggal_mulai!==currentPeriod.start
+){
+throw new Error("Tanggal mulai periode Firebase tidak sesuai.");
+}
+
+if(
+data.tanggal_selesai&&data.tanggal_selesai!==currentPeriod.end
+){
+throw new Error("Tanggal selesai periode Firebase tidak sesuai.");
+}
+
+return data;
+}
+
+/* =========================================
+   RENDER TABEL ABSENSI
 ========================================= */
 
 function render(){
 
-const q=$("search").value.toLowerCase();
+const search=$("search").value.toLowerCase();
 rows.innerHTML="";
 
-const filtered=authorizedStaff.filter(s=>{
-const text=[
+const filtered=authorizedStaff.filter(s=>
+[
 s.name,s.nik,s.div,s.dept,s.jabatan
-].join(" ").toLowerCase();
-return text.includes(q);
-});
+].join(" ").toLowerCase().includes(search)
+);
 
 $("employeeCount").textContent=authorizedStaff.length+" Karyawan";
 
@@ -624,10 +700,13 @@ const key=dataKey(currentDate,s.nik);
 const selected=values[key]||"";
 const note=notes[key]||"";
 
-const options=codes.map(([v,t])=>`
-<option value="${escapeHTML(v)}" ${selected===v?"selected":""}>
-${escapeHTML(t)}
-</option>`).join("");
+const options=
+'<option value="">— Pilih Kode —</option>'+
+attendanceCodes.map(c=>
+`<option value="${escapeHTML(c[0])}" ${selected===c[0]?"selected":""}>
+${escapeHTML(c[0]+" - "+c[1])}
+</option>`
+).join("");
 
 rows.insertAdjacentHTML("beforeend",`
 <tr>
@@ -648,7 +727,7 @@ ${options}
 </td>
 <td>
 <input class="noteInput" data-nik="${escapeHTML(s.nik)}"
-placeholder="Keterangan" value="${escapeHTML(note)}">
+value="${escapeHTML(note)}" placeholder="Keterangan">
 </td>
 </tr>
 `);
@@ -658,16 +737,21 @@ bindEvents();
 stats();
 }
 
+/* =========================================
+   EVENT INPUT
+========================================= */
+
 function bindEvents(){
 
 document.querySelectorAll(".status").forEach(el=>{
 el.onchange=()=>{
-const nik=normalizeNik(el.dataset.nik);
+const nik=el.dataset.nik;
+
 if(!authorizedStaff.some(s=>s.nik===nik)){
-alert("Karyawan tidak termasuk lingkup penugasan.");
-el.value="";
+alert("Karyawan di luar penugasan.");
 return;
 }
+
 values[dataKey(currentDate,nik)]=el.value;
 stats();
 };
@@ -675,8 +759,7 @@ stats();
 
 document.querySelectorAll(".noteInput").forEach(el=>{
 el.oninput=()=>{
-const nik=normalizeNik(el.dataset.nik);
-if(!authorizedStaff.some(s=>s.nik===nik))return;
+const nik=el.dataset.nik;
 notes[dataKey(currentDate,nik)]=el.value;
 };
 });
@@ -688,14 +771,16 @@ notes[dataKey(currentDate,nik)]=el.value;
 
 function stats(){
 
-const total=authorizedStaff.length;
-let masuk=0,terisi=0;
+let masuk=0;
+let terisi=0;
 
 authorizedStaff.forEach(s=>{
 const code=values[dataKey(currentDate,s.nik)]||"";
 if(code)terisi++;
 if(code==="1")masuk++;
 });
+
+const total=authorizedStaff.length;
 
 $("total").textContent=total;
 $("present").textContent=masuk;
@@ -706,135 +791,219 @@ $("percent").textContent=
 }
 
 /* =========================================
-   SIMPAN KE FIRESTORE
+   ID DOKUMEN ABSENSI
+========================================= */
+
+function attendanceDocumentId(nik,tanggal){
+return nik+"_"+tanggal;
+}
+
+/* =========================================
+   SIMPAN DAN UBAH ABSENSI FIRESTORE
 ========================================= */
 
 async function saveAttendance(){
 
-if(busy)return;
+if(!currentUser)throw new Error("Pengguna belum login.");
 
-const changed=authorizedStaff.filter(s=>{
-const id=dataKey(currentDate,s.nik);
-return values[id]!==originalValues[id]||
-notes[id]!==originalNotes[id];
-});
+await validateActivePeriod();
 
-if(!changed.length){
-alert("Tidak ada perubahan absensi untuk disimpan.");
+let success=0;
+let failed=0;
+let unchanged=0;
+const errors=[];
+
+const selectedStaff=authorizedStaff.filter(s=>
+values[dataKey(currentDate,s.nik)]
+);
+
+if(!selectedStaff.length){
+alert("Isi minimal satu status absensi.");
 return;
 }
 
 if(!confirm(
-"Simpan perubahan absensi "+changed.length+
-" karyawan ke Firebase?"
+"Simpan "+selectedStaff.length+
+" data absensi ke Firebase untuk tanggal "+
+formatDate(currentDate)+"?"
 ))return;
 
-setBusy(true);
+$("save").disabled=true;
+$("save").textContent="Menyimpan...";
 
 try{
 
-loadingStage="Menyimpan data_absensi";
+for(const employee of selectedStaff){
 
-const batch=writeBatch(db);
-const historyRefs=[];
+const key=dataKey(currentDate,employee.nik);
+const kode=values[key];
+const keterangan=notes[key]||"";
 
-for(const s of changed){
+const absensiId=attendanceDocumentId(
+employee.nik,currentDate
+);
 
-const id=dataKey(currentDate,s.nik);
-const ref=doc(db,"data_absensi",id);
+const ref=doc(db,"data_absensi",absensiId);
 
-const oldCode=originalValues[id]||"";
-const oldNote=originalNotes[id]||"";
-const newCode=values[id]||"";
-const newNote=notes[id]||"";
+try{
 
-const existing=dailyRecords[id]||{};
+loadingStage="Menyimpan absensi NIK "+employee.nik;
 
-batch.set(ref,{
+const oldSnap=await getDoc(ref);
 
-nik:s.nik,
-nama:s.name,
-divisi:s.div,
-departemen:s.dept,
-jabatan:s.jabatan,
+const oldData=oldSnap.exists()?oldSnap.data():null;
 
-tanggal:currentDate,
-periode_mulai:currentPeriod.start,
-periode_selesai:currentPeriod.end,
-
-kode_absensi:newCode,
-keterangan:newNote,
-
-petugas_nik:currentNik,
-petugas_nama:firstValue(currentProfile,["nama"],""),
-
-penugasan_ids:assignmentList
-.filter(assignmentIsActive)
-.map(a=>a.id),
-
-dibuat_pada:existing.dibuat_pada||serverTimestamp(),
-diperbarui_pada:serverTimestamp()
-
-},{merge:true});
-
-/* RIWAYAT PERUBAHAN */
-
-const historyRef=doc(collection(db,"riwayat_perubahan_absensi"));
-
-batch.set(historyRef,{
-
-data_absensi_id:id,
-nik:s.nik,
-nama:s.name,
-tanggal:currentDate,
-
-kode_lama:oldCode,
-kode_baru:newCode,
-
-keterangan_lama:oldNote,
-keterangan_baru:newNote,
-
-petugas_nik:currentNik,
-petugas_nama:firstValue(currentProfile,["nama"],""),
-
-waktu_perubahan:serverTimestamp(),
-jenis_perubahan:existing.kode_absensi===undefined
-?"input_absensi":"perubahan_absensi"
-
-});
-
-historyRefs.push(historyRef);
+if(
+oldData&&
+oldData.kode===kode&&
+(oldData.keterangan||"")===keterangan
+){
+unchanged++;
+continue;
 }
 
-await batch.commit();
+const access=accessByNik[employee.nik]||{};
 
-loadingStage="Memastikan data tersimpan";
+const assignmentId=isSuperAdmin
+?"super_admin"
+:(employee.penugasan_id||access.penugasan_id||"");
 
-await loadDailyFromFirestore();
+if(!isSuperAdmin&&!assignmentId){
+throw new Error("ID penugasan tidak ditemukan.");
+}
 
-showMessage(
-"Berhasil! "+changed.length+
-" data absensi dan riwayat perubahan telah dikirim ke Firebase."
+const payload={
+absensi_id:absensiId,
+periode_id:currentPeriodId,
+tanggal:currentDate,
+nik:employee.nik,
+kode:kode,
+keterangan:keterangan,
+petugas_nik:currentNik,
+penugasan_id:assignmentId
+};
+
+if(oldData){
+
+// UPDATE: createdAt dan createdBy dipertahankan.
+
+payload.createdAt=oldData.createdAt;
+payload.createdBy=oldData.createdBy;
+payload.updatedAt=serverTimestamp();
+payload.updatedBy=currentUser.uid;
+
+await setDoc(ref,payload);
+
+// Catat perubahan yang dilakukan.
+
+await addDoc(
+collection(db,"riwayat_perubahan_absensi"),
+{
+absensi_id:absensiId,
+periode_id:currentPeriodId,
+tanggal:currentDate,
+nik:employee.nik,
+kode_lama:oldData.kode||"",
+kode_baru:kode,
+keterangan_lama:oldData.keterangan||"",
+keterangan_baru:keterangan,
+aksi:"perubahan",
+petugas_nik:currentNik,
+penugasan_id:assignmentId,
+createdAt:serverTimestamp(),
+createdBy:currentUser.uid
+}
 );
+
+}else{
+
+// CREATE: dokumen absensi baru.
+
+payload.createdAt=serverTimestamp();
+payload.createdBy=currentUser.uid;
+payload.updatedAt=serverTimestamp();
+payload.updatedBy=currentUser.uid;
+
+await setDoc(ref,payload);
+
+await addDoc(
+collection(db,"riwayat_perubahan_absensi"),
+{
+absensi_id:absensiId,
+periode_id:currentPeriodId,
+tanggal:currentDate,
+nik:employee.nik,
+kode_lama:"",
+kode_baru:kode,
+keterangan_lama:"",
+keterangan_baru:keterangan,
+aksi:"pembuatan",
+petugas_nik:currentNik,
+penugasan_id:assignmentId,
+createdAt:serverTimestamp(),
+createdBy:currentUser.uid
+}
+);
+}
+
+success++;
 
 }catch(error){
+failed++;
+errors.push(employee.nik+": "+error.message);
+}
+}
 
-console.error(error);
-
-alert(
-"Gagal menyimpan ke Firebase.\n\n"+
-(error.message||String(error))
-);
+}catch(error){
+alert("Gagal menyimpan: "+error.message);
+return;
 
 }finally{
-setBusy(false);
-}
+$("save").disabled=false;
+$("save").textContent="💾 Simpan ke Firebase";
 }
 
-$("save").onclick=saveAttendance;
+await loadAttendanceFromFirebase();
+render();
+
+let message=
+"Proses penyimpanan selesai.\n\n"+
+"Berhasil: "+success+"\n"+
+"Tidak berubah: "+unchanged+"\n"+
+"Gagal: "+failed;
+
+if(errors.length){
+message+="\n\nRincian kegagalan:\n"+errors.join("\n");
+}
+
+alert(message);
+}
 
 /* =========================================
-   MODE MASSAL
+   KOSONGKAN INPUT
+========================================= */
+
+$("reset").onclick=()=>{
+
+if(!confirm(
+"Kosongkan input tanggal ini? Data yang sudah tersimpan di Firebase tidak dihapus."
+))return;
+
+authorizedStaff.forEach(s=>{
+const key=dataKey(currentDate,s.nik);
+
+// Data Firebase yang sudah ada tidak dihapus.
+if(!savedRecords[key]){
+values[key]="";
+notes[key]="";
+}
+});
+
+render();
+};
+
+/* =========================================
+   MODE INDIVIDUAL
 ========================================= */
 
 $("individual").onclick=()=>{
@@ -843,6 +1012,10 @@ $("individual").classList.add("selected");
 $("mass").classList.remove("selected");
 };
 
+/* =========================================
+   MODE MASSAL
+========================================= */
+
 $("mass").onclick=()=>{
 
 currentMode="mass";
@@ -850,28 +1023,27 @@ $("mass").classList.add("selected");
 $("individual").classList.remove("selected");
 
 const code=prompt(
-"Masukkan kode absensi untuk seluruh karyawan yang tampil.\n\n"+
-codes.filter(c=>c[0]).map(c=>c[0]+" = "+c[1]).join("\n")+
+"Masukkan kode absensi:\n"+
+attendanceCodes.map(c=>c[0]+" = "+c[1]).join("\n")+
 "\n\nKosongkan untuk membatalkan."
 );
 
 if(code===null||code==="")return;
 
-if(!codes.some(c=>c[0]===code)){
-alert("Kode absensi tidak tersedia.");
+if(!attendanceCodes.some(c=>c[0]===code)){
+alert("Kode tidak ditemukan atau tidak aktif.");
 return;
 }
 
-const q=$("search").value.toLowerCase();
+const search=$("search").value.toLowerCase();
 
 const filtered=authorizedStaff.filter(s=>
 [s.name,s.nik,s.div,s.dept,s.jabatan]
-.join(" ").toLowerCase().includes(q)
+.join(" ").toLowerCase().includes(search)
 );
 
 if(!confirm(
-"Kode "+code+" diterapkan kepada "+
-filtered.length+" karyawan?"
+"Terapkan kode "+code+" kepada "+filtered.length+" karyawan?"
 ))return;
 
 filtered.forEach(s=>{
@@ -889,75 +1061,43 @@ $("search").oninput=render;
 
 $("datePick").onchange=async e=>{
 
-if(busy)return;
-
 currentDate=e.target.value;
-
 updatePeriod();
 
 try{
-await loadDailyFromFirestore();
+await loadAttendanceFromFirebase();
+render();
 }catch(error){
-alert("Gagal membaca absensi: "+error.message);
+showError("Gagal membaca absensi tanggal terpilih: "+error.message);
 }
 };
 
 /* =========================================
-   REKAP FIRESTORE
+   TAB
 ========================================= */
 
-let recapData=[];
+document.querySelectorAll(".tab").forEach(button=>{
 
-async function buildRecap(){
+button.onclick=()=>{
 
-loadingStage="Membaca seluruh absensi periode";
+document.querySelectorAll(".tab")
+.forEach(t=>t.classList.remove("active"));
 
-const dates=getDates(currentPeriod.start,currentPeriod.end);
-recapData=[];
+button.classList.add("active");
 
-for(const s of authorizedStaff){
+["inputPanel","recapPanel","historyPanel"]
+.forEach(id=>$(id).classList.add("hidden"));
 
-const daily={};
+$(button.dataset.tab+"Panel").classList.remove("hidden");
 
-for(const date of dates){
-
-const id=dataKey(date,s.nik);
-let data;
-
-if(date===currentDate){
-data=dailyRecords[id]||null;
-}else{
-const snap=await getDoc(doc(db,"data_absensi",id));
-data=snap.exists()?snap.data():null;
-}
-
-daily[date]=data?.kode_absensi||"";
-}
-
-const counts={};
-
-codes.filter(c=>c[0]).forEach(c=>{
-counts[c[0]]=0;
+if(button.dataset.tab==="recap")renderRecap();
+if(button.dataset.tab==="history")loadHistory();
+};
 });
 
-dates.forEach(date=>{
-const code=daily[date];
-if(code&&counts[code]!==undefined)counts[code]++;
-});
-
-const terisi=Object.values(counts).reduce((a,b)=>a+b,0);
-
-recapData.push({
-staff:s,
-daily,
-counts,
-terisi,
-masuk:counts["1"]||0
-});
-}
-
-renderRecap();
-}
+/* =========================================
+   REKAP FIRESTORE
+========================================= */
 
 function renderRecap(){
 
@@ -966,43 +1106,21 @@ const dates=getDates(currentPeriod.start,currentPeriod.end);
 let head=`
 <tr>
 <th>No</th><th>NIK</th><th>Nama</th>
-<th>Divisi</th><th>Departemen</th>
-<th>Jabatan</th><th>TMK</th>
-<th>POH</th><th>Sistem Cuti</th>
+<th>Divisi</th><th>Departemen</th><th>Jabatan</th>
 `;
 
-dates.forEach(d=>{
-head+=`<th>${formatShort(d)}</th>`;
-});
+dates.forEach(d=>head+=`<th>${formatShort(d)}</th>`);
 
-head+=`
-<th>Hari Kerja</th>
-<th>Masuk Kerja</th>
-<th>Potongan Absensi</th>
-<th>Insentif Tanggal Merah</th>
-<th>Kehadiran Kerja</th>
-<th>Kehadiran (%)</th>
-<th>TMK Masa Kerja</th>
-<th>Cut-off Date</th>
-<th>Tahun</th>
-<th>Bulan</th>
-<th>Bonus Pribadi Amount</th>
-<th>Bonus Pribadi %</th>
-<th>Bonus Pribadi Total</th>
-<th>Bonus Kehadiran Team</th>
-<th>Total Bonus Kehadiran</th>
-<th>Keterangan</th>
-</tr>`;
+head+=`<th>Jumlah Kode 1</th><th>Status Terisi</th></tr>`;
 
 $("recapHead").innerHTML=head;
 
 let body="";
 
-recapData.forEach((r,i)=>{
+authorizedStaff.forEach((s,i)=>{
 
-const s=r.staff;
-const persen=dates.length?
-Math.round(r.masuk/dates.length*100):0;
+let masuk=0;
+let terisi=0;
 
 body+=`
 <tr>
@@ -1012,217 +1130,87 @@ body+=`
 <td>${escapeHTML(s.div)}</td>
 <td>${escapeHTML(s.dept)}</td>
 <td>${escapeHTML(s.jabatan)}</td>
-<td>${escapeHTML(formatDate(s.tmk))}</td>
-<td>${escapeHTML(s.poh)}</td>
-<td>${escapeHTML(s.cuti)}</td>
 `;
 
 dates.forEach(date=>{
-body+=`<td>${escapeHTML(r.daily[date])}</td>`;
+const code=values[dataKey(date,s.nik)]||"";
+if(code)terisi++;
+if(code==="1")masuk++;
+body+=`<td>${escapeHTML(code)}</td>`;
 });
 
-body+=`
-<td>${dates.length}</td>
-<td>${r.masuk}</td>
-<td></td>
-<td></td>
-<td>${r.masuk}</td>
-<td>${persen}%</td>
-<td>${escapeHTML(formatDate(s.tmk))}</td>
-<td>${formatDate(currentPeriod.end)}</td>
-<td>${currentPeriod.end.substring(0,4)}</td>
-<td>${currentPeriod.end.substring(5,7)}</td>
-<td></td><td></td><td></td><td></td><td></td><td></td>
-</tr>`;
+body+=`<td>${masuk}</td><td>${terisi}</td></tr>`;
 });
 
 $("recapRows").innerHTML=body;
 }
 
 /* =========================================
-   SIMPAN REKAP KE FIRESTORE
-========================================= */
-
-async function saveRecap(){
-
-if(busy)return;
-
-if(!recapData.length){
-alert("Rekap belum dimuat.");
-return;
-}
-
-if(!confirm("Simpan rekap periode ke Firestore?"))return;
-
-setBusy(true);
-
-try{
-
-const batch=writeBatch(db);
-
-for(const r of recapData){
-
-const s=r.staff;
-
-const id=currentPeriod.start+"_"+currentPeriod.end+"_"+s.nik;
-
-const ref=doc(db,"rekap_absensi",id);
-
-batch.set(ref,{
-
-nik:s.nik,
-nama:s.name,
-divisi:s.div,
-departemen:s.dept,
-jabatan:s.jabatan,
-
-periode_mulai:currentPeriod.start,
-periode_selesai:currentPeriod.end,
-
-data_harian:r.daily,
-jumlah_masuk:r.masuk,
-jumlah_status_terisi:r.terisi,
-
-jumlah_cuti:r.counts["2"]||0,
-jumlah_sakit:r.counts["3"]||0,
-jumlah_ijin:r.counts["4"]||0,
-jumlah_lwop:r.counts["7"]||0,
-jumlah_mangkir:r.counts["9"]||0,
-
-petugas_nik:currentNik,
-diperbarui_pada:serverTimestamp()
-
-},{merge:true});
-}
-
-await batch.commit();
-
-showMessage("Rekap periode berhasil disimpan ke Firestore.");
-
-}catch(error){
-
-console.error(error);
-alert("Gagal menyimpan rekap: "+error.message);
-
-}finally{
-setBusy(false);
-}
-}
-
-$("recapSave").onclick=saveRecap;
-
-/* =========================================
    RIWAYAT PERUBAHAN FIRESTORE
 ========================================= */
 
-async function renderHistory(){
+async function loadHistory(){
 
-$("historyList").textContent="Memuat riwayat dari Firebase...";
+$("historyList").textContent="Memuat riwayat Firebase...";
 
 try{
 
 loadingStage="Membaca riwayat_perubahan_absensi";
 
-let q;
+let records=[];
 
 if(isSuperAdmin){
-q=query(
-collection(db,"riwayat_perubahan_absensi"),
-limit(100)
+
+const snap=await getDocs(
+collection(db,"riwayat_perubahan_absensi")
 );
+
+records=snap.docs.map(d=>({id:d.id,...d.data()}));
+
 }else{
-q=query(
+
+for(const employee of authorizedStaff){
+
+const q=query(
 collection(db,"riwayat_perubahan_absensi"),
-where("petugas_nik","==",currentNik),
-limit(100)
+where("nik","==",employee.nik)
 );
-}
 
 const snap=await getDocs(q);
 
-if(snap.empty){
+snap.forEach(d=>records.push({
+id:d.id,...d.data()
+}));
+}
+}
+
+records.sort((a,b)=>{
+const ta=a.createdAt?.toMillis?.()||0;
+const tb=b.createdAt?.toMillis?.()||0;
+return tb-ta;
+});
+
+if(!records.length){
 $("historyList").textContent="Belum ada riwayat perubahan.";
 return;
 }
 
-const list=snap.docs.map(d=>({
-id:d.id,...d.data()
-}));
-
-list.sort((a,b)=>{
-const ta=a.waktu_perubahan?.seconds||0;
-const tb=b.waktu_perubahan?.seconds||0;
-return tb-ta;
-});
-
-$("historyList").innerHTML=list.map(h=>{
-
-let waktu="-";
-
-if(h.waktu_perubahan?.toDate){
-waktu=h.waktu_perubahan.toDate().toLocaleString("id-ID");
-}
-
-return `
+$("historyList").innerHTML=records.slice(0,100).map(r=>`
 <div class="recap-card">
-<b>${escapeHTML(h.nama||h.nik)}</b>
-<p>NIK: ${escapeHTML(h.nik)}</p>
-<p>Tanggal absensi: ${escapeHTML(formatDate(h.tanggal))}</p>
-<p>Kode lama: ${escapeHTML(h.kode_lama||"(kosong)")}</p>
-<p>Kode baru: ${escapeHTML(h.kode_baru||"(kosong)")}</p>
-<p>Petugas: ${escapeHTML(h.petugas_nik)}</p>
-<p>Waktu: ${escapeHTML(waktu)}</p>
+<b>${escapeHTML(r.aksi||"Perubahan absensi")}</b>
+<p>NIK: ${escapeHTML(r.nik)}</p>
+<p>Tanggal: ${escapeHTML(formatDate(r.tanggal))}</p>
+<p>Kode lama: ${escapeHTML(r.kode_lama||"-")}</p>
+<p>Kode baru: ${escapeHTML(r.kode_baru||"-")}</p>
+<p>Petugas: ${escapeHTML(r.petugas_nik||"-")}</p>
 </div>
-`;
-}).join("");
+`).join("");
 
 }catch(error){
-
-console.error(error);
 $("historyList").innerHTML=
-`<div class="error">Gagal membaca riwayat: ${escapeHTML(error.message)}</div>`;
+`<div class="error">${escapeHTML(error.message)}</div>`;
 }
 }
-
-/* =========================================
-   TAB
-========================================= */
-
-document.querySelectorAll(".tab").forEach(button=>{
-
-button.onclick=async()=>{
-
-document.querySelectorAll(".tab").forEach(t=>
-t.classList.remove("active")
-);
-
-button.classList.add("active");
-
-["inputPanel","recapPanel","historyPanel"].forEach(id=>
-$(id).classList.add("hidden")
-);
-
-$(button.dataset.tab+"Panel").classList.remove("hidden");
-
-if(button.dataset.tab==="recap"){
-
-try{
-setBusy(true);
-await buildRecap();
-}catch(error){
-alert("Gagal membuat rekap: "+error.message);
-}finally{
-setBusy(false);
-}
-
-}
-
-if(button.dataset.tab==="history"){
-await renderHistory();
-}
-
-};
-});
 
 /* =========================================
    EXCEL HARIAN
@@ -1236,9 +1224,9 @@ return;
 }
 
 const data=[
-["LAPORAN ABSENSI HARIAN WAINI"],
+["LAPORAN ABSENSI WAINI"],
 ["Tanggal",currentDate],
-["Periode",currentPeriod.start+" s.d. "+currentPeriod.end],
+["Periode",currentPeriodId],
 ["Petugas",currentNik],
 [],
 ["No","NIK","Nama","Divisi","Departemen","Jabatan",
@@ -1246,15 +1234,12 @@ const data=[
 ];
 
 authorizedStaff.forEach((s,i)=>{
-
-const id=dataKey(currentDate,s.nik);
-
+const key=dataKey(currentDate,s.nik);
 data.push([
 i+1,s.nik,s.name,s.div,s.dept,s.jabatan,
 s.tmk,s.poh,s.cuti,s.sched,
-values[id]||"",notes[id]||""
+values[key]||"",notes[key]||""
 ]);
-
 });
 
 const wb=XLSX.utils.book_new();
@@ -1277,20 +1262,11 @@ alert("Pustaka Excel belum termuat.");
 return;
 }
 
-if(!recapData.length){
-alert("Buka tab Rekap Periode terlebih dahulu.");
-return;
-}
-
 const dates=getDates(currentPeriod.start,currentPeriod.end);
 
 const header=[
-"No","NIK","Nama","Divisi","Departemen",
-"Jabatan","TMK","POH","Sistem Cuti",
-...dates,
-"Hari Kerja","Masuk Kerja","Potongan Absensi",
-"Insentif Tanggal Merah","Kehadiran Kerja",
-"Kehadiran (%)","Cut-off Date"
+"No","NIK","Nama","Divisi","Departemen","Jabatan",
+...dates,"Jumlah Kode 1","Status Terisi"
 ];
 
 const data=[
@@ -1301,19 +1277,21 @@ const data=[
 header
 ];
 
-recapData.forEach((r,i)=>{
+authorizedStaff.forEach((s,i)=>{
 
-const s=r.staff;
+let masuk=0,terisi=0;
 
-data.push([
-i+1,s.nik,s.name,s.div,s.dept,s.jabatan,
-s.tmk,s.poh,s.cuti,
-...dates.map(d=>r.daily[d]),
-dates.length,r.masuk,"","","",
-dates.length?Math.round(r.masuk/dates.length*100):0,
-currentPeriod.end
-]);
+const row=[i+1,s.nik,s.name,s.div,s.dept,s.jabatan];
 
+dates.forEach(date=>{
+const code=values[dataKey(date,s.nik)]||"";
+row.push(code);
+if(code)terisi++;
+if(code==="1")masuk++;
+});
+
+row.push(masuk,terisi);
+data.push(row);
 });
 
 const wb=XLSX.utils.book_new();
@@ -1323,16 +1301,34 @@ wb,XLSX.utils.aoa_to_sheet(data),"Rekap Periode"
 );
 
 XLSX.writeFile(
-wb,"WAINI_Rekap_"+currentPeriod.start+"_"+currentPeriod.end+".xlsx"
+wb,"WAINI_Rekap_"+currentPeriodId+".xlsx"
 );
 };
 
 /* =========================================
-   CETAK
+   CETAK DAN SIMPAN
 ========================================= */
+
+$("save").onclick=saveAttendance;
 
 $("print").onclick=()=>window.print();
 $("recapPrint").onclick=()=>window.print();
+
+/* =========================================
+   ERROR
+========================================= */
+
+function showError(message){
+
+$("errorBox").classList.remove("hidden");
+
+$("errorBox").innerHTML=`
+<div class="error">
+<b>Gagal memuat data absensi.</b><br><br>
+${escapeHTML(message)}
+</div>
+`;
+}
 
 /* =========================================
    MULAI APLIKASI
@@ -1344,15 +1340,13 @@ currentUser=user;
 
 currentProfile=await getUserProfile(user);
 
-currentNik=normalizeNik(firstValue(currentProfile,[
-"nik","NIK","nomor_induk"
-],""));
+currentNik=normalizeNik(firstValue(
+currentProfile,["nik","NIK","nomor_induk"],""
+));
 
-currentRole=normalize(firstValue(currentProfile,["role"],""));
+currentRole=normalize(currentProfile.role||"");
 
-const status=firstValue(currentProfile,["status"],"");
-
-if(!activeStatus(status)){
+if(!activeStatus(currentProfile.status)){
 throw new Error("Akun WAINI tidak aktif.");
 }
 
@@ -1360,117 +1354,119 @@ if(!currentNik){
 throw new Error("NIK pengguna tidak ditemukan.");
 }
 
-isSuperAdmin=[
-"super_admin","superadmin","super admin"
-].includes(currentRole);
+isSuperAdmin=["super_admin","superadmin","super admin"]
+.includes(currentRole);
 
 $("userInfo").innerHTML=`
-👤 ${escapeHTML(firstValue(currentProfile,["nama"],"Pengguna"))}<br>
+👤 ${escapeHTML(currentProfile.nama||"Pengguna")}<br>
 <b>${escapeHTML(currentNik)} • ${escapeHTML(currentRole)}</b>
 `;
+
+// SUPER ADMIN
 
 if(isSuperAdmin){
 
 authorizedStaff=await loadEmployeesForSuperAdmin();
-staff=authorizedStaff;
 
-assignmentList=[];
-
-$("scopeText").textContent="Super Admin • Seluruh karyawan aktif";
+$("scopeText").textContent=
+"Super Admin • Seluruh karyawan aktif";
 
 }else{
+
+// MENU ABSENSI
 
 attendanceMenu=await loadAttendanceMenu();
 
 if(!attendanceMenu){
-throw new Error("Menu Pengelolaan Absensi tidak ditemukan atau belum aktif.");
+throw new Error("Menu Pengelolaan Absensi tidak ditemukan atau tidak aktif.");
 }
+
+// PENUGASAN
 
 assignmentList=await loadAssignments(currentNik);
 
-const attendanceAssignments=
-getAttendanceAssignments(assignmentList,attendanceMenu);
+attendanceAssignments=assignmentList.filter(a=>
+assignmentIsActive(a)&&
+assignmentMatchesMenu(a,attendanceMenu)
+);
 
 if(!attendanceAssignments.length){
-throw new Error("NIK "+currentNik+" belum memiliki penugasan absensi aktif.");
+throw new Error("Tidak ada penugasan absensi aktif untuk NIK "+currentNik);
 }
+
+// AKSES KARYAWAN
 
 const accessList=await loadEmployeeAccess(currentNik);
 
-const authorizedAccess=getAuthorizedAccess(
+authorizedAccess=getAuthorizedAccess(
 accessList,attendanceAssignments
 );
 
 if(!authorizedAccess.length){
 throw new Error(
-"Belum ada akses_karyawan aktif yang terhubung dengan penugasan.\n"+
-"petugas_nik = "+currentNik+"\n"+
-"status = aktif\n"+
-"penugasan_id = ID dokumen penugasan_karyawan"
+"Belum ada akses_karyawan aktif yang sesuai penugasan.\n"+
+"Petugas NIK: "+currentNik
 );
 }
 
-authorizedStaff=await loadEmployeesByAccess(authorizedAccess);
-staff=authorizedStaff;
+// DATA KARYAWAN
 
-$("scopeText").textContent=describeAssignments(attendanceAssignments);
+authorizedStaff=await loadEmployeesByAccess(authorizedAccess);
+
+$("scopeText").textContent=
+attendanceAssignments.map(a=>
+a.nama_tugas||a.nama||a.judul||"Pengelolaan Absensi"
+).join(" | ");
 }
 
-const today=new Date();
+if(!authorizedStaff.length){
+throw new Error("Tidak ada karyawan aktif dalam lingkup akses Anda.");
+}
 
-currentDate=toISO(today);
+// MASTER KODE
 
+await loadCodes();
+
+// TANGGAL
+
+currentDate=toISO(new Date());
 $("datePick").value=currentDate;
 
 updatePeriod();
 
+// DATA FIRESTORE
+
+await loadAttendanceFromFirebase();
+
+// TAMPILKAN
+
 $("loading").classList.add("hidden");
 $("app").classList.remove("hidden");
 
-await loadDailyFromFirestore();
+render();
 }
 
 /* =========================================
-   LOGIN DAN PENANGANAN ERROR
+   AUTH
 ========================================= */
 
 onAuthStateChanged(auth,async user=>{
 
 if(!user){
-
 $("loading").classList.add("hidden");
-$("errorBox").classList.remove("hidden");
-
-$("errorBox").innerHTML=`
-<div class="error">
-<b>Anda belum login ke WAINI.</b><br>
-Silakan login terlebih dahulu.
-</div>`;
-
+showError("Anda belum login. Silakan login ke WAINI terlebih dahulu.");
 return;
 }
 
 try{
-
-loadingStage="Memulai aplikasi";
 await startApp(user);
-
 }catch(error){
-
-console.error("WAINI ABSENSI ERROR:",error);
-
+console.error("WAINI ABSENSI:",error);
 $("loading").classList.add("hidden");
-$("errorBox").classList.remove("hidden");
-
-$("errorBox").innerHTML=`
-<div class="error">
-<b>Gagal memuat data absensi.</b><br><br>
-<b>Tahap yang gagal:</b><br>
-${escapeHTML(loadingStage)}<br><br>
-<b>Pesan kesalahan:</b><br>
-${escapeHTML(error.message||String(error))}
-</div>`;
-
+showError(
+"Tahap yang gagal: "+loadingStage+
+"\n\nPesan kesalahan: "+(error.message||String(error))
+);
 }
 
 });
