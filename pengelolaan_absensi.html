@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#8d171d">
+
+<title>Pengelolaan Absensi - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f5f8;
+    color: #202938;
+    padding-bottom: 30px;
+}
+
+header {
+    background: linear-gradient(135deg, #7d1018, #a51e28);
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 3px 12px #0002;
+}
+
+.logo {
+    font-size: 30px;
+}
+
+header h1 {
+    font-size: 19px;
+}
+
+header p {
+    font-size: 12px;
+    margin-top: 3px;
+    opacity: .9;
+}
+
+.user {
+    margin-left: auto;
+    text-align: right;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 14px;
+}
+
+.headline {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0 15px;
+    align-items: center;
+}
+
+.headline .icon {
+    font-size: 29px;
+}
+
+.headline h2 {
+    font-size: 21px;
+    margin-bottom: 4px;
+}
+
+.headline p {
+    font-size: 12px;
+    color: #687385;
+    line-height: 1.5;
+}
+
+.period {
+    background: #fbe9eb;
+    border: 1px solid #f4c9cd;
+    border-radius: 12px;
+    padding: 13px;
+    margin: 12px 0;
+}
+
+.period b {
+    display: block;
+    color: #81151d;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.period span {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    margin: 14px 0;
+}
+
+.tab {
+    border: 1px solid #ddd;
+    background: white;
+    color: #424b5b;
+    border-radius: 9px;
+    padding: 11px 13px;
+    font-weight: bold;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #8d171d;
+    color: white;
+    border-color: #8d171d;
+}
+
+.scope {
+    background: #e7f1ff;
+    border: 1px solid #b8d5ff;
+    border-radius: 11px;
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+label {
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+}
+
+input, select, button {
+    font: inherit;
+}
+
+input[type="date"],
+input[type="search"],
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d6dce5;
+    border-radius: 9px;
+    background: white;
+    color: #202938;
+}
+
+.mode {
+    display: flex;
+    background: #eee;
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.mode button {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.mode button.selected {
+    background: #8d171d;
+    color: white;
+}
+
+.search {
+    margin-bottom: 12px;
+}
+
+.table-wrap {
+    overflow: auto;
+    background: white;
+    border: 1px solid #e0e4eb;
+    border-radius: 11px;
+    max-height: 70vh;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 1000px;
+    font-size: 12px;
+}
+
+th {
+    background: #8d171d;
+    color: white;
+    text-align: left;
+    padding: 10px;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+td {
+    padding: 8px;
+    border-bottom: 1px solid #e8ebf0;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+tr:last-child td {
+    border-bottom: 0;
+}
+
+select.status {
+    min-width: 170px;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.noteInput {
+    min-width: 140px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+}
+
+.chip {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 30px;
+    background: #e6eefc;
+    font-weight: bold;
+}
+
+.legend {
+    background: #fff8e9;
+    border: 1px solid #f2d9a8;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.legend .chip {
+    margin: 2px;
+    background: white;
+    border: 1px solid #ead6a8;
+}
+
+.summary {
+    border: 1px solid #ead1d3;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 14px 0;
+}
+
+.summary h3 {
+    background: #8d171d;
+    color: white;
+    padding: 11px;
+    font-size: 14px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.stat {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #eee;
+}
+
+.stat span {
+    display: block;
+    color: #647084;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.stat strong {
+    font-size: 19px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+}
+
+.btn {
+    border: 1px solid #8d171d;
+    color: #8d171d;
+    background: white;
+    border-radius: 9px;
+    padding: 11px 13px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn.primary {
+    background: #8d171d;
+    color: white;
+}
+
+.btn:active {
+    transform: scale(.98);
+}
+
+.note {
+    font-size: 12px;
+    color: #687385;
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.recap-card {
+    background: white;
+    border: 1px solid #e0e4eb;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 8px 0;
+}
+
+.recap-card h4 {
+    margin-bottom: 8px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #e7f1ff;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+footer {
+    text-align: center;
+    color: #7b8493;
+    font-size: 11px;
+    padding: 15px;
+}
+
+@media(min-width:700px) {
+    .stats {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .controls {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .headline h2 {
+        font-size: 25px;
+    }
+}
+
+@media print {
+    header,
+    .tabs,
+    .controls,
+    .search,
+    .actions,
+    .legend,
+    footer {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+    }
+
+    main {
+        max-width: none;
+        padding: 0;
+    }
+
+    .table-wrap {
+        max-height: none;
+        overflow: visible;
+    }
+
+    table {
+        min-width: 0;
+        font-size: 8px;
+    }
+
+    th {
+        position: static;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">⚓</div>
+
+    <div>
+        <h1>WAINI</h1>
+        <p>Sistem Informasi Manajemen Karyawan</p>
+    </div>
+
+    <div class="user">
+        👤 Demo Petugas<br>
+        <b>Petugas Absensi</b>
+    </div>
+</header>
+
+<main>
+
+<div class="headline">
+    <div class="icon">🗓️</div>
+
+    <div>
+        <h2>Pengelolaan Absensi</h2>
+        <p>Pengisian absensi karyawan sesuai lingkup penugasan.</p>
+    </div>
+</div>
+
+<!-- PERIODE -->
+
+<div class="period">
+    <b>PERIODE ABSENSI</b>
+    <span id="periodText"></span>
+    <p class="note" id="periodInfo"></p>
+</div>
+
+<!-- TAB -->
+
+<div class="tabs">
+
+    <button class="tab active" data-tab="input">
+        ✍️ Input Harian
+    </button>
+
+    <button class="tab" data-tab="recap">
+        📊 Rekap Periode
+    </button>
+
+    <button class="tab" data-tab="history">
+        🕘 Riwayat
+    </button>
+
+</div>
+
+<!-- ================= INPUT ================= -->
+
+<section id="inputPanel">
+
+    <div class="scope">
+
+        <div>
+            <b>Lingkup Penugasan</b><br>
+            Departemen Operasional (Demo)
+        </div>
+
+        <div>
+            <b id="employeeCount">0 Karyawan</b><br>
+            <small>Data contoh demo</small>
+        </div>
+
+    </div>
+
+    <div class="controls">
+
+        <div>
+            <label for="datePick">Tanggal Absensi</label>
+            <input type="date" id="datePick">
+        </div>
+
+        <div>
+            <label>Mode Input</label>
+
+            <div class="mode">
+                <button class="selected" id="individual">
+                    Per Karyawan
+                </button>
+
+                <button id="mass">
+                    Massal
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <label for="search">Cari Karyawan</label>
+            <input
+                type="search"
+                id="search"
+                placeholder="Nama / NIK / Divisi">
+        </div>
+
+    </div>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>NIK</th>
+                    <th>Nama</th>
+                    <th>Divisi</th>
+                    <th>Departemen</th>
+                    <th>Jabatan</th>
+                    <th>TMK</th>
+                    <th>POH</th>
+                    <th>Sistem Cuti</th>
+                    <th>Jadwal</th>
+                    <th>Status Absensi</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+
+            <tbody id="rows"></tbody>
+
+        </table>
+
+    </div>
+
+    <!-- KODE -->
+
+    <div class="legend">
+
+        <b>Keterangan Kode Absensi</b><br>
+
+        <span class="chip">1 Masuk</span>
+        <span class="chip">1A Perjalanan Dinas</span>
+        <span class="chip">2 Cuti</span>
+        <span class="chip">3 Sakit</span>
+        <span class="chip">4 Ijin Resmi</span>
+        <span class="chip">4A Panggilan Negara</span>
+        <span class="chip">4B Libur Nasional</span>
+        <span class="chip">5 Terlambat/Pulang Cepat</span>
+        <span class="chip">6 Masuk Libur Nasional</span>
+        <span class="chip">7 LWOP</span>
+        <span class="chip">9 Mangki</span>
+
+    </div>
+
+    <!-- TOMBOL -->
+
+    <div class="actions">
+
+        <button class="btn" id="reset">
+            ↺ Reset Demo
+        </button>
+
+        <button class="btn primary" id="save">
+            💾 Simpan Absensi
+        </button>
+
+        <button class="btn" id="excel">
+            📥 Download Excel
+        </button>
+
+        <button class="btn" id="print">
+            🖨️ Cetak / PDF
+        </button>
+
+    </div>
+
+    <p class="note">
+        Versi tahap 1. Data disimpan sementara pada browser perangkat
+        ini. Belum terhubung ke Firebase.
+    </p>
+
+    <!-- RINGKASAN -->
+
+    <div class="summary">
+
+        <h3>Ringkasan Tanggal Terpilih</h3>
+
+        <div class="stats">
+
+            <div class="stat">
+                <span>Total Karyawan</span>
+                <strong id="total">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Kode 1 - Masuk</span>
+                <strong id="present">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Status Terisi</span>
+                <strong id="other">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Belum Diisi</span>
+                <strong id="empty">0</strong>
+            </div>
+
+            <div class="stat">
+                <span>Persentase Kode 1</span>
+                <strong id="percent">0%</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= REKAP ================= -->
+
+<section id="recapPanel" class="hidden">
+
+    <div class="scope">
+        <b>Rekap Demo Periode 11–10</b>
+        <span id="recapPeriod"></span>
+    </div>
+
+    <div class="recap-card">
+
+        <h4>Rekapitulasi Kehadiran</h4>
+
+        <p class="note">
+            Data di bawah mengambil input demo yang sudah disimpan
+            pada browser ini.
+        </p>
+
+    </div>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead id="recapHead"></thead>
+
+            <tbody id="recapRows"></tbody>
+
+        </table>
+
+    </div>
+
+    <p class="note">
+        Hari kerja, potongan absensi, insentif tanggal merah,
+        masa kerja dan bonus belum dihitung.
+        Kolom tersebut akan dikembangkan setelah rumus resmi disepakati.
+    </p>
+
+    <div class="actions">
+
+        <button class="btn primary" id="recapExcel">
+            📥 Download Rekap Excel
+        </button>
+
+        <button class="btn" id="recapPrint">
+            🖨️ Cetak Rekap
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ================= RIWAYAT ================= -->
+
+<section id="historyPanel" class="hidden">
+
+    <div class="recap-card">
+
+        <h4>Riwayat Aktivitas Demo</h4>
+
+        <div id="historyList">
+            Belum ada aktivitas.
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+<footer>
+    WAINI • Pengelolaan Absensi • Versi Tahap 1
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+
+/* =====================================================
+   DATA CONTOH KARYAWAN
+   NANTI AKAN DIGANTI DENGAN FIRESTORE
+===================================================== */
+
+const staff = [
+
+{
+    nik: "10001",
+    name: "Andi Saputra",
+    div: "Produksi",
+    dept: "Operasional",
+    jabatan: "Operator",
+    tmk: "2020-03-15",
+    poh: "Jepara",
+    cuti: "Roster",
+    sched: "Shift 1"
+},
+
+{
+    nik: "10002",
+    name: "Rudi Hartono",
+    div: "Produksi",
+    dept: "Operasional",
+    jabatan: "Operator",
+    tmk: "2019-06-20",
+    poh: "Jepara",
+    cuti: "Roster",
+    sched: "Shift 1"
+},
+
+{
+    nik: "10003",
+    name: "Dedi Kurniawan",
+    div: "Teknik",
+    dept: "Teknik",
+    jabatan: "Teknisi",
+    tmk: "2021-02-10",
+    poh: "Kudus",
+    cuti: "Roster",
+    sched: "Shift 2"
+},
+
+{
+    nik: "10004",
+    name: "Siti Aminah",
+    div: "Produksi",
+    dept: "Operasional",
+    jabatan: "Operator",
+    tmk: "2022-01-05",
+    poh: "Jepara",
+    cuti: "Roster",
+    sched: "Shift 2"
+},
+
+{
+    nik: "10005",
+    name: "Agus Pratama",
+    div: "Logistik",
+    dept: "Logistik",
+    jabatan: "Staff",
+    tmk: "2018-11-12",
+    poh: "Demak",
+    cuti: "Tahunan",
+    sched: "Roster"
+},
+
+{
+    nik: "10006",
+    name: "Maya Sari",
+    div: "HRD",
+    dept: "HRD",
+    jabatan: "Staff HR",
+    tmk: "2023-04-01",
+    poh: "Jepara",
+    cuti: "Tahunan",
+    sched: "Non-Shift"
+},
+
+{
+    nik: "10007",
+    name: "Bambang Susilo",
+    div: "Keuangan",
+    dept: "Finance",
+    jabatan: "Staff",
+    tmk: "2017-08-21",
+    poh: "Kudus",
+    cuti: "Tahunan",
+    sched: "Non-Shift"
+},
+
+{
+    nik: "10008",
+    name: "Dewi Lestari",
+    div: "Teknik",
+    dept: "Teknik",
+    jabatan: "Teknisi",
+    tmk: "2021-09-17",
+    poh: "Jepara",
+    cuti: "Roster",
+    sched: "Shift 1"
+}
+
+];
+
+/* =====================================================
+   KODE ABSENSI
+===================================================== */
+
+const codes = [
+
+    ["", "— Pilih Kode —"],
+
+    ["1", "1 - Masuk"],
+
+    ["1A", "1A - Perjalanan Dinas 出差"],
+
+    ["2", "2 - Cuti Roster / Mingguan / Tahunan / 13.1"],
+
+    ["3", "3 - Sakit dengan Surat Dokter 有医生备注文件的病假"],
+
+    ["4", "4 - Ijin Resmi"],
+
+    ["4A", "4A - Panggilan Negara"],
+
+    ["4B", "4B - Libur Nasional (Roster tanpa cuti tahunan)"],
+
+    ["5", "5 - Terlambat / Pulang Cepat Disetujui"],
+
+    ["6", "6 - Masuk Kerja pada Libur Nasional (Grade 3 Up)"],
+
+    ["7", "7 - LWOP"],
+
+    ["9", "9 - Mangki"]
+
+];
+
+/* =====================================================
+   DATA PENYIMPANAN DEMO
+===================================================== */
+
+const STORAGE_KEY = "WAINI_ABSENSI_TAHAP1";
+
+let values = {};
+let notes = {};
+let history = [];
+
+let currentMode = "individual";
+
+let currentDate = "";
+
+let currentPeriod = {};
+
+const rows = document.getElementById("rows");
+
+/* =====================================================
+   FORMAT TANGGAL
+===================================================== */
+
+function formatDate(date) {
+
+    if (!date) return "";
+
+    const d = new Date(date + "T00:00:00");
+
+    return d.toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+}
+
+function formatShort(date) {
+
+    if (!date) return "";
+
+    const d = new Date(date + "T00:00:00");
+
+    return d.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit"
+    });
+
+}
+
+/* =====================================================
+   MENENTUKAN PERIODE 11 - 10
+===================================================== */
+
+function getPeriod(dateString) {
+
+    const d = new Date(dateString + "T00:00:00");
+
+    let start;
+    let end;
+
+    if (d.getDate() >= 11) {
+
+        start = new Date(
+            d.getFullYear(),
+            d.getMonth(),
+            11
+        );
+
+        end = new Date(
+            d.getFullYear(),
+            d.getMonth() + 1,
+            10
+        );
+
+    } else {
+
+        start = new Date(
+            d.getFullYear(),
+            d.getMonth() - 1,
+            11
+        );
+
+        end = new Date(
+            d.getFullYear(),
+            d.getMonth(),
+            10
+        );
+
+    }
+
+    return {
+        start: toISO(start),
+        end: toISO(end)
+    };
+
+}
+
+function toISO(date) {
+
+    const y = date.getFullYear();
+
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+
+    const d = String(date.getDate()).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
+
+}
+
+function getDates(start, end) {
+
+    const dates = [];
+
+    let d = new Date(start + "T00:00:00");
+
+    const last = new Date(end + "T00:00:00");
+
+    while (d <= last) {
+
+        dates.push(toISO(d));
+
+        d.setDate(d.getDate() + 1);
+
+    }
+
+    return dates;
+
+}
+
+/* =====================================================
+   KEY DATA
+===================================================== */
+
+function dataKey(date, nik) {
+
+    return date + "_" + nik;
+
+}
+
+/* =====================================================
+   LOAD DATA DEMO
+===================================================== */
+
+function loadData() {
+
+    try {
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (saved) {
+
+            const data = JSON.parse(saved);
+
+            values = data.values || {};
+
+            notes = data.notes || {};
+
+            history = data.history || [];
+
+        }
+
+    } catch (e) {
+
+        console.error("Gagal membaca penyimpanan demo", e);
+
+    }
+
+}
+
+function saveLocal() {
+
+    const data = {
+
+        values,
+
+        notes,
+
+        history
+
+    };
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(data)
+    );
+
+}
+
+/* =====================================================
+   PERIODE
+===================================================== */
+
+function updatePeriod() {
+
+    currentPeriod = getPeriod(currentDate);
+
+    document.getElementById("periodText").textContent =
+        formatDate(currentPeriod.start)
+        + " – "
+        + formatDate(currentPeriod.end);
+
+    document.getElementById("periodInfo").textContent =
+        "Periode absensi otomatis tanggal 11 sampai tanggal 10.";
+
+    document.getElementById("recapPeriod").textContent =
+        formatShort(currentPeriod.start)
+        + " – "
+        + formatShort(currentPeriod.end);
+
+}
+
+/* =====================================================
+   RENDER INPUT
+===================================================== */
+
+function render() {
+
+    const q = document
+        .getElementById("search")
+        .value
+        .toLowerCase();
+
+    rows.innerHTML = "";
+
+    const filtered = staff.filter(s => {
+
+        return (
+
+            s.name + " "
+            + s.nik + " "
+            + s.div + " "
+            + s.dept + " "
+            + s.jabatan
+
+        ).toLowerCase().includes(q);
+
+    });
+
+    document.getElementById("employeeCount").textContent =
+        staff.length + " Karyawan";
+
+    filtered.forEach((s, i) => {
+
+        const key = dataKey(currentDate, s.nik);
+
+        const selected = values[key] || "";
+
+        const note = notes[key] || "";
+
+        const options = codes.map(([v, t]) => {
+
+            return `
+                <option
+                    value="${v}"
+                    ${selected === v ? "selected" : ""}
+                >
+                    ${t}
+                </option>
+            `;
+
+        }).join("");
+
+        rows.insertAdjacentHTML(
+
+            "beforeend",
+
+            `
+            <tr>
+
+                <td>${i + 1}</td>
+
+                <td>${s.nik}</td>
+
+                <td>
+                    <b>${s.name}</b>
+                </td>
+
+                <td>${s.div}</td>
+
+                <td>${s.dept}</td>
+
+                <td>${s.jabatan}</td>
+
+                <td>${formatDate(s.tmk)}</td>
+
+                <td>${s.poh}</td>
+
+                <td>${s.cuti}</td>
+
+                <td>
+                    <span class="chip">
+                        ${s.sched}
+                    </span>
+                </td>
+
+                <td>
+                    <select
+                        class="status"
+                        data-nik="${s.nik}"
+                    >
+                        ${options}
+                    </select>
+                </td>
+
+                <td>
+                    <input
+                        class="noteInput"
+                        data-nik="${s.nik}"
+                        placeholder="Keterangan"
+                        value="${escapeHTML(note)}"
+                    >
+                </td>
+
+            </tr>
+            `
+
+        );
+
+    });
+
+    bindEvents();
+
+    stats();
+
+}
+
+/* =====================================================
+   MENCEGAH HTML DARI INPUT
+===================================================== */
+
+function escapeHTML(text) {
+
+    return String(text || "")
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+/* =====================================================
+   EVENT INPUT
+===================================================== */
+
+function bindEvents() {
+
+    document.querySelectorAll(".status").forEach(el => {
+
+        el.onchange = () => {
+
+            const nik = el.dataset.nik;
+
+            const key = dataKey(currentDate, nik);
+
+            values[key] = el.value;
+
+            stats();
+
+        };
+
+    });
+
+    document.querySelectorAll(".noteInput").forEach(el => {
+
+        el.oninput = () => {
+
+            const nik = el.dataset.nik;
+
+            const key = dataKey(currentDate, nik);
+
+            notes[key] = el.value;
+
+        };
+
+    });
+
+}
+
+/* =====================================================
+   RINGKASAN
+===================================================== */
+
+function stats() {
+
+    const total = staff.length;
+
+    let masuk = 0;
+
+    let terisi = 0;
+
+    staff.forEach(s => {
+
+        const key = dataKey(currentDate, s.nik);
+
+        const code = values[key] || "";
+
+        if (code !== "") {
+
+            terisi++;
+
+        }
+
+        if (code === "1") {
+
+            masuk++;
+
+        }
+
+    });
+
+    const belum = total - terisi;
+
+    const persen = total
+        ? Math.round((masuk / total) * 100)
+        : 0;
+
+    document.getElementById("total").textContent = total;
+
+    document.getElementById("present").textContent = masuk;
+
+    document.getElementById("other").textContent =
+        terisi - masuk;
+
+    document.getElementById("empty").textContent = belum;
+
+    document.getElementById("percent").textContent =
+        persen + "%";
+
+}
+
+/* =====================================================
+   MODE INDIVIDUAL
+===================================================== */
+
+document.getElementById("individual").onclick = () => {
+
+    currentMode = "individual";
+
+    document
+        .getElementById("individual")
+        .classList.add("selected");
+
+    document
+        .getElementById("mass")
+        .classList.remove("selected");
+
+};
+
+/* =====================================================
+   MODE MASSAL
+===================================================== */
+
+document.getElementById("mass").onclick = () => {
+
+    currentMode = "mass";
+
+    document
+        .getElementById("mass")
+        .classList.add("selected");
+
+    document
+        .getElementById("individual")
+        .classList.remove("selected");
+
+    const code = prompt(
+
+        "Masukkan kode absensi untuk semua karyawan yang tampil.\n\n"
+        + "Contoh:\n"
+        + "1 = Masuk\n"
+        + "2 = Cuti\n"
+        + "3 = Sakit\n"
+        + "4 = Ijin\n"
+        + "7 = LWOP\n"
+        + "9 = Mangki\n\n"
+        + "Kosongkan untuk membatalkan."
+
+    );
+
+    if (code === null || code === "") {
+
+        return;
+
+    }
+
+    const valid = codes.some(c => c[0] === code);
+
+    if (!valid) {
+
+        alert("Kode absensi tidak tersedia.");
+
+        return;
+
+    }
+
+    const q = document
+        .getElementById("search")
+        .value
+        .toLowerCase();
+
+    const filtered = staff.filter(s => {
+
+        return (
+
+            s.name + " "
+            + s.nik + " "
+            + s.div + " "
+            + s.dept
+
+        ).toLowerCase().includes(q);
+
+    });
+
+    if (!confirm(
+        "Kode " + code
+        + " akan diterapkan kepada "
+        + filtered.length
+        + " karyawan yang tampil.\n\n"
+        + "Lanjutkan?"
+    )) {
+
+        return;
+
+    }
+
+    filtered.forEach(s => {
+
+        const key = dataKey(currentDate, s.nik);
+
+        values[key] = code;
+
+    });
+
+    render();
+
+};
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+document.getElementById("search").oninput = render;
+
+/* =====================================================
+   PILIH TANGGAL
+===================================================== */
+
+document.getElementById("datePick").onchange = e => {
+
+    currentDate = e.target.value;
+
+    updatePeriod();
+
+    render();
+
+};
+
+/* =====================================================
+   SIMPAN
+===================================================== */
+
+document.getElementById("save").onclick = () => {
+
+    let filled = 0;
+
+    staff.forEach(s => {
+
+        const key = dataKey(currentDate, s.nik);
+
+        if (values[key]) {
+
+            filled++;
+
+        }
+
+    });
+
+    if (!filled) {
+
+        alert(
+            "Silakan isi status absensi setidaknya satu karyawan."
+        );
+
+        return;
+
+    }
+
+    const stamp = new Date().toLocaleString("id-ID");
+
+    history.unshift({
+
+        date: currentDate,
+
+        stamp,
+
+        filled,
+
+        total: staff.length
+
+    });
+
+    saveLocal();
+
+    alert(
+
+        "Absensi demo berhasil disimpan.\n\n"
+
+        + "Tanggal: " + formatDate(currentDate) + "\n"
+
+        + "Status terisi: " + filled
+        + " dari " + staff.length
+        + " karyawan.\n\n"
+
+        + "Data hanya disimpan pada browser perangkat ini."
+
+    );
+
+};
+
+/* =====================================================
+   RESET
+===================================================== */
+
+document.getElementById("reset").onclick = () => {
+
+    if (!confirm(
+        "Hapus seluruh data demo absensi yang tersimpan di browser ini?"
+    )) {
+
+        return;
+
+    }
+
+    values = {};
+
+    notes = {};
+
+    history = [];
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    render();
+
+    alert("Data demo berhasil direset.");
+
+};
+
+/* =====================================================
+   TAB
+===================================================== */
+
+document.querySelectorAll(".tab").forEach(button => {
+
+    button.onclick = () => {
+
+        document
+            .querySelectorAll(".tab")
+            .forEach(t => t.classList.remove("active"));
+
+        button.classList.add("active");
+
+        document
+            .getElementById("inputPanel")
+            .classList.add("hidden");
+
+        document
+            .getElementById("recapPanel")
+            .classList.add("hidden");
+
+        document
+            .getElementById("historyPanel")
+            .classList.add("hidden");
+
+        document
+            .getElementById(button.dataset.tab + "Panel")
+            .classList.remove("hidden");
+
+        if (button.dataset.tab === "recap") {
+
+            renderRecap();
+
+        }
+
+        if (button.dataset.tab === "history") {
+
+            renderHistory();
+
+        }
+
+    };
+
+});
+
+/* =====================================================
+   REKAP PERIODE
+===================================================== */
+
+function renderRecap() {
+
+    const dates = getDates(
+        currentPeriod.start,
+        currentPeriod.end
+    );
+
+    let head = `
+        <tr>
+            <th>No</th>
+            <th>NIK</th>
+            <th>Nama</th>
+            <th>Divisi</th>
+            <th>Departemen</th>
+            <th>Jabatan</th>
+            <th>TMK</th>
+            <th>POH</th>
+            <th>Sistem Cuti</th>
+    `;
+
+    dates.forEach(date => {
+
+        head += `
+            <th>${formatShort(date)}</th>
+        `;
+
+    });
+
+    head += `
+        <th>Hari Kerja</th>
+        <th>Masuk Kerja</th>
+        <th>Potongan Absensi</th>
+        <th>Insentif Tanggal Merah</th>
+        <th>Kehadiran Kerja</th>
+        <th>Kehadiran (%)</th>
+        <th>TMK</th>
+        <th>Cut-off Date</th>
+        <th>Tahun</th>
+        <th>Bulan</th>
+        <th>Bonus Pribadi Amount</th>
+        <th>Bonus Pribadi %</th>
+        <th>Bonus Pribadi Total</th>
+        <th>Bonus Kehadiran Team</th>
+        <th>Total Bonus Kehadiran</th>
+        <th>Keterangan</th>
+        </tr>
+    `;
+
+    document.getElementById("recapHead").innerHTML = head;
+
+    let body = "";
+
+    staff.forEach((s, i) => {
+
+        body += `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${s.nik}</td>
+                <td>${s.name}</td>
+                <td>${s.div}</td>
+                <td>${s.dept}</td>
+                <td>${s.jabatan}</td>
+                <td>${formatDate(s.tmk)}</td>
+                <td>${s.poh}</td>
+                <td>${s.cuti}</td>
+        `;
+
+        dates.forEach(date => {
+
+            const key = dataKey(date, s.nik);
+
+            body += `
+                <td>${values[key] || ""}</td>
+            `;
+
+        });
+
+        body += `
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>${formatDate(s.tmk)}</td>
+            <td>${formatDate(currentPeriod.end)}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            </tr>
+        `;
+
+    });
+
+    document.getElementById("recapRows").innerHTML = body;
+
+}
+
+/* =====================================================
+   RIWAYAT
+===================================================== */
+
+function renderHistory() {
+
+    const el = document.getElementById("historyList");
+
+    if (!history.length) {
+
+        el.innerHTML = "Belum ada aktivitas penyimpanan.";
+
+        return;
+
+    }
+
+    el.innerHTML = history.map(h => {
+
+        return `
+            <div class="recap-card">
+
+                <b>Simulasi penyimpanan absensi</b>
+
+                <p>${h.stamp}</p>
+
+                <p>Tanggal absensi: ${formatDate(h.date)}</p>
+
+                <p>Status terisi: ${h.filled} dari ${h.total} karyawan</p>
+
+            </div>
+        `;
+
+    }).join("");
+
+}
+
+/* =====================================================
+   EXCEL ABSENSI HARIAN
+===================================================== */
+
+document.getElementById("excel").onclick = () => {
+
+    if (typeof XLSX === "undefined") {
+
+        alert(
+            "Pustaka Excel belum termuat. "
+            + "Pastikan internet aktif."
+        );
+
+        return;
+
+    }
+
+    const daily = [
+
+        ["LAPORAN ABSENSI HARIAN WAINI"],
+
+        ["Tanggal", currentDate],
+
+        ["Periode", currentPeriod.start + " s.d. " + currentPeriod.end],
+
+        ["Lingkup", "Departemen Operasional (Demo)"],
+
+        [],
+
+        [
+
+            "No",
+
+            "NIK",
+
+            "Nama",
+
+            "Divisi",
+
+            "Departemen",
+
+            "Jabatan",
+
+            "TMK",
+
+            "POH",
+
+            "Sistem Cuti",
+
+            "Jadwal",
+
+            "Kode Absensi",
+
+            "Keterangan"
+
+        ]
+
+    ];
+
+    staff.forEach((s, i) => {
+
+        const key = dataKey(currentDate, s.nik);
+
+        daily.push([
+
+            i + 1,
+
+            s.nik,
+
+            s.name,
+
+            s.div,
+
+            s.dept,
+
+            s.jabatan,
+
+            s.tmk,
+
+            s.poh,
+
+            s.cuti,
+
+            s.sched,
+
+            values[key] || "",
+
+            notes[key] || ""
+
+        ]);
+
+    });
+
+    const codeSheet = [
+
+        ["KODE", "KETERANGAN"],
+
+        ...codes
+
+            .filter(c => c[0])
+
+            .map(c => [c[0], c[1]])
+
+    ];
+
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+
+        wb,
+
+        XLSX.utils.aoa_to_sheet(daily),
+
+        "Absensi Harian"
+
+    );
+
+    XLSX.utils.book_append_sheet(
+
+        wb,
+
+        XLSX.utils.aoa_to_sheet(codeSheet),
+
+        "Kode Absensi"
+
+    );
+
+    XLSX.writeFile(
+
+        wb,
+
+        "WAINI_Absensi_" + currentDate + ".xlsx"
+
+    );
+
+};
+
+/* =====================================================
+   EXCEL REKAP PERIODE
+===================================================== */
+
+document.getElementById("recapExcel").onclick = () => {
+
+    if (typeof XLSX === "undefined") {
+
+        alert("Pustaka Excel belum termuat.");
+
+        return;
+
+    }
+
+    const dates = getDates(
+        currentPeriod.start,
+        currentPeriod.end
+    );
+
+    const header = [
+
+        "No",
+
+        "NIK",
+
+        "Nama",
+
+        "Divisi",
+
+        "Departemen",
+
+        "Jabatan",
+
+        "TMK",
+
+        "POH",
+
+        "Sistem Cuti",
+
+        ...dates,
+
+        "Hari Kerja",
+
+        "Masuk Kerja",
+
+        "Potongan Absensi",
+
+        "Insentif Tanggal Merah",
+
+        "Kehadiran Kerja",
+
+        "Kehadiran Kerja (%)",
+
+        "TMK Masa Kerja",
+
+        "Cut-off Date",
+
+        "Tahun",
+
+        "Bulan",
+
+        "Bonus Pribadi Amount",
+
+        "Bonus Pribadi %",
+
+        "Bonus Pribadi Total",
+
+        "Bonus Kehadiran Team",
+
+        "Total Bonus Kehadiran",
+
+        "Keterangan"
+
+    ];
+
+    const data = [
+
+        ["REKAP ABSENSI WAINI"],
+
+        ["Periode", currentPeriod.start, "s.d.", currentPeriod.end],
+
+        [],
+
+        header
+
+    ];
+
+    staff.forEach((s, i) => {
+
+        const row = [
+
+            i + 1,
+
+            s.nik,
+
+            s.name,
+
+            s.div,
+
+            s.dept,
+
+            s.jabatan,
+
+            s.tmk,
+
+            s.poh,
+
+            s.cuti
+
+        ];
+
+        dates.forEach(date => {
+
+            const key = dataKey(date, s.nik);
+
+            row.push(values[key] || "");
+
+        });
+
+        // Kolom perhitungan belum ditentukan
+
+        row.push(
+
+            "",
+
+            "",
+
+            "",
+
+            "",
+
+            "",
+
+            "",
+
+            s.tmk,
+
+            currentPeriod.end,
+
+            "",
+
+            "",
+
+            "",
+
+            "",
+
+            "",
+
+            "",
+
+            "",
+
+            ""
+
+        );
+
+        data.push(row);
+
+    });
+
+    const wb = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+
+        wb,
+
+        XLSX.utils.aoa_to_sheet(data),
+
+        "Rekap Periode"
+
+    );
+
+    XLSX.writeFile(
+
+        wb,
+
+        "WAINI_Rekap_"
+
+        + currentPeriod.start
+
+        + "_"
+
+        + currentPeriod.end
+
+        + ".xlsx"
+
+    );
+
+};
+
+/* =====================================================
+   CETAK
+===================================================== */
+
+document.getElementById("print").onclick = () => {
+
+    window.print();
+
+};
+
+document.getElementById("recapPrint").onclick = () => {
+
+    window.print();
+
+};
+
+/* =====================================================
+   INISIALISASI
+===================================================== */
+
+function init() {
+
+    loadData();
+
+    const today = new Date();
+
+    currentDate = toISO(today);
+
+    document.getElementById("datePick").value = currentDate;
+
+    updatePeriod();
+
+    render();
+
+}
+
+init();
+
+</script>
+
+</body>
+</html>
