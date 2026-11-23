@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -59,7 +60,7 @@ select.status{min-width:170px;padding:8px;border-radius:8px;font-size:12px}
 .recap-card h4{margin-bottom:8px}
 .badge{display:inline-block;padding:4px 8px;background:#e7f1ff;border-radius:20px;font-size:11px}
 .loading{background:white;border:1px solid #ddd;border-radius:10px;padding:20px;margin:10px 0;text-align:center}
-.error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;padding:12px;border-radius:10px;line-height:1.6}
+.error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;padding:12px;border-radius:10px;line-height:1.6;overflow-wrap:anywhere}
 footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 @media(min-width:700px){.stats{grid-template-columns:repeat(5,1fr)}.controls{grid-template-columns:1fr 1fr 1fr}.headline h2{font-size:25px}}
 @media print{header,.tabs,.controls,.search,.actions,.legend,footer{display:none!important}body{background:white}main{max-width:none;padding:0}.table-wrap{max-height:none;overflow:visible}table{min-width:0;font-size:8px}th{position:static}}
@@ -187,8 +188,9 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 </div>
 
 <p class="note">
-Tahap 2: Data karyawan diambil dari Firestore. Data absensi masih tersimpan
-sementara di browser perangkat ini. Belum menyimpan absensi ke Firestore.
+Tahap 2: Data karyawan diambil dari Firestore melalui akses penugasan.
+Data absensi masih tersimpan sementara di browser perangkat ini.
+Belum menyimpan absensi ke Firestore.
 </p>
 
 <div class="summary">
@@ -250,8 +252,7 @@ belum dihitung.
 <script type="module">
 
 /* =====================================================
-   FIREBASE WAINI
-   firebase.js harus berada di folder yang sama
+   FIREBASE
 ===================================================== */
 
 import { auth, db } from "./firebase.js";
@@ -270,7 +271,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =====================================================
-   VARIABEL SISTEM
+   VARIABEL
 ===================================================== */
 
 const rows = document.getElementById("rows");
@@ -293,10 +294,13 @@ let currentNik = "";
 let currentRole = "";
 
 let isSuperAdmin = false;
+
 let assignmentList = [];
-let assignmentMenuId = "";
+let attendanceMenu = null;
 
 let currentMode = "individual";
+
+let loadingStage = "Memulai";
 
 /* =====================================================
    KODE ABSENSI
@@ -318,31 +322,36 @@ const codes = [
 ];
 
 /* =====================================================
-   FUNGSI BANTU FIELD
+   FUNGSI BANTU
 ===================================================== */
 
-function firstValue(obj, keys, fallback="") {
-    for (const key of keys) {
-        const value = obj?.[key];
-        if (value !== undefined && value !== null && value !== "") {
+function firstValue(obj,keys,fallback="") {
+
+    for(const key of keys) {
+
+        const value=obj?.[key];
+
+        if(value!==undefined && value!==null && value!=="") {
             return value;
         }
     }
+
     return fallback;
 }
 
 function normalize(value) {
-    return String(value ?? "").trim().toLowerCase();
+    return String(value??"").trim().toLowerCase();
 }
 
 function normalizeNik(value) {
-    return String(value ?? "").trim();
+    return String(value??"").trim();
 }
 
 function activeStatus(value) {
-    if (value === true) return true;
 
-    const v = normalize(value);
+    if(value===true) return true;
+
+    const v=normalize(value);
 
     return [
         "aktif",
@@ -356,15 +365,25 @@ function activeStatus(value) {
 
 function isEmployeeActive(data) {
 
-    const status = firstValue(data, [
+    const status=firstValue(data,[
         "status",
         "status_karyawan",
         "status_kerja",
         "aktif",
         "active"
-    ], "aktif");
+    ],"aktif");
 
     return activeStatus(status);
+}
+
+function escapeHTML(text) {
+
+    return String(text??"")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
 /* =====================================================
@@ -372,11 +391,12 @@ function isEmployeeActive(data) {
 ===================================================== */
 
 function formatDate(date) {
-    if (!date) return "";
 
-    const d = new Date(date + "T00:00:00");
+    if(!date) return "";
 
-    return d.toLocaleDateString("id-ID", {
+    const d=new Date(date+"T00:00:00");
+
+    return d.toLocaleDateString("id-ID",{
         day:"numeric",
         month:"long",
         year:"numeric"
@@ -384,17 +404,19 @@ function formatDate(date) {
 }
 
 function formatShort(date) {
-    if (!date) return "";
 
-    const d = new Date(date + "T00:00:00");
+    if(!date) return "";
 
-    return d.toLocaleDateString("id-ID", {
+    const d=new Date(date+"T00:00:00");
+
+    return d.toLocaleDateString("id-ID",{
         day:"2-digit",
         month:"2-digit"
     });
 }
 
 function toISO(date) {
+
     return [
         date.getFullYear(),
         String(date.getMonth()+1).padStart(2,"0"),
@@ -408,21 +430,20 @@ function toISO(date) {
 
 function getPeriod(dateString) {
 
-    const d = new Date(dateString + "T00:00:00");
+    const d=new Date(dateString+"T00:00:00");
 
     let start;
     let end;
 
-    if (d.getDate() >= 11) {
+    if(d.getDate()>=11) {
 
-        start = new Date(d.getFullYear(),d.getMonth(),11);
-        end = new Date(d.getFullYear(),d.getMonth()+1,10);
+        start=new Date(d.getFullYear(),d.getMonth(),11);
+        end=new Date(d.getFullYear(),d.getMonth()+1,10);
 
     } else {
 
-        start = new Date(d.getFullYear(),d.getMonth()-1,11);
-        end = new Date(d.getFullYear(),d.getMonth(),10);
-
+        start=new Date(d.getFullYear(),d.getMonth()-1,11);
+        end=new Date(d.getFullYear(),d.getMonth(),10);
     }
 
     return {
@@ -433,13 +454,15 @@ function getPeriod(dateString) {
 
 function getDates(start,end) {
 
-    const result = [];
+    const result=[];
 
-    let d = new Date(start+"T00:00:00");
-    const last = new Date(end+"T00:00:00");
+    let d=new Date(start+"T00:00:00");
+    const last=new Date(end+"T00:00:00");
 
     while(d<=last) {
+
         result.push(toISO(d));
+
         d.setDate(d.getDate()+1);
     }
 
@@ -452,35 +475,38 @@ function dataKey(date,nik) {
 
 function updatePeriod() {
 
-    currentPeriod = getPeriod(currentDate);
+    currentPeriod=getPeriod(currentDate);
 
-    document.getElementById("periodText").textContent =
+    document.getElementById("periodText").textContent=
         formatDate(currentPeriod.start)
         +" – "
         +formatDate(currentPeriod.end);
 
-    document.getElementById("periodInfo").textContent =
+    document.getElementById("periodInfo").textContent=
         "Periode absensi otomatis tanggal 11 sampai tanggal 10.";
 
-    document.getElementById("recapPeriod").textContent =
+    document.getElementById("recapPeriod").textContent=
         formatShort(currentPeriod.start)
         +" – "
         +formatShort(currentPeriod.end);
 }
 
 /* =====================================================
-   MEMBACA IDENTITAS LOGIN
+   MEMBACA PROFIL LOGIN
 ===================================================== */
 
 async function getUserProfile(user) {
 
-    const ref = doc(db,"pengguna",user.uid);
+    loadingStage="Membaca profil pengguna";
 
-    const snap = await getDoc(ref);
+    const ref=doc(db,"pengguna",user.uid);
+
+    const snap=await getDoc(ref);
 
     if(!snap.exists()) {
+
         throw new Error(
-            "Profil pengguna tidak ditemukan di collection pengguna."
+            "Profil pengguna tidak ditemukan pada collection pengguna."
         );
     }
 
@@ -488,7 +514,7 @@ async function getUserProfile(user) {
 }
 
 /* =====================================================
-   MENCARI MENU PENUGASAN ABSENSI
+   MENU TUGAS ABSENSI
 ===================================================== */
 
 function getMenuIdentifiers(menuData,menuDocId) {
@@ -501,7 +527,10 @@ function getMenuIdentifiers(menuData,menuDocId) {
         menuData.kode,
         menuData.tugas_id,
         menuData.tugas_kode,
-        menuData.id
+        menuData.id,
+        menuData.halaman,
+        menuData.link,
+        menuData.url
     ]
     .filter(Boolean)
     .map(String);
@@ -509,7 +538,7 @@ function getMenuIdentifiers(menuData,menuDocId) {
 
 function isAttendanceMenu(data,id) {
 
-    const text = [
+    const text=[
         id,
         data.nama,
         data.judul,
@@ -517,6 +546,8 @@ function isAttendanceMenu(data,id) {
         data.menu_kode,
         data.kode_menu,
         data.kode,
+        data.tugas_id,
+        data.tugas_kode,
         data.halaman,
         data.link,
         data.url
@@ -529,55 +560,66 @@ function isAttendanceMenu(data,id) {
         || text.includes("pengelolaan-absensi");
 }
 
+function menuIsActive(menu) {
+
+    const status=firstValue(menu,[
+        "aktif",
+        "status",
+        "active"
+    ],true);
+
+    return activeStatus(status);
+}
+
+async function loadAttendanceMenu() {
+
+    loadingStage="Membaca menu_tugas";
+
+    const snap=await getDocs(
+        collection(db,"menu_tugas")
+    );
+
+    const menus=snap.docs.map(d=>({
+        id:d.id,
+        ...d.data()
+    }));
+
+    return menus.find(m=>
+        menuIsActive(m)
+        && isAttendanceMenu(m,m.id)
+    )||null;
+}
+
 /* =====================================================
-   MEMBACA PENUGASAN BERDASARKAN NIK
+   MEMBACA PENUGASAN PETUGAS
 ===================================================== */
 
 async function loadAssignments(nik) {
 
+    loadingStage="Membaca penugasan_karyawan";
+
     /*
-       Query berdasarkan NIK petugas.
-       Tidak membaca seluruh penugasan karyawan.
+       Query hanya NIK petugas login.
+       Sesuai Firestore Rules:
+       resource.data.nik == nikLogin()
     */
 
-    const q = query(
+    const q=query(
         collection(db,"penugasan_karyawan"),
         where("nik","==",nik)
     );
 
-    const snap = await getDocs(q);
+    const snap=await getDocs(q);
 
-    return snap.docs.map(d => ({
+    return snap.docs.map(d=>({
         id:d.id,
         ...d.data()
     }));
 }
-
-/* =====================================================
-   MEMBACA MENU TUGAS
-===================================================== */
-
-async function loadAttendanceMenu() {
-
-    const snap = await getDocs(
-        collection(db,"menu_tugas")
-    );
-
-    const menus = snap.docs.map(d => ({
-        id:d.id,
-        ...d.data()
-    }));
-
-    return menus.find(m => isAttendanceMenu(m,m.id)) || null;
-}
-
-/* =====================================================
-   MENGECEK PENUGASAN UNTUK MENU ABSENSI
-===================================================== */
 
 function assignmentIsActive(a) {
 
-    const status = firstValue(a,[
+    const status=firstValue(a,[
         "aktif",
         "status",
         "active"
@@ -588,167 +630,105 @@ function assignmentIsActive(a) {
 
 function assignmentMatchesMenu(a,menu) {
 
-    const assignmentMenu = firstValue(a,[
+    if(!menu) return false;
+
+    const assignmentMenu=firstValue(a,[
         "menu_id",
         "menu_kode",
         "kode_menu",
         "kode",
         "tugas_id",
-        "tugas_kode"
+        "tugas_kode",
+        "menu_tugas_id"
     ],"");
 
     if(!assignmentMenu) return false;
 
-    const menuIds = getMenuIdentifiers(menu,menu.id)
+    const menuIds=getMenuIdentifiers(menu,menu.id)
         .map(normalize);
 
     return menuIds.includes(normalize(assignmentMenu));
 }
 
 /* =====================================================
-   MEMBACA LINGKUP PENUGASAN
+   MENCARI PENUGASAN ABSENSI YANG AKTIF
 ===================================================== */
 
-function getScope(a) {
+function getAttendanceAssignments(assignments,menu) {
 
-    const lingkup = a.lingkup || {};
-
-    let mode = firstValue(lingkup,[
-        "mode",
-        "jenis",
-        "tipe"
-    ],"");
-
-    if(!mode) {
-        mode = firstValue(a,[
-            "targetMode",
-            "mode",
-            "lingkup_mode"
-        ],"");
-    }
-
-    mode = normalize(mode);
-
-    /*
-       Menangani beberapa variasi struktur field
-       lingkup yang mungkin dipakai.
-    */
-
-    let deptList = firstValue(lingkup,[
-        "departemen",
-        "departments",
-        "department"
-    ],[]);
-
-    if(!Array.isArray(deptList)) {
-        deptList = deptList ? [deptList] : [];
-    }
-
-    let nikList = firstValue(lingkup,[
-        "nik",
-        "daftar_nik",
-        "karyawan",
-        "target_nik"
-    ],[]);
-
-    if(!Array.isArray(nikList)) {
-        nikList = nikList ? [nikList] : [];
-    }
-
-    if(!deptList.length) {
-        const d = firstValue(a,[
-            "departemen",
-            "target_departemen"
-        ],[]);
-        deptList = Array.isArray(d) ? d : (d ? [d] : []);
-    }
-
-    if(!nikList.length) {
-        const n = firstValue(a,[
-            "target_nik",
-            "daftar_nik",
-            "karyawan_nik"
-        ],[]);
-        nikList = Array.isArray(n) ? n : (n ? [n] : []);
-    }
-
-    return {
-        mode,
-        departemen:deptList.map(String),
-        nik:nikList.map(normalizeNik)
-    };
+    return assignments.filter(a=>
+        assignmentIsActive(a)
+        && assignmentMatchesMenu(a,menu)
+    );
 }
 
 /* =====================================================
-   MENENTUKAN KARYAWAN YANG BERHAK DIAKSES
+   MEMBACA AKSES KARYAWAN PETUGAS
 ===================================================== */
 
-function filterByAssignments(employees,assignments) {
+async function loadEmployeeAccess(nik) {
+
+    loadingStage="Membaca akses_karyawan";
 
     /*
-       Super Admin tidak dibatasi penugasan.
+       Query sesuai Firestore Rules:
+
+       akunAktif()
+       &&
+       resource.data.petugas_nik == nikLogin()
+
+       Tidak membaca akses milik petugas lain.
     */
 
-    if(isSuperAdmin) {
-        return employees;
-    }
-
-    const activeAssignments = assignments.filter(a =>
-        assignmentIsActive(a)
-        && assignmentMatchesMenu(a,attendanceMenu)
+    const q=query(
+        collection(db,"akses_karyawan"),
+        where("petugas_nik","==",nik)
     );
 
-    if(!activeAssignments.length) {
-        throw new Error(
-            "Anda belum memiliki penugasan aktif untuk menu Pengelolaan Absensi."
-        );
-    }
+    const snap=await getDocs(q);
 
-    const allowedNiks = new Set();
-    let allowAll = false;
-    const allowedDepartments = new Set();
-
-    activeAssignments.forEach(a => {
-
-        const scope = getScope(a);
-
-        if(scope.mode === "semua" || scope.mode === "all") {
-            allowAll = true;
-        }
-
-        if(scope.mode === "departemen" || scope.mode === "department") {
-            scope.departemen.forEach(d =>
-                allowedDepartments.add(normalize(d))
-            );
-        }
-
-        if(scope.mode === "nik" || scope.mode === "karyawan") {
-            scope.nik.forEach(n =>
-                allowedNiks.add(normalizeNik(n))
-            );
-        }
-
-    });
-
-    if(allowAll) {
-        return employees;
-    }
-
-    return employees.filter(employee => {
-
-        const nik = normalizeNik(employee.nik);
-
-        const dept = normalize(employee.departemen);
-
-        return allowedNiks.has(nik)
-            || allowedDepartments.has(dept);
-
-    });
-
+    return snap.docs.map(d=>({
+        id:d.id,
+        ...d.data()
+    }));
 }
 
 /* =====================================================
-   MEMBACA DATA KARYAWAN FIRESTORE
+   FILTER AKSES SESUAI PENUGASAN ABSENSI
+===================================================== */
+
+function accessIsActive(access) {
+
+    return normalize(access.status)==="aktif";
+}
+
+function accessMatchesAssignments(access,assignments) {
+
+    const assignmentId=normalize(
+        access.penugasan_id
+    );
+
+    if(!assignmentId) return false;
+
+    return assignments.some(a=>
+        normalize(a.id)===assignmentId
+    );
+}
+
+function getAuthorizedAccess(accessList,attendanceAssignments) {
+
+    return accessList.filter(access=>
+        accessIsActive(access)
+        &&
+        accessMatchesAssignments(
+            access,
+            attendanceAssignments
+        )
+    );
+}
+
+/* =====================================================
+   MEMBACA DATA KARYAWAN BERDASARKAN NIK
 ===================================================== */
 
 function mapEmployee(id,data) {
@@ -815,55 +795,155 @@ function mapEmployee(id,data) {
         ],"-"),
 
         raw:data
-
     };
 }
 
-async function loadEmployees() {
+/*
+   Super Admin:
+   boleh membaca seluruh collection karyawan.
 
-    const snap = await getDocs(
+   Petugas biasa:
+   hanya membaca dokumen karyawan yang NIK-nya
+   terdapat dalam akses_karyawan aktif.
+*/
+
+async function loadEmployeesForSuperAdmin() {
+
+    loadingStage="Membaca seluruh karyawan (Super Admin)";
+
+    const snap=await getDocs(
         collection(db,"karyawan")
     );
 
-    const result = [];
+    const result=[];
 
-    snap.forEach(d => {
+    snap.forEach(d=>{
 
-        const data = d.data();
+        const data=d.data();
 
         if(!isEmployeeActive(data)) return;
 
         result.push(
             mapEmployee(d.id,data)
         );
-
     });
 
     return result;
 }
 
+async function loadEmployeesByAccess(accessList) {
+
+    const result=[];
+
+    const uniqueNiks=new Set();
+
+    /*
+       Target NIK hanya diambil dari dokumen akses
+       yang sudah lolos filter penugasan absensi.
+    */
+
+    accessList.forEach(access=>{
+
+        const targetNik=normalizeNik(
+            firstValue(access,[
+                "target_nik"
+            ],"")
+        );
+
+        if(targetNik) {
+            uniqueNiks.add(targetNik);
+        }
+    });
+
+    const targetList=[...uniqueNiks];
+
+    /*
+       Membaca dokumen satu per satu menggunakan ID NIK.
+
+       Firestore Rules memeriksa:
+       akses_karyawan/{petugasNik}__{targetNik}
+       status == aktif
+       petugas_nik == NIK login
+       target_nik == NIK target
+    */
+
+    for(const nik of targetList) {
+
+        loadingStage="Membaca data karyawan NIK "+nik;
+
+        const ref=doc(db,"karyawan",nik);
+
+        const snap=await getDoc(ref);
+
+        if(!snap.exists()) {
+
+            console.warn(
+                "Data karyawan tidak ditemukan:",
+                nik
+            );
+
+            continue;
+        }
+
+        const data=snap.data();
+
+        if(!isEmployeeActive(data)) {
+            continue;
+        }
+
+        result.push(
+            mapEmployee(snap.id,data)
+        );
+    }
+
+    return result;
+}
+
 /* =====================================================
-   LOAD DATA LOKAL
+   MENAMPILKAN LINGKUP TUGAS
+===================================================== */
+
+function describeAssignments(assignments) {
+
+    if(!assignments.length) {
+        return "Tidak ada penugasan absensi aktif.";
+    }
+
+    return assignments.map(a=>{
+
+        const nama=firstValue(a,[
+            "nama_tugas",
+            "nama",
+            "judul"
+        ],"Pengelolaan Absensi");
+
+        return nama;
+
+    }).join(" | ");
+}
+
+/* =====================================================
+   DATA LOKAL
 ===================================================== */
 
 function loadLocal() {
 
     try {
 
-        const saved = localStorage.getItem(STORAGE_KEY);
+        const saved=localStorage.getItem(STORAGE_KEY);
 
         if(saved) {
 
-            const data = JSON.parse(saved);
+            const data=JSON.parse(saved);
 
-            values = data.values || {};
-            notes = data.notes || {};
-            history = data.history || [];
-
+            values=data.values||{};
+            notes=data.notes||{};
+            history=data.history||[];
         }
 
     } catch(e) {
-        console.error(e);
+
+        console.error("Gagal membaca data lokal:",e);
     }
 }
 
@@ -880,33 +960,19 @@ function saveLocal() {
 }
 
 /* =====================================================
-   HTML AMAN
-===================================================== */
-
-function escapeHTML(text) {
-
-    return String(text ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-}
-
-/* =====================================================
-   RENDER DATA ABSENSI
+   RENDER ABSENSI
 ===================================================== */
 
 function render() {
 
-    const q = document.getElementById("search")
+    const q=document.getElementById("search")
         .value.toLowerCase();
 
-    rows.innerHTML = "";
+    rows.innerHTML="";
 
-    const filtered = authorizedStaff.filter(s => {
+    const filtered=authorizedStaff.filter(s=>{
 
-        const text = [
+        const text=[
             s.name,
             s.nik,
             s.div,
@@ -917,17 +983,17 @@ function render() {
         return text.includes(q);
     });
 
-    document.getElementById("employeeCount").textContent =
+    document.getElementById("employeeCount").textContent=
         authorizedStaff.length+" Karyawan";
 
-    filtered.forEach((s,i) => {
+    filtered.forEach((s,i)=>{
 
-        const key = dataKey(currentDate,s.nik);
+        const key=dataKey(currentDate,s.nik);
 
-        const selected = values[key] || "";
-        const note = notes[key] || "";
+        const selected=values[key]||"";
+        const note=notes[key]||"";
 
-        const options = codes.map(([v,t]) => `
+        const options=codes.map(([v,t])=>`
             <option value="${escapeHTML(v)}"
                 ${selected===v?"selected":""}>
                 ${escapeHTML(t)}
@@ -959,7 +1025,6 @@ function render() {
             </td>
         </tr>
         `);
-
     });
 
     bindEvents();
@@ -972,84 +1037,83 @@ function render() {
 
 function bindEvents() {
 
-    document.querySelectorAll(".status").forEach(el => {
+    document.querySelectorAll(".status").forEach(el=>{
 
-        el.onchange = () => {
+        el.onchange=()=>{
 
-            const nik = normalizeNik(el.dataset.nik);
+            const nik=normalizeNik(el.dataset.nik);
 
-            /*
-               Validasi NIK wajib berada dalam daftar
-               karyawan yang diizinkan.
-            */
+            if(!authorizedStaff.some(s=>s.nik===nik)) {
 
-            if(!authorizedStaff.some(s => s.nik === nik)) {
-                alert("Karyawan tidak termasuk dalam lingkup penugasan Anda.");
-                el.value = "";
+                alert(
+                    "Karyawan tidak termasuk dalam lingkup penugasan Anda."
+                );
+
+                el.value="";
                 return;
             }
 
-            values[dataKey(currentDate,nik)] = el.value;
+            values[dataKey(currentDate,nik)]=el.value;
 
             stats();
         };
     });
 
-    document.querySelectorAll(".noteInput").forEach(el => {
+    document.querySelectorAll(".noteInput").forEach(el=>{
 
-        el.oninput = () => {
+        el.oninput=()=>{
 
-            const nik = normalizeNik(el.dataset.nik);
+            const nik=normalizeNik(el.dataset.nik);
 
-            if(!authorizedStaff.some(s => s.nik === nik)) {
+            if(!authorizedStaff.some(s=>s.nik===nik)) {
                 return;
             }
 
-            notes[dataKey(currentDate,nik)] = el.value;
+            notes[dataKey(currentDate,nik)]=el.value;
         };
     });
 }
 
 /* =====================================================
-   RINGKASAN
+   STATISTIK
 ===================================================== */
 
 function stats() {
 
-    const total = authorizedStaff.length;
+    const total=authorizedStaff.length;
 
-    let masuk = 0;
-    let terisi = 0;
+    let masuk=0;
+    let terisi=0;
 
-    authorizedStaff.forEach(s => {
+    authorizedStaff.forEach(s=>{
 
-        const code = values[dataKey(currentDate,s.nik)] || "";
+        const code=values[dataKey(currentDate,s.nik)]||"";
 
         if(code) terisi++;
 
         if(code==="1") masuk++;
     });
 
-    const belum = total-terisi;
+    const belum=total-terisi;
 
-    const persen = total
-        ? Math.round((masuk/total)*100)
-        : 0;
+    const persen=total
+        ?Math.round((masuk/total)*100)
+        :0;
 
-    document.getElementById("total").textContent = total;
-    document.getElementById("present").textContent = masuk;
-    document.getElementById("other").textContent = terisi-masuk;
-    document.getElementById("empty").textContent = belum;
-    document.getElementById("percent").textContent = persen+"%";
+    document.getElementById("total").textContent=total;
+    document.getElementById("present").textContent=masuk;
+    document.getElementById("other").textContent=terisi-masuk;
+    document.getElementById("empty").textContent=belum;
+    document.getElementById("percent").textContent=persen+"%";
 }
 
 /* =====================================================
    MODE INDIVIDUAL
 ===================================================== */
 
-document.getElementById("individual").onclick = () => {
+document.getElementById("individual").onclick=()=>{
 
-    currentMode = "individual";
+    currentMode="individual";
 
     document.getElementById("individual")
         .classList.add("selected");
@@ -1062,9 +1126,9 @@ document.getElementById("individual").onclick = () => {
    MODE MASSAL
 ===================================================== */
 
-document.getElementById("mass").onclick = () => {
+document.getElementById("mass").onclick=()=>{
 
-    currentMode = "mass";
+    currentMode="mass";
 
     document.getElementById("mass")
         .classList.add("selected");
@@ -1072,7 +1136,7 @@ document.getElementById("mass").onclick = () => {
     document.getElementById("individual")
         .classList.remove("selected");
 
-    const code = prompt(
+    const code=prompt(
         "Masukkan kode untuk seluruh karyawan yang tampil.\n\n"
         +"1 = Masuk\n"
         +"1A = Perjalanan Dinas\n"
@@ -1088,17 +1152,18 @@ document.getElementById("mass").onclick = () => {
         +"Kosongkan untuk membatalkan."
     );
 
-    if(code===null || code==="") return;
+    if(code===null||code==="") return;
 
     if(!codes.some(c=>c[0]===code)) {
+
         alert("Kode absensi tidak tersedia.");
         return;
     }
 
-    const q = document.getElementById("search")
+    const q=document.getElementById("search")
         .value.toLowerCase();
 
-    const filtered = authorizedStaff.filter(s =>
+    const filtered=authorizedStaff.filter(s=>
         [
             s.name,
             s.nik,
@@ -1110,18 +1175,15 @@ document.getElementById("mass").onclick = () => {
 
     if(!confirm(
         "Kode "+code+" akan diterapkan kepada "
-        +filtered.length+" karyawan yang tampil.\n\nLanjutkan?"
+        +filtered.length
+        +" karyawan yang tampil.\n\nLanjutkan?"
     )) return;
 
-    filtered.forEach(s => {
-
-        /*
-           Validasi lingkup sekali lagi sebelum
-           memasukkan status massal.
-        */
+    filtered.forEach(s=>{
 
         if(authorizedStaff.some(a=>a.nik===s.nik)) {
-            values[dataKey(currentDate,s.nik)] = code;
+
+            values[dataKey(currentDate,s.nik)]=code;
         }
     });
 
@@ -1132,29 +1194,29 @@ document.getElementById("mass").onclick = () => {
    SEARCH
 ===================================================== */
 
-document.getElementById("search").oninput = render;
+document.getElementById("search").oninput=render;
 
 /* =====================================================
-   PILIH TANGGAL
+   TANGGAL
 ===================================================== */
 
-document.getElementById("datePick").onchange = e => {
+document.getElementById("datePick").onchange=e=>{
 
-    currentDate = e.target.value;
+    currentDate=e.target.value;
 
     updatePeriod();
     render();
 };
 
 /* =====================================================
-   SIMPAN DATA LOKAL
+   SIMPAN LOKAL
 ===================================================== */
 
-document.getElementById("save").onclick = () => {
+document.getElementById("save").onclick=()=>{
 
-    let filled = 0;
+    let filled=0;
 
-    authorizedStaff.forEach(s => {
+    authorizedStaff.forEach(s=>{
 
         if(values[dataKey(currentDate,s.nik)]) {
             filled++;
@@ -1162,11 +1224,12 @@ document.getElementById("save").onclick = () => {
     });
 
     if(!filled) {
+
         alert("Isi absensi minimal satu karyawan.");
         return;
     }
 
-    const stamp = new Date().toLocaleString("id-ID");
+    const stamp=new Date().toLocaleString("id-ID");
 
     history.unshift({
         date:currentDate,
@@ -1189,18 +1252,18 @@ document.getElementById("save").onclick = () => {
 };
 
 /* =====================================================
-   RESET DATA LOKAL
+   RESET LOKAL
 ===================================================== */
 
-document.getElementById("reset").onclick = () => {
+document.getElementById("reset").onclick=()=>{
 
     if(!confirm(
         "Hapus seluruh data absensi lokal Tahap 2 pada perangkat ini?"
     )) return;
 
-    values = {};
-    notes = {};
-    history = [];
+    values={};
+    notes={};
+    history=[];
 
     localStorage.removeItem(STORAGE_KEY);
 
@@ -1213,47 +1276,59 @@ document.getElementById("reset").onclick = () => {
    TAB
 ===================================================== */
 
-document.querySelectorAll(".tab").forEach(button => {
+document.querySelectorAll(".tab").forEach(button=>{
 
-    button.onclick = () => {
+    button.onclick=()=>{
 
         document.querySelectorAll(".tab")
             .forEach(t=>t.classList.remove("active"));
 
         button.classList.add("active");
 
-        ["inputPanel","recapPanel","historyPanel"]
-            .forEach(id=>{
-                document.getElementById(id)
-                    .classList.add("hidden");
-            });
+        [
+            "inputPanel",
+            "recapPanel",
+            "historyPanel"
+        ].forEach(id=>{
+            document.getElementById(id)
+                .classList.add("hidden");
+        });
 
         document.getElementById(
             button.dataset.tab+"Panel"
         ).classList.remove("hidden");
 
-        if(button.dataset.tab==="recap") renderRecap();
+        if(button.dataset.tab==="recap") {
+            renderRecap();
+        }
 
-        if(button.dataset.tab==="history") renderHistory();
+        if(button.dataset.tab==="history") {
+            renderHistory();
+        }
     };
 });
 
 /* =====================================================
-   REKAP PERIODE
+   REKAP
 ===================================================== */
 
 function renderRecap() {
 
-    const dates = getDates(
+    const dates=getDates(
         currentPeriod.start,
         currentPeriod.end
     );
 
-    let head = `
+    let head=`
     <tr>
-        <th>No</th><th>NIK</th><th>Nama</th>
-        <th>Divisi</th><th>Departemen</th>
-        <th>Jabatan</th><th>TMK</th><th>POH</th>
+        <th>No</th>
+        <th>NIK</th>
+        <th>Nama</th>
+        <th>Divisi</th>
+        <th>Departemen</th>
+        <th>Jabatan</th>
+        <th>TMK</th>
+        <th>POH</th>
         <th>Sistem Cuti</th>
     `;
 
@@ -1299,7 +1374,7 @@ function renderRecap() {
         <td>${escapeHTML(s.cuti)}</td>`;
 
         dates.forEach(date=>{
-            body+=`<td>${values[dataKey(date,s.nik)]||""}</td>`;
+            body+=`<td>${escapeHTML(values[dataKey(date,s.nik)]||"")}</td>`;
         });
 
         body+=`
@@ -1316,7 +1391,7 @@ function renderRecap() {
 }
 
 /* =====================================================
-   RIWAYAT
+   RIWAYAT LOKAL
 ===================================================== */
 
 function renderHistory() {
@@ -1324,6 +1399,7 @@ function renderHistory() {
     const el=document.getElementById("historyList");
 
     if(!history.length) {
+
         el.innerHTML="Belum ada aktivitas penyimpanan.";
         return;
     }
@@ -1340,12 +1416,13 @@ function renderHistory() {
 }
 
 /* =====================================================
-   EXPORT EXCEL HARIAN
+   EXCEL HARIAN
 ===================================================== */
 
 document.getElementById("excel").onclick=()=>{
 
     if(typeof XLSX==="undefined") {
+
         alert("Pustaka Excel belum termuat.");
         return;
     }
@@ -1357,8 +1434,11 @@ document.getElementById("excel").onclick=()=>{
         ["Petugas",currentNik],
         ["Lingkup",document.getElementById("scopeText").textContent],
         [],
-        ["No","NIK","Nama","Divisi","Departemen","Jabatan",
-         "TMK","POH","Sistem Cuti","Jadwal","Kode Absensi","Keterangan"]
+        [
+            "No","NIK","Nama","Divisi","Departemen",
+            "Jabatan","TMK","POH","Sistem Cuti",
+            "Jadwal","Kode Absensi","Keterangan"
+        ]
     ];
 
     authorizedStaff.forEach((s,i)=>{
@@ -1366,9 +1446,18 @@ document.getElementById("excel").onclick=()=>{
         const key=dataKey(currentDate,s.nik);
 
         daily.push([
-            i+1,s.nik,s.name,s.div,s.dept,s.jabatan,
-            s.tmk,s.poh,s.cuti,s.sched,
-            values[key]||"",notes[key]||""
+            i+1,
+            s.nik,
+            s.name,
+            s.div,
+            s.dept,
+            s.jabatan,
+            s.tmk,
+            s.poh,
+            s.cuti,
+            s.sched,
+            values[key]||"",
+            notes[key]||""
         ]);
     });
 
@@ -1380,28 +1469,39 @@ document.getElementById("excel").onclick=()=>{
     const wb=XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
-        wb,XLSX.utils.aoa_to_sheet(daily),"Absensi Harian"
+        wb,
+        XLSX.utils.aoa_to_sheet(daily),
+        "Absensi Harian"
     );
 
     XLSX.utils.book_append_sheet(
-        wb,XLSX.utils.aoa_to_sheet(codeSheet),"Kode Absensi"
+        wb,
+        XLSX.utils.aoa_to_sheet(codeSheet),
+        "Kode Absensi"
     );
 
-    XLSX.writeFile(wb,"WAINI_Absensi_"+currentDate+".xlsx");
+    XLSX.writeFile(
+        wb,
+        "WAINI_Absensi_"+currentDate+".xlsx"
+    );
 };
 
 /* =====================================================
-   EXPORT EXCEL REKAP
+   EXCEL REKAP
 ===================================================== */
 
 document.getElementById("recapExcel").onclick=()=>{
 
     if(typeof XLSX==="undefined") {
+
         alert("Pustaka Excel belum termuat.");
         return;
     }
 
-    const dates=getDates(currentPeriod.start,currentPeriod.end);
+    const dates=getDates(
+        currentPeriod.start,
+        currentPeriod.end
+    );
 
     const header=[
         "No","NIK","Nama","Divisi","Departemen",
@@ -1427,8 +1527,15 @@ document.getElementById("recapExcel").onclick=()=>{
     authorizedStaff.forEach((s,i)=>{
 
         const row=[
-            i+1,s.nik,s.name,s.div,s.dept,s.jabatan,
-            s.tmk,s.poh,s.cuti
+            i+1,
+            s.nik,
+            s.name,
+            s.div,
+            s.dept,
+            s.jabatan,
+            s.tmk,
+            s.poh,
+            s.cuti
         ];
 
         dates.forEach(date=>{
@@ -1437,7 +1544,8 @@ document.getElementById("recapExcel").onclick=()=>{
 
         row.push(
             "","","","","","",
-            s.tmk,currentPeriod.end,
+            s.tmk,
+            currentPeriod.end,
             "","","","","","","",""
         );
 
@@ -1447,7 +1555,9 @@ document.getElementById("recapExcel").onclick=()=>{
     const wb=XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
-        wb,XLSX.utils.aoa_to_sheet(data),"Rekap Periode"
+        wb,
+        XLSX.utils.aoa_to_sheet(data),
+        "Rekap Periode"
     );
 
     XLSX.writeFile(
@@ -1462,38 +1572,47 @@ document.getElementById("recapExcel").onclick=()=>{
 ===================================================== */
 
 document.getElementById("print").onclick=()=>window.print();
+
 document.getElementById("recapPrint").onclick=()=>window.print();
 
 /* =====================================================
-   PROSES LOGIN DAN PEMUATAN DATA
+   START APLIKASI
 ===================================================== */
-
-let attendanceMenu=null;
 
 async function startApp(user) {
 
     currentUser=user;
 
+    /* 1. PROFIL */
+
     currentProfile=await getUserProfile(user);
 
     currentNik=normalizeNik(firstValue(currentProfile,[
-        "nik","NIK","nomor_induk"
+        "nik",
+        "NIK",
+        "nomor_induk"
     ],""));
 
     currentRole=normalize(firstValue(currentProfile,[
-        "role","hak_akses"
+        "role"
     ],""));
 
     const status=firstValue(currentProfile,[
-        "status","aktif"
-    ],"aktif");
+        "status"
+    ],"");
 
     if(!activeStatus(status)) {
-        throw new Error("Akun WAINI Anda tidak aktif.");
+
+        throw new Error(
+            "Akun WAINI Anda tidak aktif. Status akun: "+status
+        );
     }
 
     if(!currentNik) {
-        throw new Error("NIK pengguna tidak ditemukan pada profil pengguna.");
+
+        throw new Error(
+            "NIK pengguna tidak ditemukan pada profil pengguna."
+        );
     }
 
     isSuperAdmin=[
@@ -1507,25 +1626,13 @@ async function startApp(user) {
         <b>${escapeHTML(currentNik)} • ${escapeHTML(currentRole)}</b>
     `;
 
-    /*
-       Membaca menu tugas untuk menemukan menu absensi.
-    */
-
-    attendanceMenu=await loadAttendanceMenu();
-
-    /*
-       Memuat data karyawan asli.
-    */
-
-    staff=await loadEmployees();
-
-    /*
-       Super Admin mendapatkan semua karyawan aktif.
-    */
+    /* 2. SUPER ADMIN */
 
     if(isSuperAdmin) {
 
-        authorizedStaff=staff;
+        authorizedStaff=await loadEmployeesForSuperAdmin();
+
+        staff=authorizedStaff;
 
         assignmentList=[];
 
@@ -1534,63 +1641,75 @@ async function startApp(user) {
 
     } else {
 
-        /*
-           Membaca penugasan hanya untuk NIK petugas login.
-        */
+        /* 3. MENU TUGAS */
 
-        assignmentList=await loadAssignments(currentNik);
+        attendanceMenu=await loadAttendanceMenu();
 
         if(!attendanceMenu) {
 
             throw new Error(
                 "Menu tugas Pengelolaan Absensi tidak ditemukan "
-                +"di collection menu_tugas. Periksa nama halaman/menu."
+                +"atau belum aktif pada collection menu_tugas."
             );
         }
 
-        authorizedStaff=filterByAssignments(
-            staff,
-            assignmentList
+        /* 4. PENUGASAN */
+
+        assignmentList=await loadAssignments(currentNik);
+
+        const attendanceAssignments=
+            getAttendanceAssignments(
+                assignmentList,
+                attendanceMenu
+            );
+
+        if(!attendanceAssignments.length) {
+
+            throw new Error(
+                "NIK "+currentNik
+                +" belum memiliki penugasan aktif untuk menu absensi."
+            );
+        }
+
+        /* 5. AKSES KARYAWAN */
+
+        const accessList=await loadEmployeeAccess(currentNik);
+
+        const authorizedAccess=getAuthorizedAccess(
+            accessList,
+            attendanceAssignments
         );
 
-        const activeAssignments=assignmentList.filter(a=>
-            assignmentIsActive(a)
-            && assignmentMatchesMenu(a,attendanceMenu)
+        if(!authorizedAccess.length) {
+
+            throw new Error(
+                "Penugasan absensi ditemukan, tetapi belum ada "
+                +"dokumen akses_karyawan aktif yang terhubung "
+                +"dengan penugasan tersebut.\n\n"
+                +"Pastikan dokumen akses_karyawan memiliki:\n"
+                +"petugas_nik = "+currentNik+"\n"
+                +"status = aktif\n"
+                +"penugasan_id = ID dokumen penugasan_karyawan."
+            );
+        }
+
+        /* 6. DATA KARYAWAN */
+
+        authorizedStaff=await loadEmployeesByAccess(
+            authorizedAccess
         );
 
-        const descriptions=activeAssignments.map(a=>{
-
-            const scope=getScope(a);
-
-            if(scope.mode==="semua") return "Semua karyawan";
-
-            if(scope.mode==="departemen") {
-                return "Departemen: "+scope.departemen.join(", ");
-            }
-
-            if(scope.mode==="nik") {
-                return "NIK tertentu: "+scope.nik.length+" karyawan";
-            }
-
-            return "Lingkup: "+scope.mode;
-        });
+        staff=authorizedStaff;
 
         document.getElementById("scopeText").textContent=
-            descriptions.join(" | ");
+            describeAssignments(attendanceAssignments);
     }
 
-    /*
-       Jika petugas tidak memiliki karyawan yang masuk lingkup,
-       tetap tampilkan informasi jelas.
-    */
-
-    if(!authorizedStaff.length) {
-
-        document.getElementById("scopeText").textContent +=
-            " • Tidak ada karyawan dalam lingkup penugasan.";
-    }
+    /* 7. DATA LOKAL */
 
     loadLocal();
+
+    /* 8. TANGGAL */
 
     const today=new Date();
 
@@ -1600,6 +1719,8 @@ async function startApp(user) {
 
     updatePeriod();
 
+    /* 9. TAMPILKAN */
+
     document.getElementById("loading").classList.add("hidden");
 
     document.getElementById("app").classList.remove("hidden");
@@ -1608,7 +1729,7 @@ async function startApp(user) {
 }
 
 /* =====================================================
-   AUTH STATE
+   LOGIN DAN ERROR DIAGNOSTIK
 ===================================================== */
 
 onAuthStateChanged(auth,async user=>{
@@ -1621,7 +1742,7 @@ onAuthStateChanged(auth,async user=>{
 
         document.getElementById("errorBox").innerHTML=`
             <div class="error">
-                Anda belum login ke WAINI.<br><br>
+                <b>Anda belum login ke WAINI.</b><br><br>
                 Silakan login terlebih dahulu melalui halaman login WAINI.
             </div>
         `;
@@ -1630,6 +1751,8 @@ onAuthStateChanged(auth,async user=>{
     }
 
     try {
+
+        loadingStage="Memulai aplikasi";
 
         await startApp(user);
 
@@ -1644,9 +1767,15 @@ onAuthStateChanged(auth,async user=>{
         document.getElementById("errorBox").innerHTML=`
             <div class="error">
                 <b>Gagal memuat data absensi.</b><br><br>
-                ${escapeHTML(error.message||error)}<br><br>
-                Pastikan koneksi internet aktif dan hak akses Firestore
-                sesuai dengan akun WAINI Anda.
+
+                <b>Tahap yang gagal:</b><br>
+                ${escapeHTML(loadingStage)}<br><br>
+
+                <b>Pesan kesalahan:</b><br>
+                ${escapeHTML(error.message||String(error))}<br><br>
+
+                Silakan kirim pesan error ini kepada pengembang
+                untuk diperiksa.
             </div>
         `;
     }
