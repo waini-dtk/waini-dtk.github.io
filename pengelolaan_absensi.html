@@ -13,7 +13,7 @@ body{font-family:Arial,sans-serif;background:#f3f5f8;color:#202938;padding-botto
 header{background:linear-gradient(135deg,#7d1018,#a51e28);color:white;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 12px #0002}
 .logo{font-size:30px}
 header h1{font-size:19px}
-header p{font-size:12px;margin-top:3px;opacity:.9}
+header p{font-size:12px;margin-top:3px}
 .user{margin-left:auto;text-align:right;font-size:12px;line-height:1.5}
 main{max-width:1200px;margin:auto;padding:14px}
 .headline{display:flex;gap:10px;margin:10px 0 15px;align-items:center}
@@ -24,22 +24,20 @@ main{max-width:1200px;margin:auto;padding:14px}
 .period b{display:block;color:#81151d;margin-bottom:6px;font-size:13px}
 .period span{font-size:14px;font-weight:bold}
 .tabs{display:flex;gap:6px;overflow-x:auto;margin:14px 0}
-.tab{border:1px solid #ddd;background:white;color:#424b5b;border-radius:9px;padding:11px 13px;font-weight:bold;white-space:nowrap;cursor:pointer}
-.tab.active{background:#8d171d;color:white;border-color:#8d171d}
+.tab{border:1px solid #ddd;background:white;color:#424b5b;border-radius:9px;padding:11px 13px;font-weight:bold;white-space:nowrap}
+.tab.active{background:#8d171d;color:white}
 .scope{background:#e7f1ff;border:1px solid #b8d5ff;border-radius:11px;padding:12px;margin:12px 0;font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
 label{font-size:12px;font-weight:bold;display:block;margin-bottom:6px}
 input,select,button{font:inherit}
-input[type=date],input[type=search],input[type=text],select{width:100%;padding:10px;border:1px solid #d6dce5;border-radius:9px;background:white;color:#202938}
+input[type=date],input[type=search],select{width:100%;padding:10px;border:1px solid #d6dce5;border-radius:9px;background:white;color:#202938}
 .mode{display:flex;background:#eee;border-radius:10px;padding:3px}
-.mode button{flex:1;border:0;background:transparent;padding:8px;border-radius:8px;cursor:pointer;font-size:12px}
+.mode button{flex:1;border:0;background:transparent;padding:8px;border-radius:8px;font-size:12px}
 .mode button.selected{background:#8d171d;color:white}
-.search{margin-bottom:12px}
 .table-wrap{overflow:auto;background:white;border:1px solid #e0e4eb;border-radius:11px;max-height:70vh}
 table{border-collapse:collapse;width:100%;min-width:1000px;font-size:12px}
 th{background:#8d171d;color:white;text-align:left;padding:10px;white-space:nowrap;position:sticky;top:0;z-index:2}
 td{padding:8px;border-bottom:1px solid #e8ebf0;vertical-align:middle;white-space:nowrap}
-tr:last-child td{border-bottom:0}
 select.status{min-width:170px;padding:8px;border-radius:8px;font-size:12px}
 .noteInput{min-width:140px;padding:8px;border:1px solid #ddd;border-radius:7px}
 .chip{display:inline-block;padding:4px 8px;border-radius:30px;background:#e6eefc;font-weight:bold}
@@ -54,15 +52,16 @@ select.status{min-width:170px;padding:8px;border-radius:8px;font-size:12px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
 .btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:11px 13px;font-weight:bold;cursor:pointer;font-size:12px}
 .btn.primary{background:#8d171d;color:white}
+.btn:disabled{opacity:.5}
 .note{font-size:12px;color:#687385;margin:8px 0;line-height:1.6}
 .hidden{display:none!important}
 .recap-card{background:white;border:1px solid #e0e4eb;border-radius:10px;padding:12px;margin:8px 0}
 .recap-card h4{margin-bottom:8px}
-.badge{display:inline-block;padding:4px 8px;background:#e7f1ff;border-radius:20px;font-size:11px}
 .loading{background:white;border:1px solid #ddd;border-radius:10px;padding:20px;margin:10px 0;text-align:center}
 .error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;padding:12px;border-radius:10px;line-height:1.6;overflow-wrap:anywhere}
+.success{background:#e6f7ed;color:#176b38;border:1px solid #a9dfbd;padding:12px;border-radius:10px;margin:10px 0}
 footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
-@media(min-width:700px){.stats{grid-template-columns:repeat(5,1fr)}.controls{grid-template-columns:1fr 1fr 1fr}.headline h2{font-size:25px}}
+@media(min-width:700px){.stats{grid-template-columns:repeat(5,1fr)}.controls{grid-template-columns:1fr 1fr 1fr}}
 @media print{header,.tabs,.controls,.search,.actions,.legend,footer{display:none!important}body{background:white}main{max-width:none;padding:0}.table-wrap{max-height:none;overflow:visible}table{min-width:0;font-size:8px}th{position:static}}
 </style>
 </head>
@@ -70,94 +69,82 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 <body>
 
 <header>
-    <div class="logo">⚓</div>
-    <div>
-        <h1>WAINI</h1>
-        <p>Sistem Informasi Manajemen Karyawan</p>
-    </div>
-    <div class="user" id="userInfo">Memeriksa akun...</div>
+<div class="logo">⚓</div>
+<div>
+<h1>WAINI</h1>
+<p>Sistem Informasi Manajemen Karyawan</p>
+</div>
+<div class="user" id="userInfo">Memeriksa akun...</div>
 </header>
 
 <main>
 
 <div class="headline">
-    <div class="icon">🗓️</div>
-    <div>
-        <h2>Pengelolaan Absensi</h2>
-        <p>Pengisian absensi karyawan sesuai lingkup penugasan.</p>
-    </div>
+<div class="icon">🗓️</div>
+<div>
+<h2>Pengelolaan Absensi</h2>
+<p>Pengisian absensi karyawan sesuai lingkup penugasan.</p>
+</div>
 </div>
 
-<div id="loading" class="loading">
-    ⏳ Menghubungkan ke database WAINI...
-</div>
-
+<div id="loading" class="loading">⏳ Menghubungkan ke Firebase...</div>
 <div id="errorBox" class="hidden"></div>
+<div id="messageBox"></div>
 
 <div id="app" class="hidden">
 
 <div class="period">
-    <b>PERIODE ABSENSI</b>
-    <span id="periodText"></span>
-    <p class="note" id="periodInfo"></p>
+<b>PERIODE ABSENSI</b>
+<span id="periodText"></span>
+<p class="note" id="periodInfo"></p>
 </div>
 
 <div class="tabs">
-    <button class="tab active" data-tab="input">✍️ Input Harian</button>
-    <button class="tab" data-tab="recap">📊 Rekap Periode</button>
-    <button class="tab" data-tab="history">🕘 Riwayat</button>
+<button class="tab active" data-tab="input">✍️ Input Harian</button>
+<button class="tab" data-tab="recap">📊 Rekap Periode</button>
+<button class="tab" data-tab="history">🕘 Riwayat</button>
 </div>
 
 <section id="inputPanel">
 
 <div class="scope">
-    <div>
-        <b>Lingkup Penugasan</b><br>
-        <span id="scopeText">Memuat penugasan...</span>
-    </div>
-    <div>
-        <b id="employeeCount">0 Karyawan</b><br>
-        <small>Data karyawan WAINI</small>
-    </div>
+<div>
+<b>Lingkup Penugasan</b><br>
+<span id="scopeText"></span>
+</div>
+<div>
+<b id="employeeCount">0 Karyawan</b><br>
+<small>Data karyawan WAINI</small>
+</div>
 </div>
 
 <div class="controls">
-
-    <div>
-        <label for="datePick">Tanggal Absensi</label>
-        <input type="date" id="datePick">
-    </div>
-
-    <div>
-        <label>Mode Input</label>
-        <div class="mode">
-            <button class="selected" id="individual">Per Karyawan</button>
-            <button id="mass">Massal</button>
-        </div>
-    </div>
-
-    <div>
-        <label for="search">Cari Karyawan</label>
-        <input type="search" id="search" placeholder="Nama / NIK / Divisi">
-    </div>
-
+<div>
+<label for="datePick">Tanggal Absensi</label>
+<input type="date" id="datePick">
+</div>
+<div>
+<label>Mode Input</label>
+<div class="mode">
+<button class="selected" id="individual">Per Karyawan</button>
+<button id="mass">Massal</button>
+</div>
+</div>
+<div>
+<label for="search">Cari Karyawan</label>
+<input type="search" id="search" placeholder="Nama / NIK / Divisi">
+</div>
 </div>
 
 <div class="table-wrap">
 <table>
 <thead>
 <tr>
-<th>No</th>
-<th>NIK</th>
-<th>Nama</th>
-<th>Divisi</th>
-<th>Departemen</th>
-<th>Jabatan</th>
-<th>TMK</th>
-<th>POH</th>
-<th>Sistem Cuti</th>
-<th>Jadwal</th>
-<th>Status Absensi</th>
+<th>No</th><th>NIK</th><th>Nama</th>
+<th>Divisi</th><th>Departemen</th>
+<th>Jabatan</th><th>TMK</th>
+<th>POH</th><th>Sistem Cuti</th>
+<th>Jadwal</th><th>Status Absensi</th>
 <th>Keterangan</th>
 </tr>
 </thead>
@@ -181,16 +168,13 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 </div>
 
 <div class="actions">
-<button class="btn" id="reset">↺ Reset Data Lokal</button>
-<button class="btn primary" id="save">💾 Simpan Absensi</button>
+<button class="btn primary" id="save">💾 Simpan ke Firebase</button>
 <button class="btn" id="excel">📥 Download Excel</button>
 <button class="btn" id="print">🖨️ Cetak / PDF</button>
 </div>
 
 <p class="note">
-Tahap 2: Data karyawan diambil dari Firestore melalui akses penugasan.
-Data absensi masih tersimpan sementara di browser perangkat ini.
-Belum menyimpan absensi ke Firestore.
+Data absensi disimpan langsung ke Firestore. Data tidak lagi menggunakan localStorage.
 </p>
 
 <div class="summary">
@@ -214,7 +198,7 @@ Belum menyimpan absensi ke Firestore.
 
 <div class="recap-card">
 <h4>Rekapitulasi Kehadiran</h4>
-<p class="note">Rekap mengambil data lokal yang sudah diisi pada browser ini.</p>
+<p class="note">Data rekap dibaca dari absensi harian Firestore.</p>
 </div>
 
 <div class="table-wrap">
@@ -224,1561 +208,1271 @@ Belum menyimpan absensi ke Firestore.
 </table>
 </div>
 
-<p class="note">
-Hari kerja, potongan absensi, insentif tanggal merah, masa kerja dan bonus
-belum dihitung.
-</p>
-
 <div class="actions">
-<button class="btn primary" id="recapExcel">📥 Download Rekap Excel</button>
+<button class="btn primary" id="recapSave">💾 Simpan Rekap Firebase</button>
+<button class="btn" id="recapExcel">📥 Download Rekap Excel</button>
 <button class="btn" id="recapPrint">🖨️ Cetak Rekap</button>
 </div>
 </section>
 
 <section id="historyPanel" class="hidden">
 <div class="recap-card">
-<h4>Riwayat Aktivitas</h4>
-<div id="historyList">Belum ada aktivitas.</div>
+<h4>Riwayat Perubahan Absensi</h4>
+<div id="historyList">Memuat riwayat...</div>
 </div>
 </section>
 
 </div>
 </main>
 
-<footer>WAINI • Pengelolaan Absensi • Tahap 2</footer>
+<footer>WAINI • Pengelolaan Absensi • Firestore</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script type="module">
 
-/* =====================================================
-   FIREBASE
-===================================================== */
+import {auth,db} from "./firebase.js";
 
-import { auth, db } from "./firebase.js";
-
-import {
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {onAuthStateChanged} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    query,
-    where
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+collection,doc,getDoc,getDocs,query,where,
+setDoc,writeBatch,serverTimestamp,limit
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* =====================================================
+/* =========================================
    VARIABEL
-===================================================== */
+========================================= */
 
-const rows = document.getElementById("rows");
+const $=id=>document.getElementById(id);
 
-const STORAGE_KEY = "WAINI_ABSENSI_TAHAP2";
+let staff=[];
+let authorizedStaff=[];
+let values={};
+let notes={};
+let originalValues={};
+let originalNotes={};
+let dailyRecords={};
+let currentDate="";
+let currentPeriod={};
+let currentUser=null;
+let currentProfile=null;
+let currentNik="";
+let currentRole="";
+let isSuperAdmin=false;
+let assignmentList=[];
+let attendanceMenu=null;
+let currentMode="individual";
+let loadingStage="Memulai aplikasi";
+let busy=false;
 
-let staff = [];
-let authorizedStaff = [];
-
-let values = {};
-let notes = {};
-let history = [];
-
-let currentDate = "";
-let currentPeriod = {};
-
-let currentUser = null;
-let currentProfile = null;
-let currentNik = "";
-let currentRole = "";
-
-let isSuperAdmin = false;
-
-let assignmentList = [];
-let attendanceMenu = null;
-
-let currentMode = "individual";
-
-let loadingStage = "Memulai";
-
-/* =====================================================
-   KODE ABSENSI
-===================================================== */
-
-const codes = [
-    ["","— Pilih Kode —"],
-    ["1","1 - Masuk"],
-    ["1A","1A - Perjalanan Dinas 出差"],
-    ["2","2 - Cuti Roster / Mingguan / Tahunan / 13.1"],
-    ["3","3 - Sakit dengan Surat Dokter 有医生备注文件的病假"],
-    ["4","4 - Ijin Resmi"],
-    ["4A","4A - Panggilan Negara"],
-    ["4B","4B - Libur Nasional (Roster tanpa cuti tahunan)"],
-    ["5","5 - Terlambat / Pulang Cepat Disetujui"],
-    ["6","6 - Masuk Kerja pada Libur Nasional (Grade 3 Up)"],
-    ["7","7 - LWOP"],
-    ["9","9 - Mangki"]
+const codes=[
+["","— Pilih Kode —"],
+["1","1 - Masuk"],
+["1A","1A - Perjalanan Dinas"],
+["2","2 - Cuti"],
+["3","3 - Sakit"],
+["4","4 - Ijin Resmi"],
+["4A","4A - Panggilan Negara"],
+["4B","4B - Libur Nasional"],
+["5","5 - Terlambat / Pulang Cepat"],
+["6","6 - Masuk Libur Nasional"],
+["7","7 - LWOP"],
+["9","9 - Mangki"]
 ];
 
-/* =====================================================
-   FUNGSI BANTU
-===================================================== */
-
-function firstValue(obj,keys,fallback="") {
-
-    for(const key of keys) {
-
-        const value=obj?.[key];
-
-        if(value!==undefined && value!==null && value!=="") {
-            return value;
-        }
-    }
-
-    return fallback;
+function firstValue(obj,keys,fallback=""){
+for(const key of keys){
+const value=obj?.[key];
+if(value!==undefined&&value!==null&&value!=="")return value;
+}
+return fallback;
 }
 
-function normalize(value) {
-    return String(value??"").trim().toLowerCase();
+function normalize(value){
+return String(value??"").trim().toLowerCase();
 }
 
-function normalizeNik(value) {
-    return String(value??"").trim();
+function normalizeNik(value){
+return String(value??"").trim();
 }
 
-function activeStatus(value) {
-
-    if(value===true) return true;
-
-    const v=normalize(value);
-
-    return [
-        "aktif",
-        "active",
-        "1",
-        "true",
-        "ya",
-        "yes"
-    ].includes(v);
+function activeStatus(value){
+if(value===true)return true;
+return ["aktif","active","1","true","ya","yes"].includes(normalize(value));
 }
 
-function isEmployeeActive(data) {
-
-    const status=firstValue(data,[
-        "status",
-        "status_karyawan",
-        "status_kerja",
-        "aktif",
-        "active"
-    ],"aktif");
-
-    return activeStatus(status);
+function escapeHTML(text){
+return String(text??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
 
-function escapeHTML(text) {
-
-    return String(text??"")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+function showMessage(message,type="success"){
+$("messageBox").innerHTML=
+`<div class="${type}">${escapeHTML(message)}</div>`;
+window.scrollTo({top:0,behavior:"smooth"});
 }
 
-/* =====================================================
-   FORMAT TANGGAL
-===================================================== */
-
-function formatDate(date) {
-
-    if(!date) return "";
-
-    const d=new Date(date+"T00:00:00");
-
-    return d.toLocaleDateString("id-ID",{
-        day:"numeric",
-        month:"long",
-        year:"numeric"
-    });
+function setBusy(state){
+busy=state;
+["save","recapSave","excel","recapExcel"].forEach(id=>{
+$(id).disabled=state;
+});
+if(state)$("loading").classList.remove("hidden");
+else $("loading").classList.add("hidden");
 }
 
-function formatShort(date) {
-
-    if(!date) return "";
-
-    const d=new Date(date+"T00:00:00");
-
-    return d.toLocaleDateString("id-ID",{
-        day:"2-digit",
-        month:"2-digit"
-    });
+function formatDate(date){
+if(!date)return "";
+const d=new Date(date+"T00:00:00");
+return d.toLocaleDateString("id-ID",{
+day:"numeric",month:"long",year:"numeric"
+});
 }
 
-function toISO(date) {
-
-    return [
-        date.getFullYear(),
-        String(date.getMonth()+1).padStart(2,"0"),
-        String(date.getDate()).padStart(2,"0")
-    ].join("-");
+function formatShort(date){
+if(!date)return "";
+const d=new Date(date+"T00:00:00");
+return d.toLocaleDateString("id-ID",{
+day:"2-digit",month:"2-digit"
+});
 }
 
-/* =====================================================
-   PERIODE ABSENSI 11 - 10
-===================================================== */
-
-function getPeriod(dateString) {
-
-    const d=new Date(dateString+"T00:00:00");
-
-    let start;
-    let end;
-
-    if(d.getDate()>=11) {
-
-        start=new Date(d.getFullYear(),d.getMonth(),11);
-        end=new Date(d.getFullYear(),d.getMonth()+1,10);
-
-    } else {
-
-        start=new Date(d.getFullYear(),d.getMonth()-1,11);
-        end=new Date(d.getFullYear(),d.getMonth(),10);
-    }
-
-    return {
-        start:toISO(start),
-        end:toISO(end)
-    };
+function toISO(date){
+return [
+date.getFullYear(),
+String(date.getMonth()+1).padStart(2,"0"),
+String(date.getDate()).padStart(2,"0")
+].join("-");
 }
 
-function getDates(start,end) {
-
-    const result=[];
-
-    let d=new Date(start+"T00:00:00");
-    const last=new Date(end+"T00:00:00");
-
-    while(d<=last) {
-
-        result.push(toISO(d));
-
-        d.setDate(d.getDate()+1);
-    }
-
-    return result;
+function getPeriod(dateString){
+const d=new Date(dateString+"T00:00:00");
+let start,end;
+if(d.getDate()>=11){
+start=new Date(d.getFullYear(),d.getMonth(),11);
+end=new Date(d.getFullYear(),d.getMonth()+1,10);
+}else{
+start=new Date(d.getFullYear(),d.getMonth()-1,11);
+end=new Date(d.getFullYear(),d.getMonth(),10);
+}
+return {start:toISO(start),end:toISO(end)};
 }
 
-function dataKey(date,nik) {
-    return date+"_"+nik;
+function getDates(start,end){
+const result=[];
+let d=new Date(start+"T00:00:00");
+const last=new Date(end+"T00:00:00");
+while(d<=last){
+result.push(toISO(d));
+d.setDate(d.getDate()+1);
+}
+return result;
 }
 
-function updatePeriod() {
-
-    currentPeriod=getPeriod(currentDate);
-
-    document.getElementById("periodText").textContent=
-        formatDate(currentPeriod.start)
-        +" – "
-        +formatDate(currentPeriod.end);
-
-    document.getElementById("periodInfo").textContent=
-        "Periode absensi otomatis tanggal 11 sampai tanggal 10.";
-
-    document.getElementById("recapPeriod").textContent=
-        formatShort(currentPeriod.start)
-        +" – "
-        +formatShort(currentPeriod.end);
-}
-
-/* =====================================================
-   MEMBACA PROFIL LOGIN
-===================================================== */
-
-async function getUserProfile(user) {
-
-    loadingStage="Membaca profil pengguna";
-
-    const ref=doc(db,"pengguna",user.uid);
-
-    const snap=await getDoc(ref);
-
-    if(!snap.exists()) {
-
-        throw new Error(
-            "Profil pengguna tidak ditemukan pada collection pengguna."
-        );
-    }
-
-    return snap.data();
-}
-
-/* =====================================================
-   MENU TUGAS ABSENSI
-===================================================== */
-
-function getMenuIdentifiers(menuData,menuDocId) {
-
-    return [
-        menuDocId,
-        menuData.menu_id,
-        menuData.menu_kode,
-        menuData.kode_menu,
-        menuData.kode,
-        menuData.tugas_id,
-        menuData.tugas_kode,
-        menuData.id,
-        menuData.halaman,
-        menuData.link,
-        menuData.url
-    ]
-    .filter(Boolean)
-    .map(String);
-}
-
-function isAttendanceMenu(data,id) {
-
-    const text=[
-        id,
-        data.nama,
-        data.judul,
-        data.menu_id,
-        data.menu_kode,
-        data.kode_menu,
-        data.kode,
-        data.tugas_id,
-        data.tugas_kode,
-        data.halaman,
-        data.link,
-        data.url
-    ]
-    .join(" ")
-    .toLowerCase();
-
-    return text.includes("absensi")
-        || text.includes("pengelolaan_absensi")
-        || text.includes("pengelolaan-absensi");
-}
-
-function menuIsActive(menu) {
-
-    const status=firstValue(menu,[
-        "aktif",
-        "status",
-        "active"
-    ],true);
-
-    return activeStatus(status);
-}
-
-async function loadAttendanceMenu() {
-
-    loadingStage="Membaca menu_tugas";
-
-    const snap=await getDocs(
-        collection(db,"menu_tugas")
-    );
-
-    const menus=snap.docs.map(d=>({
-        id:d.id,
-        ...d.data()
-    }));
-
-    return menus.find(m=>
-        menuIsActive(m)
-        && isAttendanceMenu(m,m.id)
-    )||null;
-}
-
-/* =====================================================
-   MEMBACA PENUGASAN PETUGAS
-===================================================== */
-
-async function loadAssignments(nik) {
-
-    loadingStage="Membaca penugasan_karyawan";
-
-    /*
-       Query hanya NIK petugas login.
-       Sesuai Firestore Rules:
-       resource.data.nik == nikLogin()
-    */
-
-    const q=query(
-        collection(db,"penugasan_karyawan"),
-        where("nik","==",nik)
-    );
-
-    const snap=await getDocs(q);
-
-    return snap.docs.map(d=>({
-        id:d.id,
-        ...d.data()
-    }));
-}
-
-function assignmentIsActive(a) {
-
-    const status=firstValue(a,[
-        "aktif",
-        "status",
-        "active"
-    ],true);
-
-    return activeStatus(status);
-}
-
-function assignmentMatchesMenu(a,menu) {
-
-    if(!menu) return false;
-
-    const assignmentMenu=firstValue(a,[
-        "menu_id",
-        "menu_kode",
-        "kode_menu",
-        "kode",
-        "tugas_id",
-        "tugas_kode",
-        "menu_tugas_id"
-    ],"");
-
-    if(!assignmentMenu) return false;
-
-    const menuIds=getMenuIdentifiers(menu,menu.id)
-        .map(normalize);
-
-    return menuIds.includes(normalize(assignmentMenu));
-}
-
-/* =====================================================
-   MENCARI PENUGASAN ABSENSI YANG AKTIF
-===================================================== */
-
-function getAttendanceAssignments(assignments,menu) {
-
-    return assignments.filter(a=>
-        assignmentIsActive(a)
-        && assignmentMatchesMenu(a,menu)
-    );
-}
-
-/* =====================================================
-   MEMBACA AKSES KARYAWAN PETUGAS
-===================================================== */
-
-async function loadEmployeeAccess(nik) {
-
-    loadingStage="Membaca akses_karyawan";
-
-    /*
-       Query sesuai Firestore Rules:
-
-       akunAktif()
-       &&
-       resource.data.petugas_nik == nikLogin()
-
-       Tidak membaca akses milik petugas lain.
-    */
-
-    const q=query(
-        collection(db,"akses_karyawan"),
-        where("petugas_nik","==",nik)
-    );
-
-    const snap=await getDocs(q);
-
-    return snap.docs.map(d=>({
-        id:d.id,
-        ...d.data()
-    }));
-}
-
-/* =====================================================
-   FILTER AKSES SESUAI PENUGASAN ABSENSI
-===================================================== */
-
-function accessIsActive(access) {
-
-    return normalize(access.status)==="aktif";
-}
-
-function accessMatchesAssignments(access,assignments) {
-
-    const assignmentId=normalize(
-        access.penugasan_id
-    );
-
-    if(!assignmentId) return false;
-
-    return assignments.some(a=>
-        normalize(a.id)===assignmentId
-    );
-}
-
-function getAuthorizedAccess(accessList,attendanceAssignments) {
-
-    return accessList.filter(access=>
-        accessIsActive(access)
-        &&
-        accessMatchesAssignments(
-            access,
-            attendanceAssignments
-        )
-    );
-}
-
-/* =====================================================
-   MEMBACA DATA KARYAWAN BERDASARKAN NIK
-===================================================== */
-
-function mapEmployee(id,data) {
-
-    return {
-
-        nik:normalizeNik(firstValue(data,[
-            "nik",
-            "NIK",
-            "nomor_induk",
-            "no_induk"
-        ],id)),
-
-        name:firstValue(data,[
-            "nama",
-            "nama_karyawan",
-            "name",
-            "Nama"
-        ],"Tanpa Nama"),
-
-        div:firstValue(data,[
-            "divisi",
-            "division",
-            "nama_divisi"
-        ],"-"),
-
-        dept:firstValue(data,[
-            "departemen",
-            "department",
-            "nama_departemen"
-        ],"-"),
-
-        jabatan:firstValue(data,[
-            "jabatan",
-            "position",
-            "nama_jabatan"
-        ],"-"),
-
-        tmk:firstValue(data,[
-            "tmk",
-            "tanggal_masuk",
-            "tgl_masuk",
-            "masa_kerja"
-        ],""),
-
-        poh:firstValue(data,[
-            "poh",
-            "place_of_hire",
-            "lokasi",
-            "lokasi_kerja"
-        ],"-"),
-
-        cuti:firstValue(data,[
-            "sistem_cuti",
-            "sistem cuti",
-            "cuti",
-            "jenis_cuti"
-        ],"-"),
-
-        sched:firstValue(data,[
-            "jadwal",
-            "schedule",
-            "shift"
-        ],"-"),
-
-        raw:data
-    };
-}
-
-/*
-   Super Admin:
-   boleh membaca seluruh collection karyawan.
-
-   Petugas biasa:
-   hanya membaca dokumen karyawan yang NIK-nya
-   terdapat dalam akses_karyawan aktif.
+/* ID DOKUMEN ABSENSI:
+   NIK_TANGGAL
 */
 
-async function loadEmployeesForSuperAdmin() {
-
-    loadingStage="Membaca seluruh karyawan (Super Admin)";
-
-    const snap=await getDocs(
-        collection(db,"karyawan")
-    );
-
-    const result=[];
-
-    snap.forEach(d=>{
-
-        const data=d.data();
-
-        if(!isEmployeeActive(data)) return;
-
-        result.push(
-            mapEmployee(d.id,data)
-        );
-    });
-
-    return result;
+function dataKey(date,nik){
+return normalizeNik(nik)+"_"+date;
 }
 
-async function loadEmployeesByAccess(accessList) {
-
-    const result=[];
-
-    const uniqueNiks=new Set();
-
-    /*
-       Target NIK hanya diambil dari dokumen akses
-       yang sudah lolos filter penugasan absensi.
-    */
-
-    accessList.forEach(access=>{
-
-        const targetNik=normalizeNik(
-            firstValue(access,[
-                "target_nik"
-            ],"")
-        );
-
-        if(targetNik) {
-            uniqueNiks.add(targetNik);
-        }
-    });
-
-    const targetList=[...uniqueNiks];
-
-    /*
-       Membaca dokumen satu per satu menggunakan ID NIK.
-
-       Firestore Rules memeriksa:
-       akses_karyawan/{petugasNik}__{targetNik}
-       status == aktif
-       petugas_nik == NIK login
-       target_nik == NIK target
-    */
-
-    for(const nik of targetList) {
-
-        loadingStage="Membaca data karyawan NIK "+nik;
-
-        const ref=doc(db,"karyawan",nik);
-
-        const snap=await getDoc(ref);
-
-        if(!snap.exists()) {
-
-            console.warn(
-                "Data karyawan tidak ditemukan:",
-                nik
-            );
-
-            continue;
-        }
-
-        const data=snap.data();
-
-        if(!isEmployeeActive(data)) {
-            continue;
-        }
-
-        result.push(
-            mapEmployee(snap.id,data)
-        );
-    }
-
-    return result;
+function updatePeriod(){
+currentPeriod=getPeriod(currentDate);
+$("periodText").textContent=
+formatDate(currentPeriod.start)+" – "+formatDate(currentPeriod.end);
+$("periodInfo").textContent=
+"Periode absensi otomatis tanggal 11 sampai tanggal 10.";
+$("recapPeriod").textContent=
+formatShort(currentPeriod.start)+" – "+formatShort(currentPeriod.end);
 }
 
-/* =====================================================
-   MENAMPILKAN LINGKUP TUGAS
-===================================================== */
+/* =========================================
+   PROFIL PENGGUNA
+========================================= */
 
-function describeAssignments(assignments) {
-
-    if(!assignments.length) {
-        return "Tidak ada penugasan absensi aktif.";
-    }
-
-    return assignments.map(a=>{
-
-        const nama=firstValue(a,[
-            "nama_tugas",
-            "nama",
-            "judul"
-        ],"Pengelolaan Absensi");
-
-        return nama;
-
-    }).join(" | ");
+async function getUserProfile(user){
+loadingStage="Membaca profil pengguna";
+const snap=await getDoc(doc(db,"pengguna",user.uid));
+if(!snap.exists()){
+throw new Error("Profil pengguna tidak ditemukan pada collection pengguna.");
+}
+return snap.data();
 }
 
-/* =====================================================
-   DATA LOKAL
-===================================================== */
+/* =========================================
+   MENU TUGAS
+========================================= */
 
-function loadLocal() {
-
-    try {
-
-        const saved=localStorage.getItem(STORAGE_KEY);
-
-        if(saved) {
-
-            const data=JSON.parse(saved);
-
-            values=data.values||{};
-            notes=data.notes||{};
-            history=data.history||[];
-        }
-
-    } catch(e) {
-
-        console.error("Gagal membaca data lokal:",e);
-    }
+function getMenuIdentifiers(menuData,menuDocId){
+return [
+menuDocId,menuData.menu_id,menuData.menu_kode,
+menuData.kode_menu,menuData.kode,menuData.tugas_id,
+menuData.tugas_kode,menuData.id,menuData.halaman,
+menuData.link,menuData.url
+].filter(Boolean).map(String);
 }
 
-function saveLocal() {
+function isAttendanceMenu(data,id){
+const text=[
+id,data.nama,data.judul,data.menu_id,
+data.menu_kode,data.kode_menu,data.kode,
+data.tugas_id,data.tugas_kode,data.halaman,
+data.link,data.url
+].join(" ").toLowerCase();
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-            values,
-            notes,
-            history
-        })
-    );
+return text.includes("absensi")||
+text.includes("pengelolaan_absensi")||
+text.includes("pengelolaan-absensi");
 }
 
-/* =====================================================
-   RENDER ABSENSI
-===================================================== */
-
-function render() {
-
-    const q=document.getElementById("search")
-        .value.toLowerCase();
-
-    rows.innerHTML="";
-
-    const filtered=authorizedStaff.filter(s=>{
-
-        const text=[
-            s.name,
-            s.nik,
-            s.div,
-            s.dept,
-            s.jabatan
-        ].join(" ").toLowerCase();
-
-        return text.includes(q);
-    });
-
-    document.getElementById("employeeCount").textContent=
-        authorizedStaff.length+" Karyawan";
-
-    filtered.forEach((s,i)=>{
-
-        const key=dataKey(currentDate,s.nik);
-
-        const selected=values[key]||"";
-        const note=notes[key]||"";
-
-        const options=codes.map(([v,t])=>`
-            <option value="${escapeHTML(v)}"
-                ${selected===v?"selected":""}>
-                ${escapeHTML(t)}
-            </option>
-        `).join("");
-
-        rows.insertAdjacentHTML("beforeend",`
-        <tr>
-            <td>${i+1}</td>
-            <td>${escapeHTML(s.nik)}</td>
-            <td><b>${escapeHTML(s.name)}</b></td>
-            <td>${escapeHTML(s.div)}</td>
-            <td>${escapeHTML(s.dept)}</td>
-            <td>${escapeHTML(s.jabatan)}</td>
-            <td>${escapeHTML(formatDate(s.tmk))}</td>
-            <td>${escapeHTML(s.poh)}</td>
-            <td>${escapeHTML(s.cuti)}</td>
-            <td><span class="chip">${escapeHTML(s.sched)}</span></td>
-            <td>
-                <select class="status" data-nik="${escapeHTML(s.nik)}">
-                    ${options}
-                </select>
-            </td>
-            <td>
-                <input class="noteInput"
-                    data-nik="${escapeHTML(s.nik)}"
-                    placeholder="Keterangan"
-                    value="${escapeHTML(note)}">
-            </td>
-        </tr>
-        `);
-    });
-
-    bindEvents();
-    stats();
+function menuIsActive(menu){
+return activeStatus(firstValue(menu,["aktif","status","active"],true));
 }
 
-/* =====================================================
-   EVENT INPUT
-===================================================== */
-
-function bindEvents() {
-
-    document.querySelectorAll(".status").forEach(el=>{
-
-        el.onchange=()=>{
-
-            const nik=normalizeNik(el.dataset.nik);
-
-            if(!authorizedStaff.some(s=>s.nik===nik)) {
-
-                alert(
-                    "Karyawan tidak termasuk dalam lingkup penugasan Anda."
-                );
-
-                el.value="";
-                return;
-            }
-
-            values[dataKey(currentDate,nik)]=el.value;
-
-            stats();
-        };
-    });
-
-    document.querySelectorAll(".noteInput").forEach(el=>{
-
-        el.oninput=()=>{
-
-            const nik=normalizeNik(el.dataset.nik);
-
-            if(!authorizedStaff.some(s=>s.nik===nik)) {
-                return;
-            }
-
-            notes[dataKey(currentDate,nik)]=el.value;
-        };
-    });
+async function loadAttendanceMenu(){
+loadingStage="Membaca menu_tugas";
+const snap=await getDocs(collection(db,"menu_tugas"));
+const menus=snap.docs.map(d=>({id:d.id,...d.data()}));
+return menus.find(m=>menuIsActive(m)&&isAttendanceMenu(m,m.id))||null;
 }
 
-/* =====================================================
+/* =========================================
+   PENUGASAN
+========================================= */
+
+async function loadAssignments(nik){
+loadingStage="Membaca penugasan_karyawan";
+const q=query(
+collection(db,"penugasan_karyawan"),
+where("nik","==",nik)
+);
+const snap=await getDocs(q);
+return snap.docs.map(d=>({id:d.id,...d.data()}));
+}
+
+function assignmentIsActive(a){
+return activeStatus(firstValue(a,["aktif","status","active"],true));
+}
+
+function assignmentMatchesMenu(a,menu){
+if(!menu)return false;
+const assignmentMenu=firstValue(a,[
+"menu_id","menu_kode","kode_menu","kode",
+"tugas_id","tugas_kode","menu_tugas_id"
+],"");
+if(!assignmentMenu)return false;
+return getMenuIdentifiers(menu,menu.id)
+.map(normalize).includes(normalize(assignmentMenu));
+}
+
+function getAttendanceAssignments(assignments,menu){
+return assignments.filter(a=>
+assignmentIsActive(a)&&assignmentMatchesMenu(a,menu)
+);
+}
+
+/* =========================================
+   AKSES KARYAWAN
+========================================= */
+
+async function loadEmployeeAccess(nik){
+loadingStage="Membaca akses_karyawan";
+const q=query(
+collection(db,"akses_karyawan"),
+where("petugas_nik","==",nik)
+);
+const snap=await getDocs(q);
+return snap.docs.map(d=>({id:d.id,...d.data()}));
+}
+
+function getAuthorizedAccess(accessList,assignments){
+return accessList.filter(access=>
+normalize(access.status)==="aktif"&&
+assignments.some(a=>
+normalize(a.id)===normalize(access.penugasan_id)
+)
+);
+}
+
+/* =========================================
+   DATA KARYAWAN
+========================================= */
+
+function isEmployeeActive(data){
+const status=firstValue(data,[
+"status","status_karyawan","status_kerja","aktif","active"
+],"aktif");
+return activeStatus(status);
+}
+
+function mapEmployee(id,data){
+return {
+nik:normalizeNik(firstValue(data,[
+"nik","NIK","nomor_induk","no_induk"
+],id)),
+name:firstValue(data,["nama","nama_karyawan","name","Nama"],"Tanpa Nama"),
+div:firstValue(data,["divisi","division","nama_divisi"],"-"),
+dept:firstValue(data,["departemen","department","nama_departemen"],"-"),
+jabatan:firstValue(data,["jabatan","position","nama_jabatan"],"-"),
+tmk:firstValue(data,["tmk","tanggal_masuk","tgl_masuk","masa_kerja"],""),
+poh:firstValue(data,["poh","place_of_hire","lokasi","lokasi_kerja"],"-"),
+cuti:firstValue(data,["sistem_cuti","sistem cuti","cuti","jenis_cuti"],"-"),
+sched:firstValue(data,["jadwal","schedule","shift"],"-"),
+raw:data
+};
+}
+
+async function loadEmployeesForSuperAdmin(){
+loadingStage="Membaca seluruh karyawan";
+const snap=await getDocs(collection(db,"karyawan"));
+const result=[];
+snap.forEach(d=>{
+const data=d.data();
+if(isEmployeeActive(data))result.push(mapEmployee(d.id,data));
+});
+return result;
+}
+
+async function loadEmployeesByAccess(accessList){
+const result=[];
+const uniqueNiks=new Set();
+
+accessList.forEach(a=>{
+const nik=normalizeNik(a.target_nik);
+if(nik)uniqueNiks.add(nik);
+});
+
+for(const nik of uniqueNiks){
+loadingStage="Membaca data karyawan NIK "+nik;
+const snap=await getDoc(doc(db,"karyawan",nik));
+if(!snap.exists())continue;
+const data=snap.data();
+if(isEmployeeActive(data))result.push(mapEmployee(snap.id,data));
+}
+return result;
+}
+
+function describeAssignments(assignments){
+return assignments.map(a=>
+firstValue(a,["nama_tugas","nama","judul"],"Pengelolaan Absensi")
+).join(" | ");
+}
+
+/* =========================================
+   MEMBACA ABSENSI DARI FIRESTORE
+========================================= */
+
+async function loadDailyFromFirestore(){
+
+loadingStage="Membaca data_absensi dari Firebase";
+
+values={};
+notes={};
+originalValues={};
+originalNotes={};
+dailyRecords={};
+
+for(const s of authorizedStaff){
+
+const id=dataKey(currentDate,s.nik);
+const snap=await getDoc(doc(db,"data_absensi",id));
+
+if(!snap.exists())continue;
+
+const data=snap.data();
+
+values[id]=String(data.kode_absensi??"");
+notes[id]=String(data.keterangan??"");
+
+originalValues[id]=values[id];
+originalNotes[id]=notes[id];
+dailyRecords[id]=data;
+}
+
+render();
+}
+
+/* =========================================
+   MENAMPILKAN ABSENSI
+========================================= */
+
+function render(){
+
+const q=$("search").value.toLowerCase();
+rows.innerHTML="";
+
+const filtered=authorizedStaff.filter(s=>{
+const text=[
+s.name,s.nik,s.div,s.dept,s.jabatan
+].join(" ").toLowerCase();
+return text.includes(q);
+});
+
+$("employeeCount").textContent=authorizedStaff.length+" Karyawan";
+
+filtered.forEach((s,i)=>{
+
+const key=dataKey(currentDate,s.nik);
+const selected=values[key]||"";
+const note=notes[key]||"";
+
+const options=codes.map(([v,t])=>`
+<option value="${escapeHTML(v)}" ${selected===v?"selected":""}>
+${escapeHTML(t)}
+</option>`).join("");
+
+rows.insertAdjacentHTML("beforeend",`
+<tr>
+<td>${i+1}</td>
+<td>${escapeHTML(s.nik)}</td>
+<td><b>${escapeHTML(s.name)}</b></td>
+<td>${escapeHTML(s.div)}</td>
+<td>${escapeHTML(s.dept)}</td>
+<td>${escapeHTML(s.jabatan)}</td>
+<td>${escapeHTML(formatDate(s.tmk))}</td>
+<td>${escapeHTML(s.poh)}</td>
+<td>${escapeHTML(s.cuti)}</td>
+<td><span class="chip">${escapeHTML(s.sched)}</span></td>
+<td>
+<select class="status" data-nik="${escapeHTML(s.nik)}">
+${options}
+</select>
+</td>
+<td>
+<input class="noteInput" data-nik="${escapeHTML(s.nik)}"
+placeholder="Keterangan" value="${escapeHTML(note)}">
+</td>
+</tr>
+`);
+});
+
+bindEvents();
+stats();
+}
+
+function bindEvents(){
+
+document.querySelectorAll(".status").forEach(el=>{
+el.onchange=()=>{
+const nik=normalizeNik(el.dataset.nik);
+if(!authorizedStaff.some(s=>s.nik===nik)){
+alert("Karyawan tidak termasuk lingkup penugasan.");
+el.value="";
+return;
+}
+values[dataKey(currentDate,nik)]=el.value;
+stats();
+};
+});
+
+document.querySelectorAll(".noteInput").forEach(el=>{
+el.oninput=()=>{
+const nik=normalizeNik(el.dataset.nik);
+if(!authorizedStaff.some(s=>s.nik===nik))return;
+notes[dataKey(currentDate,nik)]=el.value;
+};
+});
+}
+
+/* =========================================
    STATISTIK
-===================================================== */
+========================================= */
 
-function stats() {
+function stats(){
 
-    const total=authorizedStaff.length;
+const total=authorizedStaff.length;
+let masuk=0,terisi=0;
 
-    let masuk=0;
-    let terisi=0;
+authorizedStaff.forEach(s=>{
+const code=values[dataKey(currentDate,s.nik)]||"";
+if(code)terisi++;
+if(code==="1")masuk++;
+});
 
-    authorizedStaff.forEach(s=>{
-
-        const code=values[dataKey(currentDate,s.nik)]||"";
-
-        if(code) terisi++;
-
-        if(code==="1") masuk++;
-    });
-
-    const belum=total-terisi;
-
-    const persen=total
-        ?Math.round((masuk/total)*100)
-        :0;
-
-    document.getElementById("total").textContent=total;
-    document.getElementById("present").textContent=masuk;
-    document.getElementById("other").textContent=terisi-masuk;
-    document.getElementById("empty").textContent=belum;
-    document.getElementById("percent").textContent=persen+"%";
+$("total").textContent=total;
+$("present").textContent=masuk;
+$("other").textContent=terisi-masuk;
+$("empty").textContent=total-terisi;
+$("percent").textContent=
+(total?Math.round(masuk/total*100):0)+"%";
 }
 
-/* =====================================================
-   MODE INDIVIDUAL
-===================================================== */
+/* =========================================
+   SIMPAN KE FIRESTORE
+========================================= */
 
-document.getElementById("individual").onclick=()=>{
+async function saveAttendance(){
 
-    currentMode="individual";
+if(busy)return;
 
-    document.getElementById("individual")
-        .classList.add("selected");
+const changed=authorizedStaff.filter(s=>{
+const id=dataKey(currentDate,s.nik);
+return values[id]!==originalValues[id]||
+notes[id]!==originalNotes[id];
+});
 
-    document.getElementById("mass")
-        .classList.remove("selected");
-};
+if(!changed.length){
+alert("Tidak ada perubahan absensi untuk disimpan.");
+return;
+}
 
-/* =====================================================
+if(!confirm(
+"Simpan perubahan absensi "+changed.length+
+" karyawan ke Firebase?"
+))return;
+
+setBusy(true);
+
+try{
+
+loadingStage="Menyimpan data_absensi";
+
+const batch=writeBatch(db);
+const historyRefs=[];
+
+for(const s of changed){
+
+const id=dataKey(currentDate,s.nik);
+const ref=doc(db,"data_absensi",id);
+
+const oldCode=originalValues[id]||"";
+const oldNote=originalNotes[id]||"";
+const newCode=values[id]||"";
+const newNote=notes[id]||"";
+
+const existing=dailyRecords[id]||{};
+
+batch.set(ref,{
+
+nik:s.nik,
+nama:s.name,
+divisi:s.div,
+departemen:s.dept,
+jabatan:s.jabatan,
+
+tanggal:currentDate,
+periode_mulai:currentPeriod.start,
+periode_selesai:currentPeriod.end,
+
+kode_absensi:newCode,
+keterangan:newNote,
+
+petugas_nik:currentNik,
+petugas_nama:firstValue(currentProfile,["nama"],""),
+
+penugasan_ids:assignmentList
+.filter(assignmentIsActive)
+.map(a=>a.id),
+
+dibuat_pada:existing.dibuat_pada||serverTimestamp(),
+diperbarui_pada:serverTimestamp()
+
+},{merge:true});
+
+/* RIWAYAT PERUBAHAN */
+
+const historyRef=doc(collection(db,"riwayat_perubahan_absensi"));
+
+batch.set(historyRef,{
+
+data_absensi_id:id,
+nik:s.nik,
+nama:s.name,
+tanggal:currentDate,
+
+kode_lama:oldCode,
+kode_baru:newCode,
+
+keterangan_lama:oldNote,
+keterangan_baru:newNote,
+
+petugas_nik:currentNik,
+petugas_nama:firstValue(currentProfile,["nama"],""),
+
+waktu_perubahan:serverTimestamp(),
+jenis_perubahan:existing.kode_absensi===undefined
+?"input_absensi":"perubahan_absensi"
+
+});
+
+historyRefs.push(historyRef);
+}
+
+await batch.commit();
+
+loadingStage="Memastikan data tersimpan";
+
+await loadDailyFromFirestore();
+
+showMessage(
+"Berhasil! "+changed.length+
+" data absensi dan riwayat perubahan telah dikirim ke Firebase."
+);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Gagal menyimpan ke Firebase.\n\n"+
+(error.message||String(error))
+);
+
+}finally{
+setBusy(false);
+}
+}
+
+$("save").onclick=saveAttendance;
+
+/* =========================================
    MODE MASSAL
-===================================================== */
+========================================= */
 
-document.getElementById("mass").onclick=()=>{
-
-    currentMode="mass";
-
-    document.getElementById("mass")
-        .classList.add("selected");
-
-    document.getElementById("individual")
-        .classList.remove("selected");
-
-    const code=prompt(
-        "Masukkan kode untuk seluruh karyawan yang tampil.\n\n"
-        +"1 = Masuk\n"
-        +"1A = Perjalanan Dinas\n"
-        +"2 = Cuti\n"
-        +"3 = Sakit\n"
-        +"4 = Ijin\n"
-        +"4A = Panggilan Negara\n"
-        +"4B = Libur Nasional\n"
-        +"5 = Terlambat/Pulang Cepat\n"
-        +"6 = Masuk Libur Nasional\n"
-        +"7 = LWOP\n"
-        +"9 = Mangki\n\n"
-        +"Kosongkan untuk membatalkan."
-    );
-
-    if(code===null||code==="") return;
-
-    if(!codes.some(c=>c[0]===code)) {
-
-        alert("Kode absensi tidak tersedia.");
-        return;
-    }
-
-    const q=document.getElementById("search")
-        .value.toLowerCase();
-
-    const filtered=authorizedStaff.filter(s=>
-        [
-            s.name,
-            s.nik,
-            s.div,
-            s.dept,
-            s.jabatan
-        ].join(" ").toLowerCase().includes(q)
-    );
-
-    if(!confirm(
-        "Kode "+code+" akan diterapkan kepada "
-        +filtered.length
-        +" karyawan yang tampil.\n\nLanjutkan?"
-    )) return;
-
-    filtered.forEach(s=>{
-
-        if(authorizedStaff.some(a=>a.nik===s.nik)) {
-
-            values[dataKey(currentDate,s.nik)]=code;
-        }
-    });
-
-    render();
+$("individual").onclick=()=>{
+currentMode="individual";
+$("individual").classList.add("selected");
+$("mass").classList.remove("selected");
 };
 
-/* =====================================================
-   SEARCH
-===================================================== */
+$("mass").onclick=()=>{
 
-document.getElementById("search").oninput=render;
+currentMode="mass";
+$("mass").classList.add("selected");
+$("individual").classList.remove("selected");
 
-/* =====================================================
-   TANGGAL
-===================================================== */
+const code=prompt(
+"Masukkan kode absensi untuk seluruh karyawan yang tampil.\n\n"+
+codes.filter(c=>c[0]).map(c=>c[0]+" = "+c[1]).join("\n")+
+"\n\nKosongkan untuk membatalkan."
+);
 
-document.getElementById("datePick").onchange=e=>{
+if(code===null||code==="")return;
 
-    currentDate=e.target.value;
+if(!codes.some(c=>c[0]===code)){
+alert("Kode absensi tidak tersedia.");
+return;
+}
 
-    updatePeriod();
-    render();
+const q=$("search").value.toLowerCase();
+
+const filtered=authorizedStaff.filter(s=>
+[s.name,s.nik,s.div,s.dept,s.jabatan]
+.join(" ").toLowerCase().includes(q)
+);
+
+if(!confirm(
+"Kode "+code+" diterapkan kepada "+
+filtered.length+" karyawan?"
+))return;
+
+filtered.forEach(s=>{
+values[dataKey(currentDate,s.nik)]=code;
+});
+
+render();
 };
 
-/* =====================================================
-   SIMPAN LOKAL
-===================================================== */
+/* =========================================
+   PENCARIAN DAN TANGGAL
+========================================= */
 
-document.getElementById("save").onclick=()=>{
+$("search").oninput=render;
 
-    let filled=0;
+$("datePick").onchange=async e=>{
 
-    authorizedStaff.forEach(s=>{
+if(busy)return;
 
-        if(values[dataKey(currentDate,s.nik)]) {
-            filled++;
-        }
-    });
+currentDate=e.target.value;
 
-    if(!filled) {
+updatePeriod();
 
-        alert("Isi absensi minimal satu karyawan.");
-        return;
-    }
-
-    const stamp=new Date().toLocaleString("id-ID");
-
-    history.unshift({
-        date:currentDate,
-        stamp,
-        filled,
-        total:authorizedStaff.length,
-        petugas:currentNik
-    });
-
-    saveLocal();
-
-    alert(
-        "Absensi berhasil disimpan di browser.\n\n"
-        +"Tanggal: "+formatDate(currentDate)+"\n"
-        +"Status terisi: "+filled
-        +" dari "+authorizedStaff.length
-        +" karyawan.\n\n"
-        +"Tahap 2 belum menyimpan ke Firestore."
-    );
+try{
+await loadDailyFromFirestore();
+}catch(error){
+alert("Gagal membaca absensi: "+error.message);
+}
 };
 
-/* =====================================================
-   RESET LOKAL
-===================================================== */
+/* =========================================
+   REKAP FIRESTORE
+========================================= */
 
-document.getElementById("reset").onclick=()=>{
+let recapData=[];
 
-    if(!confirm(
-        "Hapus seluruh data absensi lokal Tahap 2 pada perangkat ini?"
-    )) return;
+async function buildRecap(){
 
-    values={};
-    notes={};
-    history=[];
+loadingStage="Membaca seluruh absensi periode";
 
-    localStorage.removeItem(STORAGE_KEY);
+const dates=getDates(currentPeriod.start,currentPeriod.end);
+recapData=[];
 
-    render();
+for(const s of authorizedStaff){
 
-    alert("Data lokal berhasil direset.");
-};
+const daily={};
 
-/* =====================================================
+for(const date of dates){
+
+const id=dataKey(date,s.nik);
+let data;
+
+if(date===currentDate){
+data=dailyRecords[id]||null;
+}else{
+const snap=await getDoc(doc(db,"data_absensi",id));
+data=snap.exists()?snap.data():null;
+}
+
+daily[date]=data?.kode_absensi||"";
+}
+
+const counts={};
+
+codes.filter(c=>c[0]).forEach(c=>{
+counts[c[0]]=0;
+});
+
+dates.forEach(date=>{
+const code=daily[date];
+if(code&&counts[code]!==undefined)counts[code]++;
+});
+
+const terisi=Object.values(counts).reduce((a,b)=>a+b,0);
+
+recapData.push({
+staff:s,
+daily,
+counts,
+terisi,
+masuk:counts["1"]||0
+});
+}
+
+renderRecap();
+}
+
+function renderRecap(){
+
+const dates=getDates(currentPeriod.start,currentPeriod.end);
+
+let head=`
+<tr>
+<th>No</th><th>NIK</th><th>Nama</th>
+<th>Divisi</th><th>Departemen</th>
+<th>Jabatan</th><th>TMK</th>
+<th>POH</th><th>Sistem Cuti</th>
+`;
+
+dates.forEach(d=>{
+head+=`<th>${formatShort(d)}</th>`;
+});
+
+head+=`
+<th>Hari Kerja</th>
+<th>Masuk Kerja</th>
+<th>Potongan Absensi</th>
+<th>Insentif Tanggal Merah</th>
+<th>Kehadiran Kerja</th>
+<th>Kehadiran (%)</th>
+<th>TMK Masa Kerja</th>
+<th>Cut-off Date</th>
+<th>Tahun</th>
+<th>Bulan</th>
+<th>Bonus Pribadi Amount</th>
+<th>Bonus Pribadi %</th>
+<th>Bonus Pribadi Total</th>
+<th>Bonus Kehadiran Team</th>
+<th>Total Bonus Kehadiran</th>
+<th>Keterangan</th>
+</tr>`;
+
+$("recapHead").innerHTML=head;
+
+let body="";
+
+recapData.forEach((r,i)=>{
+
+const s=r.staff;
+const persen=dates.length?
+Math.round(r.masuk/dates.length*100):0;
+
+body+=`
+<tr>
+<td>${i+1}</td>
+<td>${escapeHTML(s.nik)}</td>
+<td>${escapeHTML(s.name)}</td>
+<td>${escapeHTML(s.div)}</td>
+<td>${escapeHTML(s.dept)}</td>
+<td>${escapeHTML(s.jabatan)}</td>
+<td>${escapeHTML(formatDate(s.tmk))}</td>
+<td>${escapeHTML(s.poh)}</td>
+<td>${escapeHTML(s.cuti)}</td>
+`;
+
+dates.forEach(date=>{
+body+=`<td>${escapeHTML(r.daily[date])}</td>`;
+});
+
+body+=`
+<td>${dates.length}</td>
+<td>${r.masuk}</td>
+<td></td>
+<td></td>
+<td>${r.masuk}</td>
+<td>${persen}%</td>
+<td>${escapeHTML(formatDate(s.tmk))}</td>
+<td>${formatDate(currentPeriod.end)}</td>
+<td>${currentPeriod.end.substring(0,4)}</td>
+<td>${currentPeriod.end.substring(5,7)}</td>
+<td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>`;
+});
+
+$("recapRows").innerHTML=body;
+}
+
+/* =========================================
+   SIMPAN REKAP KE FIRESTORE
+========================================= */
+
+async function saveRecap(){
+
+if(busy)return;
+
+if(!recapData.length){
+alert("Rekap belum dimuat.");
+return;
+}
+
+if(!confirm("Simpan rekap periode ke Firestore?"))return;
+
+setBusy(true);
+
+try{
+
+const batch=writeBatch(db);
+
+for(const r of recapData){
+
+const s=r.staff;
+
+const id=currentPeriod.start+"_"+currentPeriod.end+"_"+s.nik;
+
+const ref=doc(db,"rekap_absensi",id);
+
+batch.set(ref,{
+
+nik:s.nik,
+nama:s.name,
+divisi:s.div,
+departemen:s.dept,
+jabatan:s.jabatan,
+
+periode_mulai:currentPeriod.start,
+periode_selesai:currentPeriod.end,
+
+data_harian:r.daily,
+jumlah_masuk:r.masuk,
+jumlah_status_terisi:r.terisi,
+
+jumlah_cuti:r.counts["2"]||0,
+jumlah_sakit:r.counts["3"]||0,
+jumlah_ijin:r.counts["4"]||0,
+jumlah_lwop:r.counts["7"]||0,
+jumlah_mangkir:r.counts["9"]||0,
+
+petugas_nik:currentNik,
+diperbarui_pada:serverTimestamp()
+
+},{merge:true});
+}
+
+await batch.commit();
+
+showMessage("Rekap periode berhasil disimpan ke Firestore.");
+
+}catch(error){
+
+console.error(error);
+alert("Gagal menyimpan rekap: "+error.message);
+
+}finally{
+setBusy(false);
+}
+}
+
+$("recapSave").onclick=saveRecap;
+
+/* =========================================
+   RIWAYAT PERUBAHAN FIRESTORE
+========================================= */
+
+async function renderHistory(){
+
+$("historyList").textContent="Memuat riwayat dari Firebase...";
+
+try{
+
+loadingStage="Membaca riwayat_perubahan_absensi";
+
+let q;
+
+if(isSuperAdmin){
+q=query(
+collection(db,"riwayat_perubahan_absensi"),
+limit(100)
+);
+}else{
+q=query(
+collection(db,"riwayat_perubahan_absensi"),
+where("petugas_nik","==",currentNik),
+limit(100)
+);
+}
+
+const snap=await getDocs(q);
+
+if(snap.empty){
+$("historyList").textContent="Belum ada riwayat perubahan.";
+return;
+}
+
+const list=snap.docs.map(d=>({
+id:d.id,...d.data()
+}));
+
+list.sort((a,b)=>{
+const ta=a.waktu_perubahan?.seconds||0;
+const tb=b.waktu_perubahan?.seconds||0;
+return tb-ta;
+});
+
+$("historyList").innerHTML=list.map(h=>{
+
+let waktu="-";
+
+if(h.waktu_perubahan?.toDate){
+waktu=h.waktu_perubahan.toDate().toLocaleString("id-ID");
+}
+
+return `
+<div class="recap-card">
+<b>${escapeHTML(h.nama||h.nik)}</b>
+<p>NIK: ${escapeHTML(h.nik)}</p>
+<p>Tanggal absensi: ${escapeHTML(formatDate(h.tanggal))}</p>
+<p>Kode lama: ${escapeHTML(h.kode_lama||"(kosong)")}</p>
+<p>Kode baru: ${escapeHTML(h.kode_baru||"(kosong)")}</p>
+<p>Petugas: ${escapeHTML(h.petugas_nik)}</p>
+<p>Waktu: ${escapeHTML(waktu)}</p>
+</div>
+`;
+}).join("");
+
+}catch(error){
+
+console.error(error);
+$("historyList").innerHTML=
+`<div class="error">Gagal membaca riwayat: ${escapeHTML(error.message)}</div>`;
+}
+}
+
+/* =========================================
    TAB
-===================================================== */
+========================================= */
 
 document.querySelectorAll(".tab").forEach(button=>{
 
-    button.onclick=()=>{
+button.onclick=async()=>{
 
-        document.querySelectorAll(".tab")
-            .forEach(t=>t.classList.remove("active"));
+document.querySelectorAll(".tab").forEach(t=>
+t.classList.remove("active")
+);
 
-        button.classList.add("active");
+button.classList.add("active");
 
-        [
-            "inputPanel",
-            "recapPanel",
-            "historyPanel"
-        ].forEach(id=>{
-            document.getElementById(id)
-                .classList.add("hidden");
-        });
+["inputPanel","recapPanel","historyPanel"].forEach(id=>
+$(id).classList.add("hidden")
+);
 
-        document.getElementById(
-            button.dataset.tab+"Panel"
-        ).classList.remove("hidden");
+$(button.dataset.tab+"Panel").classList.remove("hidden");
 
-        if(button.dataset.tab==="recap") {
-            renderRecap();
-        }
+if(button.dataset.tab==="recap"){
 
-        if(button.dataset.tab==="history") {
-            renderHistory();
-        }
-    };
+try{
+setBusy(true);
+await buildRecap();
+}catch(error){
+alert("Gagal membuat rekap: "+error.message);
+}finally{
+setBusy(false);
+}
+
+}
+
+if(button.dataset.tab==="history"){
+await renderHistory();
+}
+
+};
 });
 
-/* =====================================================
-   REKAP
-===================================================== */
-
-function renderRecap() {
-
-    const dates=getDates(
-        currentPeriod.start,
-        currentPeriod.end
-    );
-
-    let head=`
-    <tr>
-        <th>No</th>
-        <th>NIK</th>
-        <th>Nama</th>
-        <th>Divisi</th>
-        <th>Departemen</th>
-        <th>Jabatan</th>
-        <th>TMK</th>
-        <th>POH</th>
-        <th>Sistem Cuti</th>
-    `;
-
-    dates.forEach(date=>{
-        head+=`<th>${formatShort(date)}</th>`;
-    });
-
-    head+=`
-    <th>Hari Kerja</th>
-    <th>Masuk Kerja</th>
-    <th>Potongan Absensi</th>
-    <th>Insentif Tanggal Merah</th>
-    <th>Kehadiran Kerja</th>
-    <th>Kehadiran (%)</th>
-    <th>TMK</th>
-    <th>Cut-off Date</th>
-    <th>Tahun</th>
-    <th>Bulan</th>
-    <th>Bonus Pribadi Amount</th>
-    <th>Bonus Pribadi %</th>
-    <th>Bonus Pribadi Total</th>
-    <th>Bonus Kehadiran Team</th>
-    <th>Total Bonus Kehadiran</th>
-    <th>Keterangan</th>
-    </tr>`;
-
-    document.getElementById("recapHead").innerHTML=head;
-
-    let body="";
-
-    authorizedStaff.forEach((s,i)=>{
-
-        body+=`
-        <tr>
-        <td>${i+1}</td>
-        <td>${escapeHTML(s.nik)}</td>
-        <td>${escapeHTML(s.name)}</td>
-        <td>${escapeHTML(s.div)}</td>
-        <td>${escapeHTML(s.dept)}</td>
-        <td>${escapeHTML(s.jabatan)}</td>
-        <td>${escapeHTML(formatDate(s.tmk))}</td>
-        <td>${escapeHTML(s.poh)}</td>
-        <td>${escapeHTML(s.cuti)}</td>`;
-
-        dates.forEach(date=>{
-            body+=`<td>${escapeHTML(values[dataKey(date,s.nik)]||"")}</td>`;
-        });
-
-        body+=`
-        <td></td><td></td><td></td><td></td>
-        <td></td><td></td>
-        <td>${escapeHTML(formatDate(s.tmk))}</td>
-        <td>${formatDate(currentPeriod.end)}</td>
-        <td></td><td></td><td></td><td></td>
-        <td></td><td></td><td></td>
-        </tr>`;
-    });
-
-    document.getElementById("recapRows").innerHTML=body;
-}
-
-/* =====================================================
-   RIWAYAT LOKAL
-===================================================== */
-
-function renderHistory() {
-
-    const el=document.getElementById("historyList");
-
-    if(!history.length) {
-
-        el.innerHTML="Belum ada aktivitas penyimpanan.";
-        return;
-    }
-
-    el.innerHTML=history.map(h=>`
-    <div class="recap-card">
-        <b>Aktivitas penyimpanan absensi</b>
-        <p>${escapeHTML(h.stamp)}</p>
-        <p>Tanggal absensi: ${escapeHTML(formatDate(h.date))}</p>
-        <p>Status terisi: ${h.filled} dari ${h.total} karyawan</p>
-        <p>NIK Petugas: ${escapeHTML(h.petugas||"-")}</p>
-    </div>
-    `).join("");
-}
-
-/* =====================================================
+/* =========================================
    EXCEL HARIAN
-===================================================== */
+========================================= */
 
-document.getElementById("excel").onclick=()=>{
+$("excel").onclick=()=>{
 
-    if(typeof XLSX==="undefined") {
-
-        alert("Pustaka Excel belum termuat.");
-        return;
-    }
-
-    const daily=[
-        ["LAPORAN ABSENSI HARIAN WAINI"],
-        ["Tanggal",currentDate],
-        ["Periode",currentPeriod.start+" s.d. "+currentPeriod.end],
-        ["Petugas",currentNik],
-        ["Lingkup",document.getElementById("scopeText").textContent],
-        [],
-        [
-            "No","NIK","Nama","Divisi","Departemen",
-            "Jabatan","TMK","POH","Sistem Cuti",
-            "Jadwal","Kode Absensi","Keterangan"
-        ]
-    ];
-
-    authorizedStaff.forEach((s,i)=>{
-
-        const key=dataKey(currentDate,s.nik);
-
-        daily.push([
-            i+1,
-            s.nik,
-            s.name,
-            s.div,
-            s.dept,
-            s.jabatan,
-            s.tmk,
-            s.poh,
-            s.cuti,
-            s.sched,
-            values[key]||"",
-            notes[key]||""
-        ]);
-    });
-
-    const codeSheet=[
-        ["KODE","KETERANGAN"],
-        ...codes.filter(c=>c[0])
-    ];
-
-    const wb=XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(
-        wb,
-        XLSX.utils.aoa_to_sheet(daily),
-        "Absensi Harian"
-    );
-
-    XLSX.utils.book_append_sheet(
-        wb,
-        XLSX.utils.aoa_to_sheet(codeSheet),
-        "Kode Absensi"
-    );
-
-    XLSX.writeFile(
-        wb,
-        "WAINI_Absensi_"+currentDate+".xlsx"
-    );
-};
-
-/* =====================================================
-   EXCEL REKAP
-===================================================== */
-
-document.getElementById("recapExcel").onclick=()=>{
-
-    if(typeof XLSX==="undefined") {
-
-        alert("Pustaka Excel belum termuat.");
-        return;
-    }
-
-    const dates=getDates(
-        currentPeriod.start,
-        currentPeriod.end
-    );
-
-    const header=[
-        "No","NIK","Nama","Divisi","Departemen",
-        "Jabatan","TMK","POH","Sistem Cuti",
-        ...dates,
-        "Hari Kerja","Masuk Kerja","Potongan Absensi",
-        "Insentif Tanggal Merah","Kehadiran Kerja",
-        "Kehadiran Kerja (%)","TMK Masa Kerja",
-        "Cut-off Date","Tahun","Bulan",
-        "Bonus Pribadi Amount","Bonus Pribadi %",
-        "Bonus Pribadi Total","Bonus Kehadiran Team",
-        "Total Bonus Kehadiran","Keterangan"
-    ];
-
-    const data=[
-        ["REKAP ABSENSI WAINI"],
-        ["Periode",currentPeriod.start,"s.d.",currentPeriod.end],
-        ["Petugas",currentNik],
-        [],
-        header
-    ];
-
-    authorizedStaff.forEach((s,i)=>{
-
-        const row=[
-            i+1,
-            s.nik,
-            s.name,
-            s.div,
-            s.dept,
-            s.jabatan,
-            s.tmk,
-            s.poh,
-            s.cuti
-        ];
-
-        dates.forEach(date=>{
-            row.push(values[dataKey(date,s.nik)]||"");
-        });
-
-        row.push(
-            "","","","","","",
-            s.tmk,
-            currentPeriod.end,
-            "","","","","","","",""
-        );
-
-        data.push(row);
-    });
-
-    const wb=XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(
-        wb,
-        XLSX.utils.aoa_to_sheet(data),
-        "Rekap Periode"
-    );
-
-    XLSX.writeFile(
-        wb,
-        "WAINI_Rekap_"+currentPeriod.start
-        +"_"+currentPeriod.end+".xlsx"
-    );
-};
-
-/* =====================================================
-   CETAK
-===================================================== */
-
-document.getElementById("print").onclick=()=>window.print();
-
-document.getElementById("recapPrint").onclick=()=>window.print();
-
-/* =====================================================
-   START APLIKASI
-===================================================== */
-
-async function startApp(user) {
-
-    currentUser=user;
-
-    /* 1. PROFIL */
-
-    currentProfile=await getUserProfile(user);
-
-    currentNik=normalizeNik(firstValue(currentProfile,[
-        "nik",
-        "NIK",
-        "nomor_induk"
-    ],""));
-
-    currentRole=normalize(firstValue(currentProfile,[
-        "role"
-    ],""));
-
-    const status=firstValue(currentProfile,[
-        "status"
-    ],"");
-
-    if(!activeStatus(status)) {
-
-        throw new Error(
-            "Akun WAINI Anda tidak aktif. Status akun: "+status
-        );
-    }
-
-    if(!currentNik) {
-
-        throw new Error(
-            "NIK pengguna tidak ditemukan pada profil pengguna."
-        );
-    }
-
-    isSuperAdmin=[
-        "super_admin",
-        "superadmin",
-        "super admin"
-    ].includes(currentRole);
-
-    document.getElementById("userInfo").innerHTML=`
-        👤 ${escapeHTML(firstValue(currentProfile,["nama"],"Pengguna"))}<br>
-        <b>${escapeHTML(currentNik)} • ${escapeHTML(currentRole)}</b>
-    `;
-
-    /* 2. SUPER ADMIN */
-
-    if(isSuperAdmin) {
-
-        authorizedStaff=await loadEmployeesForSuperAdmin();
-
-        staff=authorizedStaff;
-
-        assignmentList=[];
-
-        document.getElementById("scopeText").textContent=
-            "Super Admin • Seluruh karyawan aktif";
-
-    } else {
-
-        /* 3. MENU TUGAS */
-
-        attendanceMenu=await loadAttendanceMenu();
-
-        if(!attendanceMenu) {
-
-            throw new Error(
-                "Menu tugas Pengelolaan Absensi tidak ditemukan "
-                +"atau belum aktif pada collection menu_tugas."
-            );
-        }
-
-        /* 4. PENUGASAN */
-
-        assignmentList=await loadAssignments(currentNik);
-
-        const attendanceAssignments=
-            getAttendanceAssignments(
-                assignmentList,
-                attendanceMenu
-            );
-
-        if(!attendanceAssignments.length) {
-
-            throw new Error(
-                "NIK "+currentNik
-                +" belum memiliki penugasan aktif untuk menu absensi."
-            );
-        }
-
-        /* 5. AKSES KARYAWAN */
-
-        const accessList=await loadEmployeeAccess(currentNik);
-
-        const authorizedAccess=getAuthorizedAccess(
-            accessList,
-            attendanceAssignments
-        );
-
-        if(!authorizedAccess.length) {
-
-            throw new Error(
-                "Penugasan absensi ditemukan, tetapi belum ada "
-                +"dokumen akses_karyawan aktif yang terhubung "
-                +"dengan penugasan tersebut.\n\n"
-                +"Pastikan dokumen akses_karyawan memiliki:\n"
-                +"petugas_nik = "+currentNik+"\n"
-                +"status = aktif\n"
-                +"penugasan_id = ID dokumen penugasan_karyawan."
-            );
-        }
-
-        /* 6. DATA KARYAWAN */
-
-        authorizedStaff=await loadEmployeesByAccess(
-            authorizedAccess
-        );
-
-        staff=authorizedStaff;
-
-        document.getElementById("scopeText").textContent=
-            describeAssignments(attendanceAssignments);
-    }
-
-    /* 7. DATA LOKAL */
-
-    loadLocal();
-
-    /* 8. TANGGAL */
-
-    const today=new Date();
-
-    currentDate=toISO(today);
-
-    document.getElementById("datePick").value=currentDate;
-
-    updatePeriod();
-
-    /* 9. TAMPILKAN */
-
-    document.getElementById("loading").classList.add("hidden");
-
-    document.getElementById("app").classList.remove("hidden");
-
-    render();
+if(typeof XLSX==="undefined"){
+alert("Pustaka Excel belum termuat.");
+return;
 }
 
-/* =====================================================
-   LOGIN DAN ERROR DIAGNOSTIK
-===================================================== */
+const data=[
+["LAPORAN ABSENSI HARIAN WAINI"],
+["Tanggal",currentDate],
+["Periode",currentPeriod.start+" s.d. "+currentPeriod.end],
+["Petugas",currentNik],
+[],
+["No","NIK","Nama","Divisi","Departemen","Jabatan",
+"TMK","POH","Sistem Cuti","Jadwal","Kode Absensi","Keterangan"]
+];
+
+authorizedStaff.forEach((s,i)=>{
+
+const id=dataKey(currentDate,s.nik);
+
+data.push([
+i+1,s.nik,s.name,s.div,s.dept,s.jabatan,
+s.tmk,s.poh,s.cuti,s.sched,
+values[id]||"",notes[id]||""
+]);
+
+});
+
+const wb=XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(
+wb,XLSX.utils.aoa_to_sheet(data),"Absensi Harian"
+);
+
+XLSX.writeFile(wb,"WAINI_Absensi_"+currentDate+".xlsx");
+};
+
+/* =========================================
+   EXCEL REKAP
+========================================= */
+
+$("recapExcel").onclick=()=>{
+
+if(typeof XLSX==="undefined"){
+alert("Pustaka Excel belum termuat.");
+return;
+}
+
+if(!recapData.length){
+alert("Buka tab Rekap Periode terlebih dahulu.");
+return;
+}
+
+const dates=getDates(currentPeriod.start,currentPeriod.end);
+
+const header=[
+"No","NIK","Nama","Divisi","Departemen",
+"Jabatan","TMK","POH","Sistem Cuti",
+...dates,
+"Hari Kerja","Masuk Kerja","Potongan Absensi",
+"Insentif Tanggal Merah","Kehadiran Kerja",
+"Kehadiran (%)","Cut-off Date"
+];
+
+const data=[
+["REKAP ABSENSI WAINI"],
+["Periode",currentPeriod.start,"s.d.",currentPeriod.end],
+["Petugas",currentNik],
+[],
+header
+];
+
+recapData.forEach((r,i)=>{
+
+const s=r.staff;
+
+data.push([
+i+1,s.nik,s.name,s.div,s.dept,s.jabatan,
+s.tmk,s.poh,s.cuti,
+...dates.map(d=>r.daily[d]),
+dates.length,r.masuk,"","","",
+dates.length?Math.round(r.masuk/dates.length*100):0,
+currentPeriod.end
+]);
+
+});
+
+const wb=XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(
+wb,XLSX.utils.aoa_to_sheet(data),"Rekap Periode"
+);
+
+XLSX.writeFile(
+wb,"WAINI_Rekap_"+currentPeriod.start+"_"+currentPeriod.end+".xlsx"
+);
+};
+
+/* =========================================
+   CETAK
+========================================= */
+
+$("print").onclick=()=>window.print();
+$("recapPrint").onclick=()=>window.print();
+
+/* =========================================
+   MULAI APLIKASI
+========================================= */
+
+async function startApp(user){
+
+currentUser=user;
+
+currentProfile=await getUserProfile(user);
+
+currentNik=normalizeNik(firstValue(currentProfile,[
+"nik","NIK","nomor_induk"
+],""));
+
+currentRole=normalize(firstValue(currentProfile,["role"],""));
+
+const status=firstValue(currentProfile,["status"],"");
+
+if(!activeStatus(status)){
+throw new Error("Akun WAINI tidak aktif.");
+}
+
+if(!currentNik){
+throw new Error("NIK pengguna tidak ditemukan.");
+}
+
+isSuperAdmin=[
+"super_admin","superadmin","super admin"
+].includes(currentRole);
+
+$("userInfo").innerHTML=`
+👤 ${escapeHTML(firstValue(currentProfile,["nama"],"Pengguna"))}<br>
+<b>${escapeHTML(currentNik)} • ${escapeHTML(currentRole)}</b>
+`;
+
+if(isSuperAdmin){
+
+authorizedStaff=await loadEmployeesForSuperAdmin();
+staff=authorizedStaff;
+
+assignmentList=[];
+
+$("scopeText").textContent="Super Admin • Seluruh karyawan aktif";
+
+}else{
+
+attendanceMenu=await loadAttendanceMenu();
+
+if(!attendanceMenu){
+throw new Error("Menu Pengelolaan Absensi tidak ditemukan atau belum aktif.");
+}
+
+assignmentList=await loadAssignments(currentNik);
+
+const attendanceAssignments=
+getAttendanceAssignments(assignmentList,attendanceMenu);
+
+if(!attendanceAssignments.length){
+throw new Error("NIK "+currentNik+" belum memiliki penugasan absensi aktif.");
+}
+
+const accessList=await loadEmployeeAccess(currentNik);
+
+const authorizedAccess=getAuthorizedAccess(
+accessList,attendanceAssignments
+);
+
+if(!authorizedAccess.length){
+throw new Error(
+"Belum ada akses_karyawan aktif yang terhubung dengan penugasan.\n"+
+"petugas_nik = "+currentNik+"\n"+
+"status = aktif\n"+
+"penugasan_id = ID dokumen penugasan_karyawan"
+);
+}
+
+authorizedStaff=await loadEmployeesByAccess(authorizedAccess);
+staff=authorizedStaff;
+
+$("scopeText").textContent=describeAssignments(attendanceAssignments);
+}
+
+const today=new Date();
+
+currentDate=toISO(today);
+
+$("datePick").value=currentDate;
+
+updatePeriod();
+
+$("loading").classList.add("hidden");
+$("app").classList.remove("hidden");
+
+await loadDailyFromFirestore();
+}
+
+/* =========================================
+   LOGIN DAN PENANGANAN ERROR
+========================================= */
 
 onAuthStateChanged(auth,async user=>{
 
-    if(!user) {
+if(!user){
 
-        document.getElementById("loading").classList.add("hidden");
+$("loading").classList.add("hidden");
+$("errorBox").classList.remove("hidden");
 
-        document.getElementById("errorBox").classList.remove("hidden");
+$("errorBox").innerHTML=`
+<div class="error">
+<b>Anda belum login ke WAINI.</b><br>
+Silakan login terlebih dahulu.
+</div>`;
 
-        document.getElementById("errorBox").innerHTML=`
-            <div class="error">
-                <b>Anda belum login ke WAINI.</b><br><br>
-                Silakan login terlebih dahulu melalui halaman login WAINI.
-            </div>
-        `;
+return;
+}
 
-        return;
-    }
+try{
 
-    try {
+loadingStage="Memulai aplikasi";
+await startApp(user);
 
-        loadingStage="Memulai aplikasi";
+}catch(error){
 
-        await startApp(user);
+console.error("WAINI ABSENSI ERROR:",error);
 
-    } catch(error) {
+$("loading").classList.add("hidden");
+$("errorBox").classList.remove("hidden");
 
-        console.error("WAINI ABSENSI ERROR:",error);
+$("errorBox").innerHTML=`
+<div class="error">
+<b>Gagal memuat data absensi.</b><br><br>
+<b>Tahap yang gagal:</b><br>
+${escapeHTML(loadingStage)}<br><br>
+<b>Pesan kesalahan:</b><br>
+${escapeHTML(error.message||String(error))}
+</div>`;
 
-        document.getElementById("loading").classList.add("hidden");
+}
 
-        document.getElementById("errorBox").classList.remove("hidden");
-
-        document.getElementById("errorBox").innerHTML=`
-            <div class="error">
-                <b>Gagal memuat data absensi.</b><br><br>
-
-                <b>Tahap yang gagal:</b><br>
-                ${escapeHTML(loadingStage)}<br><br>
-
-                <b>Pesan kesalahan:</b><br>
-                ${escapeHTML(error.message||String(error))}<br><br>
-
-                Silakan kirim pesan error ini kepada pengembang
-                untuk diperiksa.
-            </div>
-        `;
-    }
 });
 
 </script>
