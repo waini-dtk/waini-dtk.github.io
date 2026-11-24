@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,60 +8,461 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f3f5f8;color:#202938;padding-bottom:30px}
-header{background:linear-gradient(135deg,#7d1018,#a51e28);color:white;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 12px #0002}
-.logo{font-size:30px}
-header h1{font-size:19px}
-header p{font-size:12px;margin-top:3px}
-.user{margin-left:auto;text-align:right;font-size:12px;line-height:1.5}
-main{max-width:1200px;margin:auto;padding:14px}
-.headline{display:flex;gap:10px;margin:10px 0 15px;align-items:center}
-.headline .icon{font-size:29px}
-.headline h2{font-size:21px;margin-bottom:4px}
-.headline p,.note{font-size:12px;color:#687385;line-height:1.6}
-.period,.scope,.legend,.summary,.recap-card,.loading,.error{border-radius:11px;padding:13px;margin:12px 0}
-.period{background:#fbe9eb;border:1px solid #f4c9cd}
-.period b{display:block;color:#81151d;margin-bottom:6px;font-size:13px}
-.period span{font-size:14px;font-weight:bold}
-.tabs{display:flex;gap:6px;overflow-x:auto;margin:14px 0}
-.tab{border:1px solid #ddd;background:white;color:#424b5b;border-radius:9px;padding:11px 13px;font-weight:bold;white-space:nowrap}
-.tab.active{background:#8d171d;color:white}
-.scope{background:#e7f1ff;border:1px solid #b8d5ff;font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-label{font-size:12px;font-weight:bold;display:block;margin-bottom:6px}
+
+body{
+font-family:Arial,sans-serif;
+background:#f3f5f8;
+color:#202938;
+padding-bottom:30px;
+overflow-x:hidden
+}
+
+header{
+background:linear-gradient(135deg,#7d1018,#a51e28);
+color:white;
+padding:13px;
+display:flex;
+align-items:center;
+gap:10px;
+box-shadow:0 3px 12px #0002
+}
+
+.logo{font-size:28px}
+
+header h1{font-size:18px}
+
+header p{font-size:11px;margin-top:3px}
+
+.user{
+margin-left:auto;
+text-align:right;
+font-size:11px;
+line-height:1.5;
+max-width:150px;
+overflow-wrap:anywhere
+}
+
+main{
+width:100%;
+max-width:1200px;
+margin:auto;
+padding:12px
+}
+
+.headline{
+display:flex;
+gap:10px;
+margin:10px 0 15px;
+align-items:center
+}
+
+.headline .icon{font-size:28px}
+
+.headline h2{
+font-size:19px;
+margin-bottom:4px
+}
+
+.headline p,.note{
+font-size:12px;
+color:#687385;
+line-height:1.6
+}
+
+.period,.scope,.legend,.summary,.recap-card,.loading,.error{
+border-radius:11px;
+padding:13px;
+margin:12px 0
+}
+
+.period{
+background:#fbe9eb;
+border:1px solid #f4c9cd
+}
+
+.period b{
+display:block;
+color:#81151d;
+margin-bottom:6px;
+font-size:12px
+}
+
+.period span{
+font-size:13px;
+font-weight:bold
+}
+
+.tabs{
+display:flex;
+gap:6px;
+overflow-x:auto;
+margin:14px 0;
+padding-bottom:3px
+}
+
+.tab{
+border:1px solid #ddd;
+background:white;
+color:#424b5b;
+border-radius:9px;
+padding:10px 12px;
+font-weight:bold;
+white-space:nowrap;
+font-size:12px;
+flex:1
+}
+
+.tab.active{
+background:#8d171d;
+color:white;
+border-color:#8d171d
+}
+
+.scope{
+background:#e7f1ff;
+border:1px solid #b8d5ff;
+font-size:12px;
+display:flex;
+justify-content:space-between;
+gap:10px;
+flex-wrap:wrap
+}
+
+.scope>div{
+min-width:120px;
+flex:1
+}
+
+.controls{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin:12px 0
+}
+
+label{
+font-size:12px;
+font-weight:bold;
+display:block;
+margin-bottom:6px
+}
+
 input,select,button{font:inherit}
-input[type=date],input[type=search],input[type=text],select{width:100%;padding:10px;border:1px solid #d6dce5;border-radius:9px;background:white;color:#202938}
-.mode{display:flex;background:#eee;border-radius:10px;padding:3px}
-.mode button{flex:1;border:0;background:transparent;padding:8px;border-radius:8px;font-size:12px}
-.mode button.selected{background:#8d171d;color:white}
-.table-wrap{overflow:auto;background:white;border:1px solid #e0e4eb;border-radius:11px;max-height:70vh}
-table{border-collapse:collapse;width:100%;min-width:1000px;font-size:12px}
-th{background:#8d171d;color:white;text-align:left;padding:10px;white-space:nowrap;position:sticky;top:0;z-index:2}
-td{padding:8px;border-bottom:1px solid #e8ebf0;vertical-align:middle;white-space:nowrap}
-select.status{min-width:180px;padding:8px;font-size:12px}
-.noteInput{min-width:140px;padding:8px;border:1px solid #ddd;border-radius:7px}
-.chip{display:inline-block;padding:4px 8px;border-radius:30px;background:#e6eefc;font-weight:bold}
-.legend{background:#fff8e9;border:1px solid #f2d9a8;font-size:12px;line-height:1.9}
-.legend .chip{margin:2px;background:white;border:1px solid #ead6a8}
-.summary{border:1px solid #ead1d3;background:white;overflow:hidden;padding:0}
-.summary h3{background:#8d171d;color:white;padding:11px;font-size:14px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr)}
-.stat{padding:12px;border-bottom:1px solid #eee;border-right:1px solid #eee}
-.stat span{display:block;color:#647084;font-size:12px;margin-bottom:5px}
-.stat strong{font-size:19px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-.btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:11px 13px;font-weight:bold;font-size:12px}
-.btn.primary{background:#8d171d;color:white}
+
+input[type=date],
+input[type=search],
+input[type=text],
+select{
+width:100%;
+padding:11px;
+border:1px solid #d6dce5;
+border-radius:9px;
+background:white;
+color:#202938;
+min-width:0
+}
+
+.mode{
+display:flex;
+background:#eee;
+border-radius:10px;
+padding:3px;
+width:100%
+}
+
+.mode button{
+flex:1;
+border:0;
+background:transparent;
+padding:9px 4px;
+border-radius:8px;
+font-size:11px
+}
+
+.mode button.selected{
+background:#8d171d;
+color:white
+}
+
+.table-wrap{
+overflow:auto;
+-webkit-overflow-scrolling:touch;
+background:white;
+border:1px solid #e0e4eb;
+border-radius:11px;
+max-height:70vh;
+width:100%;
+margin-top:12px
+}
+
+table{
+border-collapse:collapse;
+width:100%;
+min-width:1050px;
+font-size:12px
+}
+
+th{
+background:#8d171d;
+color:white;
+text-align:left;
+padding:10px;
+white-space:nowrap;
+position:sticky;
+top:0;
+z-index:2
+}
+
+td{
+padding:8px;
+border-bottom:1px solid #e8ebf0;
+vertical-align:middle;
+white-space:nowrap
+}
+
+select.status{
+min-width:170px;
+padding:8px;
+font-size:12px
+}
+
+.noteInput{
+min-width:140px;
+padding:8px;
+border:1px solid #ddd;
+border-radius:7px
+}
+
+.chip{
+display:inline-block;
+padding:4px 8px;
+border-radius:30px;
+background:#e6eefc;
+font-weight:bold;
+font-size:11px
+}
+
+.legend{
+background:#fff8e9;
+border:1px solid #f2d9a8;
+font-size:12px;
+line-height:2
+}
+
+.legend .chip{
+margin:2px;
+background:white;
+border:1px solid #ead6a8
+}
+
+.summary{
+border:1px solid #ead1d3;
+background:white;
+overflow:hidden;
+padding:0
+}
+
+.summary h3{
+background:#8d171d;
+color:white;
+padding:11px;
+font-size:14px
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr))
+}
+
+.stat{
+padding:11px;
+border-bottom:1px solid #eee;
+border-right:1px solid #eee;
+min-width:0
+}
+
+.stat span{
+display:block;
+color:#647084;
+font-size:11px;
+margin-bottom:5px
+}
+
+.stat strong{font-size:18px}
+
+.actions{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:8px;
+margin:12px 0
+}
+
+.btn{
+border:1px solid #8d171d;
+color:#8d171d;
+background:white;
+border-radius:9px;
+padding:12px 8px;
+font-weight:bold;
+font-size:12px;
+width:100%;
+min-height:45px;
+overflow-wrap:anywhere
+}
+
+.btn.primary{
+background:#8d171d;
+color:white
+}
+
 .btn:disabled{opacity:.6}
+
 .hidden{display:none!important}
-.recap-card{background:white;border:1px solid #e0e4eb}
+
+.recap-card{
+background:white;
+border:1px solid #e0e4eb;
+padding:12px
+}
+
 .recap-card h4{margin-bottom:8px}
-.badge{display:inline-block;padding:4px 8px;background:#e7f1ff;border-radius:20px;font-size:11px}
-.loading{background:white;border:1px solid #ddd;text-align:center}
-.error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;line-height:1.6;overflow-wrap:anywhere}
-footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
-@media(min-width:700px){.stats{grid-template-columns:repeat(5,1fr)}.controls{grid-template-columns:1fr 1fr 1fr}}
-@media print{header,.tabs,.controls,.actions,.legend,footer{display:none!important}body{background:white}main{max-width:none;padding:0}.table-wrap{max-height:none;overflow:visible}table{min-width:0;font-size:8px}th{position:static}}
+
+.badge{
+display:inline-block;
+padding:4px 8px;
+background:#e7f1ff;
+border-radius:20px;
+font-size:11px
+}
+
+.loading{
+background:white;
+border:1px solid #ddd;
+text-align:center
+}
+
+.error{
+background:#ffeded;
+color:#8d171d;
+border:1px solid #f2b9bf;
+line-height:1.6;
+overflow-wrap:anywhere
+}
+
+footer{
+text-align:center;
+color:#7b8493;
+font-size:10px;
+padding:15px
+}
+
+/* TAMPILAN HP */
+@media(max-width:600px){
+
+main{padding:10px}
+
+header{padding:11px}
+
+header h1{font-size:16px}
+
+header p{font-size:10px}
+
+.user{font-size:10px}
+
+.headline h2{font-size:17px}
+
+.period,.scope,.legend,.recap-card{
+padding:11px
+}
+
+.controls{
+grid-template-columns:1fr 1fr;
+gap:8px
+}
+
+.scope{
+flex-direction:row
+}
+
+.scope>div{
+flex:1 1 45%
+}
+
+.tabs .tab{
+padding:10px 7px;
+font-size:11px
+}
+
+.actions{
+grid-template-columns:1fr 1fr;
+gap:8px
+}
+
+.btn{
+padding:11px 6px;
+font-size:11px
+}
+
+.stats{
+grid-template-columns:1fr 1fr
+}
+
+.stat{padding:10px}
+
+.stat strong{font-size:17px}
+
+.table-wrap{max-height:65vh}
+
+table{min-width:1050px}
+}
+
+/* TABLET DAN KOMPUTER */
+@media(min-width:700px){
+
+.controls{
+grid-template-columns:1fr 1fr 1fr
+}
+
+.stats{
+grid-template-columns:repeat(5,1fr)
+}
+
+.actions{
+display:flex;
+flex-wrap:wrap
+}
+
+.actions .btn{width:auto}
+}
+
+/* CETAK */
+@media print{
+
+header,.tabs,.controls,.actions,.legend,footer{
+display:none!important
+}
+
+body{background:white}
+
+main{
+max-width:none;
+padding:0
+}
+
+.table-wrap{
+max-height:none;
+overflow:visible
+}
+
+table{
+min-width:0;
+font-size:8px
+}
+
+th{position:static}
+
+.summary{break-inside:avoid}
+}
 </style>
 </head>
 
@@ -70,24 +470,32 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 
 <header>
 <div class="logo">⚓</div>
+
 <div>
 <h1>WAINI</h1>
 <p>Sistem Informasi Manajemen Karyawan</p>
 </div>
-<div class="user" id="userInfo">Memeriksa akun...</div>
+
+<div class="user" id="userInfo">
+Memeriksa akun...
+</div>
 </header>
 
 <main>
 
 <div class="headline">
 <div class="icon">🗓️</div>
+
 <div>
 <h2>Pengelolaan Absensi</h2>
 <p>Pengisian absensi sesuai lingkup penugasan.</p>
 </div>
 </div>
 
-<div id="loading" class="loading">⏳ Menghubungkan ke Firebase...</div>
+<div id="loading" class="loading">
+⏳ Menghubungkan ke Firebase...
+</div>
+
 <div id="errorBox" class="hidden"></div>
 
 <div id="app" class="hidden">
@@ -99,29 +507,58 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 </div>
 
 <div class="tabs">
-<button class="tab active" data-tab="input">✍️ Input Harian</button>
-<button class="tab" data-tab="recap">📊 Rekap Periode</button>
-<button class="tab" data-tab="history">🕘 Riwayat</button>
+
+<button class="tab active" data-tab="input">
+✍️ Input Harian
+</button>
+
+<button class="tab" data-tab="recap">
+📊 Rekap Periode
+</button>
+
+<button class="tab" data-tab="history">
+🕘 Riwayat
+</button>
+
 </div>
 
 <section id="inputPanel">
 
 <div class="scope">
-<div><b>Lingkup Penugasan</b><br><span id="scopeText"></span></div>
-<div><b id="employeeCount">0 Karyawan</b><br><small>Data karyawan WAINI</small></div>
+
+<div>
+<b>Lingkup Penugasan</b><br>
+<span id="scopeText"></span>
+</div>
+
+<div>
+<b id="employeeCount">0 Karyawan</b><br>
+<small>Data karyawan WAINI</small>
+</div>
+
 </div>
 
 <div class="controls">
+
 <div>
 <label>Tanggal Absensi</label>
 <input type="date" id="datePick">
 </div>
+
 <div>
 <label>Mode Input</label>
+
 <div class="mode">
-<button class="selected" id="individual">Per Karyawan</button>
-<button id="mass">Massal</button>
+<button class="selected" id="individual">
+Per Karyawan
+</button>
+
+<button id="mass">
+Massal
+</button>
 </div>
+</div>
+
 </div>
 
 <div>
@@ -130,21 +567,35 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 </div>
 
 <div class="table-wrap">
+
 <table>
+
 <thead>
 <tr>
-<th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th>
-<th>Departemen</th><th>Jabatan</th><th>TMK</th>
-<th>POH</th><th>Sistem Cuti</th><th>Jadwal</th>
-<th>Status Absensi</th><th>Keterangan</th>
+<th>No</th>
+<th>NIK</th>
+<th>Nama</th>
+<th>Divisi</th>
+<th>Departemen</th>
+<th>Jabatan</th>
+<th>TMK</th>
+<th>POH</th>
+<th>Sistem Cuti</th>
+<th>Jadwal</th>
+<th>Status Absensi</th>
+<th>Keterangan</th>
 </tr>
 </thead>
+
 <tbody id="rows"></tbody>
+
 </table>
 </div>
 
 <div class="legend">
+
 <b>Keterangan Kode Absensi</b><br>
+
 <span class="chip">1 Masuk</span>
 <span class="chip">1A Perjalanan Dinas</span>
 <span class="chip">2 Cuti</span>
@@ -156,13 +607,27 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 <span class="chip">6 Masuk Libur Nasional</span>
 <span class="chip">7 LWOP</span>
 <span class="chip">9 Mangki</span>
+
 </div>
 
 <div class="actions">
-<button class="btn" id="reset">↺ Kosongkan Input</button>
-<button class="btn primary" id="save">💾 Simpan ke Firebase</button>
-<button class="btn" id="excel">📥 Download Excel</button>
-<button class="btn" id="print">🖨️ Cetak / PDF</button>
+
+<button class="btn" id="reset">
+↺ Kosongkan Input
+</button>
+
+<button class="btn primary" id="save">
+💾 Simpan ke Firebase
+</button>
+
+<button class="btn" id="excel">
+📥 Download Excel
+</button>
+
+<button class="btn" id="print">
+🖨️ Cetak / PDF
+</button>
+
 </div>
 
 <p class="note">
@@ -171,49 +636,101 @@ Setiap perubahan dicatat pada riwayat_perubahan_absensi.
 </p>
 
 <div class="summary">
+
 <h3>Ringkasan Tanggal Terpilih</h3>
+
 <div class="stats">
-<div class="stat"><span>Total Karyawan</span><strong id="total">0</strong></div>
-<div class="stat"><span>Kode 1 - Masuk</span><strong id="present">0</strong></div>
-<div class="stat"><span>Status Terisi</span><strong id="other">0</strong></div>
-<div class="stat"><span>Belum Diisi</span><strong id="empty">0</strong></div>
-<div class="stat"><span>Persentase Kode 1</span><strong id="percent">0%</strong></div>
+
+<div class="stat">
+<span>Total Karyawan</span>
+<strong id="total">0</strong>
+</div>
+
+<div class="stat">
+<span>Kode 1 - Masuk</span>
+<strong id="present">0</strong>
+</div>
+
+<div class="stat">
+<span>Status Terisi</span>
+<strong id="other">0</strong>
+</div>
+
+<div class="stat">
+<span>Belum Diisi</span>
+<strong id="empty">0</strong>
+</div>
+
+<div class="stat">
+<span>Persentase Kode 1</span>
+<strong id="percent">0%</strong>
+</div>
+
 </div>
 </div>
+
 </section>
 
 <section id="recapPanel" class="hidden">
+
 <div class="scope">
 <b>Rekap Periode 11–10</b>
 <span id="recapPeriod"></span>
 </div>
+
 <div class="recap-card">
+
 <h4>Rekapitulasi Kehadiran</h4>
-<p class="note">Rekap berdasarkan data absensi dari Firebase.</p>
+
+<p class="note">
+Rekap berdasarkan data absensi dari Firebase.
+</p>
+
 </div>
+
 <div class="table-wrap">
+
 <table>
 <thead id="recapHead"></thead>
 <tbody id="recapRows"></tbody>
 </table>
+
 </div>
+
 <div class="actions">
-<button class="btn primary" id="recapExcel">📥 Download Rekap Excel</button>
-<button class="btn" id="recapPrint">🖨️ Cetak Rekap</button>
+
+<button class="btn primary" id="recapExcel">
+📥 Download Rekap Excel
+</button>
+
+<button class="btn" id="recapPrint">
+🖨️ Cetak Rekap
+</button>
+
 </div>
+
 </section>
 
 <section id="historyPanel" class="hidden">
+
 <div class="recap-card">
+
 <h4>Riwayat Perubahan Absensi</h4>
-<div id="historyList">Memuat riwayat...</div>
+
+<div id="historyList">
+Memuat riwayat...
 </div>
+
+</div>
+
 </section>
 
 </div>
 </main>
 
-<footer>WAINI • Pengelolaan Absensi • Firebase</footer>
+<footer>
+WAINI • Pengelolaan Absensi • Firebase
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -230,7 +747,7 @@ setDoc,addDoc,serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =========================================
-   VARIABEL
+VARIABEL
 ========================================= */
 
 const $=id=>document.getElementById(id);
@@ -264,7 +781,7 @@ let loadingStage="Memulai aplikasi";
 const rows=$("rows");
 
 /* =========================================
-   KODE ABSENSI CADANGAN
+KODE ABSENSI CADANGAN
 ========================================= */
 
 const defaultCodes=[
@@ -282,7 +799,7 @@ const defaultCodes=[
 ];
 
 /* =========================================
-   BANTUAN
+BANTUAN
 ========================================= */
 
 function firstValue(obj,keys,fallback=""){
@@ -343,19 +860,24 @@ return date+"_"+nik;
 }
 
 /* =========================================
-   PERIODE 11 SAMPAI 10
+PERIODE 11 SAMPAI 10
 ========================================= */
 
 function getPeriod(dateString){
+
 const d=new Date(dateString+"T00:00:00");
 let start,end;
 
 if(d.getDate()>=11){
+
 start=new Date(d.getFullYear(),d.getMonth(),11);
 end=new Date(d.getFullYear(),d.getMonth()+1,10);
+
 }else{
+
 start=new Date(d.getFullYear(),d.getMonth()-1,11);
 end=new Date(d.getFullYear(),d.getMonth(),10);
+
 }
 
 return {start:toISO(start),end:toISO(end)};
@@ -366,17 +888,21 @@ return start.substring(0,7);
 }
 
 function getDates(start,end){
+
 const result=[];
 let d=new Date(start+"T00:00:00");
 const last=new Date(end+"T00:00:00");
+
 while(d<=last){
 result.push(toISO(d));
 d.setDate(d.getDate()+1);
 }
+
 return result;
 }
 
 function updatePeriod(){
+
 currentPeriod=getPeriod(currentDate);
 currentPeriodId=getPeriodId(currentPeriod.start);
 
@@ -384,28 +910,36 @@ $("periodText").textContent=
 formatDate(currentPeriod.start)+" – "+formatDate(currentPeriod.end);
 
 $("periodInfo").textContent=
-"ID periode: "+currentPeriodId+" • Periode otomatis tanggal 11 sampai 10.";
+"ID periode: "+currentPeriodId+
+" • Periode otomatis tanggal 11 sampai 10.";
 
 $("recapPeriod").textContent=
 formatShort(currentPeriod.start)+" – "+formatShort(currentPeriod.end);
 }
 
 /* =========================================
-   PROFIL PENGGUNA
+PROFIL PENGGUNA
 ========================================= */
 
 async function getUserProfile(user){
+
 loadingStage="Membaca profil pengguna";
+
 const snap=await getDoc(doc(db,"pengguna",user.uid));
-if(!snap.exists())throw new Error("Profil pengguna tidak ditemukan.");
+
+if(!snap.exists()){
+throw new Error("Profil pengguna tidak ditemukan.");
+}
+
 return snap.data();
 }
 
 /* =========================================
-   MENU TUGAS ABSENSI
+MENU TUGAS ABSENSI
 ========================================= */
 
 function isAttendanceMenu(data,id){
+
 const text=[
 id,data.nama,data.judul,data.menu_id,data.menu_kode,
 data.kode_menu,data.kode,data.tugas_id,data.tugas_kode,
@@ -418,6 +952,7 @@ text.includes("pengelolaan-absensi");
 }
 
 async function loadAttendanceMenu(){
+
 loadingStage="Membaca menu_tugas";
 
 const snap=await getDocs(collection(db,"menu_tugas"));
@@ -433,9 +968,12 @@ activeStatus(firstValue(m,["aktif","status","active"],false))
 
 if(found)return found;
 
-const exact=snap.docs.find(d=>d.id==="xCPwUphMweEgFQu0xMUI");
+const exact=snap.docs.find(d=>
+d.id==="xCPwUphMweEgFQu0xMUI"
+);
 
 if(exact){
+
 const data=exact.data();
 
 if(
@@ -444,12 +982,14 @@ normalize(data.halaman)==="pengelolaan_absensi.html"
 ){
 return {id:exact.id,...data};
 }
+
 }
 
 return null;
 }
 
 function getMenuIdentifiers(menu){
+
 return [
 menu.id,menu.menu_id,menu.menu_kode,menu.kode_menu,
 menu.kode,menu.tugas_id,menu.tugas_kode,
@@ -458,17 +998,20 @@ menu.halaman,menu.link,menu.url
 }
 
 /* =========================================
-   PENUGASAN PETUGAS
+PENUGASAN PETUGAS
 ========================================= */
 
 async function loadAssignments(nik){
+
 loadingStage="Membaca penugasan_karyawan";
 
 const collectionRef=collection(db,"penugasan_karyawan");
 let result=[];
 
 for(const field of ["petugas_nik","nik"]){
+
 try{
+
 const q=query(collectionRef,where(field,"==",nik));
 const snap=await getDocs(q);
 
@@ -477,19 +1020,30 @@ if(!result.some(x=>x.id===d.id)){
 result.push({id:d.id,...d.data()});
 }
 });
+
 }catch(error){
-console.warn("Pencarian penugasan melalui field",field,error);
+
+console.warn(
+"Pencarian penugasan melalui field",
+field,error
+);
+
 }
+
 }
 
 return result;
 }
 
 function assignmentIsActive(a){
-return activeStatus(firstValue(a,["aktif","status","active"],false));
+
+return activeStatus(
+firstValue(a,["aktif","status","active"],false)
+);
 }
 
 function assignmentMatchesMenu(a,menu){
+
 const id=firstValue(a,[
 "menu_id","menu_kode","kode_menu","kode",
 "tugas_id","tugas_kode","menu_tugas_id"
@@ -499,10 +1053,11 @@ return !!id&&getMenuIdentifiers(menu).includes(normalize(id));
 }
 
 /* =========================================
-   AKSES KARYAWAN
+AKSES KARYAWAN
 ========================================= */
 
 async function loadEmployeeAccess(nik){
+
 loadingStage="Membaca akses_karyawan";
 
 const q=query(
@@ -512,67 +1067,106 @@ where("petugas_nik","==",nik)
 
 const snap=await getDocs(q);
 
-return snap.docs.map(d=>({id:d.id,...d.data()}));
+return snap.docs.map(d=>({
+id:d.id,...d.data()
+}));
 }
 
 function getAuthorizedAccess(accessList,assignments){
+
 return accessList.filter(a=>
-activeStatus(firstValue(a,["aktif","status","active"],false))&&
+
+activeStatus(
+firstValue(a,["aktif","status","active"],false)
+)&&
+
 assignments.some(x=>x.id===a.penugasan_id)
+
 );
 }
 
 /* =========================================
-   DATA KARYAWAN
+DATA KARYAWAN
 ========================================= */
 
 function mapEmployee(id,data){
+
 return {
-nik:normalizeNik(firstValue(data,["nik","NIK","nomor_induk"],id)),
-name:firstValue(data,["nama","nama_karyawan","name","Nama"],"Tanpa Nama"),
-div:firstValue(data,["divisi","division","nama_divisi"],"-"),
-dept:firstValue(data,["departemen","department","nama_departemen"],"-"),
-jabatan:firstValue(data,["jabatan","position","nama_jabatan"],"-"),
-tmk:firstValue(data,["tmk","tanggal_masuk","tgl_masuk"],""),
-poh:firstValue(data,["poh","place_of_hire","lokasi","lokasi_kerja"],"-"),
-cuti:firstValue(data,["sistem_cuti","sistem cuti","cuti","jenis_cuti"],"-"),
-sched:firstValue(data,["jadwal","schedule","shift"],"-"),
+
+nik:normalizeNik(
+firstValue(data,["nik","NIK","nomor_induk"],id)
+),
+
+name:firstValue(
+data,["nama","nama_karyawan","name","Nama"],"Tanpa Nama"
+),
+
+div:firstValue(
+data,["divisi","division","nama_divisi"],"-"
+),
+
+dept:firstValue(
+data,["departemen","department","nama_departemen"],"-"
+),
+
+jabatan:firstValue(
+data,["jabatan","position","nama_jabatan"],"-"
+),
+
+tmk:firstValue(
+data,["tmk","tanggal_masuk","tgl_masuk"],""
+),
+
+poh:firstValue(
+data,["poh","place_of_hire","lokasi","lokasi_kerja"],"-"
+),
+
+cuti:firstValue(
+data,["sistem_cuti","sistem cuti","cuti","jenis_cuti"],"-"
+),
+
+sched:firstValue(
+data,["jadwal","schedule","shift"],"-"
+),
+
 raw:data
+
 };
 }
 
 function employeeIsActive(data){
-return activeStatus(firstValue(data,[
+
+return activeStatus(
+firstValue(data,[
 "status","status_karyawan","status_kerja","aktif","active"
-],"aktif"));
+],"aktif")
+);
+
 }
 
 async function loadEmployeesForSuperAdmin(){
+
 loadingStage="Membaca seluruh karyawan";
 
 const snap=await getDocs(collection(db,"karyawan"));
 const result=[];
 
 snap.forEach(d=>{
+
 const data=d.data();
 
 if(employeeIsActive(data)){
 result.push(mapEmployee(d.id,data));
 }
+
 });
 
 return result;
 }
 
-/*
-   PERBAIKAN UTAMA:
-
-   Petugas tidak membaca seluruh collection karyawan.
-
-   Setiap target NIK dibaca langsung menggunakan getDoc().
-   Cara ini sesuai dengan Firestore Rules yang membatasi
-   petugas hanya boleh membaca karyawan yang ditugaskan.
-*/
+/* =========================================
+MEMBACA KARYAWAN SESUAI AKSES PETUGAS
+========================================= */
 
 async function loadEmployeesByAccess(accessList){
 
@@ -612,45 +1206,67 @@ employee.petugas_nik=access.petugas_nik;
 result.push(employee);
 
 accessByNik[nik]=access;
+
 }
 
 return result;
 }
 
 /* =========================================
-   MASTER KODE ABSENSI
+MASTER KODE ABSENSI
 ========================================= */
 
 async function loadCodes(){
+
 loadingStage="Membaca master_kode_absensi";
 
-const snap=await getDocs(collection(db,"master_kode_absensi"));
+const snap=await getDocs(
+collection(db,"master_kode_absensi")
+);
 
 if(snap.empty){
+
 attendanceCodes=defaultCodes;
 return;
+
 }
 
 attendanceCodes=snap.docs
+
 .map(d=>{
+
 const x=d.data();
+
 return {
+
 kode:String(x.kode||d.id),
 nama:x.nama||d.id,
 kategori:x.kategori||"-",
-aktif:activeStatus(firstValue(x,["aktif","status","active"],false))
+
+aktif:activeStatus(
+firstValue(x,["aktif","status","active"],false)
+)
+
 };
+
 })
+
 .filter(x=>x.aktif)
+
 .map(x=>[x.kode,x.nama,x.kategori]);
 
 if(!attendanceCodes.length){
-throw new Error("Tidak ada kode absensi aktif pada master_kode_absensi.");
+
+throw new Error(
+"Tidak ada kode absensi aktif pada master_kode_absensi."
+);
+
 }
+
 }
 
 /* =========================================
-   MEMBACA DATA ABSENSI
+MEMBACA DATA ABSENSI
 ========================================= */
 
 async function loadAttendanceFromFirebase(){
@@ -662,6 +1278,7 @@ notes={};
 savedRecords={};
 
 function processRecord(d){
+
 const data=d.data();
 
 if(!data.tanggal||!data.nik)return;
@@ -680,11 +1297,15 @@ savedRecords[key]={
 id:d.id,
 ...data
 };
+
 }
 
 if(isSuperAdmin){
 
-const snap=await getDocs(collection(db,"data_absensi"));
+const snap=await getDocs(
+collection(db,"data_absensi")
+);
+
 snap.forEach(processRecord);
 
 }else{
@@ -698,12 +1319,15 @@ where("nik","==",employee.nik)
 
 const snap=await getDocs(q);
 snap.forEach(processRecord);
+
 }
+
 }
+
 }
 
 /* =========================================
-   MEMBACA PERIODE FIRESTORE
+MEMBACA PERIODE FIRESTORE
 ========================================= */
 
 async function validateActivePeriod(){
@@ -714,33 +1338,53 @@ const ref=doc(db,"periode_absensi",currentPeriodId);
 const snap=await getDoc(ref);
 
 if(!snap.exists()){
+
 throw new Error(
 "Dokumen periode_absensi/"+currentPeriodId+
 " tidak ditemukan."
 );
+
 }
 
 const data=snap.data();
 
 if(normalize(data.status)!=="aktif"){
+
 throw new Error(
-"Periode "+currentPeriodId+" tidak aktif. Status: "+data.status
+"Periode "+currentPeriodId+
+" tidak aktif. Status: "+data.status
 );
+
 }
 
-if(data.tanggal_mulai&&data.tanggal_mulai!==currentPeriod.start){
-throw new Error("Tanggal mulai periode Firebase tidak sesuai.");
+if(
+data.tanggal_mulai&&
+data.tanggal_mulai!==currentPeriod.start
+){
+
+throw new Error(
+"Tanggal mulai periode Firebase tidak sesuai."
+);
+
 }
 
-if(data.tanggal_selesai&&data.tanggal_selesai!==currentPeriod.end){
-throw new Error("Tanggal selesai periode Firebase tidak sesuai.");
+if(
+data.tanggal_selesai&&
+data.tanggal_selesai!==currentPeriod.end
+){
+
+throw new Error(
+"Tanggal selesai periode Firebase tidak sesuai."
+);
+
 }
 
 return data;
+
 }
 
 /* =========================================
-   RENDER TABEL ABSENSI
+RENDER TABEL ABSENSI
 ========================================= */
 
 function render(){
@@ -749,12 +1393,15 @@ const search=$("search").value.toLowerCase();
 rows.innerHTML="";
 
 const filtered=authorizedStaff.filter(s=>
+
 [
 s.name,s.nik,s.div,s.dept,s.jabatan
 ].join(" ").toLowerCase().includes(search)
+
 );
 
-$("employeeCount").textContent=authorizedStaff.length+" Karyawan";
+$("employeeCount").textContent=
+authorizedStaff.length+" Karyawan";
 
 filtered.forEach((s,i)=>{
 
@@ -764,71 +1411,112 @@ const note=notes[key]||"";
 
 const options=
 '<option value="">— Pilih Kode —</option>'+
+
 attendanceCodes.map(c=>
+
 `<option value="${escapeHTML(c[0])}" ${selected===c[0]?"selected":""}>
 ${escapeHTML(c[0]+" - "+c[1])}
 </option>`
+
 ).join("");
 
 rows.insertAdjacentHTML("beforeend",`
+
 <tr>
+
 <td>${i+1}</td>
+
 <td>${escapeHTML(s.nik)}</td>
+
 <td><b>${escapeHTML(s.name)}</b></td>
+
 <td>${escapeHTML(s.div)}</td>
+
 <td>${escapeHTML(s.dept)}</td>
+
 <td>${escapeHTML(s.jabatan)}</td>
+
 <td>${escapeHTML(formatDate(s.tmk))}</td>
+
 <td>${escapeHTML(s.poh)}</td>
+
 <td>${escapeHTML(s.cuti)}</td>
-<td><span class="chip">${escapeHTML(s.sched)}</span></td>
+
 <td>
+<span class="chip">${escapeHTML(s.sched)}</span>
+</td>
+
+<td>
+
 <select class="status" data-nik="${escapeHTML(s.nik)}">
 ${options}
 </select>
+
 </td>
+
 <td>
-<input class="noteInput" data-nik="${escapeHTML(s.nik)}"
-value="${escapeHTML(note)}" placeholder="Keterangan">
+
+<input class="noteInput"
+data-nik="${escapeHTML(s.nik)}"
+value="${escapeHTML(note)}"
+placeholder="Keterangan">
+
 </td>
+
 </tr>
+
 `);
+
 });
 
 bindEvents();
 stats();
+
 }
 
 /* =========================================
-   EVENT INPUT
+EVENT INPUT
 ========================================= */
 
 function bindEvents(){
 
 document.querySelectorAll(".status").forEach(el=>{
+
 el.onchange=()=>{
+
 const nik=el.dataset.nik;
 
 if(!authorizedStaff.some(s=>s.nik===nik)){
+
 alert("Karyawan di luar penugasan.");
 return;
+
 }
 
 values[dataKey(currentDate,nik)]=el.value;
+
 stats();
+
 };
+
 });
 
 document.querySelectorAll(".noteInput").forEach(el=>{
+
 el.oninput=()=>{
+
 const nik=el.dataset.nik;
+
 notes[dataKey(currentDate,nik)]=el.value;
+
 };
+
 });
+
 }
 
 /* =========================================
-   STATISTIK
+STATISTIK
 ========================================= */
 
 function stats(){
@@ -837,9 +1525,12 @@ let masuk=0;
 let terisi=0;
 
 authorizedStaff.forEach(s=>{
+
 const code=values[dataKey(currentDate,s.nik)]||"";
+
 if(code)terisi++;
 if(code==="1")masuk++;
+
 });
 
 const total=authorizedStaff.length;
@@ -848,12 +1539,14 @@ $("total").textContent=total;
 $("present").textContent=masuk;
 $("other").textContent=terisi-masuk;
 $("empty").textContent=total-terisi;
+
 $("percent").textContent=
 (total?Math.round(masuk/total*100):0)+"%";
+
 }
 
 /* =========================================
-   ID DOKUMEN ABSENSI
+ID DOKUMEN ABSENSI
 ========================================= */
 
 function attendanceDocumentId(nik,tanggal){
@@ -861,12 +1554,14 @@ return nik+"_"+tanggal;
 }
 
 /* =========================================
-   SIMPAN ABSENSI
+SIMPAN ABSENSI
 ========================================= */
 
 async function saveAttendance(){
 
-if(!currentUser)throw new Error("Pengguna belum login.");
+if(!currentUser){
+throw new Error("Pengguna belum login.");
+}
 
 await validateActivePeriod();
 
@@ -880,14 +1575,18 @@ values[dataKey(currentDate,s.nik)]
 );
 
 if(!selectedStaff.length){
+
 alert("Isi minimal satu status absensi.");
 return;
+
 }
 
 if(!confirm(
+
 "Simpan "+selectedStaff.length+
 " data absensi ke Firebase untuk tanggal "+
 formatDate(currentDate)+"?"
+
 ))return;
 
 $("save").disabled=true;
@@ -917,8 +1616,10 @@ oldData&&
 oldData.kode===kode&&
 (oldData.keterangan||"")===keterangan
 ){
+
 unchanged++;
 continue;
+
 }
 
 const access=accessByNik[employee.nik]||{};
@@ -928,10 +1629,13 @@ const assignmentId=isSuperAdmin
 :(employee.penugasan_id||access.penugasan_id||"");
 
 if(!isSuperAdmin&&!assignmentId){
+
 throw new Error("ID penugasan tidak ditemukan.");
+
 }
 
 const payload={
+
 absensi_id:absensiId,
 periode_id:currentPeriodId,
 tanggal:currentDate,
@@ -940,18 +1644,23 @@ kode:kode,
 keterangan:keterangan,
 petugas_nik:currentNik,
 penugasan_id:assignmentId
+
 };
 
 if(oldData){
+
 payload.createdAt=oldData.createdAt;
 payload.createdBy=oldData.createdBy;
 payload.updatedAt=serverTimestamp();
 payload.updatedBy=currentUser.uid;
+
 }else{
+
 payload.createdAt=serverTimestamp();
 payload.createdBy=currentUser.uid;
 payload.updatedAt=serverTimestamp();
 payload.updatedBy=currentUser.uid;
+
 }
 
 await setDoc(ref,payload);
@@ -959,37 +1668,50 @@ await setDoc(ref,payload);
 await addDoc(
 collection(db,"riwayat_perubahan_absensi"),
 {
+
 absensi_id:absensiId,
 periode_id:currentPeriodId,
 tanggal:currentDate,
 nik:employee.nik,
+
 kode_lama:oldData?.kode||"",
 kode_baru:kode,
+
 keterangan_lama:oldData?.keterangan||"",
 keterangan_baru:keterangan,
+
 aksi:oldData?"perubahan":"pembuatan",
+
 petugas_nik:currentNik,
 penugasan_id:assignmentId,
+
 createdAt:serverTimestamp(),
 createdBy:currentUser.uid
+
 }
 );
 
 success++;
 
 }catch(error){
+
 failed++;
 errors.push(employee.nik+": "+error.message);
+
 }
+
 }
 
 }catch(error){
+
 alert("Gagal menyimpan: "+error.message);
 return;
 
 }finally{
+
 $("save").disabled=false;
 $("save").textContent="💾 Simpan ke Firebase";
+
 }
 
 await loadAttendanceFromFirebase();
@@ -1002,14 +1724,17 @@ let message=
 "Gagal: "+failed;
 
 if(errors.length){
+
 message+="\n\nRincian kegagalan:\n"+errors.join("\n");
+
 }
 
 alert(message);
+
 }
 
 /* =========================================
-   KOSONGKAN INPUT
+KOSONGKAN INPUT
 ========================================= */
 
 $("reset").onclick=()=>{
@@ -1019,70 +1744,91 @@ if(!confirm(
 ))return;
 
 authorizedStaff.forEach(s=>{
+
 const key=dataKey(currentDate,s.nik);
 
 if(!savedRecords[key]){
+
 values[key]="";
 notes[key]="";
+
 }
+
 });
 
 render();
+
 };
 
 /* =========================================
-   MODE INDIVIDUAL
+MODE INDIVIDUAL
 ========================================= */
 
 $("individual").onclick=()=>{
+
 currentMode="individual";
+
 $("individual").classList.add("selected");
 $("mass").classList.remove("selected");
+
 };
 
 /* =========================================
-   MODE MASSAL
+MODE MASSAL
 ========================================= */
 
 $("mass").onclick=()=>{
 
 currentMode="mass";
+
 $("mass").classList.add("selected");
 $("individual").classList.remove("selected");
 
 const code=prompt(
+
 "Masukkan kode absensi:\n"+
 attendanceCodes.map(c=>c[0]+" = "+c[1]).join("\n")+
 "\n\nKosongkan untuk membatalkan."
+
 );
 
 if(code===null||code==="")return;
 
 if(!attendanceCodes.some(c=>c[0]===code)){
+
 alert("Kode tidak ditemukan atau tidak aktif.");
 return;
+
 }
 
 const search=$("search").value.toLowerCase();
 
 const filtered=authorizedStaff.filter(s=>
+
 [s.name,s.nik,s.div,s.dept,s.jabatan]
 .join(" ").toLowerCase().includes(search)
+
 );
 
 if(!confirm(
-"Terapkan kode "+code+" kepada "+filtered.length+" karyawan?"
+
+"Terapkan kode "+code+
+" kepada "+filtered.length+" karyawan?"
+
 ))return;
 
 filtered.forEach(s=>{
+
 values[dataKey(currentDate,s.nik)]=code;
+
 });
 
 render();
+
 };
 
 /* =========================================
-   PENCARIAN DAN TANGGAL
+PENCARIAN DAN TANGGAL
 ========================================= */
 
 $("search").oninput=render;
@@ -1096,15 +1842,22 @@ if(!currentDate)return;
 updatePeriod();
 
 try{
+
 await loadAttendanceFromFirebase();
 render();
+
 }catch(error){
-showError("Gagal membaca absensi tanggal terpilih: "+error.message);
+
+showError(
+"Gagal membaca absensi tanggal terpilih: "+error.message
+);
+
 }
+
 };
 
 /* =========================================
-   TAB
+TAB
 ========================================= */
 
 document.querySelectorAll(".tab").forEach(button=>{
@@ -1122,27 +1875,47 @@ button.classList.add("active");
 $(button.dataset.tab+"Panel").classList.remove("hidden");
 
 if(button.dataset.tab==="recap")renderRecap();
+
 if(button.dataset.tab==="history")loadHistory();
+
 };
+
 });
 
 /* =========================================
-   REKAP
+REKAP
 ========================================= */
 
 function renderRecap(){
 
-const dates=getDates(currentPeriod.start,currentPeriod.end);
+const dates=getDates(
+currentPeriod.start,
+currentPeriod.end
+);
 
 let head=`
+
 <tr>
-<th>No</th><th>NIK</th><th>Nama</th>
-<th>Divisi</th><th>Departemen</th><th>Jabatan</th>
+
+<th>No</th>
+<th>NIK</th>
+<th>Nama</th>
+<th>Divisi</th>
+<th>Departemen</th>
+<th>Jabatan</th>
+
 `;
 
 dates.forEach(d=>head+=`<th>${formatShort(d)}</th>`);
 
-head+=`<th>Jumlah Kode 1</th><th>Status Terisi</th></tr>`;
+head+=`
+
+<th>Jumlah Kode 1</th>
+<th>Status Terisi</th>
+
+</tr>
+
+`;
 
 $("recapHead").innerHTML=head;
 
@@ -1154,35 +1927,52 @@ let masuk=0;
 let terisi=0;
 
 body+=`
+
 <tr>
+
 <td>${i+1}</td>
 <td>${escapeHTML(s.nik)}</td>
 <td>${escapeHTML(s.name)}</td>
 <td>${escapeHTML(s.div)}</td>
 <td>${escapeHTML(s.dept)}</td>
 <td>${escapeHTML(s.jabatan)}</td>
+
 `;
 
 dates.forEach(date=>{
+
 const code=values[dataKey(date,s.nik)]||"";
+
 if(code)terisi++;
 if(code==="1")masuk++;
+
 body+=`<td>${escapeHTML(code)}</td>`;
+
 });
 
-body+=`<td>${masuk}</td><td>${terisi}</td></tr>`;
+body+=`
+
+<td>${masuk}</td>
+<td>${terisi}</td>
+
+</tr>
+
+`;
+
 });
 
 $("recapRows").innerHTML=body;
+
 }
 
 /* =========================================
-   RIWAYAT PERUBAHAN
+RIWAYAT PERUBAHAN
 ========================================= */
 
 async function loadHistory(){
 
-$("historyList").textContent="Memuat riwayat Firebase...";
+$("historyList").textContent=
+"Memuat riwayat Firebase...";
 
 try{
 
@@ -1196,7 +1986,9 @@ const snap=await getDocs(
 collection(db,"riwayat_perubahan_absensi")
 );
 
-records=snap.docs.map(d=>({id:d.id,...d.data()}));
+records=snap.docs.map(d=>({
+id:d.id,...d.data()
+}));
 
 }else{
 
@@ -1212,140 +2004,215 @@ const snap=await getDocs(q);
 snap.forEach(d=>records.push({
 id:d.id,...d.data()
 }));
+
 }
+
 }
 
 records.sort((a,b)=>{
+
 const ta=a.createdAt?.toMillis?.()||0;
 const tb=b.createdAt?.toMillis?.()||0;
+
 return tb-ta;
+
 });
 
 if(!records.length){
-$("historyList").textContent="Belum ada riwayat perubahan.";
+
+$("historyList").textContent=
+"Belum ada riwayat perubahan.";
+
 return;
+
 }
 
-$("historyList").innerHTML=records.slice(0,100).map(r=>`
+$("historyList").innerHTML=
+records.slice(0,100).map(r=>`
+
 <div class="recap-card">
+
 <b>${escapeHTML(r.aksi||"Perubahan absensi")}</b>
+
 <p>NIK: ${escapeHTML(r.nik)}</p>
+
 <p>Tanggal: ${escapeHTML(formatDate(r.tanggal))}</p>
+
 <p>Kode lama: ${escapeHTML(r.kode_lama||"-")}</p>
+
 <p>Kode baru: ${escapeHTML(r.kode_baru||"-")}</p>
+
 <p>Petugas: ${escapeHTML(r.petugas_nik||"-")}</p>
+
 </div>
+
 `).join("");
 
 }catch(error){
+
 $("historyList").innerHTML=
 `<div class="error">${escapeHTML(error.message)}</div>`;
+
 }
+
 }
 
 /* =========================================
-   EXCEL HARIAN
+EXCEL HARIAN
 ========================================= */
 
 $("excel").onclick=()=>{
 
 if(typeof XLSX==="undefined"){
+
 alert("Pustaka Excel belum termuat.");
 return;
+
 }
 
 const data=[
+
 ["LAPORAN ABSENSI WAINI"],
 ["Tanggal",currentDate],
 ["Periode",currentPeriodId],
 ["Petugas",currentNik],
 [],
-["No","NIK","Nama","Divisi","Departemen","Jabatan",
-"TMK","POH","Sistem Cuti","Jadwal","Kode Absensi","Keterangan"]
+
+[
+"No","NIK","Nama","Divisi","Departemen","Jabatan",
+"TMK","POH","Sistem Cuti","Jadwal","Kode Absensi","Keterangan"
+]
+
 ];
 
 authorizedStaff.forEach((s,i)=>{
+
 const key=dataKey(currentDate,s.nik);
+
 data.push([
-i+1,s.nik,s.name,s.div,s.dept,s.jabatan,
-s.tmk,s.poh,s.cuti,s.sched,
-values[key]||"",notes[key]||""
+
+i+1,
+s.nik,
+s.name,
+s.div,
+s.dept,
+s.jabatan,
+s.tmk,
+s.poh,
+s.cuti,
+s.sched,
+values[key]||"",
+notes[key]||""
+
 ]);
+
 });
 
 const wb=XLSX.utils.book_new();
 
 XLSX.utils.book_append_sheet(
-wb,XLSX.utils.aoa_to_sheet(data),"Absensi Harian"
+wb,
+XLSX.utils.aoa_to_sheet(data),
+"Absensi Harian"
 );
 
-XLSX.writeFile(wb,"WAINI_Absensi_"+currentDate+".xlsx");
+XLSX.writeFile(
+wb,
+"WAINI_Absensi_"+currentDate+".xlsx"
+);
+
 };
 
 /* =========================================
-   EXCEL REKAP
+EXCEL REKAP
 ========================================= */
 
 $("recapExcel").onclick=()=>{
 
 if(typeof XLSX==="undefined"){
+
 alert("Pustaka Excel belum termuat.");
 return;
+
 }
 
-const dates=getDates(currentPeriod.start,currentPeriod.end);
+const dates=getDates(
+currentPeriod.start,
+currentPeriod.end
+);
 
 const header=[
+
 "No","NIK","Nama","Divisi","Departemen","Jabatan",
-...dates,"Jumlah Kode 1","Status Terisi"
+...dates,
+"Jumlah Kode 1",
+"Status Terisi"
+
 ];
 
 const data=[
+
 ["REKAP ABSENSI WAINI"],
 ["Periode",currentPeriod.start,"s.d.",currentPeriod.end],
 ["Petugas",currentNik],
 [],
 header
+
 ];
 
 authorizedStaff.forEach((s,i)=>{
 
-let masuk=0,terisi=0;
+let masuk=0;
+let terisi=0;
 
-const row=[i+1,s.nik,s.name,s.div,s.dept,s.jabatan];
+const row=[
+i+1,s.nik,s.name,s.div,s.dept,s.jabatan
+];
 
 dates.forEach(date=>{
+
 const code=values[dataKey(date,s.nik)]||"";
+
 row.push(code);
+
 if(code)terisi++;
 if(code==="1")masuk++;
+
 });
 
 row.push(masuk,terisi);
+
 data.push(row);
+
 });
 
 const wb=XLSX.utils.book_new();
 
 XLSX.utils.book_append_sheet(
-wb,XLSX.utils.aoa_to_sheet(data),"Rekap Periode"
+wb,
+XLSX.utils.aoa_to_sheet(data),
+"Rekap Periode"
 );
 
 XLSX.writeFile(
-wb,"WAINI_Rekap_"+currentPeriodId+".xlsx"
+wb,
+"WAINI_Rekap_"+currentPeriodId+".xlsx"
 );
+
 };
 
 /* =========================================
-   CETAK
+CETAK
 ========================================= */
 
 $("save").onclick=saveAttendance;
+
 $("print").onclick=()=>window.print();
+
 $("recapPrint").onclick=()=>window.print();
 
 /* =========================================
-   ERROR
+ERROR
 ========================================= */
 
 function showError(message){
@@ -1353,15 +2220,21 @@ function showError(message){
 $("errorBox").classList.remove("hidden");
 
 $("errorBox").innerHTML=`
+
 <div class="error">
+
 <b>Gagal memuat data absensi.</b><br><br>
+
 ${escapeHTML(message)}
+
 </div>
+
 `;
+
 }
 
 /* =========================================
-   MULAI APLIKASI
+MULAI APLIKASI
 ========================================= */
 
 async function startApp(user){
@@ -1377,22 +2250,32 @@ currentProfile,["nik","NIK","nomor_induk"],""
 currentRole=normalize(currentProfile.role||"");
 
 if(!activeStatus(currentProfile.status)){
+
 throw new Error("Akun WAINI tidak aktif.");
+
 }
 
 if(!currentNik){
+
 throw new Error("NIK pengguna tidak ditemukan.");
+
 }
 
-isSuperAdmin=["super_admin","superadmin","super admin"]
-.includes(currentRole);
+isSuperAdmin=[
+"super_admin","superadmin","super admin"
+].includes(currentRole);
 
 $("userInfo").innerHTML=`
+
 👤 ${escapeHTML(currentProfile.nama||"Pengguna")}<br>
-<b>${escapeHTML(currentNik)} • ${escapeHTML(currentRole)}</b>
+
+<b>
+${escapeHTML(currentNik)} • ${escapeHTML(currentRole)}
+</b>
+
 `;
 
-// SUPER ADMIN
+/* SUPER ADMIN */
 
 if(isSuperAdmin){
 
@@ -1403,33 +2286,41 @@ $("scopeText").textContent=
 
 }else{
 
-// MENU
+/* MENU */
 
 attendanceMenu=await loadAttendanceMenu();
 
 if(!attendanceMenu){
+
 throw new Error(
 "Menu Pengelolaan Absensi tidak ditemukan atau tidak aktif."
 );
+
 }
 
-// PENUGASAN
+/* PENUGASAN */
 
 assignmentList=await loadAssignments(currentNik);
 
 attendanceAssignments=assignmentList.filter(a=>
+
 assignmentIsActive(a)&&
 assignmentMatchesMenu(a,attendanceMenu)
+
 );
 
 if(!attendanceAssignments.length){
+
 throw new Error(
+
 "Tidak ada penugasan absensi aktif untuk NIK "+currentNik+
 ". Periksa petugas_nik, aktif, dan menu_id."
+
 );
+
 }
 
-// AKSES KARYAWAN
+/* AKSES KARYAWAN */
 
 const accessList=await loadEmployeeAccess(currentNik);
 
@@ -1438,75 +2329,105 @@ accessList,attendanceAssignments
 );
 
 if(!authorizedAccess.length){
+
 throw new Error(
+
 "Belum ada akses_karyawan aktif yang sesuai penugasan.\n"+
 "Petugas NIK: "+currentNik+
 "\nPeriksa aktif, petugas_nik, dan penugasan_id."
+
 );
+
 }
 
-// MEMBACA KARYAWAN TARGET
+/* BACA TARGET KARYAWAN */
 
 authorizedStaff=await loadEmployeesByAccess(authorizedAccess);
 
 $("scopeText").textContent=
+
 attendanceAssignments.map(a=>
 a.nama_tugas||a.nama||a.judul||"Pengelolaan Absensi"
 ).join(" | ");
+
 }
+
+/* CEK KARYAWAN */
 
 if(!authorizedStaff.length){
-throw new Error("Tidak ada karyawan aktif dalam lingkup akses Anda.");
+
+throw new Error(
+"Tidak ada karyawan aktif dalam lingkup akses Anda."
+);
+
 }
 
-// KODE ABSENSI
+/* KODE ABSENSI */
 
 await loadCodes();
 
-// TANGGAL
+/* TANGGAL */
 
 currentDate=toISO(new Date());
+
 $("datePick").value=currentDate;
 
 updatePeriod();
 
-// ABSENSI
+/* DATA ABSENSI */
 
 await loadAttendanceFromFirebase();
 
-// TAMPILKAN
+/* TAMPILKAN */
 
 $("loading").classList.add("hidden");
+
 $("app").classList.remove("hidden");
 
 render();
+
 }
 
 /* =========================================
-   AUTH
+AUTH
 ========================================= */
 
 onAuthStateChanged(auth,async user=>{
 
 if(!user){
+
 $("loading").classList.add("hidden");
-showError("Anda belum login. Silakan login ke WAINI terlebih dahulu.");
+
+showError(
+"Anda belum login. Silakan login ke WAINI terlebih dahulu."
+);
+
 return;
+
 }
 
 try{
+
 await startApp(user);
+
 }catch(error){
+
 console.error("WAINI ABSENSI:",error);
+
 $("loading").classList.add("hidden");
+
 showError(
+
 "Tahap yang gagal: "+loadingStage+
 "\n\nPesan kesalahan: "+(error.message||String(error))
+
 );
+
 }
 
 });
 
 </script>
+
 </body>
 </html>
