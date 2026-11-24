@@ -549,6 +549,7 @@ e.target.value=v;
 });
 
 async function simpanRiwayat(data){
+try{
 await addDoc(collection(db,C_RIWAYAT),{
 ...data,
 pelaku_uid:penggunaLogin.uid,
@@ -557,6 +558,12 @@ pelaku_nama:penggunaLogin.nama||"",
 waktu:serverTimestamp(),
 createdAt:serverTimestamp()
 });
+return true;
+}catch(err){
+// Riwayat tidak boleh membuat operasi utama (karyawan) dianggap gagal.
+console.error("Gagal menyimpan riwayat karyawan:",err);
+return false;
+}
 }
 
 /* =========================
@@ -778,6 +785,7 @@ btn.disabled=true;
 btn.textContent="Menyimpan...";
 
 try{
+let riwayatTersimpan=true;
 const data={
 divisi:"Terminal Khusus",
 departemen:nilai("departemen"),
@@ -809,26 +817,26 @@ data.created_by=penggunaLogin.uid;
 
 await setDoc(doc(db,C_KARYAWAN,nik),data);
 
-await simpanRiwayat({
+riwayatTersimpan=await simpanRiwayat({
 aksi:"tambah_karyawan",
 nik_karyawan:nik,
 nama_karyawan:data.nama,
 detail:"Menambahkan data karyawan"
 });
 
-toast("Data karyawan berhasil ditambahkan.");
+toast(riwayatTersimpan?"Data karyawan berhasil ditambahkan.":"Data karyawan tersimpan, tetapi riwayat gagal disimpan (izin riwayat)." );
 
 }else{
 await updateDoc(doc(db,C_KARYAWAN,idLama),data);
 
-await simpanRiwayat({
+riwayatTersimpan=await simpanRiwayat({
 aksi:"edit_karyawan",
 nik_karyawan:idLama,
 nama_karyawan:data.nama,
 detail:"Memperbarui data karyawan"
 });
 
-toast("Data karyawan berhasil diperbarui.");
+toast(riwayatTersimpan?"Data karyawan berhasil diperbarui.":"Data karyawan diperbarui, tetapi riwayat gagal disimpan (izin riwayat)." );
 }
 
 tutup("modalKaryawan");
@@ -837,9 +845,9 @@ await muatKaryawan();
 
 }catch(err){
 console.error(err);
-toast("GAGAL MENYIMPAN: "+(
+toast("GAGAL MENYIMPAN DATA KARYAWAN: "+(
 err.code==="permission-denied"
-?"Akses ditolak Firestore Rules. Periksa izin tulis koleksi karyawan."
+?"Firestore Rules menolak penulisan ke collection karyawan. Data belum dapat dipastikan tersimpan."
 :err.message
 ));
 }finally{
@@ -863,14 +871,14 @@ if(!confirm("Hapus data karyawan berikut?\n\n"+k.nama+"\nNIK: "+nik+"\n\nData ya
 try{
 await deleteDoc(doc(db,C_KARYAWAN,nik));
 
-await simpanRiwayat({
+const riwayatTersimpan=await simpanRiwayat({
 aksi:"hapus_karyawan",
 nik_karyawan:nik,
 nama_karyawan:k.nama,
 detail:"Menghapus data karyawan"
 });
 
-toast("Data karyawan berhasil dihapus.");
+toast(riwayatTersimpan?"Data karyawan berhasil dihapus.":"Data karyawan terhapus, tetapi riwayat gagal disimpan (izin riwayat)." );
 await muatKaryawan();
 
 }catch(err){
@@ -1105,14 +1113,16 @@ $("hasilImport").textContent=
 (daftarGagal.length?"\n\nDetail:\n"+daftarGagal.slice(0,30).join("\n"):"");
 
 if(berhasil>0){
-await simpanRiwayat({
+const riwayatImportTersimpan=await simpanRiwayat({
 aksi:"import_karyawan",
 detail:"Import Excel: "+berhasil+" data berhasil, "+duplikat+" duplikat, "+gagal+" gagal"
 });
 
 halamanAktif=1;
 await muatKaryawan();
-toast("Import selesai. "+berhasil+" data berhasil ditambahkan.");
+toast(riwayatImportTersimpan
+?"Import selesai. "+berhasil+" data berhasil ditambahkan."
+:"Import selesai; data tersimpan, tetapi riwayat gagal disimpan.");
 }
 
 }catch(err){
