@@ -122,10 +122,10 @@ footer{text-align:center;color:#7b8493;font-size:11px;padding:15px}
 <button id="mass">Massal</button>
 </div>
 </div>
+
 <div>
 <label>Cari Karyawan</label>
 <input type="search" id="search" placeholder="Nama / NIK / Divisi">
-</div>
 </div>
 
 <div class="table-wrap">
@@ -401,7 +401,7 @@ return snap.data();
 }
 
 /* =========================================
-   MENU TUGAS
+   MENU TUGAS ABSENSI
 ========================================= */
 
 function isAttendanceMenu(data,id){
@@ -418,23 +418,47 @@ text.includes("pengelolaan-absensi");
 
 async function loadAttendanceMenu(){
 loadingStage="Membaca menu_tugas";
+
 const snap=await getDocs(collection(db,"menu_tugas"));
 
 const menus=snap.docs.map(d=>({
 id:d.id,...d.data()
 }));
 
-return menus.find(m=>
-activeStatus(firstValue(m,["aktif","status","active"],true))
+// Menu harus aktif.
+// Mencari berdasarkan nama/kode/halaman, bukan ID saja.
+
+const found=menus.find(m=>
+activeStatus(firstValue(m,["aktif","status","active"],false))
 &&isAttendanceMenu(m,m.id)
-)||null;
+);
+
+if(found)return found;
+
+// Jika halaman yang dikonfirmasi sebelumnya cocok,
+// gunakan ID dokumen yang sudah diperiksa.
+
+const exact=snap.docs.find(d=>d.id==="xCPwUphMweEgFQu0xMUI");
+
+if(exact){
+const data=exact.data();
+
+if(
+data.aktif===true&&
+normalize(data.halaman)==="pengelolaan_absensi.html"
+){
+return {id:exact.id,...data};
+}
+}
+
+return null;
 }
 
 function getMenuIdentifiers(menu){
 return [
 menu.id,menu.menu_id,menu.menu_kode,menu.kode_menu,
 menu.kode,menu.tugas_id,menu.tugas_kode,
-menu.id,menu.halaman,menu.link,menu.url
+menu.halaman,menu.link,menu.url
 ].filter(Boolean).map(normalize);
 }
 
@@ -442,18 +466,35 @@ menu.id,menu.halaman,menu.link,menu.url
    PENUGASAN PETUGAS
 ========================================= */
 
+// Mendukung struktur petugas_nik maupun nik.
+// Menghindari kegagalan karena nama field berbeda.
+
 async function loadAssignments(nik){
 loadingStage="Membaca penugasan_karyawan";
-const q=query(
-collection(db,"penugasan_karyawan"),
-where("nik","==",nik)
-);
+
+const collectionRef=collection(db,"penugasan_karyawan");
+let result=[];
+
+for(const field of ["petugas_nik","nik"]){
+try{
+const q=query(collectionRef,where(field,"==",nik));
 const snap=await getDocs(q);
-return snap.docs.map(d=>({id:d.id,...d.data()}));
+
+snap.docs.forEach(d=>{
+if(!result.some(x=>x.id===d.id)){
+result.push({id:d.id,...d.data()});
+}
+});
+}catch(error){
+console.warn("Pencarian penugasan melalui field",field,error);
+}
+}
+
+return result;
 }
 
 function assignmentIsActive(a){
-return activeStatus(firstValue(a,["aktif","status","active"],true));
+return activeStatus(firstValue(a,["aktif","status","active"],false));
 }
 
 function assignmentMatchesMenu(a,menu){
@@ -461,6 +502,7 @@ const id=firstValue(a,[
 "menu_id","menu_kode","kode_menu","kode",
 "tugas_id","tugas_kode","menu_tugas_id"
 ],"");
+
 return !!id&&getMenuIdentifiers(menu).includes(normalize(id));
 }
 
@@ -470,17 +512,20 @@ return !!id&&getMenuIdentifiers(menu).includes(normalize(id));
 
 async function loadEmployeeAccess(nik){
 loadingStage="Membaca akses_karyawan";
+
 const q=query(
 collection(db,"akses_karyawan"),
 where("petugas_nik","==",nik)
 );
+
 const snap=await getDocs(q);
+
 return snap.docs.map(d=>({id:d.id,...d.data()}));
 }
 
 function getAuthorizedAccess(accessList,assignments){
 return accessList.filter(a=>
-normalize(a.status)==="aktif"&&
+activeStatus(firstValue(a,["aktif","status","active"],false))&&
 assignments.some(x=>x.id===a.penugasan_id)
 );
 }
@@ -504,43 +549,63 @@ raw:data
 };
 }
 
+function employeeIsActive(data){
+return activeStatus(firstValue(data,[
+"status","status_karyawan","status_kerja","aktif","active"
+],"aktif"));
+}
+
 async function loadEmployeesForSuperAdmin(){
 loadingStage="Membaca seluruh karyawan";
+
 const snap=await getDocs(collection(db,"karyawan"));
 const result=[];
 
 snap.forEach(d=>{
 const data=d.data();
-if(activeStatus(firstValue(data,[
-"status","status_karyawan","status_kerja","aktif","active"
-],"aktif"))){
+
+if(employeeIsActive(data)){
 result.push(mapEmployee(d.id,data));
 }
 });
+
 return result;
 }
 
-async function loadEmployeesByAccess(accessList){
-const result=[];
-const unique=new Map();
+// Membaca seluruh collection karyawan sekali.
+// Target NIK dicocokkan dengan field NIK maupun ID dokumen.
 
-accessList.forEach(a=>{
-const nik=normalizeNik(a.target_nik);
-if(nik&&!unique.has(nik))unique.set(nik,a);
+async function loadEmployeesByAccess(accessList){
+loadingStage="Membaca data karyawan sesuai akses";
+
+const snap=await getDocs(collection(db,"karyawan"));
+const employeeMap=new Map();
+
+snap.forEach(d=>{
+const data=d.data();
+const employee=mapEmployee(d.id,data);
+
+employeeMap.set(employee.nik,employee);
+employeeMap.set(normalizeNik(d.id),employee);
 });
 
-for(const [nik,access] of unique){
-loadingStage="Membaca data karyawan NIK "+nik;
+const result=[];
+const unique=new Set();
 
-const snap=await getDoc(doc(db,"karyawan",nik));
-if(!snap.exists())continue;
+for(const access of accessList){
 
-const data=snap.data();
-if(!activeStatus(firstValue(data,[
-"status","status_karyawan","status_kerja","aktif","active"
-],"aktif")))continue;
+const nik=normalizeNik(firstValue(access,[
+"target_nik","nik_target","karyawan_nik","nik"
+],""));
 
-const employee=mapEmployee(snap.id,data);
+if(!nik||unique.has(nik))continue;
+unique.add(nik);
+
+const employee=employeeMap.get(nik);
+if(!employee)continue;
+
+if(!employeeIsActive(employee.raw))continue;
+
 employee.penugasan_id=access.penugasan_id;
 employee.akses_id=access.id;
 employee.petugas_nik=access.petugas_nik;
@@ -573,7 +638,7 @@ return {
 kode:String(x.kode||d.id),
 nama:x.nama||d.id,
 kategori:x.kategori||"-",
-aktif:x.aktif===true
+aktif:activeStatus(firstValue(x,["aktif","status","active"],false))
 };
 })
 .filter(x=>x.aktif)
@@ -585,12 +650,12 @@ throw new Error("Tidak ada kode absensi aktif pada master_kode_absensi.");
 }
 
 /* =========================================
-   MEMBACA DATA ABSENSI FIRESTORE
+   MEMBACA DATA ABSENSI
 ========================================= */
 
 async function loadAttendanceFromFirebase(){
 
-loadingStage="Membaca data_absensi dari Firebase";
+loadingStage="Membaca data_absensi";
 
 values={};
 notes={};
@@ -610,6 +675,7 @@ const key=dataKey(data.tanggal,data.nik);
 
 values[key]=data.kode||"";
 notes[key]=data.keterangan||"";
+
 savedRecords[key]={
 id:d.id,
 ...data
@@ -650,27 +716,23 @@ const snap=await getDoc(ref);
 if(!snap.exists()){
 throw new Error(
 "Dokumen periode_absensi/"+currentPeriodId+
-" tidak ditemukan. Buat atau periksa dokumen periode tersebut."
+" tidak ditemukan."
 );
 }
 
 const data=snap.data();
 
-if(data.status!=="aktif"){
+if(normalize(data.status)!=="aktif"){
 throw new Error(
 "Periode "+currentPeriodId+" tidak aktif. Status: "+data.status
 );
 }
 
-if(
-data.tanggal_mulai&&data.tanggal_mulai!==currentPeriod.start
-){
+if(data.tanggal_mulai&&data.tanggal_mulai!==currentPeriod.start){
 throw new Error("Tanggal mulai periode Firebase tidak sesuai.");
 }
 
-if(
-data.tanggal_selesai&&data.tanggal_selesai!==currentPeriod.end
-){
+if(data.tanggal_selesai&&data.tanggal_selesai!==currentPeriod.end){
 throw new Error("Tanggal selesai periode Firebase tidak sesuai.");
 }
 
@@ -799,7 +861,7 @@ return nik+"_"+tanggal;
 }
 
 /* =========================================
-   SIMPAN DAN UBAH ABSENSI FIRESTORE
+   SIMPAN ABSENSI
 ========================================= */
 
 async function saveAttendance(){
@@ -847,10 +909,7 @@ const ref=doc(db,"data_absensi",absensiId);
 
 try{
 
-loadingStage="Menyimpan absensi NIK "+employee.nik;
-
 const oldSnap=await getDoc(ref);
-
 const oldData=oldSnap.exists()?oldSnap.data():null;
 
 if(
@@ -884,45 +943,16 @@ penugasan_id:assignmentId
 };
 
 if(oldData){
-
-// UPDATE: createdAt dan createdBy dipertahankan.
-
 payload.createdAt=oldData.createdAt;
 payload.createdBy=oldData.createdBy;
 payload.updatedAt=serverTimestamp();
 payload.updatedBy=currentUser.uid;
-
-await setDoc(ref,payload);
-
-// Catat perubahan yang dilakukan.
-
-await addDoc(
-collection(db,"riwayat_perubahan_absensi"),
-{
-absensi_id:absensiId,
-periode_id:currentPeriodId,
-tanggal:currentDate,
-nik:employee.nik,
-kode_lama:oldData.kode||"",
-kode_baru:kode,
-keterangan_lama:oldData.keterangan||"",
-keterangan_baru:keterangan,
-aksi:"perubahan",
-petugas_nik:currentNik,
-penugasan_id:assignmentId,
-createdAt:serverTimestamp(),
-createdBy:currentUser.uid
-}
-);
-
 }else{
-
-// CREATE: dokumen absensi baru.
-
 payload.createdAt=serverTimestamp();
 payload.createdBy=currentUser.uid;
 payload.updatedAt=serverTimestamp();
 payload.updatedBy=currentUser.uid;
+}
 
 await setDoc(ref,payload);
 
@@ -933,18 +963,17 @@ absensi_id:absensiId,
 periode_id:currentPeriodId,
 tanggal:currentDate,
 nik:employee.nik,
-kode_lama:"",
+kode_lama:oldData?.kode||"",
 kode_baru:kode,
-keterangan_lama:"",
+keterangan_lama:oldData?.keterangan||"",
 keterangan_baru:keterangan,
-aksi:"pembuatan",
+aksi:oldData?"perubahan":"pembuatan",
 petugas_nik:currentNik,
 penugasan_id:assignmentId,
 createdAt:serverTimestamp(),
 createdBy:currentUser.uid
 }
 );
-}
 
 success++;
 
@@ -986,13 +1015,12 @@ alert(message);
 $("reset").onclick=()=>{
 
 if(!confirm(
-"Kosongkan input tanggal ini? Data yang sudah tersimpan di Firebase tidak dihapus."
+"Kosongkan input tanggal ini? Data Firebase tidak akan dihapus."
 ))return;
 
 authorizedStaff.forEach(s=>{
 const key=dataKey(currentDate,s.nik);
 
-// Data Firebase yang sudah ada tidak dihapus.
 if(!savedRecords[key]){
 values[key]="";
 notes[key]="";
@@ -1096,7 +1124,7 @@ if(button.dataset.tab==="history")loadHistory();
 });
 
 /* =========================================
-   REKAP FIRESTORE
+   REKAP
 ========================================= */
 
 function renderRecap(){
@@ -1146,7 +1174,7 @@ $("recapRows").innerHTML=body;
 }
 
 /* =========================================
-   RIWAYAT PERUBAHAN FIRESTORE
+   RIWAYAT PERUBAHAN
 ========================================= */
 
 async function loadHistory(){
@@ -1306,11 +1334,10 @@ wb,"WAINI_Rekap_"+currentPeriodId+".xlsx"
 };
 
 /* =========================================
-   CETAK DAN SIMPAN
+   CETAK
 ========================================= */
 
 $("save").onclick=saveAttendance;
-
 $("print").onclick=()=>window.print();
 $("recapPrint").onclick=()=>window.print();
 
@@ -1373,12 +1400,14 @@ $("scopeText").textContent=
 
 }else{
 
-// MENU ABSENSI
+// MENU
 
 attendanceMenu=await loadAttendanceMenu();
 
 if(!attendanceMenu){
-throw new Error("Menu Pengelolaan Absensi tidak ditemukan atau tidak aktif.");
+throw new Error(
+"Menu Pengelolaan Absensi tidak ditemukan atau tidak aktif."
+);
 }
 
 // PENUGASAN
@@ -1391,7 +1420,10 @@ assignmentMatchesMenu(a,attendanceMenu)
 );
 
 if(!attendanceAssignments.length){
-throw new Error("Tidak ada penugasan absensi aktif untuk NIK "+currentNik);
+throw new Error(
+"Tidak ada penugasan absensi aktif untuk NIK "+currentNik+
+". Periksa petugas_nik, aktif, dan menu_id."
+);
 }
 
 // AKSES KARYAWAN
@@ -1405,11 +1437,12 @@ accessList,attendanceAssignments
 if(!authorizedAccess.length){
 throw new Error(
 "Belum ada akses_karyawan aktif yang sesuai penugasan.\n"+
-"Petugas NIK: "+currentNik
+"Petugas NIK: "+currentNik+
+"\nPeriksa aktif, petugas_nik, dan penugasan_id."
 );
 }
 
-// DATA KARYAWAN
+// KARYAWAN
 
 authorizedStaff=await loadEmployeesByAccess(authorizedAccess);
 
@@ -1423,7 +1456,7 @@ if(!authorizedStaff.length){
 throw new Error("Tidak ada karyawan aktif dalam lingkup akses Anda.");
 }
 
-// MASTER KODE
+// KODE ABSENSI
 
 await loadCodes();
 
@@ -1434,7 +1467,7 @@ $("datePick").value=currentDate;
 
 updatePeriod();
 
-// DATA FIRESTORE
+// ABSENSI
 
 await loadAttendanceFromFirebase();
 
