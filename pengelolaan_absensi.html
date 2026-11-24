@@ -53,6 +53,7 @@ select.status{min-width:180px;padding:8px;font-size:12px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
 .btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:11px 13px;font-weight:bold;font-size:12px}
 .btn.primary{background:#8d171d;color:white}
+.btn:disabled{opacity:.6}
 .hidden{display:none!important}
 .recap-card{background:white;border:1px solid #e0e4eb}
 .recap-card h4{margin-bottom:8px}
@@ -425,18 +426,12 @@ const menus=snap.docs.map(d=>({
 id:d.id,...d.data()
 }));
 
-// Menu harus aktif.
-// Mencari berdasarkan nama/kode/halaman, bukan ID saja.
-
 const found=menus.find(m=>
 activeStatus(firstValue(m,["aktif","status","active"],false))
 &&isAttendanceMenu(m,m.id)
 );
 
 if(found)return found;
-
-// Jika halaman yang dikonfirmasi sebelumnya cocok,
-// gunakan ID dokumen yang sudah diperiksa.
 
 const exact=snap.docs.find(d=>d.id==="xCPwUphMweEgFQu0xMUI");
 
@@ -465,9 +460,6 @@ menu.halaman,menu.link,menu.url
 /* =========================================
    PENUGASAN PETUGAS
 ========================================= */
-
-// Mendukung struktur petugas_nik maupun nik.
-// Menghindari kegagalan karena nama field berbeda.
 
 async function loadAssignments(nik){
 loadingStage="Membaca penugasan_karyawan";
@@ -572,22 +564,19 @@ result.push(mapEmployee(d.id,data));
 return result;
 }
 
-// Membaca seluruh collection karyawan sekali.
-// Target NIK dicocokkan dengan field NIK maupun ID dokumen.
+/*
+   PERBAIKAN UTAMA:
+
+   Petugas tidak membaca seluruh collection karyawan.
+
+   Setiap target NIK dibaca langsung menggunakan getDoc().
+   Cara ini sesuai dengan Firestore Rules yang membatasi
+   petugas hanya boleh membaca karyawan yang ditugaskan.
+*/
 
 async function loadEmployeesByAccess(accessList){
+
 loadingStage="Membaca data karyawan sesuai akses";
-
-const snap=await getDocs(collection(db,"karyawan"));
-const employeeMap=new Map();
-
-snap.forEach(d=>{
-const data=d.data();
-const employee=mapEmployee(d.id,data);
-
-employeeMap.set(employee.nik,employee);
-employeeMap.set(normalizeNik(d.id),employee);
-});
 
 const result=[];
 const unique=new Set();
@@ -599,18 +588,29 @@ const nik=normalizeNik(firstValue(access,[
 ],""));
 
 if(!nik||unique.has(nik))continue;
+
 unique.add(nik);
 
-const employee=employeeMap.get(nik);
-if(!employee)continue;
+loadingStage="Membaca karyawan NIK "+nik;
 
-if(!employeeIsActive(employee.raw))continue;
+const snap=await getDoc(
+doc(db,"karyawan",nik)
+);
+
+if(!snap.exists())continue;
+
+const data=snap.data();
+
+if(!employeeIsActive(data))continue;
+
+const employee=mapEmployee(snap.id,data);
 
 employee.penugasan_id=access.penugasan_id;
 employee.akses_id=access.id;
 employee.petugas_nik=access.petugas_nik;
 
 result.push(employee);
+
 accessByNik[nik]=access;
 }
 
@@ -1090,6 +1090,9 @@ $("search").oninput=render;
 $("datePick").onchange=async e=>{
 
 currentDate=e.target.value;
+
+if(!currentDate)return;
+
 updatePeriod();
 
 try{
@@ -1442,7 +1445,7 @@ throw new Error(
 );
 }
 
-// KARYAWAN
+// MEMBACA KARYAWAN TARGET
 
 authorizedStaff=await loadEmployeesByAccess(authorizedAccess);
 
