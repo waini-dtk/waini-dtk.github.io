@@ -686,30 +686,27 @@ font-size:12px
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 import {
-  getAuth,
   signInWithEmailAndPassword,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  getFirestore,
   doc,
   getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import { firebaseConfig } from "./firebase.js";
+import {
+  auth,
+  db
+} from "./firebase.js";
 
 
 /* =====================================
-   1. HUBUNGKAN FIREBASE WAINI
+   1. KONEKSI FIREBASE WAINI
+   Menggunakan koneksi pusat firebase.js.
+   Tidak membuat Firebase App baru.
 ===================================== */
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
 
 
 /* =====================================
