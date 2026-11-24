@@ -1,0 +1,972 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+<title>Menu Utama - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f8;
+    color: #252525;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg,#991b1b,#7f1d1d);
+    color: white;
+    padding: 22px 18px 28px;
+    border-radius: 0 0 22px 22px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #fecaca;
+}
+
+.logout {
+    border: 1px solid rgba(255,255,255,.6);
+    color: white;
+    background: rgba(255,255,255,.08);
+    padding: 9px 15px;
+    border-radius: 9px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.header-info {
+    margin-top: 24px;
+}
+
+.header-info h2 {
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.header-info p {
+    font-size: 13px;
+    opacity: .9;
+    line-height: 1.5;
+}
+
+/* CONTAINER */
+
+.container {
+    width: 100%;
+    max-width: 950px;
+    margin: auto;
+    padding: 20px 15px 35px;
+}
+
+/* IDENTITAS */
+
+.identitas {
+    background: white;
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+    border: 1px solid #eee;
+}
+
+.identitas .nama {
+    font-size: 16px;
+    font-weight: bold;
+    color: #7f1d1d;
+    margin-bottom: 6px;
+}
+
+.identitas .detail {
+    color: #777;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* STATUS */
+
+.status {
+    padding: 13px;
+    border-radius: 10px;
+    background: white;
+    color: #777;
+    font-size: 12px;
+    text-align: center;
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+.status.error {
+    color: #b91c1c;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+/* JUDUL BAGIAN */
+
+.judul-bagian {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+    margin: 27px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.judul-bagian::before {
+    content: "";
+    width: 4px;
+    height: 19px;
+    background: #991b1b;
+    border-radius: 5px;
+}
+
+/* GRID */
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+}
+
+/* KARTU UMUM */
+
+.menu-card {
+    background: white;
+    border-radius: 14px;
+    padding: 16px 13px;
+    min-height: 116px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-decoration: none;
+    color: #222;
+    box-shadow: 0 3px 12px rgba(0,0,0,.045);
+    border: 1px solid #ededed;
+    transition: .18s;
+    overflow-wrap: anywhere;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-card:active {
+    transform: scale(.97);
+}
+
+.menu-icon {
+    width: 43px;
+    height: 43px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 11px;
+    flex-shrink: 0;
+}
+
+.menu-icon svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.menu-card h3 {
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.menu-card p {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.5;
+}
+
+/* IKON MENU UMUM */
+
+.icon-profil {
+    background: #e8efff;
+    color: #4169b2;
+}
+
+.icon-pengajuan {
+    background: #fcebdc;
+    color: #d17b32;
+}
+
+.icon-saldo {
+    background: #e2f5eb;
+    color: #269568;
+}
+
+.icon-absensi {
+    background: #e9e5ff;
+    color: #7661bd;
+}
+
+.icon-riwayat {
+    background: #fce5ed;
+    color: #c45179;
+}
+
+/* MENU TUGAS */
+
+#bagianMenuTugas {
+    margin-top: 29px;
+}
+
+#menuTugas {
+    padding: 5px 3px 12px;
+    gap: 15px;
+}
+
+.menu-card.tugas {
+    position: relative;
+    min-height: 135px;
+    padding: 19px 14px 15px;
+    border: none;
+    border-radius: 3px 3px 8px 3px;
+    background: #fff5c9;
+    box-shadow: 2px 5px 10px rgba(0,0,0,.11);
+    transform: rotate(-1deg);
+}
+
+.menu-card.tugas:nth-child(even) {
+    background: #e3f5e9;
+    transform: rotate(1deg);
+}
+
+.menu-card.tugas:nth-child(3n) {
+    background: #e7efff;
+    transform: rotate(-.5deg);
+}
+
+.menu-card.tugas:nth-child(4n) {
+    background: #fce7ee;
+    transform: rotate(.8deg);
+}
+
+.menu-card.tugas:active {
+    transform: scale(.97);
+}
+
+.menu-card.tugas::before {
+    content: "";
+    position: absolute;
+    width: 45px;
+    height: 12px;
+    background: rgba(180,150,90,.22);
+    top: -5px;
+    left: calc(50% - 22px);
+    border-radius: 2px;
+}
+
+.menu-card.tugas .menu-icon {
+    background: rgba(255,255,255,.68);
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+}
+
+.menu-card.tugas h3 {
+    color: #38352c;
+}
+
+.menu-card.tugas p {
+    color: #777365;
+}
+
+/* MENU PENGELOLAAN MODERN */
+
+#bagianMenuAdmin {
+    margin-top: 30px;
+}
+
+.menu-card.admin {
+    min-height: 132px;
+    padding: 17px 14px;
+    border: 1px solid #e8e1f3;
+    border-radius: 15px;
+    background: linear-gradient(145deg,#fff 55%,#faf7ff);
+    box-shadow: 0 4px 14px rgba(70,45,110,.07);
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-card.admin::after {
+    content: "";
+    position: absolute;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: rgba(118,81,181,.045);
+    right: -20px;
+    bottom: -25px;
+}
+
+.menu-card.admin .menu-icon {
+    width: 44px;
+    height: 44px;
+    background: #eee8fa;
+    color: #7651b5;
+    border-radius: 13px;
+    margin-bottom: 12px;
+}
+
+.menu-card.admin h3 {
+    color: #49366c;
+    font-size: 13px;
+}
+
+.menu-card.admin p {
+    color: #888;
+}
+
+/* WARNA KHUSUS KARTU ADMIN */
+
+.menu-card.admin[data-menu="verifikasi_pendaftaran"] .menu-icon {
+    background: #e0f5ed;
+    color: #21845e;
+}
+
+.menu-card.admin[data-menu="kelola_akun"] .menu-icon {
+    background: #e5efff;
+    color: #3970bd;
+}
+
+.menu-card.admin[data-menu="data_karyawan"] .menu-icon {
+    background: #fff0df;
+    color: #c47b30;
+}
+
+.menu-card.admin[data-menu="penugasan_hak_akses"] .menu-icon {
+    background: #f0e8ff;
+    color: #7651b5;
+}
+
+.menu-card.admin[data-menu="pengaturan_hak_akses"] .menu-icon {
+    background: #ffe8ed;
+    color: #bf4968;
+}
+
+/* PENGUMUMAN */
+
+.bagian-pengumuman {
+    margin-top: 28px;
+}
+
+.pengumuman-keterangan {
+    color: #888;
+    font-size: 11px;
+    margin: -5px 0 13px;
+    line-height: 1.5;
+}
+
+.menu-card.pengumuman {
+    min-height: 120px;
+    border: 1px solid #e5e8ed;
+    background: white;
+    border-radius: 14px;
+}
+
+.menu-card.pengumuman .menu-icon {
+    background: #f0f2f6;
+    color: #536276;
+}
+
+.menu-card.pengumuman[data-menu="pengelolaan_menu_tugas"] .menu-icon {
+    background: #eee8fa;
+    color: #7651b5;
+}
+
+.menu-card.pengumuman[data-menu="pengaturan_sistem"] .menu-icon {
+    background: #e9e5ff;
+    color: #7059b4;
+}
+
+.menu-card.pengumuman[data-menu="informasi_divisi"] .menu-icon {
+    background: #e1f3ec;
+    color: #278666;
+}
+
+.menu-card.pengumuman[data-menu="bantuan"] .menu-icon {
+    background: #fff0df;
+    color: #d18a3c;
+}
+
+/* KOSONG */
+
+.kosong {
+    background: white;
+    border: 1px dashed #ddd;
+    color: #888;
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+    grid-column: 1/-1;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: #999;
+    font-size: 11px;
+    padding: 25px 10px;
+}
+
+/* RESPONSIVE */
+
+@media(min-width:600px) {
+    .menu-grid {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+}
+
+@media(max-width:360px) {
+    .menu-grid {
+        gap: 9px;
+    }
+
+    .menu-card {
+        padding: 14px 11px;
+    }
+
+    .menu-card h3 {
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">WAI<span>NI</span></div>
+        <button class="logout" id="tombolLogout">
+            Keluar
+        </button>
+    </div>
+
+    <div class="header-info">
+        <h2>Menu Utama</h2>
+        <p>Selamat datang di portal karyawan Divisi Pelabuhan.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- IDENTITAS -->
+
+    <section class="identitas">
+        <div class="nama" id="namaPengguna">
+            Memuat data pengguna...
+        </div>
+
+        <div class="detail" id="detailPengguna">
+            Mohon tunggu sebentar.
+        </div>
+    </section>
+
+    <!-- STATUS -->
+
+    <div id="statusHalaman" class="status">
+        Memeriksa akun dan memuat menu...
+    </div>
+
+    <!-- MENU UMUM -->
+
+    <section>
+        <div class="judul-bagian">Menu Umum</div>
+
+        <div class="menu-grid" id="menuUmum">
+
+            <a class="menu-card" href="profil.html">
+                <div class="menu-icon icon-profil">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 21c0-4.2 3.6-7 8-7s8 2.8 8 7"/>
+                    </svg>
+                </div>
+                <h3>Profil</h3>
+                <p>Informasi data diri karyawan</p>
+            </a>
+
+            <a class="menu-card" href="pengajuan-cuti.html">
+                <div class="menu-icon icon-pengajuan">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <path d="M14 2v6h6M8 13h8M8 17h6"/>
+                    </svg>
+                </div>
+                <h3>Pengajuan Cuti</h3>
+                <p>Ajukan permohonan cuti</p>
+            </a>
+
+            <a class="menu-card" href="saldo-cuti.html">
+                <div class="menu-icon icon-saldo">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="16" rx="2"/>
+                        <path d="M3 10h18M7 15h4M16 14v3"/>
+                    </svg>
+                </div>
+                <h3>Saldo Cuti</h3>
+                <p>Informasi saldo hak cuti</p>
+            </a>
+
+            <a class="menu-card" href="riwayat-absensi.html">
+                <div class="menu-icon icon-absensi">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="17" rx="2"/>
+                        <path d="M16 2v4M8 2v4M3 9h18"/>
+                        <path d="m8 15 2 2 5-5"/>
+                    </svg>
+                </div>
+                <h3>Riwayat Absensi</h3>
+                <p>Informasi riwayat kehadiran</p>
+            </a>
+
+            <a class="menu-card" href="riwayat-cuti.html">
+                <div class="menu-icon icon-riwayat">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4h16v16H4z"/>
+                        <path d="M8 2v4M16 2v4M8 11h8M8 15h5"/>
+                    </svg>
+                </div>
+                <h3>Riwayat Cuti</h3>
+                <p>Informasi riwayat pengajuan cuti</p>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- MENU TUGAS DINAMIS -->
+
+    <section id="bagianMenuTugas" style="display:none;">
+        <div class="judul-bagian">Menu Tugas</div>
+        <div class="menu-grid" id="menuTugas"></div>
+    </section>
+
+    <!-- MENU PENGELOLAAN -->
+
+    <section id="bagianMenuAdmin" style="display:none;">
+
+        <div class="judul-bagian">Menu Pengelolaan</div>
+
+        <div class="menu-grid" id="menuAdmin"></div>
+
+        <!-- PENGUMUMAN -->
+
+        <div class="bagian-pengumuman">
+
+            <div class="judul-bagian">Pengumuman</div>
+
+            <p class="pengumuman-keterangan">
+                Informasi dan layanan pendukung sistem WAINI.
+            </p>
+
+            <div class="menu-grid" id="menuPengumuman"></div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    WAINI - Portal Karyawan Divisi Pelabuhan
+</footer>
+
+<script type="module">
+// ================================================
+// WAINI - MENU UTAMA
+// Menggunakan koneksi pusat dari firebase.js
+// ================================================
+
+import { auth, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    query,
+    where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// Elemen halaman
+const namaPenggunaEl = document.getElementById("namaPengguna");
+const detailPenggunaEl = document.getElementById("detailPengguna");
+const statusHalamanEl = document.getElementById("statusHalaman");
+const bagianMenuTugas = document.getElementById("bagianMenuTugas");
+const menuTugasEl = document.getElementById("menuTugas");
+const bagianMenuAdmin = document.getElementById("bagianMenuAdmin");
+const menuAdminEl = document.getElementById("menuAdmin");
+const menuPengumumanEl = document.getElementById("menuPengumuman");
+const tombolLogout = document.getElementById("tombolLogout");
+
+let penggunaAktif = null;
+let rolePengguna = "";
+let superAdmin = false;
+
+// Menu pengelolaan yang tersedia untuk Super Admin.
+const MENU_ADMIN = [
+    { kode: "verifikasi_pendaftaran", nama: "Verifikasi Pendaftaran", halaman: "verifikasi-akun.html", deskripsi: "Memeriksa dan menyetujui pendaftaran akun", ikon: "verifikasi" },
+    { kode: "kelola_akun", nama: "Kelola Akun", halaman: "kelola-akun.html", deskripsi: "Mengelola akun dan status pengguna", ikon: "akun" },
+    { kode: "data_karyawan", nama: "Data Karyawan", halaman: "data-karyawan.html", deskripsi: "Mengelola data seluruh karyawan", ikon: "karyawan" },
+    { kode: "penugasan_hak_akses", nama: "Penugasan dan Hak Akses", halaman: "pengolahan-penugasan.html", deskripsi: "Mengatur penugasan berdasarkan NIK karyawan", ikon: "penugasan" },
+    { kode: "pengaturan_hak_akses", nama: "Pengaturan Hak Akses", halaman: "pengaturan-hak-akses.html", deskripsi: "Mengatur ketentuan dan hak akses sistem", ikon: "hakakses" }
+];
+
+const MENU_PENGUMUMAN = [
+    { kode: "pengelolaan_menu_tugas", nama: "Pengelolaan Menu Tugas", halaman: "pengelolaan-menu-tugas.html", deskripsi: "Mengatur menu tugas dinamis dan penugasan", ikon: "menu" },
+    { kode: "pengaturan_sistem", nama: "Pengaturan Sistem", halaman: "pengaturan-sistem.html", deskripsi: "Pengaturan dan konfigurasi WAINI", ikon: "sistem" },
+    { kode: "informasi_divisi", nama: "Informasi Divisi", halaman: "informasi-divisi.html", deskripsi: "Informasi perusahaan dan Divisi Pelabuhan", ikon: "divisi" },
+    { kode: "bantuan", nama: "Bantuan", halaman: "bantuan.html", deskripsi: "Panduan penggunaan dan bantuan sistem", ikon: "bantuan" }
+];
+
+function normalisasiKode(nilai) {
+    return String(nilai ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "_")
+        .replace(/-/g, "_");
+}
+
+function nilaiPertama(data, daftarField, fallback = "") {
+    for (const field of daftarField) {
+        const nilai = data?.[field];
+        if (nilai !== undefined && nilai !== null && String(nilai).trim() !== "") return nilai;
+    }
+    return fallback;
+}
+
+function ambilNIK() {
+    return String(nilaiPertama(penggunaAktif, ["nik", "NIK", "nomor_induk", "nomor_induk_karyawan"], "")).trim();
+}
+
+function statusAktif(data) {
+    if (data?.aktif === true || data?.active === true) return true;
+    const status = String(data?.status ?? "").trim().toLowerCase();
+    return status === "aktif" || status === "active";
+}
+
+function tampilkanStatus(pesan, error = false) {
+    statusHalamanEl.textContent = pesan;
+    statusHalamanEl.className = error ? "status error" : "status";
+    statusHalamanEl.style.display = "block";
+}
+
+function sembunyikanStatus() {
+    statusHalamanEl.style.display = "none";
+}
+
+const IKON = {
+    verifikasi: ["M9 12l2 2 4-4", "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20"],
+    akun: ["M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2", "M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8", "M20 8v6M17 11h6"],
+    karyawan: ["M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2", "M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8", "M20 21v-2a4 4 0 0 0-3-3.87", "M17 3.13a4 4 0 0 1 0 7.75"],
+    penugasan: ["M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2", "M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8", "M19 8v6M16 11h6"],
+    hakakses: ["M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11", "M9 12l2 2 4-4"],
+    menu: ["M4 5h16M4 12h16M4 19h16"],
+    sistem: ["M12 8v4l3 2", "M21 12a9 9 0 1 1-2.6-6.4", "M21 3v6h-6"],
+    divisi: ["M3 21h18", "M5 21V7l7-4 7 4v14", "M9 10h.01M15 10h.01M9 14h.01M15 14h.01", "M10 21v-4h4v4"],
+    bantuan: ["M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20", "M9.5 9a2.6 2.6 0 1 1 4.4 1.9c-1.3 1.1-1.9 1.5-1.9 3.1", "M12 17h.01"]
+};
+
+function buatIkonSVG(jenis) {
+    const ikon = document.createElement("div");
+    ikon.className = "menu-icon";
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    (IKON[jenis] || IKON.menu).forEach(d => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        svg.appendChild(path);
+    });
+    ikon.appendChild(svg);
+    return ikon;
+}
+
+function halamanLokal(menu) {
+    const kandidat = String(menu?.halaman || menu?.link || menu?.url || "").trim();
+    return /^[a-zA-Z0-9_-]+\.html(?:#[a-zA-Z0-9_-]+)?$/.test(kandidat) ? kandidat : "";
+}
+
+function buatKartuMenu(menu, jenis = "tugas") {
+    const kartu = document.createElement("a");
+    kartu.className = "menu-card " + jenis;
+    const halaman = halamanLokal(menu);
+    if (halaman) kartu.href = halaman;
+    else {
+        kartu.href = "#";
+        kartu.addEventListener("click", event => event.preventDefault());
+    }
+
+    if (jenis === "admin" || jenis === "pengumuman") {
+        kartu.dataset.menu = normalisasiKode(menu.kode || menu.id);
+        kartu.appendChild(buatIkonSVG(menu.ikon));
+    } else {
+        const ikon = document.createElement("div");
+        ikon.className = "menu-icon";
+        ikon.textContent = menu.ikon || "📌";
+        kartu.appendChild(ikon);
+    }
+
+    const judul = document.createElement("h3");
+    judul.textContent = menu.nama || menu.judul || "Menu";
+    const deskripsi = document.createElement("p");
+    deskripsi.textContent = menu.deskripsi || "Menu WAINI";
+    kartu.append(judul, deskripsi);
+    return kartu;
+}
+
+async function muatDataPengguna(user) {
+    const snapshot = await getDoc(doc(db, "pengguna", user.uid));
+    if (!snapshot.exists()) throw new Error("Data pengguna tidak ditemukan di Firestore.");
+    penggunaAktif = snapshot.data();
+
+    if (!statusAktif(penggunaAktif)) {
+        throw new Error("Akun Anda belum aktif. Silakan hubungi administrator.");
+    }
+
+    rolePengguna = normalisasiKode(penggunaAktif.role || penggunaAktif.peran);
+    superAdmin = ["super_admin", "superadmin", "admin_utama"].includes(rolePengguna);
+
+    const nama = nilaiPertama(penggunaAktif, ["nama", "nama_lengkap", "name"], user.displayName || "Karyawan");
+    namaPenggunaEl.textContent = nama;
+    detailPenggunaEl.textContent = "NIK: " + (ambilNIK() || "-") + " | Role: " + (penggunaAktif.role || penggunaAktif.peran || "karyawan");
+}
+
+function identitasNIKPenugasan(data) {
+    return String(nilaiPertama(data, ["nik", "petugas_nik", "NIK", "nik_karyawan"], "")).trim();
+}
+
+async function muatPenugasanKaryawan() {
+    const nikLogin = ambilNIK();
+    if (!nikLogin) return [];
+    const ref = collection(db, "penugasan_karyawan");
+    const hasil = new Map();
+
+    // Struktur yang dipakai di proyek memiliki NIK petugas.
+    // Coba field nik terlebih dahulu, lalu petugas_nik sebagai kompatibilitas.
+    for (const field of ["nik", "petugas_nik"]) {
+        try {
+            const snap = await getDocs(query(ref, where(field, "==", nikLogin)));
+            snap.forEach(d => hasil.set(d.id, { id: d.id, ...d.data() }));
+        } catch (error) {
+            console.warn("Query penugasan dengan field " + field + " gagal:", error);
+        }
+    }
+
+    return [...hasil.values()].filter(data => identitasNIKPenugasan(data) === nikLogin && statusAktif(data));
+}
+
+function menuCocokDenganPenugasan(menu, tugas) {
+    const identitasMenu = [menu.id, menu.kode, menu.menu_id, menu.menu_kode, menu.kode_menu, menu.nama, menu.halaman, menu.link, menu.url]
+        .filter(Boolean).map(normalisasiKode);
+    const identitasTugas = [tugas.menu_id, tugas.menu_kode, tugas.kode_menu, tugas.kode, tugas.tugas_id, tugas.tugas_kode, tugas.menu_tugas_id, tugas.halaman, tugas.link, tugas.url]
+        .filter(Boolean).map(normalisasiKode);
+    return identitasMenu.some(kode => identitasTugas.includes(kode));
+}
+
+async function muatMenuTugasDinamis() {
+    menuTugasEl.innerHTML = "";
+    bagianMenuTugas.style.display = "none";
+
+    const snapMenu = await getDocs(collection(db, "menu_tugas"));
+    const menuAktif = snapMenu.docs.map(d => ({ id: d.id, ...d.data() })).filter(statusAktif);
+    let menuTerpilih = [];
+
+    if (superAdmin) {
+        menuTerpilih = menuAktif;
+    } else {
+        const penugasan = await muatPenugasanKaryawan();
+        menuTerpilih = menuAktif.filter(menu => penugasan.some(tugas => menuCocokDenganPenugasan(menu, tugas)));
+    }
+
+    menuTerpilih.sort((a, b) => Number(a.urutan || 0) - Number(b.urutan || 0));
+
+    if (!menuTerpilih.length) {
+        if (superAdmin) {
+            bagianMenuTugas.style.display = "block";
+            const kosong = document.createElement("div");
+            kosong.className = "kosong";
+            kosong.textContent = "Belum ada menu tugas aktif.";
+            menuTugasEl.appendChild(kosong);
+        }
+        return;
+    }
+
+    bagianMenuTugas.style.display = "block";
+    menuTerpilih.forEach(menu => menuTugasEl.appendChild(buatKartuMenu(menu, "tugas")));
+}
+
+async function muatKonfigurasiMenuUtama() {
+    const snap = await getDocs(collection(db, "menu_utama"));
+    const konfigurasi = {};
+    snap.forEach(d => {
+        const data = d.data();
+        const kode = normalisasiKode(data.kode || data.menu_kode || d.id);
+        konfigurasi[kode] = { id: d.id, ...data };
+    });
+    return konfigurasi;
+}
+
+function siapkanMenu(defaultMenu, konfigurasi) {
+    return defaultMenu.filter(menu => {
+        const config = konfigurasi[normalisasiKode(menu.kode)];
+        return !(config && (config.aktif === false || config.status === "nonaktif"));
+    }).map(menu => {
+        const config = konfigurasi[normalisasiKode(menu.kode)] || {};
+        return {
+            ...menu,
+            nama: config.nama || config.judul || menu.nama,
+            halaman: config.halaman || config.link || config.url || menu.halaman,
+            deskripsi: config.deskripsi || menu.deskripsi,
+            ikon: config.ikon || menu.ikon
+        };
+    });
+}
+
+async function muatMenuAdmin() {
+    menuAdminEl.innerHTML = "";
+    menuPengumumanEl.innerHTML = "";
+    bagianMenuAdmin.style.display = "none";
+    if (!superAdmin) return;
+    bagianMenuAdmin.style.display = "block";
+
+    let konfigurasi = {};
+    try {
+        konfigurasi = await muatKonfigurasiMenuUtama();
+    } catch (error) {
+        console.warn("Konfigurasi menu_utama gagal dibaca; menu bawaan ditampilkan:", error);
+    }
+
+    const admin = siapkanMenu(MENU_ADMIN, konfigurasi);
+    admin.forEach(menu => menuAdminEl.appendChild(buatKartuMenu(menu, "admin")));
+    if (!admin.length) {
+        const kosong = document.createElement("div");
+        kosong.className = "kosong";
+        kosong.textContent = "Belum ada menu pengelolaan yang aktif.";
+        menuAdminEl.appendChild(kosong);
+    }
+
+    const pengumuman = siapkanMenu(MENU_PENGUMUMAN, konfigurasi);
+    pengumuman.forEach(menu => menuPengumumanEl.appendChild(buatKartuMenu(menu, "pengumuman")));
+}
+
+async function muatSemuaMenu() {
+    tampilkanStatus("Memuat menu WAINI...");
+    const kesalahan = [];
+
+    try {
+        await muatMenuTugasDinamis();
+    } catch (error) {
+        console.error("Menu tugas gagal dimuat:", error);
+        bagianMenuTugas.style.display = "none";
+        kesalahan.push("menu tugas");
+    }
+
+    try {
+        await muatMenuAdmin();
+    } catch (error) {
+        console.error("Menu pengelolaan gagal dimuat:", error);
+        kesalahan.push("menu pengelolaan");
+    }
+
+    if (kesalahan.length) {
+        tampilkanStatus("Menu umum tersedia. Sebagian " + kesalahan.join(" dan ") + " gagal dimuat. Periksa koneksi atau hak akses database.", true);
+    } else {
+        sembunyikanStatus();
+    }
+}
+
+onAuthStateChanged(auth, async user => {
+    if (!user) {
+        window.location.replace("index.html");
+        return;
+    }
+
+    try {
+        await muatDataPengguna(user);
+        await muatSemuaMenu();
+    } catch (error) {
+        console.error("Pemeriksaan akun gagal:", error);
+        alert(error.message || "Tidak dapat memeriksa akun.");
+        try { await signOut(auth); } catch (logoutError) { console.error(logoutError); }
+        window.location.replace("index.html");
+    }
+});
+
+// ================================================
+// LOGOUT WAINI — KEMBALI KE HALAMAN LOGIN
+// ================================================
+// Redirect tetap dilakukan pada blok finally, agar tombol
+// tidak tertahan di menu jika proses signOut mengalami error.
+// ================================================
+
+tombolLogout.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    if (tombolLogout.disabled) return;
+    if (!confirm("Apakah Anda yakin ingin keluar?")) return;
+
+    tombolLogout.disabled = true;
+    tombolLogout.textContent = "Keluar...";
+
+    let pesanError = "";
+
+    try {
+        await signOut(auth);
+    } catch (error) {
+        console.error("Gagal mengakhiri sesi Firebase:", error);
+        pesanError = error?.message || "Sesi Firebase gagal diakhiri.";
+    } finally {
+        // Arahkan ke login meskipun signOut gagal.
+        // index.html tidak boleh dianggap sebagai halaman menu.
+        window.location.href = "./index.html";
+    }
+
+    if (pesanError) {
+        // Pesan ditampilkan jika browser tetap berada di halaman ini.
+        console.warn("Catatan logout:", pesanError);
+    }
+});
+</script>
+
+</body>
+</html>

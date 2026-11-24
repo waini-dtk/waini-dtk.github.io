@@ -1,0 +1,2713 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#991b1b">
+<title>Pengolahan Penugasan - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f7;
+    color: #222;
+    padding-bottom: 30px;
+}
+
+header {
+    background: #991b1b;
+    color: white;
+    padding: 20px 16px;
+}
+
+.header-inner {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.header-title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.header-subtitle {
+    font-size: 13px;
+    opacity: .9;
+    margin-top: 6px;
+}
+
+.header-info {
+    margin-top: 12px;
+    font-size: 12px;
+    opacity: .9;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 14px;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+
+.card-title {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 14px;
+    color: #991b1b;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.summary-card {
+    background: white;
+    padding: 14px 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 7px rgba(0,0,0,.05);
+    text-align: center;
+}
+
+.summary-number {
+    font-size: 23px;
+    font-weight: bold;
+    color: #991b1b;
+}
+
+.summary-label {
+    font-size: 11px;
+    color: #666;
+    margin-top: 5px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 12px 0 6px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d5d5d5;
+    border-radius: 9px;
+    font-size: 14px;
+    background: white;
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #991b1b;
+    box-shadow: 0 0 0 2px rgba(153,27,27,.08);
+}
+
+textarea {
+    min-height: 75px;
+    resize: vertical;
+}
+
+button {
+    border: none;
+    border-radius: 9px;
+    padding: 11px 14px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: #991b1b;
+    color: white;
+}
+
+.btn-secondary {
+    background: #eee;
+    color: #333;
+}
+
+.btn-success {
+    background: #15803d;
+    color: white;
+}
+
+.btn-warning {
+    background: #d97706;
+    color: white;
+}
+
+.btn-danger {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-small {
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.info-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 12px;
+    border-radius: 9px;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 12px 0;
+}
+
+.success-box {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    padding: 12px;
+    border-radius: 9px;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.error-box {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 12px;
+    border-radius: 9px;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.employee-result {
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+    border-radius: 9px;
+    margin-top: 7px;
+    background: white;
+}
+
+.employee-result strong {
+    font-size: 13px;
+    display: block;
+}
+
+.employee-result small {
+    display: block;
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.employee-result button {
+    margin-top: 8px;
+}
+
+.selected-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.target-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    margin-top: 8px;
+}
+
+.target-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+}
+
+.target-item:last-child {
+    border-bottom: none;
+}
+
+.target-item input {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.target-item span {
+    flex: 1;
+}
+
+.target-item small {
+    display: block;
+    color: #666;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.list-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 11px;
+    padding: 13px;
+    margin-bottom: 10px;
+    background: white;
+}
+
+.list-name {
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.list-detail {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.7;
+    margin-top: 6px;
+}
+
+.status {
+    display: inline-block;
+    border-radius: 30px;
+    padding: 5px 9px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.status-aktif {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-dicabut {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-nonaktif {
+    background: #eee;
+    color: #555;
+}
+
+.empty {
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+    padding: 22px 10px;
+}
+
+.loading {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+    font-size: 13px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 14px 0;
+}
+
+.search-row {
+    display: flex;
+    gap: 8px;
+}
+
+.search-row input {
+    flex: 1;
+}
+
+.task-list {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    margin: 0;
+    font-weight: normal;
+}
+
+.task-item:last-child {
+    border-bottom: none;
+}
+
+.task-item input {
+    width: 19px;
+    height: 19px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: #991b1b;
+}
+
+.task-content {
+    flex: 1;
+}
+
+.task-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.task-description {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.5;
+    margin-top: 4px;
+}
+
+.task-code {
+    font-size: 10px;
+    color: #991b1b;
+    margin-top: 4px;
+}
+
+.task-count {
+    background: #fef2f2;
+    color: #991b1b;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 12px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 14px;
+    }
+
+    .header-title {
+        font-size: 20px;
+    }
+
+    .summary-number {
+        font-size: 20px;
+    }
+
+    .summary-label {
+        font-size: 10px;
+    }
+
+    .button-row button {
+        flex: 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="header-title">📋 Pengolahan Penugasan</div>
+
+        <div class="header-subtitle">
+            WAINI - Wadah Informasi Internal Divisi Terminal Khusus
+        </div>
+
+        <div class="header-info" id="infoPengguna">
+            Memeriksa akun...
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div id="pesanGlobal"></div>
+
+    <div class="summary">
+
+        <div class="summary-card">
+            <div class="summary-number" id="jumlahAktif">0</div>
+            <div class="summary-label">Penugasan Aktif</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-number" id="jumlahDicabut">0</div>
+            <div class="summary-label">Dicabut</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-number" id="jumlahKaryawan">0</div>
+            <div class="summary-label">Data Karyawan</div>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title" id="judulForm">
+            ➕ Buat Penugasan Baru
+        </div>
+
+        <div class="info-box">
+            Daftar tugas diambil otomatis dari Firestore
+            <strong>menu_tugas</strong>.
+            Pilih karyawan, kemudian centang satu atau beberapa
+            tugas yang ingin diberikan.
+        </div>
+
+        <input type="hidden" id="editId">
+
+        <label>Pemegang Tugas</label>
+
+        <input
+            type="text"
+            id="cariPemegang"
+            placeholder="Cari nama atau NIK karyawan..."
+            autocomplete="off"
+        >
+
+        <div id="hasilPemegang"></div>
+
+        <div id="pemegangTerpilih" class="selected-box hidden"></div>
+
+        <input type="hidden" id="pemegangNik">
+        <input type="hidden" id="pemegangNama">
+
+        <label>Daftar Menu Tugas</label>
+
+        <input
+            type="text"
+            id="cariMenuTugas"
+            placeholder="Cari menu tugas..."
+        >
+
+        <div id="daftarMenuTugas" class="task-list">
+            <div class="loading">
+                Memuat daftar tugas...
+            </div>
+        </div>
+
+        <div class="task-count">
+            Tugas dipilih: <strong id="jumlahTugasDipilih">0</strong>
+        </div>
+
+        <label>Lingkup Penugasan</label>
+
+        <select id="targetMode">
+            <option value="semua">Semua Karyawan</option>
+            <option value="departemen">Departemen Tertentu</option>
+            <option value="nik">Karyawan yang Dipilih</option>
+        </select>
+
+        <div id="targetDepartemenBox" class="hidden">
+
+            <label>Pilih Departemen</label>
+
+            <select id="targetDepartemen">
+                <option value="">-- Pilih Departemen --</option>
+            </select>
+
+        </div>
+
+        <div id="targetNikBox" class="hidden">
+
+            <label>Cari Karyawan Target</label>
+
+            <input
+                type="text"
+                id="cariTarget"
+                placeholder="Masukkan nama atau NIK..."
+            >
+
+            <div class="button-row">
+
+                <button type="button"
+                    class="btn-secondary btn-small"
+                    id="pilihSemuaTarget">
+                    Pilih Semua Hasil
+                </button>
+
+                <button type="button"
+                    class="btn-secondary btn-small"
+                    id="hapusSemuaTarget">
+                    Hapus Pilihan
+                </button>
+
+            </div>
+
+            <div id="hasilTarget" class="target-list"></div>
+
+            <div class="selected-box">
+                Target dipilih:
+                <strong id="jumlahTargetDipilih">0</strong>
+                karyawan
+            </div>
+
+        </div>
+
+        <label>Keterangan (Opsional)</label>
+
+        <textarea
+            id="keterangan"
+            placeholder="Keterangan penugasan..."
+        ></textarea>
+
+        <div class="button-row">
+
+            <button type="button"
+                class="btn-primary"
+                id="btnSimpan">
+                💾 Simpan Penugasan
+            </button>
+
+            <button type="button"
+                class="btn-secondary hidden"
+                id="btnBatalEdit">
+                Batal Edit
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            📑 Daftar Penugasan
+        </div>
+
+        <input
+            type="text"
+            id="cariPenugasan"
+            placeholder="Cari tugas, pemegang, target..."
+        >
+
+        <div id="daftarPenugasan" class="loading">
+            Memuat penugasan...
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            🕘 Riwayat Penugasan Terbaru
+        </div>
+
+        <div class="info-box">
+            Menampilkan maksimal 5 riwayat terbaru.
+        </div>
+
+        <div id="daftarRiwayat" class="loading">
+            Memuat riwayat...
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+import {
+    auth,
+    db
+} from "./firebase.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    collection,
+    getDocs,
+    getDoc,
+    doc,
+    addDoc,
+    updateDoc,
+    setDoc,
+    serverTimestamp,
+    query,
+    orderBy,
+    limit,
+    where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// ======================================================
+// VARIABEL GLOBAL
+// ======================================================
+
+let semuaKaryawan = [];
+let semuaPenugasan = [];
+let semuaMenuTugas = [];
+
+let pemegangTerpilih = null;
+
+let targetTerpilih = new Set();
+let tugasTerpilih = new Set();
+
+let penggunaLogin = null;
+let uidLogin = null;
+
+let sedangMenyimpan = false;
+
+
+// ======================================================
+// ELEMENT
+// ======================================================
+
+const el = id => document.getElementById(id);
+
+
+// ======================================================
+// FUNGSI UMUM
+// ======================================================
+
+function normalisasi(value) {
+    return String(value ?? "").trim().toLowerCase();
+}
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function getNik(data) {
+    return String(
+        data.nik ??
+        data.NIK ??
+        data.nomor_induk ??
+        ""
+    ).trim();
+}
+
+function getNama(data) {
+    return String(
+        data.nama ??
+        data.Nama ??
+        data.name ??
+        ""
+    ).trim();
+}
+
+function getDepartemen(data) {
+    return String(
+        data.departemen ??
+        data.department ??
+        ""
+    ).trim();
+}
+
+function getMenuNama(menuId) {
+
+    const menu = semuaMenuTugas.find(
+        m => m.id === menuId || m.kode === menuId
+    );
+
+    return menu
+        ? menu.nama
+        : menuId || "-";
+}
+
+function getMenuKode(menuId) {
+
+    const menu = semuaMenuTugas.find(
+        m => m.id === menuId || m.kode === menuId
+    );
+
+    return menu
+        ? menu.kode
+        : menuId || "-";
+}
+
+function getMenuData(menuId) {
+
+    return semuaMenuTugas.find(
+        m => m.id === menuId || m.kode === menuId
+    ) || {};
+}
+
+function tanggal(value) {
+
+    if (!value) return "-";
+
+    try {
+
+        let d;
+
+        if (value.toDate) {
+            d = value.toDate();
+        } else {
+            d = new Date(value);
+        }
+
+        if (isNaN(d.getTime())) return "-";
+
+        return d.toLocaleString("id-ID", {
+            dateStyle: "short",
+            timeStyle: "short"
+        });
+
+    } catch {
+        return "-";
+    }
+}
+
+function waktuData(data) {
+
+    const t =
+        data.updatedAt ||
+        data.createdAt ||
+        data.waktu;
+
+    if (!t) return 0;
+
+    if (t.toMillis) return t.toMillis();
+
+    const d = new Date(t);
+
+    return isNaN(d.getTime())
+        ? 0
+        : d.getTime();
+}
+
+function tampilPesan(pesan, tipe = "info") {
+
+    const warna = tipe === "error"
+        ? "error-box"
+        : tipe === "success"
+            ? "success-box"
+            : "info-box";
+
+    el("pesanGlobal").innerHTML = `
+        <div class="${warna}">
+            ${escapeHTML(pesan)}
+        </div>
+    `;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+function hapusPesan() {
+    el("pesanGlobal").innerHTML = "";
+}
+
+function targetLabel(lingkup) {
+
+    const data = bacaLingkup(lingkup);
+
+    if (data.mode === "semua") {
+        return "Semua Karyawan";
+    }
+
+    if (data.mode === "departemen") {
+        return data.departemen || "Departemen";
+    }
+
+    if (data.mode === "nik") {
+        const jumlah = Array.isArray(data.nik)
+            ? data.nik.length
+            : 0;
+
+        return jumlah + " Karyawan Pilihan";
+    }
+
+    return "Lingkup belum ditentukan";
+}
+
+
+// ======================================================
+// MEMBACA LINGKUP
+// ======================================================
+
+function bacaLingkup(value) {
+
+    if (!value) {
+        return {
+            mode: "semua",
+            departemen: "",
+            nik: []
+        };
+    }
+
+    if (typeof value === "object") {
+        return value;
+    }
+
+    try {
+
+        const hasil = JSON.parse(value);
+
+        if (hasil && typeof hasil === "object") {
+            return hasil;
+        }
+
+    } catch {
+
+        if (value === "semua") {
+            return {
+                mode: "semua",
+                departemen: "",
+                nik: []
+            };
+        }
+
+    }
+
+    return {
+        mode: "semua",
+        departemen: "",
+        nik: []
+    };
+}
+
+
+// ======================================================
+// MENENTUKAN TARGET NIK DARI LINGKUP
+// ======================================================
+
+function nikDariLingkup(lingkup) {
+
+    const data = bacaLingkup(lingkup);
+
+    let hasil = [];
+
+    if (data.mode === "semua") {
+
+        hasil = semuaKaryawan.map(getNik);
+
+    } else if (data.mode === "departemen") {
+
+        hasil = semuaKaryawan
+            .filter(k =>
+                normalisasi(getDepartemen(k)) ===
+                normalisasi(data.departemen)
+            )
+            .map(getNik);
+
+    } else if (data.mode === "nik") {
+
+        hasil = Array.isArray(data.nik)
+            ? data.nik
+            : [];
+
+    }
+
+    return [
+        ...new Set(
+            hasil
+                .map(n => String(n || "").trim())
+                .filter(Boolean)
+        )
+    ];
+}
+
+
+// ======================================================
+// MENENTUKAN TUGAS ABSENSI
+// ======================================================
+
+function tugasAdalahAbsensi(data) {
+
+    const menu = getMenuData(data.menu_id);
+
+    const nama = normalisasi(menu.nama);
+    const kode = normalisasi(menu.kode);
+    const halaman = normalisasi(menu.halaman);
+
+    return nama.includes("absensi")
+        || kode.includes("absensi")
+        || halaman.includes("pengelolaan_absensi")
+        || halaman.includes("absensi");
+}
+
+
+// ======================================================
+// MENENTUKAN PENUGASAN TERBAIK UNTUK AKSES
+// ======================================================
+
+function pilihPenugasanUntukAkses(daftar) {
+
+    if (!daftar.length) return null;
+
+    // Prioritas penugasan absensi.
+    const absensi = daftar.find(tugasAdalahAbsensi);
+
+    if (absensi) return absensi;
+
+    // Jika tidak ada tugas absensi,
+    // pilih penugasan terbaru.
+    return daftar.sort(
+        (a, b) => waktuData(b) - waktuData(a)
+    )[0];
+}
+
+
+// ======================================================
+// SINKRONISASI AKSES KARYAWAN
+// ======================================================
+//
+// ID DOKUMEN:
+// NIK_PETUGAS__NIK_TARGET
+//
+// Field mengikuti Firestore Rules:
+// petugas_nik
+// target_nik
+// penugasan_id
+// nama_tugas
+// status
+// updatedAt
+//
+// ======================================================
+
+async function sinkronkanAksesPetugas(petugasNik) {
+
+    if (!petugasNik) {
+        throw new Error("NIK petugas tidak ditemukan.");
+    }
+
+    // Baca ulang penugasan dari Firestore
+    // agar sinkronisasi menggunakan data terbaru.
+
+    const snapTugas = await getDocs(
+        collection(db, "penugasan_karyawan")
+    );
+
+    const tugasPetugas = snapTugas.docs.map(d => ({
+        id: d.id,
+        ...d.data()
+    })).filter(d =>
+        String(d.nik || "").trim() ===
+        String(petugasNik).trim()
+    );
+
+    // Ambil penugasan aktif milik petugas.
+    const tugasAktif = tugasPetugas.filter(
+        d => d.aktif === true
+    );
+
+    // Bentuk daftar target dari seluruh tugas aktif.
+    const daftarTargetAktif = new Set();
+
+    tugasAktif.forEach(tugas => {
+
+        const target = nikDariLingkup(tugas.lingkup);
+
+        target.forEach(nik => {
+            daftarTargetAktif.add(nik);
+        });
+
+    });
+
+    // Baca akses_karyawan yang sudah pernah dibuat
+    // oleh petugas tersebut.
+    const snapAkses = await getDocs(
+        query(
+            collection(db, "akses_karyawan"),
+            where("petugas_nik", "==", petugasNik)
+        )
+    );
+
+    const aksesLama = snapAkses.docs.map(d => ({
+        id: d.id,
+        ...d.data()
+    }));
+
+    // Target yang perlu disinkronkan:
+    // target aktif + target yang pernah mempunyai akses.
+    const semuaTarget = new Set([
+        ...daftarTargetAktif,
+        ...aksesLama.map(d => d.target_nik)
+    ]);
+
+    let berhasil = 0;
+
+    for (const targetNik of semuaTarget) {
+
+        if (!targetNik) continue;
+
+        // Cari seluruh penugasan aktif
+        // yang mencakup target ini.
+        const tugasYangMencakupTarget =
+            tugasAktif.filter(tugas => {
+
+                const targetTugas =
+                    nikDariLingkup(tugas.lingkup);
+
+                return targetTugas.includes(targetNik);
+            });
+
+        // Tentukan apakah akses masih diperlukan.
+        const masihAdaTugas =
+            tugasYangMencakupTarget.length > 0;
+
+        const tugasPilihan =
+            pilihPenugasanUntukAkses(
+                tugasYangMencakupTarget
+            );
+
+        const idAkses =
+            `${petugasNik}__${targetNik}`;
+
+        const refAkses = doc(
+            db,
+            "akses_karyawan",
+            idAkses
+        );
+
+        if (masihAdaTugas && tugasPilihan) {
+
+            // AKTIFKAN / PERBARUI AKSES
+            await setDoc(
+                refAkses,
+                {
+                    petugas_nik: petugasNik,
+
+                    target_nik: targetNik,
+
+                    penugasan_id: tugasPilihan.id,
+
+                    nama_tugas:
+                        getMenuNama(tugasPilihan.menu_id),
+
+                    status: "aktif",
+
+                    updatedAt: serverTimestamp()
+                },
+                {
+                    merge: true
+                }
+            );
+
+        } else {
+
+            // CABUT AKSES
+            // Jika dokumen pernah dibuat,
+            // statusnya menjadi dicabut.
+            const aksesAda = aksesLama.find(
+                d => d.id === idAkses
+            );
+
+            if (aksesAda) {
+
+                await setDoc(
+                    refAkses,
+                    {
+                        petugas_nik: petugasNik,
+
+                        target_nik: targetNik,
+
+                        penugasan_id:
+                            aksesAda.penugasan_id || "",
+
+                        nama_tugas:
+                            aksesAda.nama_tugas || "",
+
+                        status: "dicabut",
+
+                        updatedAt: serverTimestamp()
+                    },
+                    {
+                        merge: true
+                    }
+                );
+            }
+        }
+
+        berhasil++;
+    }
+
+    return berhasil;
+}
+
+
+// ======================================================
+// LOGIN & HAK AKSES
+// ======================================================
+
+onAuthStateChanged(auth, async user => {
+
+    if (!user) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    uidLogin = user.uid;
+
+    try {
+
+        const snapPengguna = await getDoc(
+            doc(db, "pengguna", user.uid)
+        );
+
+        if (!snapPengguna.exists()) {
+
+            tampilPesan(
+                "Data pengguna tidak ditemukan.",
+                "error"
+            );
+
+            return;
+        }
+
+        penggunaLogin = snapPengguna.data();
+
+        if (penggunaLogin.status !== "aktif") {
+
+            tampilPesan(
+                "Akun Anda belum aktif.",
+                "error"
+            );
+
+            return;
+        }
+
+        if (penggunaLogin.role !== "super_admin") {
+
+            tampilPesan(
+                "Halaman ini hanya dapat diakses Super Admin.",
+                "error"
+            );
+
+            setTimeout(() => {
+                window.location.href = "menu.html";
+            }, 2000);
+
+            return;
+        }
+
+        el("infoPengguna").textContent =
+            "Login sebagai Super Admin: " +
+            (
+                penggunaLogin.nama ||
+                penggunaLogin.nik ||
+                user.email ||
+                ""
+            );
+
+        await muatSemuaData();
+
+        // Jika dibuka dari Data Karyawan, NIK pemegang tugas
+        // otomatis dipilih dan daftar penugasan difilter.
+        const nikParameter = new URLSearchParams(window.location.search).get("nik");
+        if (nikParameter) {
+            const nikCari = normalisasiNIK(nikParameter);
+            const karyawanTujuan = semuaKaryawan.find(k =>
+                normalisasiNIK(getNik(k)) === nikCari
+            );
+            if (karyawanTujuan) {
+                pemegangTerpilih = karyawanTujuan;
+                el("pemegangNik").value = getNik(karyawanTujuan);
+                el("pemegangNama").value = getNama(karyawanTujuan);
+                el("cariPemegang").value = getNama(karyawanTujuan) + " - " + getNik(karyawanTujuan);
+                el("hasilPemegang").innerHTML = "";
+                el("pemegangTerpilih").innerHTML = `
+                    <strong>Pemegang tugas:</strong><br>
+                    ${escapeHTML(getNama(karyawanTujuan))}<br>
+                    NIK: ${escapeHTML(getNik(karyawanTujuan))}<br>
+                    Departemen: ${escapeHTML(getDepartemen(karyawanTujuan))}
+                `;
+                el("pemegangTerpilih").classList.remove("hidden");
+                el("cariPenugasan").value = getNik(karyawanTujuan);
+                tampilkanPenugasan();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+                tampilPesan("NIK dari halaman Data Karyawan tidak ditemukan.", "error");
+            }
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        tampilPesan(
+            "Gagal memeriksa akun: " + error.message,
+            "error"
+        );
+    }
+});
+
+
+// ======================================================
+// MEMUAT SEMUA DATA
+// ======================================================
+
+async function muatSemuaData() {
+
+    el("daftarPenugasan").innerHTML =
+        '<div class="loading">Memuat data...</div>';
+
+    el("daftarRiwayat").innerHTML =
+        '<div class="loading">Memuat riwayat...</div>';
+
+    try {
+
+        // DATA KARYAWAN
+        const snapKaryawan = await getDocs(
+            collection(db, "karyawan")
+        );
+
+        semuaKaryawan = snapKaryawan.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+        }));
+
+
+        // MENU TUGAS DINAMIS
+        const snapMenu = await getDocs(
+            collection(db, "menu_tugas")
+        );
+
+        semuaMenuTugas = snapMenu.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+        }));
+
+        semuaMenuTugas = semuaMenuTugas
+            .filter(d => d.aktif === true)
+            .sort((a, b) =>
+                Number(a.urutan || 0) -
+                Number(b.urutan || 0)
+            );
+
+
+        // PENUGASAN
+        const snapPenugasan = await getDocs(
+            collection(db, "penugasan_karyawan")
+        );
+
+        semuaPenugasan = snapPenugasan.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+        }));
+
+        semuaPenugasan.sort((a, b) =>
+            waktuData(b) - waktuData(a)
+        );
+
+
+        // TAMPILKAN
+        el("jumlahKaryawan").textContent =
+            semuaKaryawan.length;
+
+        hitungRingkasan();
+
+        tampilkanMenuTugas();
+
+        muatDepartemen();
+
+        tampilkanPenugasan();
+
+        await muatRiwayat();
+
+    } catch (error) {
+
+        console.error(error);
+
+        el("daftarPenugasan").innerHTML = `
+            <div class="error-box">
+                Gagal memuat data:
+                ${escapeHTML(error.message)}
+            </div>
+        `;
+
+        el("daftarMenuTugas").innerHTML = `
+            <div class="error-box">
+                Gagal memuat menu tugas dari Firestore.
+                ${escapeHTML(error.message)}
+            </div>
+        `;
+
+        el("daftarRiwayat").innerHTML =
+            '<div class="error-box">Gagal memuat riwayat.</div>';
+    }
+}
+
+
+// ======================================================
+// RINGKASAN
+// ======================================================
+
+function hitungRingkasan() {
+
+    const aktif = semuaPenugasan.filter(
+        d => d.aktif === true
+    ).length;
+
+    const dicabut = semuaPenugasan.filter(
+        d => d.aktif === false
+    ).length;
+
+    el("jumlahAktif").textContent = aktif;
+    el("jumlahDicabut").textContent = dicabut;
+}
+
+
+// ======================================================
+// DEPARTEMEN OTOMATIS
+// ======================================================
+
+function muatDepartemen() {
+
+    const daftar = [
+        ...new Set(
+            semuaKaryawan
+                .map(getDepartemen)
+                .filter(Boolean)
+        )
+    ].sort();
+
+    el("targetDepartemen").innerHTML =
+        '<option value="">-- Pilih Departemen --</option>' +
+        daftar.map(d => `
+            <option value="${escapeHTML(d)}">
+                ${escapeHTML(d)}
+            </option>
+        `).join("");
+}
+
+
+// ======================================================
+// MENU TUGAS DINAMIS
+// ======================================================
+
+el("cariMenuTugas").addEventListener(
+    "input",
+    tampilkanMenuTugas
+);
+
+function tampilkanMenuTugas() {
+
+    const kata = normalisasi(
+        el("cariMenuTugas").value
+    );
+
+    let daftar = semuaMenuTugas;
+
+    if (kata) {
+
+        daftar = daftar.filter(m => {
+
+            return normalisasi(m.nama).includes(kata)
+                || normalisasi(m.kode).includes(kata)
+                || normalisasi(m.deskripsi).includes(kata);
+
+        });
+    }
+
+    if (!daftar.length) {
+
+        el("daftarMenuTugas").innerHTML = `
+            <div class="empty">
+                ${
+                    semuaMenuTugas.length
+                    ? "Menu tugas tidak ditemukan."
+                    : "Belum ada menu tugas aktif di Firestore."
+                }
+            </div>
+        `;
+
+        el("jumlahTugasDipilih").textContent =
+            tugasTerpilih.size;
+
+        return;
+    }
+
+    el("daftarMenuTugas").innerHTML =
+        daftar.map(m => {
+
+            const checked = tugasTerpilih.has(m.id);
+
+            return `
+                <label class="task-item">
+
+                    <input
+                        type="checkbox"
+                        data-menu-id="${escapeHTML(m.id)}"
+                        ${checked ? "checked" : ""}
+                    >
+
+                    <div class="task-content">
+
+                        <div class="task-name">
+                            ${escapeHTML(m.nama || m.kode || m.id)}
+                        </div>
+
+                        <div class="task-description">
+                            ${escapeHTML(m.deskripsi || "Tidak ada deskripsi")}
+                        </div>
+
+                        <div class="task-code">
+                            Kode: ${escapeHTML(m.kode || m.id)}
+                            | Halaman: ${escapeHTML(m.halaman || "-")}
+                        </div>
+
+                    </div>
+
+                </label>
+            `;
+
+        }).join("");
+
+    el("jumlahTugasDipilih").textContent =
+        tugasTerpilih.size;
+}
+
+
+// ======================================================
+// CHECKLIST MENU TUGAS
+// ======================================================
+
+el("daftarMenuTugas").addEventListener(
+    "change",
+    function(e) {
+
+        const checkbox = e.target.closest("[data-menu-id]");
+
+        if (!checkbox) return;
+
+        const menuId = checkbox.dataset.menuId;
+
+        if (checkbox.checked) {
+            tugasTerpilih.add(menuId);
+        } else {
+            tugasTerpilih.delete(menuId);
+        }
+
+        el("jumlahTugasDipilih").textContent =
+            tugasTerpilih.size;
+    }
+);
+
+
+// ======================================================
+// PENCARIAN PEMEGANG TUGAS
+// ======================================================
+
+el("cariPemegang").addEventListener(
+    "input",
+    function() {
+
+        const kata = normalisasi(this.value);
+
+        pemegangTerpilih = null;
+
+        el("pemegangNik").value = "";
+        el("pemegangNama").value = "";
+
+        el("pemegangTerpilih").classList.add("hidden");
+
+        if (!kata) {
+            el("hasilPemegang").innerHTML = "";
+            return;
+        }
+
+        const hasil = semuaKaryawan.filter(k => {
+
+            const nik = normalisasi(getNik(k));
+            const nama = normalisasi(getNama(k));
+
+            return nik.includes(kata)
+                || nama.includes(kata);
+
+        }).slice(0, 15);
+
+        if (!hasil.length) {
+
+            el("hasilPemegang").innerHTML =
+                '<div class="empty">Karyawan tidak ditemukan.</div>';
+
+            return;
+        }
+
+        el("hasilPemegang").innerHTML =
+            hasil.map(k => `
+                <div class="employee-result">
+
+                    <strong>
+                        ${escapeHTML(getNama(k))}
+                    </strong>
+
+                    <small>
+                        NIK: ${escapeHTML(getNik(k))}
+                        <br>
+                        ${escapeHTML(getDepartemen(k))}
+                    </small>
+
+                    <button
+                        class="btn-primary btn-small"
+                        data-pilih-pemegang="${escapeHTML(getNik(k))}">
+                        Pilih Karyawan
+                    </button>
+
+                </div>
+            `).join("");
+    }
+);
+
+
+el("hasilPemegang").addEventListener(
+    "click",
+    function(e) {
+
+        const tombol = e.target.closest(
+            "[data-pilih-pemegang]"
+        );
+
+        if (!tombol) return;
+
+        const nik = tombol.dataset.pilihPemegang;
+
+        const k = semuaKaryawan.find(
+            d => getNik(d) === nik
+        );
+
+        if (!k) return;
+
+        pemegangTerpilih = k;
+
+        el("pemegangNik").value = getNik(k);
+        el("pemegangNama").value = getNama(k);
+
+        el("cariPemegang").value =
+            getNama(k) + " - " + getNik(k);
+
+        el("hasilPemegang").innerHTML = "";
+
+        el("pemegangTerpilih").innerHTML = `
+            <strong>Pemegang tugas:</strong><br>
+            ${escapeHTML(getNama(k))}<br>
+            NIK: ${escapeHTML(getNik(k))}<br>
+            Departemen: ${escapeHTML(getDepartemen(k))}
+        `;
+
+        el("pemegangTerpilih").classList.remove("hidden");
+    }
+);
+
+
+// ======================================================
+// MODE LINGKUP TARGET
+// ======================================================
+
+el("targetMode").addEventListener(
+    "change",
+    function() {
+
+        el("targetDepartemenBox").classList.toggle(
+            "hidden",
+            this.value !== "departemen"
+        );
+
+        el("targetNikBox").classList.toggle(
+            "hidden",
+            this.value !== "nik"
+        );
+
+        if (this.value !== "nik") {
+
+            targetTerpilih.clear();
+
+            el("jumlahTargetDipilih").textContent = "0";
+
+            el("hasilTarget").innerHTML = "";
+        }
+    }
+);
+
+
+// ======================================================
+// PENCARIAN TARGET
+// ======================================================
+
+el("cariTarget").addEventListener(
+    "input",
+    tampilkanTarget
+);
+
+function tampilkanTarget() {
+
+    const kata = normalisasi(
+        el("cariTarget").value
+    );
+
+    let hasil = semuaKaryawan;
+
+    if (kata) {
+
+        hasil = hasil.filter(k => {
+
+            return normalisasi(getNik(k)).includes(kata)
+                || normalisasi(getNama(k)).includes(kata)
+                || normalisasi(getDepartemen(k)).includes(kata);
+
+        });
+    }
+
+    hasil = hasil.slice(0, 100);
+
+    if (!hasil.length) {
+
+        el("hasilTarget").innerHTML =
+            '<div class="empty">Karyawan tidak ditemukan.</div>';
+
+        return;
+    }
+
+    el("hasilTarget").innerHTML =
+        hasil.map(k => {
+
+            const nik = getNik(k);
+
+            const checked = targetTerpilih.has(nik);
+
+            return `
+                <label class="target-item">
+
+                    <input
+                        type="checkbox"
+                        data-target-nik="${escapeHTML(nik)}"
+                        ${checked ? "checked" : ""}
+                    >
+
+                    <span>
+
+                        <strong>
+                            ${escapeHTML(getNama(k))}
+                        </strong>
+
+                        <small>
+                            NIK: ${escapeHTML(nik)}
+                            | ${escapeHTML(getDepartemen(k))}
+                        </small>
+
+                    </span>
+
+                </label>
+            `;
+
+        }).join("");
+
+    el("jumlahTargetDipilih").textContent =
+        targetTerpilih.size;
+}
+
+
+// ======================================================
+// CHECKBOX TARGET
+// ======================================================
+
+el("hasilTarget").addEventListener(
+    "change",
+    function(e) {
+
+        const checkbox = e.target.closest(
+            "[data-target-nik]"
+        );
+
+        if (!checkbox) return;
+
+        const nik = checkbox.dataset.targetNik;
+
+        if (checkbox.checked) {
+            targetTerpilih.add(nik);
+        } else {
+            targetTerpilih.delete(nik);
+        }
+
+        el("jumlahTargetDipilih").textContent =
+            targetTerpilih.size;
+    }
+);
+
+
+// ======================================================
+// PILIH SEMUA TARGET
+// ======================================================
+
+el("pilihSemuaTarget").addEventListener(
+    "click",
+    function() {
+
+        const kata = normalisasi(
+            el("cariTarget").value
+        );
+
+        let hasil = semuaKaryawan.filter(k => {
+
+            if (!kata) return true;
+
+            return normalisasi(getNik(k)).includes(kata)
+                || normalisasi(getNama(k)).includes(kata)
+                || normalisasi(getDepartemen(k)).includes(kata);
+
+        }).slice(0, 100);
+
+        hasil.forEach(k => {
+            targetTerpilih.add(getNik(k));
+        });
+
+        tampilkanTarget();
+    }
+);
+
+
+// ======================================================
+// HAPUS PILIHAN TARGET
+// ======================================================
+
+el("hapusSemuaTarget").addEventListener(
+    "click",
+    function() {
+
+        targetTerpilih.clear();
+
+        tampilkanTarget();
+    }
+);
+
+
+// ======================================================
+// MENYUSUN LINGKUP
+// ======================================================
+
+function ambilLingkup() {
+
+    const mode = el("targetMode").value;
+
+    if (mode === "semua") {
+
+        return JSON.stringify({
+            mode: "semua",
+            departemen: "",
+            nik: []
+        });
+    }
+
+    if (mode === "departemen") {
+
+        const departemen =
+            el("targetDepartemen").value;
+
+        if (!departemen) {
+            throw new Error(
+                "Silakan pilih departemen target."
+            );
+        }
+
+        return JSON.stringify({
+            mode: "departemen",
+            departemen,
+            nik: []
+        });
+    }
+
+    if (mode === "nik") {
+
+        if (targetTerpilih.size === 0) {
+
+            throw new Error(
+                "Silakan pilih karyawan target."
+            );
+        }
+
+        return JSON.stringify({
+            mode: "nik",
+            departemen: "",
+            nik: Array.from(targetTerpilih)
+        });
+    }
+
+    throw new Error("Lingkup penugasan tidak valid.");
+}
+
+
+// ======================================================
+// MENYIMPAN PENUGASAN
+// ======================================================
+
+el("btnSimpan").addEventListener(
+    "click",
+    simpanPenugasan
+);
+
+async function simpanPenugasan() {
+
+    if (sedangMenyimpan) return;
+
+    hapusPesan();
+
+    try {
+
+        const nikPemegang =
+            el("pemegangNik").value.trim();
+
+        const namaPemegang =
+            el("pemegangNama").value.trim();
+
+        const editId =
+            el("editId").value.trim();
+
+        const keterangan =
+            el("keterangan").value.trim();
+
+        if (!nikPemegang || !namaPemegang) {
+
+            throw new Error(
+                "Silakan pilih karyawan pemegang tugas."
+            );
+        }
+
+        if (tugasTerpilih.size === 0) {
+
+            throw new Error(
+                "Silakan centang minimal satu menu tugas."
+            );
+        }
+
+        const lingkup = ambilLingkup();
+
+        const menuDipilih = Array.from(tugasTerpilih);
+
+        sedangMenyimpan = true;
+
+        el("btnSimpan").disabled = true;
+
+        el("btnSimpan").textContent =
+            "Menyimpan...";
+
+        let jumlahBerhasil = 0;
+
+        // NIK petugas lama juga disinkronkan
+        // jika pemegang tugas berubah ketika edit.
+        const petugasPerluSinkron = new Set();
+
+        petugasPerluSinkron.add(nikPemegang);
+
+        if (editId) {
+
+            const dataEdit = semuaPenugasan.find(
+                d => d.id === editId
+            );
+
+            if (dataEdit && dataEdit.nik) {
+                petugasPerluSinkron.add(dataEdit.nik);
+            }
+        }
+
+
+        // SIMPAN SATU DOKUMEN UNTUK SETIAP MENU
+        for (const menuId of menuDipilih) {
+
+            const menu = semuaMenuTugas.find(
+                m => m.id === menuId
+            );
+
+            if (!menu) continue;
+
+
+            // CARI PENUGASAN YANG SUDAH ADA
+            let dataLama = semuaPenugasan.find(d =>
+                d.nik === nikPemegang &&
+                d.menu_id === menuId
+            );
+
+
+            // JIKA EDIT, UTAMAKAN DOKUMEN YANG SEDANG DIEDIT
+            if (editId) {
+
+                const dataEdit = semuaPenugasan.find(
+                    d => d.id === editId
+                );
+
+                if (
+                    dataEdit &&
+                    dataEdit.menu_id === menuId
+                ) {
+                    dataLama = dataEdit;
+                }
+            }
+
+
+            const data = {
+
+                nik: nikPemegang,
+
+                menu_id: menuId,
+
+                aktif: true,
+
+                lingkup: lingkup,
+
+                keterangan: keterangan,
+
+                updatedAt: serverTimestamp(),
+
+                updated_by: uidLogin,
+
+                updated_by_nik:
+                    penggunaLogin.nik || "",
+
+                updated_by_nama:
+                    penggunaLogin.nama || ""
+            };
+
+
+            if (dataLama) {
+
+                // PERBARUI PENUGASAN YANG SUDAH ADA
+                const ref = doc(
+                    db,
+                    "penugasan_karyawan",
+                    dataLama.id
+                );
+
+                await updateDoc(ref, data);
+
+                await simpanRiwayat(
+                    "edit",
+                    dataLama.id,
+                    dataLama,
+                    data,
+                    "Penugasan diperbarui"
+                );
+
+            } else {
+
+                // BUAT PENUGASAN BARU
+                data.createdAt = serverTimestamp();
+
+                data.created_by = uidLogin;
+
+                data.created_by_nik =
+                    penggunaLogin.nik || "";
+
+                data.created_by_nama =
+                    penggunaLogin.nama || "";
+
+                const refBaru = await addDoc(
+                    collection(db, "penugasan_karyawan"),
+                    data
+                );
+
+                await simpanRiwayat(
+                    "buat",
+                    refBaru.id,
+                    null,
+                    data,
+                    "Penugasan baru dibuat"
+                );
+            }
+
+            jumlahBerhasil++;
+        }
+
+
+        // ==================================================
+        // SINKRONKAN AKSES KARYAWAN OTOMATIS
+        // ==================================================
+
+        let jumlahAksesDisinkron = 0;
+
+        for (const nikPetugas of petugasPerluSinkron) {
+
+            jumlahAksesDisinkron +=
+                await sinkronkanAksesPetugas(
+                    nikPetugas
+                );
+        }
+
+
+        resetForm();
+
+        await muatSemuaData();
+
+        tampilPesan(
+            jumlahBerhasil +
+            " penugasan berhasil disimpan. " +
+            "Akses karyawan berhasil disinkronkan.",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        tampilPesan(
+            "Proses penyimpanan/sinkronisasi gagal: " +
+            error.message +
+            ". Periksa data penugasan dan akses_karyawan.",
+            "error"
+        );
+
+    } finally {
+
+        sedangMenyimpan = false;
+
+        el("btnSimpan").disabled = false;
+
+        el("btnSimpan").textContent =
+            "💾 Simpan Penugasan";
+    }
+}
+
+
+// ======================================================
+// RIWAYAT
+// ======================================================
+
+async function simpanRiwayat(
+    aksi,
+    penugasanId,
+    dataLama,
+    dataBaru,
+    detail
+) {
+
+    const data = dataBaru || dataLama || {};
+
+    const menuId = data.menu_id || "";
+
+    await addDoc(
+        collection(db, "riwayat_penugasan"),
+        {
+
+            aksi,
+
+            penugasan_id: penugasanId,
+
+            nik: data.nik || "",
+
+            menu_id: menuId,
+
+            nama_tugas: getMenuNama(menuId),
+
+            lingkup: data.lingkup || "semua",
+
+            aktif: data.aktif ?? true,
+
+            detail,
+
+            actor_uid: uidLogin,
+
+            actor_nik:
+                penggunaLogin.nik || "",
+
+            actor_nama:
+                penggunaLogin.nama || "",
+
+            waktu: serverTimestamp(),
+
+            createdAt: serverTimestamp()
+        }
+    );
+}
+
+
+// ======================================================
+// EDIT PENUGASAN
+// ======================================================
+
+function editPenugasan(id) {
+
+    const data = semuaPenugasan.find(
+        d => d.id === id
+    );
+
+    if (!data) return;
+
+    el("editId").value = id;
+
+    el("pemegangNik").value =
+        data.nik || "";
+
+    const karyawan = semuaKaryawan.find(
+        k => getNik(k) === data.nik
+    );
+
+    const nama = karyawan
+        ? getNama(karyawan)
+        : data.nik;
+
+    el("pemegangNama").value = nama;
+
+    el("cariPemegang").value =
+        nama + " - " + data.nik;
+
+    pemegangTerpilih = karyawan || {
+        nik: data.nik,
+        nama
+    };
+
+    el("pemegangTerpilih").innerHTML = `
+        <strong>Pemegang tugas:</strong><br>
+        ${escapeHTML(nama)}<br>
+        NIK: ${escapeHTML(data.nik || "-")}
+    `;
+
+    el("pemegangTerpilih").classList.remove("hidden");
+
+
+    // CENTANG MENU YANG SEDANG DIEDIT
+    tugasTerpilih.clear();
+
+    tugasTerpilih.add(data.menu_id);
+
+
+    // LINGKUP
+    const lingkup = bacaLingkup(data.lingkup);
+
+    el("targetMode").value =
+        lingkup.mode || "semua";
+
+    el("targetDepartemen").value =
+        lingkup.departemen || "";
+
+    targetTerpilih = new Set(
+        Array.isArray(lingkup.nik)
+            ? lingkup.nik
+            : []
+    );
+
+    el("cariTarget").value = "";
+
+    el("targetMode").dispatchEvent(
+        new Event("change")
+    );
+
+    if (lingkup.mode === "nik") {
+        tampilkanTarget();
+    }
+
+
+    // KETERANGAN
+    el("keterangan").value =
+        data.keterangan || "";
+
+
+    // TAMPILKAN MENU
+    tampilkanMenuTugas();
+
+
+    el("judulForm").textContent =
+        "✏️ Edit Penugasan";
+
+    el("btnSimpan").textContent =
+        "💾 Simpan Perubahan";
+
+    el("btnBatalEdit").classList.remove("hidden");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+// ======================================================
+// RESET FORM
+// ======================================================
+
+el("btnBatalEdit").addEventListener(
+    "click",
+    resetForm
+);
+
+function resetForm() {
+
+    el("editId").value = "";
+
+    el("cariPemegang").value = "";
+
+    el("pemegangNik").value = "";
+
+    el("pemegangNama").value = "";
+
+    el("hasilPemegang").innerHTML = "";
+
+    el("pemegangTerpilih").innerHTML = "";
+
+    el("pemegangTerpilih").classList.add("hidden");
+
+
+    tugasTerpilih.clear();
+
+    el("cariMenuTugas").value = "";
+
+    el("jumlahTugasDipilih").textContent = "0";
+
+    tampilkanMenuTugas();
+
+
+    el("targetMode").value = "semua";
+
+    el("targetDepartemen").value = "";
+
+    el("cariTarget").value = "";
+
+    el("hasilTarget").innerHTML = "";
+
+    el("jumlahTargetDipilih").textContent = "0";
+
+    el("keterangan").value = "";
+
+
+    targetTerpilih.clear();
+
+    pemegangTerpilih = null;
+
+
+    el("targetMode").dispatchEvent(
+        new Event("change")
+    );
+
+
+    el("judulForm").textContent =
+        "➕ Buat Penugasan Baru";
+
+    el("btnSimpan").textContent =
+        "💾 Simpan Penugasan";
+
+    el("btnBatalEdit").classList.add("hidden");
+}
+
+
+// ======================================================
+// CABUT / AKTIFKAN
+// ======================================================
+
+async function ubahStatusPenugasan(
+    id,
+    statusBaru
+) {
+
+    const data = semuaPenugasan.find(
+        d => d.id === id
+    );
+
+    if (!data) return;
+
+    const pertanyaan = statusBaru
+        ? "Yakin ingin mengaktifkan penugasan ini?"
+        : "Yakin ingin mencabut penugasan ini?";
+
+    if (!confirm(pertanyaan)) return;
+
+    try {
+
+        const dataLama = { ...data };
+
+        await updateDoc(
+            doc(db, "penugasan_karyawan", id),
+            {
+                aktif: statusBaru,
+
+                updatedAt: serverTimestamp(),
+
+                updated_by: uidLogin,
+
+                updated_by_nik:
+                    penggunaLogin.nik || "",
+
+                updated_by_nama:
+                    penggunaLogin.nama || ""
+            }
+        );
+
+        const dataBaru = {
+            ...dataLama,
+            aktif: statusBaru
+        };
+
+        await simpanRiwayat(
+            statusBaru ? "aktifkan" : "cabut",
+            id,
+            dataLama,
+            dataBaru,
+            statusBaru
+                ? "Penugasan diaktifkan kembali"
+                : "Penugasan dicabut"
+        );
+
+
+        // ==================================================
+        // SINKRONKAN AKSES SETELAH CABUT / AKTIFKAN
+        // ==================================================
+
+        await sinkronkanAksesPetugas(data.nik);
+
+
+        await muatSemuaData();
+
+        tampilPesan(
+            statusBaru
+                ? "Penugasan berhasil diaktifkan dan akses karyawan disinkronkan."
+                : "Penugasan berhasil dicabut dan akses karyawan disinkronkan.",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        tampilPesan(
+            "Gagal mengubah status atau sinkronisasi akses: " +
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+// ======================================================
+// TAMPILKAN DAFTAR PENUGASAN
+// ======================================================
+
+el("cariPenugasan").addEventListener(
+    "input",
+    tampilkanPenugasan
+);
+
+function tampilkanPenugasan() {
+
+    const kata = normalisasi(
+        el("cariPenugasan").value
+    );
+
+    let hasil = semuaPenugasan;
+
+    if (kata) {
+
+        hasil = hasil.filter(d => {
+
+            const karyawan = semuaKaryawan.find(
+                k => getNik(k) === d.nik
+            );
+
+            const nama = karyawan
+                ? getNama(karyawan)
+                : "";
+
+            return normalisasi(getMenuNama(d.menu_id)).includes(kata)
+                || normalisasi(getMenuKode(d.menu_id)).includes(kata)
+                || normalisasi(d.nik).includes(kata)
+                || normalisasi(nama).includes(kata)
+                || normalisasi(targetLabel(d.lingkup)).includes(kata);
+
+        });
+    }
+
+    if (!hasil.length) {
+
+        el("daftarPenugasan").innerHTML =
+            '<div class="empty">Belum ada data penugasan.</div>';
+
+        return;
+    }
+
+
+    el("daftarPenugasan").innerHTML =
+        hasil.map(d => {
+
+            const aktif = d.aktif === true;
+
+            const karyawan = semuaKaryawan.find(
+                k => getNik(k) === d.nik
+            );
+
+            const nama = karyawan
+                ? getNama(karyawan)
+                : d.nik || "-";
+
+            return `
+                <div class="list-card">
+
+                    <div class="list-name">
+                        ${escapeHTML(getMenuNama(d.menu_id))}
+                    </div>
+
+                    <div class="list-detail">
+
+                        <strong>Pemegang:</strong>
+                        ${escapeHTML(nama)}
+                        <br>
+
+                        <strong>NIK:</strong>
+                        ${escapeHTML(d.nik || "-")}
+                        <br>
+
+                        <strong>Kode Tugas:</strong>
+                        ${escapeHTML(getMenuKode(d.menu_id))}
+                        <br>
+
+                        <strong>Lingkup:</strong>
+                        ${escapeHTML(targetLabel(d.lingkup))}
+                        <br>
+
+                        <strong>Keterangan:</strong>
+                        ${escapeHTML(d.keterangan || "-")}
+                        <br>
+
+                        <strong>Diperbarui:</strong>
+                        ${tanggal(d.updatedAt || d.createdAt)}
+
+                    </div>
+
+                    <span class="status ${
+                        aktif
+                            ? "status-aktif"
+                            : "status-dicabut"
+                    }">
+                        ${aktif ? "AKTIF" : "DICABUT"}
+                    </span>
+
+                    <div class="button-row">
+
+                        <button
+                            class="btn-primary btn-small"
+                            data-edit="${escapeHTML(d.id)}">
+                            ✏️ Edit
+                        </button>
+
+                        ${
+                            aktif
+                            ? `
+                                <button
+                                    class="btn-danger btn-small"
+                                    data-cabut="${escapeHTML(d.id)}">
+                                    🚫 Cabut
+                                </button>
+                            `
+                            : `
+                                <button
+                                    class="btn-success btn-small"
+                                    data-aktifkan="${escapeHTML(d.id)}">
+                                    ♻️ Aktifkan
+                                </button>
+                            `
+                        }
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+}
+
+
+// ======================================================
+// EVENT DAFTAR PENUGASAN
+// ======================================================
+
+el("daftarPenugasan").addEventListener(
+    "click",
+    async function(e) {
+
+        const edit = e.target.closest("[data-edit]");
+
+        const cabut = e.target.closest("[data-cabut]");
+
+        const aktifkan = e.target.closest("[data-aktifkan]");
+
+
+        if (edit) {
+
+            editPenugasan(edit.dataset.edit);
+
+            return;
+        }
+
+        if (cabut) {
+
+            await ubahStatusPenugasan(
+                cabut.dataset.cabut,
+                false
+            );
+
+            return;
+        }
+
+        if (aktifkan) {
+
+            await ubahStatusPenugasan(
+                aktifkan.dataset.aktifkan,
+                true
+            );
+        }
+    }
+);
+
+
+// ======================================================
+// MEMUAT 5 RIWAYAT TERBARU
+// ======================================================
+
+async function muatRiwayat() {
+
+    try {
+
+        const q = query(
+            collection(db, "riwayat_penugasan"),
+            orderBy("createdAt", "desc"),
+            limit(5)
+        );
+
+        const snap = await getDocs(q);
+
+        const riwayat = snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+        }));
+
+        tampilkanRiwayat(riwayat);
+
+    } catch (error) {
+
+        console.error(error);
+
+        el("daftarRiwayat").innerHTML = `
+            <div class="error-box">
+                Riwayat tidak dapat dimuat.
+                ${escapeHTML(error.message)}
+            </div>
+        `;
+    }
+}
+
+
+// ======================================================
+// TAMPILKAN RIWAYAT
+// ======================================================
+
+function tampilkanRiwayat(data) {
+
+    if (!data.length) {
+
+        el("daftarRiwayat").innerHTML =
+            '<div class="empty">Belum ada riwayat.</div>';
+
+        return;
+    }
+
+    el("daftarRiwayat").innerHTML =
+        data.map(d => {
+
+            const aksi = d.aksi || "-";
+
+            const labelAksi = {
+                buat: "🆕 Penugasan dibuat",
+                edit: "✏️ Penugasan diubah",
+                cabut: "🚫 Penugasan dicabut",
+                aktifkan: "♻️ Penugasan diaktifkan"
+            };
+
+            const karyawan = semuaKaryawan.find(
+                k => getNik(k) === d.nik
+            );
+
+            const nama = karyawan
+                ? getNama(karyawan)
+                : d.nik || "-";
+
+            return `
+                <div class="list-card">
+
+                    <div class="list-name">
+                        ${escapeHTML(labelAksi[aksi] || aksi)}
+                    </div>
+
+                    <div class="list-detail">
+
+                        <strong>Tugas:</strong>
+                        ${escapeHTML(getMenuNama(d.menu_id))}
+                        <br>
+
+                        <strong>Pemegang:</strong>
+                        ${escapeHTML(nama)}
+                        <br>
+
+                        <strong>NIK:</strong>
+                        ${escapeHTML(d.nik || "-")}
+                        <br>
+
+                        <strong>Lingkup:</strong>
+                        ${escapeHTML(targetLabel(d.lingkup))}
+                        <br>
+
+                        <strong>Detail:</strong>
+                        ${escapeHTML(d.detail || "-")}
+                        <br>
+
+                        <strong>Pelaksana:</strong>
+                        ${escapeHTML(d.actor_nama || "-")}
+                        <br>
+
+                        <strong>Waktu:</strong>
+                        ${tanggal(d.createdAt || d.waktu)}
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+}
+
+
+// ======================================================
+// SELESAI
+// ======================================================
+
+</script>
+
+</body>
+</html>

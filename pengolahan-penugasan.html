@@ -1176,7 +1176,7 @@ async function sinkronkanAksesPetugas(petugasNik) {
 onAuthStateChanged(auth, async user => {
 
     if (!user) {
-        window.location.href = "login.html";
+        window.location.href = "index.html";
         return;
     }
 
@@ -1234,6 +1234,35 @@ onAuthStateChanged(auth, async user => {
             );
 
         await muatSemuaData();
+
+        // Jika dibuka dari Data Karyawan, NIK pemegang tugas
+        // otomatis dipilih dan daftar penugasan difilter.
+        const nikParameter = new URLSearchParams(window.location.search).get("nik");
+        if (nikParameter) {
+            const nikCari = normalisasiNIK(nikParameter);
+            const karyawanTujuan = semuaKaryawan.find(k =>
+                normalisasiNIK(getNik(k)) === nikCari
+            );
+            if (karyawanTujuan) {
+                pemegangTerpilih = karyawanTujuan;
+                el("pemegangNik").value = getNik(karyawanTujuan);
+                el("pemegangNama").value = getNama(karyawanTujuan);
+                el("cariPemegang").value = getNama(karyawanTujuan) + " - " + getNik(karyawanTujuan);
+                el("hasilPemegang").innerHTML = "";
+                el("pemegangTerpilih").innerHTML = `
+                    <strong>Pemegang tugas:</strong><br>
+                    ${escapeHTML(getNama(karyawanTujuan))}<br>
+                    NIK: ${escapeHTML(getNik(karyawanTujuan))}<br>
+                    Departemen: ${escapeHTML(getDepartemen(karyawanTujuan))}
+                `;
+                el("pemegangTerpilih").classList.remove("hidden");
+                el("cariPenugasan").value = getNik(karyawanTujuan);
+                tampilkanPenugasan();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+                tampilPesan("NIK dari halaman Data Karyawan tidak ditemukan.", "error");
+            }
+        }
 
     } catch (error) {
 

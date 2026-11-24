@@ -932,18 +932,38 @@ onAuthStateChanged(auth, async user => {
     }
 });
 
-tombolLogout.addEventListener("click", async () => {
+// ================================================
+// LOGOUT WAINI — KEMBALI KE HALAMAN LOGIN
+// ================================================
+// Redirect tetap dilakukan pada blok finally, agar tombol
+// tidak tertahan di menu jika proses signOut mengalami error.
+// ================================================
+
+tombolLogout.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    if (tombolLogout.disabled) return;
     if (!confirm("Apakah Anda yakin ingin keluar?")) return;
+
     tombolLogout.disabled = true;
     tombolLogout.textContent = "Keluar...";
+
+    let pesanError = "";
+
     try {
         await signOut(auth);
-        window.location.replace("index.html");
     } catch (error) {
-        console.error("Gagal logout:", error);
-        alert("Gagal keluar: " + (error.message || "Terjadi kesalahan."));
-        tombolLogout.disabled = false;
-        tombolLogout.textContent = "Keluar";
+        console.error("Gagal mengakhiri sesi Firebase:", error);
+        pesanError = error?.message || "Sesi Firebase gagal diakhiri.";
+    } finally {
+        // Arahkan ke login meskipun signOut gagal.
+        // index.html tidak boleh dianggap sebagai halaman menu.
+        window.location.href = "./index.html";
+    }
+
+    if (pesanError) {
+        // Pesan ditampilkan jika browser tetap berada di halaman ini.
+        console.warn("Catatan logout:", pesanError);
     }
 });
 </script>
