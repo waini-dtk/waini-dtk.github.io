@@ -692,7 +692,6 @@ import {
   getDoc,
   getDocs,
   updateDoc,
-  setDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -824,7 +823,7 @@ function showMessage(text,type="success"){
 onAuthStateChanged(auth,async user=>{
 
   if(!user){
-    window.location.href="login.html";
+    window.location.href="index.html";
     return;
   }
 
@@ -900,7 +899,7 @@ async function loadApplicants(){
 
       const data=item.data();
 
-      if(normalize(data.role)!=="karyawan") return;
+      if(normalize(data.role)!=="data_karyawan") return;
 
       applicants.push({
         id:item.id,
@@ -952,7 +951,7 @@ async function loadEmployeeMatches(){
 
     try{
 
-      const employeeRef=doc(db,"karyawan",nik);
+      const employeeRef=doc(db,"data_karyawan",nik);
       const employeeSnap=await getDoc(employeeRef);
 
       employeeCache[nik]=employeeSnap.exists()
@@ -1356,7 +1355,7 @@ async function saveAction(){
     let newStatus="";
     let note="";
     let userUpdate={};
-    let publicUpdate={};
+    
 
     if(actionType==="setujui"){
 
@@ -1366,13 +1365,6 @@ async function saveAction(){
         status:"aktif",
         approvedAt:serverTimestamp(),
         approvedBy:currentUser.uid,
-        updatedAt:serverTimestamp()
-      };
-
-      publicUpdate={
-        nama:item.nama||"",
-        status:"Disetujui",
-        tanggal_persetujuan:serverTimestamp(),
         updatedAt:serverTimestamp()
       };
 
@@ -1396,14 +1388,6 @@ async function saveAction(){
         updatedAt:serverTimestamp()
       };
 
-      publicUpdate={
-        nama:item.nama||"",
-        status:"Ditolak",
-        alasan:note,
-        catatan_admin:note,
-        updatedAt:serverTimestamp()
-      };
-
     }
 
     if(actionType==="lengkapi"){
@@ -1422,21 +1406,10 @@ async function saveAction(){
         updatedAt:serverTimestamp()
       };
 
-      publicUpdate={
-        nama:item.nama||"",
-        status:"Perlu Melengkapi Data",
-        catatan_admin:note,
-        updatedAt:serverTimestamp()
-      };
-
     }
 
     const userRef=doc(db,"pengguna",item.id);
-    const publicRef=doc(db,"status_pendaftaran_public",item.id);
-
     await updateDoc(userRef,userUpdate);
-
-    await setDoc(publicRef,publicUpdate,{merge:true});
 
     const localItem=applicants.find(x=>x.id===item.id);
 

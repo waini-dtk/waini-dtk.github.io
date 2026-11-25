@@ -278,9 +278,18 @@ body {
 
 <main class="container">
 
+    <div class="card" style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:14px">
+        <form id="formCariStatus">
+            <label for="nikCari" style="display:block;font-size:12px;font-weight:bold;margin-bottom:7px">NIK yang didaftarkan</label>
+            <input id="nikCari" type="text" autocomplete="off" required maxlength="30"
+                placeholder="Masukkan NIK" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;margin-bottom:9px">
+            <button type="submit" style="width:100%;padding:12px;background:#991b1b;color:white;border:0;border-radius:9px;font-weight:bold">Periksa Status</button>
+        </form>
+    </div>
+
     <div class="section-title">
-        <span>5 Pendaftar Terbaru</span>
-        <span class="latest">Terbaru</span>
+        <span>Status Pendaftaran Anda</span>
+        <span class="latest">Privat</span>
     </div>
 
     <div id="daftarPendaftar">
@@ -292,8 +301,7 @@ body {
     </div>
 
     <p class="note" id="catatan">
-        Menampilkan maksimal 5 pendaftar terbaru.
-        NIK tidak ditampilkan untuk menjaga privasi.
+        Masukkan NIK yang digunakan saat mendaftar. Halaman hanya menampilkan status pendaftaran yang cocok.
     </p>
 
     <button
@@ -306,377 +314,89 @@ body {
 </main>
 
 <script type="module">
-
-import { firebaseConfig } from "./firebase.js";
-
+import { db } from "./firebase.js";
 import {
-    initializeApp,
-    getApps,
-    getApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-    getFirestore,
-    collection,
-    query,
-    orderBy,
-    limit,
-    getDocs
+  collection, query, where, getDocs, limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+const list = document.getElementById("daftarPendaftar");
+const note = document.getElementById("catatan");
+const form = document.getElementById("formCariStatus");
+const nikInput = document.getElementById("nikCari");
 
-// =====================================
-// 1. HUBUNGKAN FIREBASE
-// =====================================
-
-const app = getApps().length
-    ? getApp()
-    : initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-
-// =====================================
-// 2. ELEMEN HALAMAN
-// =====================================
-
-const daftarPendaftar =
-    document.getElementById("daftarPendaftar");
-
-const catatan =
-    document.getElementById("catatan");
-
-
-// =====================================
-// 3. FORMAT TANGGAL
-// =====================================
-
-function formatTanggal(data) {
-
-    let tanggal = null;
-
-    if (data?.createdAt?.toDate) {
-
-        tanggal = data.createdAt.toDate();
-
-    } else if (data?.createdAt instanceof Date) {
-
-        tanggal = data.createdAt;
-
-    } else if (data?.tanggal) {
-
-        tanggal = new Date(data.tanggal);
-
-    }
-
-    if (!tanggal || isNaN(tanggal.getTime())) {
-
-        return "Tanggal tidak tersedia";
-
-    }
-
-    return tanggal.toLocaleDateString("id-ID", {
-
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-
-    });
-
+function statusInfo(status) {
+  const v = String(status || "").toLowerCase().trim();
+  if (["aktif","disetujui","approved"].includes(v)) return {label:"Disetujui / Akun Aktif",cls:"approved",icon:"✓"};
+  if (["ditolak","rejected"].includes(v)) return {label:"Ditolak",cls:"rejected",icon:"✕"};
+  if (v==="perlu_melengkapi_data") return {label:"Perlu Melengkapi Data",cls:"waiting",icon:"!"};
+  return {label:"Menunggu Verifikasi",cls:"waiting",icon:"◷"};
 }
-
-
-// =====================================
-// 4. TERJEMAHAN STATUS
-// =====================================
-
-function informasiStatus(status) {
-
-    const nilai = String(status || "")
-        .toLowerCase()
-        .trim();
-
-    if (
-        nilai === "disetujui" ||
-        nilai === "approved" ||
-        nilai === "aktif"
-    ) {
-
-        return {
-
-            label: "Disetujui",
-            kelas: "approved",
-            ikon: "✓",
-            warna: "#16a34a"
-
-        };
-
-    }
-
-    if (
-        nilai === "ditolak" ||
-        nilai === "rejected"
-    ) {
-
-        return {
-
-            label: "Ditolak",
-            kelas: "rejected",
-            ikon: "✕",
-            warna: "#dc2626"
-
-        };
-
-    }
-
-    return {
-
-        label: "Menunggu Verifikasi",
-        kelas: "waiting",
-        ikon: "◷",
-        warna: "#d97706"
-
-    };
-
+function safeText(el, text){ el.textContent=String(text??""); }
+function showMessage(text, cls="empty"){
+  list.innerHTML="";
+  const div=document.createElement("div");
+  div.className=cls;
+  div.textContent=text;
+  list.appendChild(div);
 }
-
-
-// =====================================
-// 5. BUAT KARTU PENDAFTAR
-// =====================================
-
-function buatKartu(data) {
-
-    const status = informasiStatus(data.status);
-
-    const kartu = document.createElement("div");
-
-    kartu.className = "person-card";
-
-
-    const bagianAtas = document.createElement("div");
-
-    bagianAtas.className = "person-top";
-
-
-    const avatar = document.createElement("div");
-
-    avatar.className = "avatar";
-
-    avatar.textContent = "♙";
-
-
-    const informasi = document.createElement("div");
-
-    informasi.className = "person-info";
-
-
-    const nama = document.createElement("strong");
-
-    nama.textContent = data.nama || "Nama tidak tersedia";
-
-
-    const tanggal = document.createElement("small");
-
-    tanggal.textContent = formatTanggal(data);
-
-
-    informasi.appendChild(nama);
-
-    informasi.appendChild(tanggal);
-
-
-    const ikonStatus = document.createElement("span");
-
-    ikonStatus.className = "status-icon";
-
-    ikonStatus.textContent = status.ikon;
-
-    ikonStatus.style.color = status.warna;
-
-
-    bagianAtas.appendChild(avatar);
-
-    bagianAtas.appendChild(informasi);
-
-    bagianAtas.appendChild(ikonStatus);
-
-
-    const barisStatus = document.createElement("div");
-
-    barisStatus.className = "status-row";
-
-
-    const labelStatus = document.createElement("span");
-
-    labelStatus.className = "status-label";
-
-    labelStatus.textContent = "Status pendaftaran";
-
-
-    const badgeStatus = document.createElement("span");
-
-    badgeStatus.className =
-        "status " + status.kelas;
-
-    badgeStatus.textContent = status.label;
-
-
-    barisStatus.appendChild(labelStatus);
-
-    barisStatus.appendChild(badgeStatus);
-
-
-    kartu.appendChild(bagianAtas);
-
-    kartu.appendChild(barisStatus);
-
-
-    return kartu;
-
+function renderResult(data){
+  list.innerHTML="";
+  const info=statusInfo(data.status);
+  const card=document.createElement("div");
+  card.className="person-card";
+  const top=document.createElement("div");
+  top.className="person-top";
+  const avatar=document.createElement("div");
+  avatar.className="avatar";
+  avatar.textContent="♙";
+  const detail=document.createElement("div");
+  detail.className="person-info";
+  const name=document.createElement("strong");
+  name.textContent=data.nama||"Nama tidak tersedia";
+  const date=document.createElement("small");
+  date.textContent="Terdaftar: "+formatTanggal(data);
+  detail.append(name,date);
+  const icon=document.createElement("span");
+  icon.className="status-icon";
+  icon.textContent=info.icon;
+  top.append(avatar,detail,icon);
+  const row=document.createElement("div");
+  row.className="status-row";
+  const label=document.createElement("span");
+  label.className="status-label";
+  label.textContent="Status pendaftaran";
+  const badge=document.createElement("span");
+  badge.className="status "+info.cls;
+  badge.textContent=info.label;
+  row.append(label,badge);
+  card.append(top,row);
+  list.appendChild(card);
 }
-
-
-// =====================================
-// 6. TAMPILKAN DATA KOSONG
-// =====================================
-
-function tampilKosong() {
-
-    daftarPendaftar.innerHTML = "";
-
-    const kosong = document.createElement("div");
-
-    kosong.className = "empty";
-
-    kosong.textContent =
-        "Belum ada pendaftaran yang tercatat.";
-
-    daftarPendaftar.appendChild(kosong);
-
-    catatan.textContent =
-        "Informasi pendaftaran terbaru akan ditampilkan di sini setelah ada pendaftar.";
-
+function formatTanggal(data){
+  const v=data.createdAt;
+  let d;
+  if(v?.toDate) d=v.toDate();
+  else if(v) d=new Date(v);
+  if(!d||isNaN(d.getTime())) return "Tanggal tidak tersedia";
+  return d.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
 }
-
-
-// =====================================
-// 7. TAMPILKAN ERROR
-// =====================================
-
-function tampilError(error) {
-
-    console.error(
-        "Gagal mengambil data pendaftaran:",
-        error
-    );
-
-    daftarPendaftar.innerHTML = "";
-
-    const kotakError = document.createElement("div");
-
-    kotakError.className = "error-message";
-
-    kotakError.textContent =
-        "Data pendaftaran belum dapat dimuat. Periksa koneksi internet atau aturan akses Firebase.";
-
-    const tombolUlang = document.createElement("button");
-
-    tombolUlang.className = "refresh-button";
-
-    tombolUlang.textContent = "Coba Lagi";
-
-    tombolUlang.onclick = muatPendaftaran;
-
-    kotakError.appendChild(tombolUlang);
-
-    daftarPendaftar.appendChild(kotakError);
-
-}
-
-
-// =====================================
-// 8. AMBIL 5 DATA TERBARU
-// =====================================
-
-async function muatPendaftaran() {
-
-    daftarPendaftar.innerHTML = "";
-
-    const loading = document.createElement("div");
-
-    loading.className = "loading";
-
-    loading.textContent =
-        "Memuat data pendaftaran...";
-
-    daftarPendaftar.appendChild(loading);
-
-
-    try {
-
-        const referensi = collection(
-            db,
-            "status_pendaftaran_public"
-        );
-
-
-        const pencarian = query(
-
-            referensi,
-
-            orderBy("createdAt", "desc"),
-
-            limit(5)
-
-        );
-
-
-        const hasil = await getDocs(pencarian);
-
-
-        daftarPendaftar.innerHTML = "";
-
-
-        if (hasil.empty) {
-
-            tampilKosong();
-
-            return;
-
-        }
-
-
-        hasil.forEach((dokumen) => {
-
-            const data = dokumen.data();
-
-            const kartu = buatKartu(data);
-
-            daftarPendaftar.appendChild(kartu);
-
-        });
-
-
-        catatan.textContent =
-            "Menampilkan maksimal 5 pendaftar terbaru. NIK tidak ditampilkan untuk menjaga privasi.";
-
-
-    } catch (error) {
-
-        tampilError(error);
-
-    }
-
-}
-
-
-// =====================================
-// 9. JALANKAN
-// =====================================
-
-muatPendaftaran();
-
+form.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const nik=nikInput.value.trim().toUpperCase();
+  if(!nik){showMessage("Masukkan NIK terlebih dahulu.");return;}
+  showMessage("Memeriksa data pendaftaran...","loading");
+  try{
+    const q=query(collection(db,"pengguna"),where("nik","==",nik),limit(5));
+    const snap=await getDocs(q);
+    const found=snap.docs.find(d=>String(d.data().role||"").toLowerCase()==="karyawan");
+    if(!found){showMessage("Data pendaftaran dengan NIK tersebut tidak ditemukan. Pastikan NIK benar.");return;}
+    renderResult(found.data());
+    note.textContent="Status ditampilkan berdasarkan NIK yang Anda masukkan. Jika data belum berubah, hubungi Super Admin.";
+  }catch(err){
+    console.error("Gagal memeriksa status:",err);
+    showMessage("Status belum dapat diperiksa. Periksa koneksi internet atau akses Firebase.","error-message");
+  }
+});
 </script>
 
 </body>

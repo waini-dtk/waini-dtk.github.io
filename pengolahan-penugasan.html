@@ -1292,7 +1292,7 @@ async function muatSemuaData() {
 
         // DATA KARYAWAN
         const snapKaryawan = await getDocs(
-            collection(db, "karyawan")
+            collection(db, "data_karyawan")
         );
 
         semuaKaryawan = snapKaryawan.docs.map(d => ({

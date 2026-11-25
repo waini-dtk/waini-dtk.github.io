@@ -1148,7 +1148,7 @@ async function loadEmployeesForSuperAdmin(){
 
 loadingStage="Membaca seluruh karyawan";
 
-const snap=await getDocs(collection(db,"karyawan"));
+const snap=await getDocs(collection(db,"data_karyawan"));
 const result=[];
 
 snap.forEach(d=>{
@@ -1188,7 +1188,7 @@ unique.add(nik);
 loadingStage="Membaca karyawan NIK "+nik;
 
 const snap=await getDoc(
-doc(db,"karyawan",nik)
+doc(db,"data_karyawan",nik)
 );
 
 if(!snap.exists())continue;

@@ -476,8 +476,6 @@ const db = getFirestore(app);
 
 const KOLEKSI_PENGGUNA = "pengguna";
 
-const KOLEKSI_PUBLIK =
-    "status_pendaftaran_public";
 
 // =====================================
 // 3. ELEMEN FORM
@@ -831,30 +829,7 @@ form.addEventListener("submit", async (e) => {
         );
 
         // =================================
-        // 11. STATUS PENDAFTARAN
-        // =================================
-
-        const referensiPublik = doc(
-            db,
-            KOLEKSI_PUBLIK,
-            userBaru.uid
-        );
-
-        batch.set(
-            referensiPublik,
-            {
-
-                nama: nama,
-
-                status: "Menunggu Verifikasi",
-
-                createdAt: serverTimestamp()
-
-            }
-        );
-
-        // =================================
-        // 12. SIMPAN DATA
+        // 11. SIMPAN DATA
         // =================================
 
         await batch.commit();
@@ -862,7 +837,7 @@ form.addEventListener("submit", async (e) => {
         dataBerhasilTersimpan = true;
 
         // =================================
-        // 13. KELUAR OTOMATIS
+        // 12. KELUAR OTOMATIS
         // =================================
 
         try {
@@ -879,7 +854,7 @@ form.addEventListener("submit", async (e) => {
         }
 
         // =================================
-        // 14. PENDAFTARAN BERHASIL
+        // 13. PENDAFTARAN BERHASIL
         // =================================
 
         tampilPesan(
@@ -902,7 +877,7 @@ form.addEventListener("submit", async (e) => {
         );
 
         // =================================
-        // 15. HAPUS AUTH JIKA PENYIMPANAN GAGAL
+        // 14. HAPUS AUTH JIKA PENYIMPANAN GAGAL
         // =================================
 
         if (
@@ -955,7 +930,7 @@ form.addEventListener("submit", async (e) => {
         }
 
         // =================================
-        // 16. TAMPILKAN ERROR
+        // 15. TAMPILKAN ERROR
         // =================================
 
         tampilPesan(
@@ -973,7 +948,7 @@ form.addEventListener("submit", async (e) => {
 });
 
 // =====================================
-// 17. KONDISI AWAL
+// 16. KONDISI AWAL
 // =====================================
 
 tombolDaftar.disabled = false;

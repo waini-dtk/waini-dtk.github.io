@@ -453,7 +453,7 @@ collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,
 serverTimestamp,writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const C_KARYAWAN="karyawan";
+const C_KARYAWAN="data_karyawan";
 const C_PENGGUNA="pengguna";
 const C_RIWAYAT="riwayat_penugasan";
 
@@ -779,7 +779,7 @@ if(!nilai("jabatan"))return toast("Jabatan wajib diisi.");
 if(!validasiTMK(nilai("tmk")))return toast("Format TMK harus dd/mm/yy dan tanggal valid.");
 if(!nilai("sistemCuti"))return toast("Sistem cuti wajib dipilih.");
 if(!nilai("shiftKerja"))return toast("Shift kerja wajib dipilih.");
-if(nilai("grade")===""||Number(nilai("grade"))<0)return toast("Grade tidak valid.");
+if(nilai("grade").trim()==="")return toast("Grade wajib diisi.");
 
 btn.disabled=true;
 btn.textContent="Menyimpan...";
@@ -796,7 +796,7 @@ tmk:nilai("tmk"),
 poh:nilai("poh"),
 sistem_cuti:nilai("sistemCuti"),
 shift_kerja:nilai("shiftKerja"),
-grade:Number(nilai("grade")),
+grade:String(nilai("grade")).trim(),
 nowa:nilai("nowa"),
 updatedAt:serverTimestamp(),
 updated_by:penggunaLogin.uid
@@ -1021,7 +1021,7 @@ tmk:tanggalExcel(cariKolom(row,["TMK","Tanggal Masuk","Tanggal Mulai Kerja"])),
 poh:String(cariKolom(row,["POH","Tempat POH"])||"").trim(),
 sistem_cuti:normalisasiSistemCuti(cariKolom(row,["Sistem Cuti","Cuti"])),
 shift_kerja:normalisasiShift(cariKolom(row,["Shift Kerja","Shift"])),
-grade:Number(cariKolom(row,["Grade","Golongan"])),
+grade:String(cariKolom(row,["Grade","Golongan"])||"").trim(),
 nowa:String(cariKolom(row,["NOWA","No WA","WhatsApp","Nomor WhatsApp"])||"").trim()
 };
 }
@@ -1065,7 +1065,7 @@ continue;
 }
 
 if(!data.departemen||!data.jabatan||!validasiTMK(data.tmk)||
-!data.sistem_cuti||!data.shift_kerja||!Number.isFinite(data.grade)){
+!data.sistem_cuti||!data.shift_kerja||!data.grade){
 gagal++;
 daftarGagal.push("Baris "+(i+2)+" ("+data.nik+"): data wajib tidak valid.");
 continue;
