@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+
+<title>Bantuan - WAINI</title>
+
+<style>
+:root {
+    --marun: #991b1b;
+    --marun-gelap: #7f1d1d;
+    --putih: #ffffff;
+    --abu: #f5f5f5;
+    --teks: #292929;
+    --abu-teks: #666666;
+    --garis: #e5e5e5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--abu);
+    color: var(--teks);
+}
+
+header {
+    background: var(--marun);
+    color: white;
+    padding: 17px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 6px #0002;
+}
+
+.header-content {
+    max-width: 750px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.back-button {
+    border: 1px solid #ffffff66;
+    background: #ffffff18;
+    color: white;
+    border-radius: 9px;
+    padding: 9px 12px;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.header-title {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.header-subtitle {
+    font-size: 12px;
+    opacity: .85;
+    margin-top: 4px;
+}
+
+.container {
+    width: 100%;
+    max-width: 750px;
+    margin: auto;
+    padding: 17px 14px 35px;
+}
+
+.welcome {
+    background: linear-gradient(135deg, #991b1b, #b83232);
+    color: white;
+    padding: 23px 19px;
+    border-radius: 15px;
+    margin-bottom: 18px;
+}
+
+.welcome-icon {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.welcome h2 {
+    font-size: 21px;
+    margin: 0 0 9px;
+}
+
+.welcome p {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0;
+    opacity: .95;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 22px 0 12px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 11px;
+    border: 1px solid var(--garis);
+}
+
+.info-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.info-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: #fceaea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.info-heading strong {
+    font-size: 14px;
+}
+
+.info-heading small {
+    display: block;
+    font-size: 12px;
+    color: var(--abu-teks);
+    margin-top: 4px;
+}
+
+.info-description {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #555;
+    margin: 12px 0 0;
+}
+
+.faq-item {
+    background: white;
+    border: 1px solid var(--garis);
+    border-radius: 11px;
+    margin-bottom: 9px;
+    overflow: hidden;
+}
+
+.faq-question {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background: white;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--teks);
+    cursor: pointer;
+    gap: 10px;
+}
+
+.faq-question span:last-child {
+    color: var(--marun);
+    font-size: 19px;
+}
+
+.faq-answer {
+    display: none;
+    padding: 0 15px 15px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #555;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+.faq-item.active .faq-question span:last-child {
+    transform: rotate(45deg);
+}
+
+.contact-card {
+    background: white;
+    border: 1px solid var(--garis);
+    border-radius: 12px;
+    padding: 17px;
+    margin-top: 12px;
+}
+
+.contact-card h3 {
+    margin: 0 0 9px;
+    font-size: 16px;
+}
+
+.contact-card p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.7;
+}
+
+.report-box {
+    width: 100%;
+    min-height: 115px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    resize: vertical;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 8px;
+}
+
+.primary-button {
+    width: 100%;
+    background: var(--marun);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.primary-button:active {
+    background: var(--marun-gelap);
+}
+
+.notice {
+    background: #fff7e6;
+    border: 1px solid #f3d99b;
+    color: #76551a;
+    border-radius: 10px;
+    padding: 13px;
+    font-size: 12px;
+    line-height: 1.7;
+    margin-top: 15px;
+}
+
+footer {
+    text-align: center;
+    padding: 22px 10px;
+    color: #888;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+@media (min-width: 600px) {
+    .container {
+        padding: 25px 20px 40px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <button class="back-button"
+            onclick="kembaliKeMenu()"
+            aria-label="Kembali">‹</button>
+
+        <div>
+            <div class="header-title">Pusat Bantuan</div>
+            <div class="header-subtitle">
+                WAINI - Sistem Informasi Karyawan
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- SAMBUTAN -->
+
+    <section class="welcome">
+        <div class="welcome-icon">♙</div>
+        <h2>Selamat Datang di Bantuan WAINI</h2>
+        <p>
+            Halaman ini menyediakan panduan penggunaan aplikasi
+            WAINI dan informasi mengenai langkah yang dapat
+            dilakukan apabila mengalami kendala.
+        </p>
+    </section>
+
+    <!-- PANDUAN -->
+
+    <div class="section-title">Panduan Penggunaan</div>
+
+    <div class="info-card">
+        <div class="info-heading">
+            <div class="info-icon">👤</div>
+            <div>
+                <strong>Profil Karyawan</strong>
+                <small>Informasi data pribadi</small>
+            </div>
+        </div>
+        <p class="info-description">
+            Gunakan menu Profil untuk melihat informasi
+            data karyawan. Apabila terdapat data yang tidak
+            sesuai, hubungi Admin untuk mendapatkan bantuan
+            perbaikan data.
+        </p>
+    </div>
+
+    <div class="info-card">
+        <div class="info-heading">
+            <div class="info-icon">📋</div>
+            <div>
+                <strong>Pengajuan Cuti</strong>
+                <small>Pengajuan dan pemeriksaan cuti</small>
+            </div>
+        </div>
+        <p class="info-description">
+            Gunakan menu Pengajuan Cuti untuk mengajukan
+            permohonan cuti. Isi informasi pengajuan sesuai
+            ketentuan perusahaan dan pantau perkembangan
+            status melalui riwayat pengajuan cuti.
+        </p>
+    </div>
+
+    <div class="info-card">
+        <div class="info-heading">
+            <div class="info-icon">📊</div>
+            <div>
+                <strong>Saldo Cuti</strong>
+                <small>Informasi hak dan sisa cuti</small>
+            </div>
+        </div>
+        <p class="info-description">
+            Menu Saldo Cuti digunakan untuk melihat informasi
+            hak cuti, cuti yang telah digunakan, dan sisa
+            saldo cuti berdasarkan data yang tercatat
+            dalam sistem.
+        </p>
+    </div>
+
+    <div class="info-card">
+        <div class="info-heading">
+            <div class="info-icon">📅</div>
+            <div>
+                <strong>Riwayat Absensi</strong>
+                <small>Informasi kehadiran karyawan</small>
+            </div>
+        </div>
+        <p class="info-description">
+            Gunakan menu Riwayat Absensi untuk melihat
+            catatan kehadiran. Jika ditemukan ketidaksesuaian
+            data, laporkan kepada petugas atau Admin
+            yang berwenang.
+        </p>
+    </div>
+
+    <div class="info-card">
+        <div class="info-heading">
+            <div class="info-icon">🗂️</div>
+            <div>
+                <strong>Menu Tugas</strong>
+                <small>Menu tambahan sesuai penugasan</small>
+            </div>
+        </div>
+        <p class="info-description">
+            Menu tambahan diberikan berdasarkan penugasan
+            dan hak akses karyawan. Apabila menu tugas
+            belum muncul atau tidak dapat dibuka,
+            hubungi Super Admin.
+        </p>
+    </div>
+
+    <!-- FAQ -->
+
+    <div class="section-title">Pertanyaan yang Sering Diajukan</div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>Saya tidak bisa login ke aplikasi. Apa yang harus dilakukan?</span>
+            <span>+</span>
+        </button>
+        <div class="faq-answer">
+            Pastikan koneksi internet tersedia dan data login
+            yang dimasukkan benar. Periksa kembali NIK dan
+            kata sandi. Jika masih gagal, hubungi Admin
+            untuk pemeriksaan akun.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>Data profil saya tidak sesuai.</span>
+            <span>+</span>
+        </button>
+        <div class="faq-answer">
+            Laporkan ketidaksesuaian data kepada Admin.
+            Sertakan NIK dan informasi data yang perlu
+            diperbaiki agar dapat diperiksa.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>Pengajuan cuti saya belum diproses.</span>
+            <span>+</span>
+        </button>
+        <div class="faq-answer">
+            Periksa status pengajuan melalui menu Riwayat Cuti.
+            Jika belum ada perubahan status, hubungi petugas
+            yang bertanggung jawab atas verifikasi cuti.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>Riwayat absensi saya tidak sesuai.</span>
+            <span>+</span>
+        </button>
+        <div class="faq-answer">
+            Catat tanggal dan jenis ketidaksesuaian absensi.
+            Selanjutnya sampaikan kepada petugas absensi
+            yang berwenang untuk dilakukan pemeriksaan.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>Menu tertentu tidak muncul di akun saya.</span>
+            <span>+</span>
+        </button>
+        <div class="faq-answer">
+            Menu dapat ditampilkan berdasarkan hak akses
+            dan penugasan masing-masing karyawan.
+            Hubungi Super Admin apabila menu yang
+            seharusnya menjadi tugas Anda belum tersedia.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>Apa yang harus dilakukan jika aplikasi mengalami error?</span>
+            <span>+</span>
+        </button>
+        <div class="faq-answer">
+            Coba muat ulang halaman dan pastikan koneksi
+            internet stabil. Jika kendala tetap terjadi,
+            catat halaman yang bermasalah dan pesan error
+            yang muncul, kemudian laporkan kepada Admin.
+        </div>
+    </div>
+
+    <!-- LAPORAN KENDALA -->
+
+    <div class="section-title">Laporkan Kendala</div>
+
+    <div class="contact-card">
+        <h3>📝 Formulir Laporan Kendala</h3>
+
+        <p>
+            Apabila mengalami kendala, tuliskan kronologi
+            permasalahan di bawah ini. Anda dapat menyalin
+            laporan untuk disampaikan kepada Admin.
+        </p>
+
+        <textarea
+            id="laporan"
+            class="report-box"
+            placeholder="Tuliskan laporan Anda di sini...
+
+Contoh:
+NIK:
+Halaman yang bermasalah:
+Tanggal kejadian:
+Kendala yang dialami:
+Pesan error (jika ada):"></textarea>
+
+        <button class="primary-button" onclick="salinLaporan()">
+            📋 Salin Laporan
+        </button>
+
+        <div class="notice">
+            <strong>Perhatian:</strong><br>
+            Setelah laporan disalin, kirimkan kepada Admin
+            melalui saluran komunikasi resmi perusahaan.
+            Jangan menyertakan kata sandi atau informasi
+            rahasia akun dalam laporan.
+        </div>
+    </div>
+
+    <!-- INFORMASI -->
+
+    <div class="section-title">Informasi Penting</div>
+
+    <div class="info-card">
+        <div class="info-heading">
+            <div class="info-icon">🔐</div>
+            <div>
+                <strong>Keamanan Akun</strong>
+                <small>Lindungi informasi pribadi Anda</small>
+            </div>
+        </div>
+        <p class="info-description">
+            Jangan memberikan kata sandi kepada orang lain.
+            Gunakan akun masing-masing dan pastikan keluar
+            dari aplikasi apabila menggunakan perangkat
+            bersama.
+        </p>
+    </div>
+
+    <div class="info-card">
+        <div class="info-heading">
+            <div class="info-icon">ℹ️</div>
+            <div>
+                <strong>Hak Akses Pengguna</strong>
+                <small>Penggunaan sesuai kewenangan</small>
+            </div>
+        </div>
+        <p class="info-description">
+            Setiap pengguna memiliki hak akses sesuai
+            kewenangannya. Pengelolaan data dan perubahan
+            informasi tertentu hanya dapat dilakukan
+            oleh petugas yang telah diberikan wewenang.
+        </p>
+    </div>
+
+</main>
+
+<footer>
+    <strong>WAINI</strong><br>
+    Sistem Informasi Karyawan<br>
+    Halaman Pusat Bantuan
+</footer>
+
+<script>
+
+// KEMBALI KE MENU
+
+function kembaliKeMenu() {
+    window.location.href = "menu.html";
+}
+
+// BUKA TUTUP PERTANYAAN
+
+function toggleFAQ(button) {
+    const item = button.parentElement;
+    item.classList.toggle("active");
+}
+
+// SALIN LAPORAN
+
+async function salinLaporan() {
+    const laporan = document.getElementById("laporan");
+    const isi = laporan.value.trim();
+
+    if (!isi) {
+        alert("Silakan tuliskan laporan kendala terlebih dahulu.");
+        laporan.focus();
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(isi);
+        alert("Laporan berhasil disalin. Silakan kirimkan kepada Admin.");
+    } catch (error) {
+        laporan.select();
+        laporan.setSelectionRange(0, 99999);
+
+        const berhasil = document.execCommand("copy");
+
+        if (berhasil) {
+            alert("Laporan berhasil disalin. Silakan kirimkan kepada Admin.");
+        } else {
+            alert("Silakan salin laporan secara manual.");
+        }
+    }
+}
+
+</script>
+
+</body>
+</html>
