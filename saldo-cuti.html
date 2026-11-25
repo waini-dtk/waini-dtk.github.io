@@ -1,0 +1,1208 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+<title>Saldo Cuti - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f8;
+    color: #252525;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg, #991b1b, #7f1d1d);
+    color: white;
+    padding: 22px 18px 27px;
+    border-radius: 0 0 22px 22px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #fecaca;
+}
+
+.tombol-header {
+    border: 1px solid rgba(255,255,255,.6);
+    color: white;
+    background: rgba(255,255,255,.08);
+    padding: 9px 14px;
+    border-radius: 9px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.header-info {
+    margin-top: 23px;
+}
+
+.header-info h1 {
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.header-info p {
+    font-size: 13px;
+    opacity: .9;
+    line-height: 1.5;
+}
+
+/* CONTAINER */
+
+.container {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+    padding: 19px 15px 35px;
+}
+
+/* IDENTITAS */
+
+.identitas {
+    background: white;
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.05);
+    border: 1px solid #eee;
+}
+
+.nama {
+    font-size: 16px;
+    font-weight: bold;
+    color: #7f1d1d;
+    margin-bottom: 6px;
+}
+
+.detail {
+    color: #777;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* STATUS */
+
+.status {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 17px;
+    text-align: center;
+    font-size: 12px;
+    color: #777;
+    line-height: 1.6;
+    border: 1px solid #eee;
+}
+
+.status.error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.status.warning {
+    background: #fff7ed;
+    color: #9a5b16;
+    border-color: #fed7aa;
+}
+
+.status.success {
+    background: #ecfdf5;
+    color: #18764c;
+    border-color: #bbf7d0;
+}
+
+/* SALDO UTAMA */
+
+.saldo-utama {
+    background: linear-gradient(135deg, #991b1b, #7f1d1d);
+    color: white;
+    padding: 22px 19px;
+    border-radius: 17px;
+    margin-bottom: 17px;
+    box-shadow: 0 5px 15px rgba(127,29,29,.15);
+}
+
+.saldo-utama .label {
+    font-size: 12px;
+    opacity: .9;
+    margin-bottom: 12px;
+}
+
+.saldo-utama .angka {
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.saldo-utama .satuan {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.saldo-utama .keterangan {
+    margin-top: 12px;
+    font-size: 11px;
+    line-height: 1.6;
+    opacity: .85;
+}
+
+/* RINGKASAN */
+
+.grid-ringkasan {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.kartu-ringkasan {
+    background: white;
+    border: 1px solid #ededed;
+    border-radius: 14px;
+    padding: 16px 13px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.kartu-ringkasan .label {
+    color: #888;
+    font-size: 11px;
+    line-height: 1.5;
+    margin-bottom: 9px;
+}
+
+.kartu-ringkasan .angka {
+    font-size: 23px;
+    font-weight: bold;
+    color: #333;
+}
+
+.kartu-ringkasan .satuan {
+    font-size: 11px;
+    color: #888;
+    font-weight: normal;
+}
+
+.kartu-ringkasan.hak .angka {
+    color: #2875bd;
+}
+
+.kartu-ringkasan.digunakan .angka {
+    color: #d17b32;
+}
+
+.kartu-ringkasan.sisa .angka {
+    color: #269568;
+}
+
+.kartu-ringkasan.pending .angka {
+    color: #7661bd;
+}
+
+/* JUDUL BAGIAN */
+
+.judul-bagian {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+    margin: 25px 0 13px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.judul-bagian::before {
+    content: "";
+    width: 4px;
+    height: 19px;
+    background: #991b1b;
+    border-radius: 5px;
+}
+
+/* PERIODE */
+
+.daftar-periode {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.kartu-periode {
+    background: white;
+    border: 1px solid #ededed;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.035);
+}
+
+.periode-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 13px;
+}
+
+.periode-nama {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.badge-periode {
+    background: #e8f5ed;
+    color: #21845e;
+    border-radius: 20px;
+    padding: 5px 9px;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.rincian-periode {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.rincian-item {
+    background: #f7f8fa;
+    padding: 10px;
+    border-radius: 9px;
+    text-align: center;
+}
+
+.rincian-item .label {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.rincian-item .angka {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* INFORMASI */
+
+.info-box {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 11px;
+    color: #777;
+    line-height: 1.7;
+}
+
+.info-box strong {
+    color: #555;
+}
+
+/* KOSONG */
+
+.kosong {
+    background: white;
+    border: 1px dashed #ddd;
+    color: #888;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 12px;
+    line-height: 1.7;
+    text-align: center;
+}
+
+/* TOMBOL */
+
+.tombol-kembali {
+    display: block;
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px;
+    background: #991b1b;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.tombol-kembali:active {
+    transform: scale(.98);
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: #999;
+    font-size: 11px;
+    padding: 22px 10px;
+}
+
+/* RESPONSIVE */
+
+@media (min-width: 600px) {
+    .grid-ringkasan {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 360px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .saldo-utama .angka {
+        font-size: 31px;
+    }
+
+    .kartu-ringkasan {
+        padding: 13px 10px;
+    }
+
+    .kartu-ringkasan .angka {
+        font-size: 20px;
+    }
+
+    .rincian-item {
+        padding: 8px 5px;
+    }
+
+    .rincian-item .angka {
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">WAI<span>NI</span></div>
+
+        <button class="tombol-header" id="tombolLogout">
+            Keluar
+        </button>
+    </div>
+
+    <div class="header-info">
+        <h1>Saldo Cuti</h1>
+        <p>Informasi hak cuti dan sisa cuti karyawan.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- IDENTITAS KARYAWAN -->
+
+    <section class="identitas">
+        <div class="nama" id="namaPengguna">
+            Memuat identitas...
+        </div>
+
+        <div class="detail" id="detailPengguna">
+            Mohon tunggu sebentar.
+        </div>
+    </section>
+
+    <!-- STATUS HALAMAN -->
+
+    <div class="status" id="statusHalaman">
+        Memeriksa akun dan saldo cuti...
+    </div>
+
+    <!-- SALDO UTAMA -->
+
+    <section id="bagianSaldoUtama" style="display:none;">
+
+        <div class="saldo-utama">
+            <div class="label">TOTAL SISA CUTI</div>
+
+            <div class="angka">
+                <span id="totalSisa">0</span>
+                <span class="satuan">hari</span>
+            </div>
+
+            <div class="keterangan">
+                Saldo cuti yang tercatat dalam sistem.
+            </div>
+        </div>
+
+        <!-- RINGKASAN -->
+
+        <div class="grid-ringkasan">
+
+            <div class="kartu-ringkasan hak">
+                <div class="label">Total Hak Cuti</div>
+                <div class="angka">
+                    <span id="totalHak">0</span>
+                    <span class="satuan">hari</span>
+                </div>
+            </div>
+
+            <div class="kartu-ringkasan digunakan">
+                <div class="label">Cuti Digunakan</div>
+                <div class="angka">
+                    <span id="totalDigunakan">0</span>
+                    <span class="satuan">hari</span>
+                </div>
+            </div>
+
+            <div class="kartu-ringkasan sisa">
+                <div class="label">Sisa Cuti</div>
+                <div class="angka">
+                    <span id="totalSisaRingkasan">0</span>
+                    <span class="satuan">hari</span>
+                </div>
+            </div>
+
+            <div class="kartu-ringkasan pending">
+                <div class="label">Dalam Pengajuan</div>
+                <div class="angka">
+                    <span id="totalPengajuan">0</span>
+                    <span class="satuan">hari</span>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- RINCIAN PERIODE -->
+
+    <section id="bagianPeriode" style="display:none;">
+
+        <div class="judul-bagian">
+            Rincian Saldo Cuti
+        </div>
+
+        <div class="daftar-periode" id="daftarPeriode"></div>
+
+    </section>
+
+    <!-- INFORMASI -->
+
+    <div class="info-box">
+        <strong>Informasi:</strong><br>
+        Halaman ini hanya menampilkan informasi saldo cuti
+        yang tersimpan di sistem WAINI. Perubahan saldo
+        dilakukan melalui mekanisme administrasi yang
+        berwenang, bukan melalui halaman ini.
+    </div>
+
+    <!-- KEMBALI -->
+
+    <a href="menu-utama.html" class="tombol-kembali">
+        ← Kembali ke Menu Utama
+    </a>
+
+</main>
+
+<footer>
+    WAINI - Portal Karyawan Divisi Pelabuhan
+</footer>
+
+<script type="module">
+
+// ==================================================
+// WAINI - SALDO CUTI
+// FIRESTORE READ ONLY
+// ==================================================
+
+import { auth, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    query,
+    where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ==================================================
+// ELEMENT
+// ==================================================
+
+const namaPenggunaEl = document.getElementById("namaPengguna");
+const detailPenggunaEl = document.getElementById("detailPengguna");
+const statusHalamanEl = document.getElementById("statusHalaman");
+
+const bagianSaldoUtama = document.getElementById("bagianSaldoUtama");
+const bagianPeriode = document.getElementById("bagianPeriode");
+
+const totalHakEl = document.getElementById("totalHak");
+const totalDigunakanEl = document.getElementById("totalDigunakan");
+const totalSisaEl = document.getElementById("totalSisa");
+const totalSisaRingkasanEl = document.getElementById("totalSisaRingkasan");
+const totalPengajuanEl = document.getElementById("totalPengajuan");
+
+const daftarPeriodeEl = document.getElementById("daftarPeriode");
+const tombolLogout = document.getElementById("tombolLogout");
+
+let penggunaAktif = null;
+let userFirebase = null;
+
+// ==================================================
+// HELPER
+// ==================================================
+
+function nilaiPertama(data, daftarField, fallback = "") {
+    for (const field of daftarField) {
+        const nilai = data?.[field];
+
+        if (
+            nilai !== undefined &&
+            nilai !== null &&
+            String(nilai).trim() !== ""
+        ) {
+            return nilai;
+        }
+    }
+
+    return fallback;
+}
+
+function ambilNIK() {
+    return String(
+        nilaiPertama(
+            penggunaAktif,
+            [
+                "nik",
+                "NIK",
+                "nomor_induk",
+                "nomor_induk_karyawan"
+            ],
+            ""
+        )
+    ).trim();
+}
+
+function statusAktif(data) {
+    if (data?.aktif === true || data?.active === true) {
+        return true;
+    }
+
+    const status = String(data?.status ?? "")
+        .trim()
+        .toLowerCase();
+
+    return status === "aktif" || status === "active";
+}
+
+function angka(nilai) {
+    if (nilai === undefined || nilai === null || nilai === "") {
+        return 0;
+    }
+
+    if (typeof nilai === "number") {
+        return Number.isFinite(nilai) ? nilai : 0;
+    }
+
+    let teks = String(nilai)
+        .trim()
+        .replace(/[^\d,.-]/g, "");
+
+    if (teks.includes(",") && teks.includes(".")) {
+        teks = teks.replace(/\./g, "").replace(",", ".");
+    } else if (teks.includes(",")) {
+        teks = teks.replace(",", ".");
+    }
+
+    const hasil = Number(teks);
+
+    return Number.isFinite(hasil) ? hasil : 0;
+}
+
+function formatAngka(nilai) {
+    return angka(nilai).toLocaleString("id-ID", {
+        maximumFractionDigits: 2
+    });
+}
+
+function tampilkanStatus(pesan, jenis = "") {
+    statusHalamanEl.textContent = pesan;
+
+    statusHalamanEl.className = "status";
+
+    if (jenis) {
+        statusHalamanEl.classList.add(jenis);
+    }
+
+    statusHalamanEl.style.display = "block";
+}
+
+function sembunyikanStatus() {
+    statusHalamanEl.style.display = "none";
+}
+
+// ==================================================
+// IDENTITAS PENGGUNA
+// ==================================================
+
+async function muatDataPengguna(user) {
+    const refPengguna = doc(db, "pengguna", user.uid);
+
+    const snapshot = await getDoc(refPengguna);
+
+    if (!snapshot.exists()) {
+        throw new Error(
+            "Data pengguna tidak ditemukan di Firestore."
+        );
+    }
+
+    penggunaAktif = snapshot.data();
+
+    if (!statusAktif(penggunaAktif)) {
+        throw new Error(
+            "Akun Anda belum aktif. Silakan hubungi administrator."
+        );
+    }
+
+    const nama = nilaiPertama(
+        penggunaAktif,
+        ["nama", "nama_lengkap", "name"],
+        user.displayName || "Karyawan"
+    );
+
+    namaPenggunaEl.textContent = nama;
+
+    detailPenggunaEl.textContent =
+        "NIK: " + (ambilNIK() || "-") +
+        " | Role: " +
+        (penggunaAktif.role || penggunaAktif.peran || "karyawan");
+}
+
+// ==================================================
+// PENCARIAN DOKUMEN SALDO
+// ==================================================
+
+// Nama collection di bawah ini merupakan kandidat.
+// Struktur aktual perlu dicocokkan dengan database WAINI.
+
+const KANDIDAT_COLLECTION = [
+    "saldo_cuti",
+    "saldo_cuti_karyawan",
+    "data_saldo_cuti",
+    "hak_cuti",
+    "cuti_karyawan"
+];
+
+const FIELD_NIK = [
+    "nik",
+    "NIK",
+    "nik_karyawan",
+    "nomor_induk",
+    "nomor_induk_karyawan"
+];
+
+async function cariDokumenSaldo() {
+    const nik = ambilNIK();
+
+    if (!nik) {
+        throw new Error(
+            "NIK pengguna tidak ditemukan. Periksa dokumen pengguna."
+        );
+    }
+
+    const hasil = [];
+
+    for (const namaCollection of KANDIDAT_COLLECTION) {
+
+        // 1. Coba dokumen dengan ID = NIK
+
+        try {
+            const refDokumen = doc(
+                db,
+                namaCollection,
+                nik
+            );
+
+            const snapshot = await getDoc(refDokumen);
+
+            if (snapshot.exists()) {
+                hasil.push({
+                    collection: namaCollection,
+                    id: snapshot.id,
+                    data: snapshot.data()
+                });
+            }
+        } catch (error) {
+            console.warn(
+                "Pemeriksaan dokumen " + namaCollection + " gagal:",
+                error
+            );
+        }
+
+        // 2. Coba mencari berdasarkan field NIK
+
+        for (const fieldNIK of FIELD_NIK) {
+            try {
+                const refCollection = collection(
+                    db,
+                    namaCollection
+                );
+
+                const q = query(
+                    refCollection,
+                    where(fieldNIK, "==", nik)
+                );
+
+                const snapshot = await getDocs(q);
+
+                snapshot.forEach(dokumen => {
+                    const sudahAda = hasil.some(
+                        item =>
+                            item.collection === namaCollection &&
+                            item.id === dokumen.id
+                    );
+
+                    if (!sudahAda) {
+                        hasil.push({
+                            collection: namaCollection,
+                            id: dokumen.id,
+                            data: dokumen.data()
+                        });
+                    }
+                });
+
+            } catch (error) {
+                console.warn(
+                    "Query " + namaCollection +
+                    " menggunakan " + fieldNIK +
+                    " gagal:",
+                    error
+                );
+            }
+        }
+    }
+
+    return hasil;
+}
+
+// ==================================================
+// MEMBACA FIELD SALDO
+// ==================================================
+
+function ambilHak(data) {
+    return angka(
+        nilaiPertama(
+            data,
+            [
+                "total_hak",
+                "hak_cuti",
+                "hak_cuti_tahunan",
+                "jumlah_hak",
+                "jatah_cuti",
+                "jatah",
+                "hak"
+            ],
+            0
+        )
+    );
+}
+
+function ambilDigunakan(data) {
+    return angka(
+        nilaiPertama(
+            data,
+            [
+                "cuti_digunakan",
+                "total_digunakan",
+                "jumlah_digunakan",
+                "terpakai",
+                "digunakan"
+            ],
+            0
+        )
+    );
+}
+
+function ambilSisa(data) {
+    const fieldSisa = [
+        "sisa_cuti",
+        "saldo_cuti",
+        "saldo",
+        "sisa",
+        "saldo_tersedia",
+        "cuti_tersisa"
+    ];
+
+    for (const field of fieldSisa) {
+        if (
+            data?.[field] !== undefined &&
+            data?.[field] !== null &&
+            data?.[field] !== ""
+        ) {
+            return angka(data[field]);
+        }
+    }
+
+    // Perhitungan hanya jika hak dan digunakan
+    // tersedia dalam dokumen saldo yang sama.
+
+    const hak = ambilHak(data);
+    const digunakan = ambilDigunakan(data);
+
+    if (
+        data?.total_hak !== undefined ||
+        data?.hak_cuti !== undefined ||
+        data?.hak_cuti_tahunan !== undefined ||
+        data?.jumlah_hak !== undefined ||
+        data?.jatah_cuti !== undefined ||
+        data?.jatah !== undefined
+    ) {
+        return hak - digunakan;
+    }
+
+    return 0;
+}
+
+function ambilPengajuan(data) {
+    return angka(
+        nilaiPertama(
+            data,
+            [
+                "cuti_dalam_pengajuan",
+                "total_pengajuan",
+                "jumlah_pengajuan",
+                "cuti_pending",
+                "pending"
+            ],
+            0
+        )
+    );
+}
+
+// ==================================================
+// MENCARI RINCIAN PERIODE
+// ==================================================
+
+function ambilArrayPeriode(data) {
+    const kandidat = [
+        "rincian_periode",
+        "periode_saldo",
+        "saldo_per_periode",
+        "riwayat_saldo",
+        "rincian_saldo",
+        "daftar_periode",
+        "periode"
+    ];
+
+    for (const field of kandidat) {
+        if (Array.isArray(data?.[field])) {
+            return data[field];
+        }
+    }
+
+    return [];
+}
+
+function namaPeriode(item, index) {
+    return String(
+        nilaiPertama(
+            item,
+            [
+                "nama_periode",
+                "periode",
+                "tahun",
+                "tahun_periode",
+                "periode_cuti",
+                "label"
+            ],
+            "Periode " + (index + 1)
+        )
+    );
+}
+
+function hakPeriode(item) {
+    return angka(
+        nilaiPertama(
+            item,
+            [
+                "hak_cuti",
+                "total_hak",
+                "jumlah_hak",
+                "jatah",
+                "hak"
+            ],
+            0
+        )
+    );
+}
+
+function digunakanPeriode(item) {
+    return angka(
+        nilaiPertama(
+            item,
+            [
+                "cuti_digunakan",
+                "total_digunakan",
+                "terpakai",
+                "digunakan"
+            ],
+            0
+        )
+    );
+}
+
+function sisaPeriode(item) {
+    const sisa = nilaiPertama(
+        item,
+        [
+            "sisa_cuti",
+            "saldo_cuti",
+            "saldo",
+            "sisa"
+        ],
+        null
+    );
+
+    if (sisa !== null) {
+        return angka(sisa);
+    }
+
+    return hakPeriode(item) - digunakanPeriode(item);
+}
+
+// ==================================================
+// TAMPILKAN PERIODE
+// ==================================================
+
+function tampilkanPeriode(data) {
+    daftarPeriodeEl.innerHTML = "";
+
+    const periode = ambilArrayPeriode(data);
+
+    if (!periode.length) {
+        bagianPeriode.style.display = "none";
+        return;
+    }
+
+    bagianPeriode.style.display = "block";
+
+    periode.forEach((item, index) => {
+        if (!item || typeof item !== "object") {
+            return;
+        }
+
+        const kartu = document.createElement("div");
+        kartu.className = "kartu-periode";
+
+        const header = document.createElement("div");
+        header.className = "periode-header";
+
+        const nama = document.createElement("div");
+        nama.className = "periode-nama";
+        nama.textContent = namaPeriode(item, index);
+
+        const badge = document.createElement("div");
+        badge.className = "badge-periode";
+        badge.textContent = "Rincian";
+
+        header.append(nama, badge);
+
+        const rincian = document.createElement("div");
+        rincian.className = "rincian-periode";
+
+        const itemHak = buatRincian(
+            "Hak Cuti",
+            hakPeriode(item)
+        );
+
+        const itemDigunakan = buatRincian(
+            "Digunakan",
+            digunakanPeriode(item)
+        );
+
+        const itemSisa = buatRincian(
+            "Sisa",
+            sisaPeriode(item)
+        );
+
+        rincian.append(
+            itemHak,
+            itemDigunakan,
+            itemSisa
+        );
+
+        kartu.append(header, rincian);
+
+        daftarPeriodeEl.appendChild(kartu);
+    });
+}
+
+function buatRincian(label, nilai) {
+    const item = document.createElement("div");
+    item.className = "rincian-item";
+
+    const teksLabel = document.createElement("div");
+    teksLabel.className = "label";
+    teksLabel.textContent = label;
+
+    const teksAngka = document.createElement("div");
+    teksAngka.className = "angka";
+    teksAngka.textContent = formatAngka(nilai) + " hari";
+
+    item.append(teksLabel, teksAngka);
+
+    return item;
+}
+
+// ==================================================
+// TAMPILKAN SALDO
+// ==================================================
+
+function tampilkanSaldo(data) {
+    const hak = ambilHak(data);
+    const digunakan = ambilDigunakan(data);
+    const sisa = ambilSisa(data);
+    const pengajuan = ambilPengajuan(data);
+
+    totalHakEl.textContent = formatAngka(hak);
+    totalDigunakanEl.textContent = formatAngka(digunakan);
+    totalSisaEl.textContent = formatAngka(sisa);
+    totalSisaRingkasanEl.textContent = formatAngka(sisa);
+    totalPengajuanEl.textContent = formatAngka(pengajuan);
+
+    bagianSaldoUtama.style.display = "block";
+
+    tampilkanPeriode(data);
+}
+
+// ==================================================
+// MEMUAT SALDO
+// ==================================================
+
+async function muatSaldoCuti() {
+    tampilkanStatus("Mencari data saldo cuti...");
+
+    bagianSaldoUtama.style.display = "none";
+    bagianPeriode.style.display = "none";
+
+    const hasil = await cariDokumenSaldo();
+
+    if (!hasil.length) {
+        tampilkanStatus(
+            "Data saldo cuti belum ditemukan. Struktur collection saldo cuti perlu disesuaikan dengan database WAINI. Saldo tidak ditampilkan karena data belum terverifikasi.",
+            "warning"
+        );
+
+        return;
+    }
+
+    // Menggunakan dokumen pertama yang ditemukan.
+    // Tidak menggabungkan beberapa dokumen agar saldo tidak ganda.
+
+    const dokumenSaldo = hasil[0];
+
+    console.log(
+        "Dokumen saldo ditemukan:",
+        dokumenSaldo.collection,
+        dokumenSaldo.id
+    );
+
+    tampilkanSaldo(dokumenSaldo.data);
+
+    tampilkanStatus(
+        "Data saldo cuti berhasil dibaca.",
+        "success"
+    );
+}
+
+// ==================================================
+// AUTHENTICATION
+// ==================================================
+
+onAuthStateChanged(auth, async user => {
+    if (!user) {
+        window.location.replace("index.html");
+        return;
+    }
+
+    userFirebase = user;
+
+    try {
+        await muatDataPengguna(user);
+
+        await muatSaldoCuti();
+
+    } catch (error) {
+        console.error(
+            "Gagal memuat saldo cuti:",
+            error
+        );
+
+        tampilkanStatus(
+            error.message || "Gagal memuat data saldo cuti.",
+            "error"
+        );
+    }
+});
+
+// ==================================================
+// LOGOUT
+// ==================================================
+
+tombolLogout.addEventListener("click", async () => {
+    if (tombolLogout.disabled) return;
+
+    const yakin = confirm(
+        "Apakah Anda yakin ingin keluar?"
+    );
+
+    if (!yakin) return;
+
+    tombolLogout.disabled = true;
+    tombolLogout.textContent = "Keluar...";
+
+    try {
+        await signOut(auth);
+    } catch (error) {
+        console.error("Logout gagal:", error);
+    } finally {
+        window.location.replace("index.html");
+    }
+});
+
+</script>
+
+</body>
+</html>
