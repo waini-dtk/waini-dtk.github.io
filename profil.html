@@ -1,0 +1,1014 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+
+<title>Profil Karyawan - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f8;
+    color: #252525;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg, #991b1b, #7f1d1d);
+    color: white;
+    padding: 20px 18px 27px;
+    border-radius: 0 0 22px 22px;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #fecaca;
+}
+
+.btn-kembali {
+    border: 1px solid rgba(255,255,255,.65);
+    color: white;
+    background: rgba(255,255,255,.1);
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-size: 12px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.header-info {
+    margin-top: 23px;
+}
+
+.header-info h1 {
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.header-info p {
+    font-size: 13px;
+    opacity: .9;
+    line-height: 1.5;
+}
+
+/* CONTAINER */
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px 15px 35px;
+}
+
+/* STATUS */
+
+.status {
+    background: white;
+    color: #777;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.6;
+    padding: 14px;
+    border-radius: 11px;
+    margin-bottom: 17px;
+    border: 1px solid #eee;
+}
+
+.status.error {
+    color: #b91c1c;
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.status.success {
+    color: #15803d;
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+/* KARTU PROFIL */
+
+.kartu-profil {
+    background: white;
+    border-radius: 17px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,.05);
+    border: 1px solid #ededed;
+    margin-bottom: 17px;
+}
+
+.profil-header {
+    background: linear-gradient(135deg,#fff,#fff7f7);
+    padding: 23px 17px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #f1eeee;
+}
+
+.avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#991b1b,#b91c1c);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    flex-shrink: 0;
+    border: 3px solid #fee2e2;
+}
+
+.identitas-ringkas {
+    min-width: 0;
+    flex: 1;
+}
+
+.nama {
+    font-size: 17px;
+    font-weight: bold;
+    color: #7f1d1d;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.nik {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+    overflow-wrap: anywhere;
+}
+
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+}
+
+/* DETAIL */
+
+.detail-profil {
+    padding: 18px 16px 20px;
+}
+
+.judul-detail {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.judul-detail::before {
+    content: "";
+    width: 4px;
+    height: 17px;
+    background: #991b1b;
+    border-radius: 4px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+}
+
+.detail-item {
+    padding: 12px 2px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.label {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.nilai {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.nilai.kosong {
+    color: #aaa;
+    font-weight: normal;
+}
+
+/* INFORMASI AKUN */
+
+.kartu-akun {
+    background: white;
+    border: 1px solid #ededed;
+    border-radius: 15px;
+    padding: 17px;
+    margin-bottom: 17px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.kartu-akun .judul-detail {
+    margin-bottom: 12px;
+}
+
+.info-akun {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.info-akun-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.info-akun-icon {
+    width: 34px;
+    height: 34px;
+    background: #f8eeee;
+    color: #991b1b;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 15px;
+}
+
+.info-akun-teks {
+    flex: 1;
+    min-width: 0;
+}
+
+.info-akun-teks .label {
+    margin-bottom: 4px;
+}
+
+.info-akun-teks .nilai {
+    font-size: 12px;
+}
+
+/* CATATAN */
+
+.catatan {
+    padding: 13px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 11px;
+    font-size: 11px;
+    color: #9a5b20;
+    line-height: 1.6;
+}
+
+/* TOMBOL */
+
+.tombol-area {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 11px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-utama {
+    color: white;
+    background: #991b1b;
+}
+
+.btn-utama:active {
+    background: #7f1d1d;
+    transform: scale(.98);
+}
+
+.btn-putih {
+    color: #991b1b;
+    background: white;
+    border: 1px solid #e5caca;
+}
+
+.btn-putih:active {
+    background: #fff1f1;
+    transform: scale(.98);
+}
+
+/* LOADING */
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ddd;
+    border-top-color: #991b1b;
+    border-radius: 50%;
+    animation: putar .8s linear infinite;
+}
+
+@keyframes putar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: #999;
+    font-size: 11px;
+    padding: 23px 10px;
+}
+
+/* RESPONSIVE */
+
+@media(min-width:600px) {
+    .detail-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        column-gap: 22px;
+    }
+
+    .detail-item {
+        border-bottom: 1px solid #f0f0f0;
+    }
+}
+
+@media(max-width:360px) {
+    .profil-header {
+        padding: 19px 13px;
+        gap: 11px;
+    }
+
+    .avatar {
+        width: 58px;
+        height: 58px;
+        font-size: 21px;
+    }
+
+    .nama {
+        font-size: 15px;
+    }
+
+    .container {
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">WAI<span>NI</span></div>
+
+        <a href="menu.html" class="btn-kembali">
+            ← Menu Utama
+        </a>
+    </div>
+
+    <div class="header-info">
+        <h1>Profil Karyawan</h1>
+        <p>Informasi identitas dan data kepegawaian Anda.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- STATUS -->
+
+    <div id="statusHalaman" class="status">
+        <div class="loading">
+            <span class="spinner"></span>
+            Memuat profil karyawan...
+        </div>
+    </div>
+
+    <!-- PROFIL UTAMA -->
+
+    <section class="kartu-profil" id="kartuProfil" style="display:none;">
+
+        <div class="profil-header">
+
+            <div class="avatar" id="avatarNama">
+                --
+            </div>
+
+            <div class="identitas-ringkas">
+
+                <div class="nama" id="namaKaryawan">
+                    -
+                </div>
+
+                <div class="nik" id="nikKaryawan">
+                    NIK: -
+                </div>
+
+                <div class="badge-status" id="badgeStatus">
+                    AKUN AKTIF
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="detail-profil">
+
+            <div class="judul-detail">
+                Data Kepegawaian
+            </div>
+
+            <div class="detail-grid" id="detailGrid">
+
+                <!-- Data akan dimuat dari Firebase -->
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- INFORMASI AKUN -->
+
+    <section class="kartu-akun" id="kartuAkun" style="display:none;">
+
+        <div class="judul-detail">
+            Informasi Akun
+        </div>
+
+        <div class="info-akun">
+
+            <div class="info-akun-item">
+
+                <div class="info-akun-icon">
+                    ✉
+                </div>
+
+                <div class="info-akun-teks">
+                    <div class="label">Email akun</div>
+                    <div class="nilai" id="emailPengguna">-</div>
+                </div>
+
+            </div>
+
+            <div class="info-akun-item">
+
+                <div class="info-akun-icon">
+                    👤
+                </div>
+
+                <div class="info-akun-teks">
+                    <div class="label">Jenis akun</div>
+                    <div class="nilai" id="rolePengguna">Karyawan</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CATATAN -->
+
+    <div class="catatan" id="catatanProfil" style="display:none;">
+        Data profil ditampilkan sesuai data yang tersimpan di sistem WAINI.
+        Jika terdapat kesalahan data, silakan hubungi administrator.
+    </div>
+
+    <!-- TOMBOL -->
+
+    <div class="tombol-area">
+
+        <a href="menu.html" class="btn btn-utama">
+            ← Kembali ke Menu Utama
+        </a>
+
+    </div>
+
+</main>
+
+<footer>
+    WAINI - Portal Karyawan Divisi Pelabuhan
+</footer>
+
+<script type="module">
+
+// ================================================
+// WAINI - PROFIL KARYAWAN
+// Firebase Authentication + Firestore
+// ================================================
+
+import { auth, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs,
+    limit
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ================================================
+// ELEMEN HALAMAN
+// ================================================
+
+const statusHalaman = document.getElementById("statusHalaman");
+const kartuProfil = document.getElementById("kartuProfil");
+const kartuAkun = document.getElementById("kartuAkun");
+const catatanProfil = document.getElementById("catatanProfil");
+
+const namaKaryawanEl = document.getElementById("namaKaryawan");
+const nikKaryawanEl = document.getElementById("nikKaryawan");
+const avatarNamaEl = document.getElementById("avatarNama");
+const badgeStatusEl = document.getElementById("badgeStatus");
+const detailGridEl = document.getElementById("detailGrid");
+
+const emailPenggunaEl = document.getElementById("emailPengguna");
+const rolePenggunaEl = document.getElementById("rolePengguna");
+
+// ================================================
+// FUNGSI DASAR
+// ================================================
+
+function tampilStatus(pesan, tipe = "") {
+    statusHalaman.style.display = "block";
+    statusHalaman.className = "status" + (tipe ? " " + tipe : "");
+    statusHalaman.textContent = pesan;
+}
+
+function sembunyikanStatus() {
+    statusHalaman.style.display = "none";
+}
+
+function nilaiPertama(data, daftarField, fallback = "") {
+    for (const field of daftarField) {
+        const nilai = data?.[field];
+
+        if (
+            nilai !== undefined &&
+            nilai !== null &&
+            String(nilai).trim() !== ""
+        ) {
+            return nilai;
+        }
+    }
+
+    return fallback;
+}
+
+function teks(nilai, fallback = "-") {
+    if (
+        nilai === undefined ||
+        nilai === null ||
+        String(nilai).trim() === ""
+    ) {
+        return fallback;
+    }
+
+    return String(nilai).trim();
+}
+
+function normalisasiStatus(status) {
+    return String(status ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "_");
+}
+
+function akunAktif(data) {
+    const status = normalisasiStatus(data?.status);
+
+    return (
+        data?.aktif === true ||
+        data?.active === true ||
+        status === "aktif" ||
+        status === "active"
+    );
+}
+
+function ambilNIK(data) {
+    return String(
+        nilaiPertama(
+            data,
+            [
+                "nik",
+                "NIK",
+                "nik_karyawan",
+                "nomor_induk",
+                "nomor_induk_karyawan"
+            ],
+            ""
+        )
+    ).trim();
+}
+
+function buatInisial(nama) {
+    const kata = String(nama || "")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    if (!kata.length) return "?";
+
+    if (kata.length === 1) {
+        return kata[0].substring(0, 2).toUpperCase();
+    }
+
+    return (
+        kata[0][0] +
+        kata[1][0]
+    ).toUpperCase();
+}
+
+// ================================================
+// MENAMPILKAN FIELD PROFIL
+// ================================================
+
+function buatDetail(label, nilai) {
+    const item = document.createElement("div");
+    item.className = "detail-item";
+
+    const labelEl = document.createElement("div");
+    labelEl.className = "label";
+    labelEl.textContent = label;
+
+    const nilaiEl = document.createElement("div");
+    nilaiEl.className = "nilai";
+
+    const isi = teks(nilai);
+
+    nilaiEl.textContent = isi;
+
+    if (isi === "-") {
+        nilaiEl.classList.add("kosong");
+    }
+
+    item.append(labelEl, nilaiEl);
+
+    return item;
+}
+
+function tampilkanDataKaryawan(data, nik) {
+
+    const nama = teks(
+        nilaiPertama(data, ["nama", "nama_karyawan", "nama_lengkap"]),
+        "Nama belum tersedia"
+    );
+
+    namaKaryawanEl.textContent = nama;
+    nikKaryawanEl.textContent = "NIK: " + teks(nik);
+    avatarNamaEl.textContent = buatInisial(nama);
+
+    detailGridEl.innerHTML = "";
+
+    const daftarDetail = [
+        {
+            label: "Nama Lengkap",
+            nilai: nilaiPertama(
+                data,
+                ["nama", "nama_karyawan", "nama_lengkap"]
+            )
+        },
+        {
+            label: "NIK",
+            nilai: nik
+        },
+        {
+            label: "Divisi",
+            nilai: nilaiPertama(data, ["divisi"])
+        },
+        {
+            label: "Departemen",
+            nilai: nilaiPertama(data, ["departemen"])
+        },
+        {
+            label: "Jabatan",
+            nilai: nilaiPertama(data, ["jabatan"])
+        },
+        {
+            label: "TMK (Tanggal Mulai Kerja)",
+            nilai: nilaiPertama(data, ["tmk"])
+        },
+        {
+            label: "POH",
+            nilai: nilaiPertama(data, ["poh"])
+        },
+        {
+            label: "Sistem Cuti",
+            nilai: nilaiPertama(data, ["sistem_cuti"])
+        },
+        {
+            label: "Shift Kerja",
+            nilai: nilaiPertama(data, ["shift_kerja"])
+        },
+        {
+            label: "Grade",
+            nilai: nilaiPertama(data, ["grade"])
+        },
+        {
+            label: "Nomor WhatsApp",
+            nilai: nilaiPertama(data, ["nowa", "no_wa", "nomor_wa"])
+        }
+    ];
+
+    daftarDetail.forEach(item => {
+        detailGridEl.appendChild(
+            buatDetail(item.label, item.nilai)
+        );
+    });
+
+    kartuProfil.style.display = "block";
+}
+
+// ================================================
+// MEMBACA DATA PENGGUNA
+// ================================================
+
+async function muatDataPengguna(user) {
+
+    const refPengguna = doc(db, "pengguna", user.uid);
+    const snapPengguna = await getDoc(refPengguna);
+
+    if (!snapPengguna.exists()) {
+        throw new Error(
+            "Data akun Anda tidak ditemukan di collection pengguna."
+        );
+    }
+
+    const dataPengguna = snapPengguna.data();
+
+    if (!akunAktif(dataPengguna)) {
+        throw new Error(
+            "Akun Anda belum aktif atau belum diverifikasi. Silakan hubungi administrator."
+        );
+    }
+
+    const nik = ambilNIK(dataPengguna);
+
+    if (!nik) {
+        throw new Error(
+            "NIK belum tersedia pada data akun pengguna."
+        );
+    }
+
+    return {
+        dataPengguna,
+        nik
+    };
+}
+
+// ================================================
+// MEMBACA DATA KARYAWAN
+// ================================================
+
+async function cariDataKaryawan(nik) {
+
+    // ------------------------------------------------
+    // CARA 1:
+    // Document ID data_karyawan = NIK
+    // Sesuai struktur halaman pengelolaan data karyawan.
+    // ------------------------------------------------
+
+    const refKaryawan = doc(db, "data_karyawan", nik);
+    const snapKaryawan = await getDoc(refKaryawan);
+
+    if (snapKaryawan.exists()) {
+        return {
+            id: snapKaryawan.id,
+            ...snapKaryawan.data()
+        };
+    }
+
+    // ------------------------------------------------
+    // CARA 2:
+    // Jika dokumen tidak ditemukan melalui Document ID,
+    // pencarian berdasarkan field nik.
+    // ------------------------------------------------
+
+    const kemungkinanField = [
+        "nik",
+        "nik_karyawan"
+    ];
+
+    for (const field of kemungkinanField) {
+
+        try {
+
+            const q = query(
+                collection(db, "data_karyawan"),
+                where(field, "==", nik),
+                limit(1)
+            );
+
+            const hasil = await getDocs(q);
+
+            if (!hasil.empty) {
+                const dokumen = hasil.docs[0];
+
+                return {
+                    id: dokumen.id,
+                    ...dokumen.data()
+                };
+            }
+
+        } catch (error) {
+
+            console.warn(
+                "Pencarian data karyawan melalui field " +
+                field +
+                " gagal:",
+                error
+            );
+
+        }
+    }
+
+    return null;
+}
+
+// ================================================
+// MENAMPILKAN INFORMASI AKUN
+// ================================================
+
+function tampilkanInformasiAkun(user, dataPengguna) {
+
+    emailPenggunaEl.textContent =
+        teks(user.email || dataPengguna.email);
+
+    rolePenggunaEl.textContent =
+        teks(
+            nilaiPertama(
+                dataPengguna,
+                ["role", "peran", "hak_akses"],
+                "Karyawan"
+            )
+        );
+
+    kartuAkun.style.display = "block";
+}
+
+// ================================================
+// PROSES UTAMA
+// ================================================
+
+async function prosesProfil(user) {
+
+    try {
+
+        tampilStatus("Memeriksa akun dan mengambil data profil...");
+
+        // 1. Periksa akun pengguna dan NIK.
+        const hasilPengguna = await muatDataPengguna(user);
+
+        const dataPengguna = hasilPengguna.dataPengguna;
+        const nik = hasilPengguna.nik;
+
+        // 2. Cari data karyawan berdasarkan NIK.
+        const dataKaryawan = await cariDataKaryawan(nik);
+
+        if (!dataKaryawan) {
+
+            kartuProfil.style.display = "none";
+            kartuAkun.style.display = "none";
+            catatanProfil.style.display = "none";
+
+            tampilStatus(
+                "Data karyawan dengan NIK " +
+                nik +
+                " belum ditemukan pada collection data_karyawan. " +
+                "Silakan hubungi administrator.",
+                "error"
+            );
+
+            return;
+        }
+
+        // 3. Tampilkan profil.
+        tampilkanDataKaryawan(dataKaryawan, nik);
+
+        // 4. Tampilkan informasi akun.
+        tampilkanInformasiAkun(user, dataPengguna);
+
+        // 5. Tampilkan catatan.
+        catatanProfil.style.display = "block";
+
+        // 6. Sembunyikan status loading.
+        sembunyikanStatus();
+
+    } catch (error) {
+
+        console.error("Gagal memuat profil:", error);
+
+        kartuProfil.style.display = "none";
+        kartuAkun.style.display = "none";
+        catatanProfil.style.display = "none";
+
+        tampilStatus(
+            error.message ||
+            "Terjadi kesalahan saat mengambil data profil.",
+            "error"
+        );
+
+    }
+}
+
+// ================================================
+// PEMERIKSAAN LOGIN FIREBASE
+// ================================================
+
+onAuthStateChanged(auth, async user => {
+
+    if (!user) {
+
+        // Belum login, kembali ke halaman login.
+        window.location.replace("index.html");
+
+        return;
+    }
+
+    // Pengguna sudah login.
+    await prosesProfil(user);
+
+});
+
+</script>
+
+</body>
+</html>
