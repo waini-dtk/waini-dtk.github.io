@@ -1,0 +1,1601 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+<title>Kelola Akun - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f8;
+    color: #252525;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg,#991b1b,#7f1d1d);
+    color: white;
+    padding: 20px 18px 25px;
+    border-radius: 0 0 22px 22px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #fecaca;
+}
+
+.tombol-kembali {
+    border: 1px solid rgba(255,255,255,.6);
+    background: rgba(255,255,255,.1);
+    color: white;
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.header-info {
+    margin-top: 22px;
+}
+
+.header-info h1 {
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.header-info p {
+    font-size: 12px;
+    line-height: 1.6;
+    opacity: .9;
+}
+
+/* CONTAINER */
+
+.container {
+    max-width: 950px;
+    width: 100%;
+    margin: auto;
+    padding: 18px 14px 35px;
+}
+
+/* IDENTITAS ADMIN */
+
+.identitas {
+    background: white;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 13px;
+    margin-bottom: 17px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.identitas-nama {
+    color: #7f1d1d;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.identitas-detail {
+    color: #777;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+/* STATUS HALAMAN */
+
+.status {
+    background: white;
+    border-radius: 10px;
+    padding: 13px;
+    margin-bottom: 15px;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.status.error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.status.sukses {
+    background: #ecfdf5;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+/* STATISTIK */
+
+.statistik {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+    margin-bottom: 17px;
+}
+
+.stat-card {
+    background: white;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 13px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.035);
+}
+
+.stat-card .angka {
+    font-size: 24px;
+    font-weight: bold;
+    color: #991b1b;
+    margin-bottom: 5px;
+}
+
+.stat-card .label {
+    color: #777;
+    font-size: 11px;
+}
+
+/* PENCARIAN */
+
+.panel {
+    background: white;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.035);
+    margin-bottom: 16px;
+}
+
+.judul-panel {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 13px;
+    color: #333;
+}
+
+.pencarian {
+    width: 100%;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 13px;
+    outline: none;
+}
+
+.pencarian:focus {
+    border-color: #991b1b;
+    background: white;
+}
+
+.filter {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    background: white;
+    padding: 10px;
+    font-size: 12px;
+    margin-top: 10px;
+    outline: none;
+}
+
+.barang-filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+/* TOMBOL */
+
+.tombol {
+    border: none;
+    border-radius: 9px;
+    padding: 10px 13px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .15s;
+}
+
+.tombol:active {
+    transform: scale(.97);
+}
+
+.tombol:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.tombol-merah {
+    background: #991b1b;
+    color: white;
+}
+
+.tombol-abu {
+    background: #f1f1f1;
+    color: #444;
+}
+
+.tombol-hijau {
+    background: #15803d;
+    color: white;
+}
+
+.tombol-biru {
+    background: #2563eb;
+    color: white;
+}
+
+.tombol-refresh {
+    width: 100%;
+    margin-top: 11px;
+}
+
+/* LIST AKUN */
+
+.judul-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin: 22px 0 13px;
+}
+
+.judul-list h2 {
+    font-size: 15px;
+}
+
+.jumlah-list {
+    font-size: 11px;
+    color: #777;
+}
+
+.list-akun {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+/* KARTU AKUN */
+
+.kartu-akun {
+    background: white;
+    border: 1px solid #eaeaea;
+    border-radius: 13px;
+    padding: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.035);
+}
+
+.kartu-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+.avatar {
+    width: 43px;
+    height: 43px;
+    border-radius: 12px;
+    background: #f8e5e5;
+    color: #991b1b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.info-akun {
+    flex: 1;
+    min-width: 0;
+}
+
+.nama-akun {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    overflow-wrap: anywhere;
+}
+
+.nik-akun {
+    color: #777;
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.email-akun {
+    color: #777;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+.badge-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.badge {
+    padding: 5px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.badge-aktif {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.badge-nonaktif {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+.badge-menunggu {
+    color: #b45309;
+    background: #fef3c7;
+}
+
+.badge-role {
+    color: #6d28d9;
+    background: #ede9fe;
+}
+
+.badge-karyawan {
+    color: #2563eb;
+    background: #dbeafe;
+}
+
+/* ACTION */
+
+.aksi-akun {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 13px;
+}
+
+.aksi-akun button {
+    width: 100%;
+}
+
+.kosong {
+    text-align: center;
+    padding: 25px 15px;
+    background: white;
+    border: 1px dashed #ddd;
+    border-radius: 12px;
+    color: #888;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* MODAL */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,.48);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: 100%;
+    max-width: 460px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 17px;
+    padding: 18px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 17px;
+}
+
+.modal-header h2 {
+    font-size: 17px;
+    color: #7f1d1d;
+}
+
+.tutup-modal {
+    background: #f3f3f3;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.detail-item {
+    padding: 11px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-label {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-size: 13px;
+    color: #333;
+    overflow-wrap: anywhere;
+}
+
+.form-group {
+    margin-top: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.form-group select {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 11px;
+    border-radius: 9px;
+    background: white;
+    font-size: 13px;
+}
+
+.catatan {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    border-radius: 9px;
+    padding: 11px;
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 13px;
+}
+
+.modal-aksi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: #999;
+    font-size: 11px;
+    padding: 25px 10px;
+}
+
+/* RESPONSIVE */
+
+@media(min-width:600px) {
+    .statistik {
+        grid-template-columns: repeat(4,minmax(0,1fr));
+    }
+
+    .list-akun {
+        display: grid;
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:360px) {
+    .barang-filter {
+        grid-template-columns: 1fr;
+    }
+
+    .aksi-akun {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">WAI<span>NI</span></div>
+
+        <button class="tombol-kembali" id="tombolKembali">
+            ← Menu Utama
+        </button>
+    </div>
+
+    <div class="header-info">
+        <h1>Kelola Akun</h1>
+        <p>Pengelolaan akun pengguna portal WAINI.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- IDENTITAS ADMIN -->
+
+    <section class="identitas">
+        <div class="identitas-nama" id="namaAdmin">
+            Memeriksa administrator...
+        </div>
+
+        <div class="identitas-detail" id="detailAdmin">
+            Memuat informasi akun.
+        </div>
+    </section>
+
+    <!-- STATUS -->
+
+    <div class="status" id="statusHalaman">
+        Memeriksa hak akses...
+    </div>
+
+    <!-- STATISTIK -->
+
+    <section class="statistik" id="statistik" style="display:none;">
+
+        <div class="stat-card">
+            <div class="angka" id="jumlahTotal">0</div>
+            <div class="label">Total Akun</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="angka" id="jumlahAktif">0</div>
+            <div class="label">Akun Aktif</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="angka" id="jumlahMenunggu">0</div>
+            <div class="label">Menunggu Verifikasi</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="angka" id="jumlahNonaktif">0</div>
+            <div class="label">Akun Nonaktif</div>
+        </div>
+
+    </section>
+
+    <!-- PENCARIAN DAN FILTER -->
+
+    <section class="panel" id="panelFilter" style="display:none;">
+
+        <div class="judul-panel">Pencarian Akun</div>
+
+        <input
+            type="search"
+            id="pencarian"
+            class="pencarian"
+            placeholder="Cari nama, NIK, email..."
+            autocomplete="off"
+        >
+
+        <div class="barang-filter">
+
+            <select id="filterStatus" class="filter">
+                <option value="">Semua Status</option>
+                <option value="aktif">Aktif</option>
+                <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
+                <option value="nonaktif">Nonaktif</option>
+            </select>
+
+            <select id="filterRole" class="filter">
+                <option value="">Semua Role</option>
+                <option value="karyawan">Karyawan</option>
+                <option value="super_admin">Super Admin</option>
+            </select>
+
+        </div>
+
+        <button class="tombol tombol-abu tombol-refresh" id="tombolRefresh">
+            ↻ Muat Ulang Data
+        </button>
+
+    </section>
+
+    <!-- DAFTAR AKUN -->
+
+    <section id="bagianDaftar" style="display:none;">
+
+        <div class="judul-list">
+            <h2>Daftar Akun</h2>
+            <span class="jumlah-list" id="jumlahHasil">0 akun</span>
+        </div>
+
+        <div class="list-akun" id="listAkun"></div>
+
+    </section>
+
+</main>
+
+<footer>
+    WAINI - Pengelolaan Akun
+</footer>
+
+<!-- MODAL DETAIL AKUN -->
+
+<div class="modal-overlay" id="modalOverlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2>Detail Akun</h2>
+            <button class="tutup-modal" id="tutupModal">×</button>
+        </div>
+
+        <div id="detailAkun"></div>
+
+        <div id="formPengelolaan" style="display:none;">
+
+            <div class="form-group">
+                <label for="ubahRole">Role Akun</label>
+
+                <select id="ubahRole">
+                    <option value="karyawan">Karyawan</option>
+                    <option value="super_admin">Super Admin</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ubahStatus">Status Akun</label>
+
+                <select id="ubahStatus">
+                    <option value="menunggu_verifikasi">Menunggu Verifikasi</option>
+                    <option value="aktif">Aktif</option>
+                    <option value="nonaktif">Nonaktif</option>
+                </select>
+            </div>
+
+            <div class="catatan">
+                Perubahan role dan status memengaruhi akses pengguna
+                ke sistem WAINI. Pastikan perubahan sudah benar
+                sebelum menyimpan.
+            </div>
+
+            <div class="modal-aksi">
+
+                <button class="tombol tombol-abu" id="batalEdit">
+                    Batal
+                </button>
+
+                <button class="tombol tombol-merah" id="tombolSimpan">
+                    Simpan Perubahan
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+// ================================================
+// WAINI - KELOLA AKUN
+// Firestore collection: pengguna
+// Document ID: UID Firebase Authentication
+// Khusus Super Admin
+// ================================================
+
+import { auth, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    collection,
+    getDocs,
+    doc,
+    updateDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ================================================
+// ELEMEN HALAMAN
+// ================================================
+
+const namaAdminEl = document.getElementById("namaAdmin");
+const detailAdminEl = document.getElementById("detailAdmin");
+
+const statusHalamanEl = document.getElementById("statusHalaman");
+
+const statistikEl = document.getElementById("statistik");
+const panelFilterEl = document.getElementById("panelFilter");
+const bagianDaftarEl = document.getElementById("bagianDaftar");
+
+const listAkunEl = document.getElementById("listAkun");
+
+const jumlahTotalEl = document.getElementById("jumlahTotal");
+const jumlahAktifEl = document.getElementById("jumlahAktif");
+const jumlahMenungguEl = document.getElementById("jumlahMenunggu");
+const jumlahNonaktifEl = document.getElementById("jumlahNonaktif");
+const jumlahHasilEl = document.getElementById("jumlahHasil");
+
+const pencarianEl = document.getElementById("pencarian");
+const filterStatusEl = document.getElementById("filterStatus");
+const filterRoleEl = document.getElementById("filterRole");
+
+const tombolRefresh = document.getElementById("tombolRefresh");
+const tombolKembali = document.getElementById("tombolKembali");
+
+const modalOverlay = document.getElementById("modalOverlay");
+const tutupModal = document.getElementById("tutupModal");
+const detailAkunEl = document.getElementById("detailAkun");
+
+const formPengelolaan = document.getElementById("formPengelolaan");
+const ubahRoleEl = document.getElementById("ubahRole");
+const ubahStatusEl = document.getElementById("ubahStatus");
+
+const tombolSimpan = document.getElementById("tombolSimpan");
+const batalEdit = document.getElementById("batalEdit");
+
+// ================================================
+// VARIABEL
+// ================================================
+
+let adminAktif = null;
+let uidAdmin = "";
+
+let semuaAkun = [];
+let akunDipilih = null;
+
+let sedangMemuat = false;
+let sedangMenyimpan = false;
+
+// ================================================
+// FUNGSI UMUM
+// ================================================
+
+function normalisasi(nilai) {
+    return String(nilai ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "_")
+        .replace(/-/g, "_");
+}
+
+function teks(nilai, fallback = "-") {
+    if (nilai === undefined || nilai === null || String(nilai).trim() === "") {
+        return fallback;
+    }
+
+    return String(nilai);
+}
+
+function statusAktif(data) {
+    return normalisasi(data?.status) === "aktif";
+}
+
+function roleSuperAdmin(data) {
+    return normalisasi(data?.role || data?.peran) === "super_admin";
+}
+
+function tampilkanStatus(pesan, jenis = "") {
+    statusHalamanEl.textContent = pesan;
+
+    statusHalamanEl.className = "status";
+
+    if (jenis === "error") {
+        statusHalamanEl.classList.add("error");
+    }
+
+    if (jenis === "sukses") {
+        statusHalamanEl.classList.add("sukses");
+    }
+
+    statusHalamanEl.style.display = "block";
+}
+
+function sembunyikanStatus() {
+    statusHalamanEl.style.display = "none";
+}
+
+function namaStatus(status) {
+    switch (normalisasi(status)) {
+        case "aktif":
+            return "Aktif";
+
+        case "nonaktif":
+            return "Nonaktif";
+
+        case "menunggu_verifikasi":
+            return "Menunggu Verifikasi";
+
+        default:
+            return teks(status, "Tidak diketahui");
+    }
+}
+
+function namaRole(role) {
+    switch (normalisasi(role)) {
+        case "super_admin":
+            return "Super Admin";
+
+        case "karyawan":
+            return "Karyawan";
+
+        default:
+            return teks(role, "Belum ditentukan");
+    }
+}
+
+function badgeStatus(status) {
+    const badge = document.createElement("span");
+    badge.className = "badge";
+
+    const kondisi = normalisasi(status);
+
+    if (kondisi === "aktif") {
+        badge.classList.add("badge-aktif");
+    } else if (kondisi === "nonaktif") {
+        badge.classList.add("badge-nonaktif");
+    } else {
+        badge.classList.add("badge-menunggu");
+    }
+
+    badge.textContent = namaStatus(status);
+
+    return badge;
+}
+
+function badgeRole(role) {
+    const badge = document.createElement("span");
+    badge.className = "badge badge-role";
+
+    if (normalisasi(role) === "karyawan") {
+        badge.className = "badge badge-karyawan";
+    }
+
+    badge.textContent = namaRole(role);
+
+    return badge;
+}
+
+function inisialNama(nama) {
+    const bagian = String(nama || "Akun")
+        .trim()
+        .split(/\s+/);
+
+    if (bagian.length === 1) {
+        return bagian[0].substring(0, 1).toUpperCase();
+    }
+
+    return (
+        bagian[0].substring(0, 1) +
+        bagian[1].substring(0, 1)
+    ).toUpperCase();
+}
+
+function buatElemen(tag, className, isi = "") {
+    const el = document.createElement(tag);
+
+    if (className) {
+        el.className = className;
+    }
+
+    el.textContent = isi;
+
+    return el;
+}
+
+// ================================================
+// PEMERIKSAAN SUPER ADMIN
+// ================================================
+
+async function periksaAdmin(user) {
+
+    uidAdmin = user.uid;
+
+    const dataAdmin = semuaAkun;
+
+    // Baca dokumen pengguna sendiri
+    const akunAdmin = dataAdmin.find(a => a.id === user.uid);
+
+    if (!akunAdmin) {
+        throw new Error(
+            "Data administrator tidak ditemukan di collection pengguna."
+        );
+    }
+
+    if (!statusAktif(akunAdmin.data)) {
+        throw new Error(
+            "Akun administrator tidak aktif."
+        );
+    }
+
+    if (!roleSuperAdmin(akunAdmin.data)) {
+        throw new Error(
+            "Halaman ini hanya dapat diakses oleh Super Admin."
+        );
+    }
+
+    adminAktif = akunAdmin.data;
+
+    namaAdminEl.textContent =
+        teks(adminAktif.nama, user.displayName || "Super Admin");
+
+    detailAdminEl.textContent =
+        "NIK: " + teks(adminAktif.nik) +
+        " | Role: Super Admin";
+
+}
+
+// ================================================
+// MEMUAT DATA FIRESTORE
+// ================================================
+
+async function muatDataAkun() {
+
+    if (sedangMemuat) return;
+
+    sedangMemuat = true;
+
+    tombolRefresh.disabled = true;
+    tombolRefresh.textContent = "Memuat data...";
+
+    tampilkanStatus("Mengambil data akun dari Firestore...");
+
+    try {
+
+        const snapshot = await getDocs(
+            collection(db, "pengguna")
+        );
+
+        semuaAkun = snapshot.docs.map(d => ({
+            id: d.id,
+            data: d.data()
+        }));
+
+        // Periksa Super Admin setelah data dibaca
+        await periksaAdmin(auth.currentUser);
+
+        statistikEl.style.display = "grid";
+        panelFilterEl.style.display = "block";
+        bagianDaftarEl.style.display = "block";
+
+        hitungStatistik();
+        tampilkanDaftar();
+
+        sembunyikanStatus();
+
+    } catch (error) {
+
+        console.error("Gagal memuat akun:", error);
+
+        tampilkanStatus(
+            error.message ||
+            "Gagal membaca data akun. Periksa koneksi dan Firestore Rules.",
+            "error"
+        );
+
+    } finally {
+
+        sedangMemuat = false;
+
+        tombolRefresh.disabled = false;
+        tombolRefresh.textContent = "↻ Muat Ulang Data";
+
+    }
+}
+
+// ================================================
+// STATISTIK
+// ================================================
+
+function hitungStatistik() {
+
+    jumlahTotalEl.textContent = semuaAkun.length;
+
+    jumlahAktifEl.textContent =
+        semuaAkun.filter(a =>
+            normalisasi(a.data.status) === "aktif"
+        ).length;
+
+    jumlahMenungguEl.textContent =
+        semuaAkun.filter(a =>
+            normalisasi(a.data.status) === "menunggu_verifikasi"
+        ).length;
+
+    jumlahNonaktifEl.textContent =
+        semuaAkun.filter(a =>
+            normalisasi(a.data.status) === "nonaktif"
+        ).length;
+}
+
+// ================================================
+// FILTER
+// ================================================
+
+function akunLolosFilter(akun) {
+
+    const data = akun.data;
+
+    const kata = normalisasiPencarian(
+        pencarianEl.value
+    );
+
+    const statusFilter =
+        normalisasi(filterStatusEl.value);
+
+    const roleFilter =
+        normalisasi(filterRoleEl.value);
+
+    const nama = normalisasi(data.nama);
+    const nik = normalisasi(data.nik);
+    const email = normalisasi(data.email);
+    const jabatan = normalisasi(data.jabatan);
+
+    const cocokPencarian =
+        !kata ||
+        nama.includes(kata) ||
+        nik.includes(kata) ||
+        email.includes(kata) ||
+        jabatan.includes(kata);
+
+    const cocokStatus =
+        !statusFilter ||
+        normalisasi(data.status) === statusFilter;
+
+    const cocokRole =
+        !roleFilter ||
+        normalisasi(data.role || data.peran) === roleFilter;
+
+    return cocokPencarian && cocokStatus && cocokRole;
+}
+
+function normalisasiPencarian(nilai) {
+    return String(nilai ?? "")
+        .trim()
+        .toLowerCase();
+}
+
+// ================================================
+// MENAMPILKAN DAFTAR
+// ================================================
+
+function tampilkanDaftar() {
+
+    listAkunEl.innerHTML = "";
+
+    const hasil = semuaAkun
+        .filter(akunLolosFilter)
+        .sort((a, b) => {
+            const namaA = String(a.data.nama || "").toLowerCase();
+            const namaB = String(b.data.nama || "").toLowerCase();
+
+            return namaA.localeCompare(namaB);
+        });
+
+    jumlahHasilEl.textContent =
+        hasil.length + " akun ditemukan";
+
+    if (hasil.length === 0) {
+
+        const kosong = buatElemen(
+            "div",
+            "kosong",
+            "Tidak ada akun yang sesuai dengan pencarian."
+        );
+
+        listAkunEl.appendChild(kosong);
+        return;
+    }
+
+    hasil.forEach(akun => {
+        listAkunEl.appendChild(
+            buatKartuAkun(akun)
+        );
+    });
+}
+
+// ================================================
+// KARTU AKUN
+// ================================================
+
+function buatKartuAkun(akun) {
+
+    const data = akun.data;
+
+    const kartu = buatElemen("div", "kartu-akun");
+
+    const top = buatElemen("div", "kartu-top");
+
+    const avatar = buatElemen(
+        "div",
+        "avatar",
+        inisialNama(data.nama)
+    );
+
+    const info = buatElemen("div", "info-akun");
+
+    const nama = buatElemen(
+        "div",
+        "nama-akun",
+        teks(data.nama, "Nama belum tersedia")
+    );
+
+    const nik = buatElemen(
+        "div",
+        "nik-akun",
+        "NIK: " + teks(data.nik)
+    );
+
+    const email = buatElemen(
+        "div",
+        "email-akun",
+        teks(data.email)
+    );
+
+    info.append(nama, nik, email);
+
+    top.append(avatar, info);
+
+    const badgeContainer =
+        buatElemen("div", "badge-container");
+
+    badgeContainer.append(
+        badgeStatus(data.status),
+        badgeRole(data.role || data.peran)
+    );
+
+    const aksi = buatElemen("div", "aksi-akun");
+
+    const tombolDetail = buatElemen(
+        "button",
+        "tombol tombol-biru",
+        "Detail"
+    );
+
+    tombolDetail.type = "button";
+
+    tombolDetail.addEventListener("click", () => {
+        bukaDetailAkun(akun);
+    });
+
+    const tombolStatus = buatElemen(
+        "button",
+        "tombol tombol-abu",
+        normalisasi(data.status) === "aktif"
+            ? "Nonaktifkan"
+            : "Aktifkan"
+    );
+
+    tombolStatus.type = "button";
+
+    // Admin tidak boleh menonaktifkan dirinya sendiri
+    if (akun.id === uidAdmin) {
+
+        tombolStatus.disabled = true;
+        tombolStatus.textContent = "Akun Anda";
+
+    } else {
+
+        tombolStatus.addEventListener("click", () => {
+            ubahStatusCepat(akun);
+        });
+
+    }
+
+    aksi.append(tombolDetail, tombolStatus);
+
+    kartu.append(top, badgeContainer, aksi);
+
+    return kartu;
+}
+
+// ================================================
+// DETAIL AKUN
+// ================================================
+
+function buatDetail(label, nilai) {
+
+    const item = buatElemen("div", "detail-item");
+
+    const lbl = buatElemen(
+        "div",
+        "detail-label",
+        label
+    );
+
+    const val = buatElemen(
+        "div",
+        "detail-value",
+        teks(nilai)
+    );
+
+    item.append(lbl, val);
+
+    return item;
+}
+
+function bukaDetailAkun(akun) {
+
+    akunDipilih = akun;
+
+    const data = akun.data;
+
+    detailAkunEl.innerHTML = "";
+
+    detailAkunEl.append(
+        buatDetail("Nama", data.nama),
+        buatDetail("NIK", data.nik),
+        buatDetail("Jabatan", data.jabatan),
+        buatDetail("Email", data.email),
+        buatDetail("UID Firebase", akun.id),
+        buatDetail("Role", namaRole(data.role || data.peran)),
+        buatDetail("Status", namaStatus(data.status)),
+        buatDetail("Hak Akses", Array.isArray(data.hak_akses)
+            ? data.hak_akses.join(", ") || "-"
+            : data.hak_akses)
+    );
+
+    // Jangan mengubah akun sendiri melalui halaman ini
+    if (akun.id === uidAdmin) {
+
+        formPengelolaan.style.display = "none";
+
+    } else {
+
+        formPengelolaan.style.display = "block";
+
+        ubahRoleEl.value =
+            normalisasi(data.role || data.peran) === "super_admin"
+                ? "super_admin"
+                : "karyawan";
+
+        ubahStatusEl.value =
+            normalisasi(data.status);
+
+    }
+
+    modalOverlay.classList.add("show");
+}
+
+// ================================================
+// TUTUP MODAL
+// ================================================
+
+function tutupDetail() {
+
+    modalOverlay.classList.remove("show");
+
+    akunDipilih = null;
+
+    detailAkunEl.innerHTML = "";
+
+    formPengelolaan.style.display = "none";
+}
+
+tutupModal.addEventListener("click", tutupDetail);
+batalEdit.addEventListener("click", tutupDetail);
+
+modalOverlay.addEventListener("click", event => {
+
+    if (event.target === modalOverlay) {
+        tutupDetail();
+    }
+
+});
+
+// ================================================
+// UBAH STATUS CEPAT
+// ================================================
+
+async function ubahStatusCepat(akun) {
+
+    if (akun.id === uidAdmin) {
+        alert("Anda tidak dapat menonaktifkan akun sendiri.");
+        return;
+    }
+
+    const statusLama =
+        normalisasi(akun.data.status);
+
+    const statusBaru =
+        statusLama === "aktif"
+            ? "nonaktif"
+            : "aktif";
+
+    const nama =
+        teks(akun.data.nama, "akun ini");
+
+    const konfirmasi = confirm(
+        "Apakah Anda yakin ingin mengubah status akun " +
+        nama +
+        " menjadi " +
+        namaStatus(statusBaru) +
+        "?"
+    );
+
+    if (!konfirmasi) return;
+
+    try {
+
+        tampilkanStatus("Memperbarui status akun...");
+
+        await updateDoc(
+            doc(db, "pengguna", akun.id),
+            {
+                status: statusBaru,
+                updatedAt: serverTimestamp()
+            }
+        );
+
+        akun.data.status = statusBaru;
+
+        hitungStatistik();
+        tampilkanDaftar();
+
+        tampilkanStatus(
+            "Status akun berhasil diubah menjadi " +
+            namaStatus(statusBaru) + ".",
+            "sukses"
+        );
+
+    } catch (error) {
+
+        console.error("Gagal mengubah status:", error);
+
+        tampilkanStatus(
+            error.message ||
+            "Gagal mengubah status akun.",
+            "error"
+        );
+
+    }
+}
+
+// ================================================
+// SIMPAN PERUBAHAN ROLE DAN STATUS
+// ================================================
+
+tombolSimpan.addEventListener("click", async () => {
+
+    if (!akunDipilih) return;
+
+    if (sedangMenyimpan) return;
+
+    if (akunDipilih.id === uidAdmin) {
+
+        alert("Anda tidak dapat mengubah role atau status akun sendiri.");
+        return;
+
+    }
+
+    const roleBaru =
+        normalisasi(ubahRoleEl.value);
+
+    const statusBaru =
+        normalisasi(ubahStatusEl.value);
+
+    const roleLama =
+        normalisasi(akunDipilih.data.role || akunDipilih.data.peran);
+
+    const statusLama =
+        normalisasi(akunDipilih.data.status);
+
+    if (roleBaru === roleLama && statusBaru === statusLama) {
+
+        alert("Tidak ada perubahan yang perlu disimpan.");
+        return;
+
+    }
+
+    const konfirmasi = confirm(
+        "Simpan perubahan akun?\n\n" +
+        "Role: " + namaRole(roleBaru) + "\n" +
+        "Status: " + namaStatus(statusBaru)
+    );
+
+    if (!konfirmasi) return;
+
+    sedangMenyimpan = true;
+
+    tombolSimpan.disabled = true;
+    tombolSimpan.textContent = "Menyimpan...";
+
+    try {
+
+        const perubahan = {
+            role: roleBaru,
+            status: statusBaru,
+            updatedAt: serverTimestamp()
+        };
+
+        await updateDoc(
+            doc(db, "pengguna", akunDipilih.id),
+            perubahan
+        );
+
+        // Perbarui data lokal
+        akunDipilih.data.role = roleBaru;
+        akunDipilih.data.status = statusBaru;
+
+        // Jika role berubah, hak_akses tidak otomatis diubah.
+        // Struktur hak_akses tetap mengikuti database.
+        hitungStatistik();
+        tampilkanDaftar();
+
+        tutupDetail();
+
+        tampilkanStatus(
+            "Perubahan akun berhasil disimpan.",
+            "sukses"
+        );
+
+    } catch (error) {
+
+        console.error("Gagal menyimpan perubahan:", error);
+
+        tampilkanStatus(
+            error.message ||
+            "Gagal menyimpan perubahan akun.",
+            "error"
+        );
+
+    } finally {
+
+        sedangMenyimpan = false;
+
+        tombolSimpan.disabled = false;
+        tombolSimpan.textContent = "Simpan Perubahan";
+
+    }
+
+});
+
+// ================================================
+// FILTER EVENT
+// ================================================
+
+pencarianEl.addEventListener("input", tampilkanDaftar);
+
+filterStatusEl.addEventListener("change", tampilkanDaftar);
+
+filterRoleEl.addEventListener("change", tampilkanDaftar);
+
+// ================================================
+// REFRESH
+// ================================================
+
+tombolRefresh.addEventListener("click", async () => {
+
+    await muatDataAkun();
+
+});
+
+// ================================================
+// KEMBALI
+// ================================================
+
+tombolKembali.addEventListener("click", () => {
+
+    window.location.href = "menu.html";
+
+});
+
+// ================================================
+// LOGIN DAN PEMERIKSAAN AUTH
+// ================================================
+
+onAuthStateChanged(auth, async user => {
+
+    if (!user) {
+
+        window.location.replace("index.html");
+        return;
+
+    }
+
+    try {
+
+        // Ambil data pengguna terlebih dahulu
+        const snapshot = await getDocs(
+            collection(db, "pengguna")
+        );
+
+        semuaAkun = snapshot.docs.map(d => ({
+            id: d.id,
+            data: d.data()
+        }));
+
+        // Validasi akun dan role
+        await periksaAdmin(user);
+
+        // Tampilkan halaman
+        statistikEl.style.display = "grid";
+        panelFilterEl.style.display = "block";
+        bagianDaftarEl.style.display = "block";
+
+        hitungStatistik();
+        tampilkanDaftar();
+
+        sembunyikanStatus();
+
+    } catch (error) {
+
+        console.error("Pemeriksaan akses gagal:", error);
+
+        tampilkanStatus(
+            error.message ||
+            "Anda tidak memiliki izin mengakses halaman ini.",
+            "error"
+        );
+
+        statistikEl.style.display = "none";
+        panelFilterEl.style.display = "none";
+        bagianDaftarEl.style.display = "none";
+
+        // Pengguna bukan Super Admin:
+        // kembali ke menu utama
+        if (
+            error.message &&
+            error.message.includes("hanya dapat diakses")
+        ) {
+
+            alert(error.message);
+
+            window.location.replace("menu.html");
+
+        }
+
+    }
+
+});
+
+// ================================================
+// AKHIR KODE KELOLA AKUN WAINI
+// ================================================
+
+</script>
+
+</body>
+</html>
