@@ -1,0 +1,1455 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+<title>Pengaturan Sistem - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f8;
+    color: #252525;
+    min-height: 100vh;
+}
+
+header {
+    background: linear-gradient(135deg,#991b1b,#7f1d1d);
+    color: white;
+    padding: 20px 17px 27px;
+    border-radius: 0 0 22px 22px;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #fecaca;
+}
+
+.btn-back {
+    color: white;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,.6);
+    padding: 9px 12px;
+    border-radius: 9px;
+    font-size: 12px;
+}
+
+.header-info {
+    margin-top: 24px;
+}
+
+.header-info h1 {
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.header-info p {
+    font-size: 12px;
+    line-height: 1.6;
+    opacity: .9;
+}
+
+.container {
+    max-width: 850px;
+    width: 100%;
+    margin: auto;
+    padding: 18px 13px 35px;
+}
+
+.status {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 11px;
+    padding: 13px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #777;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.status.error {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.status.success {
+    background: #f0fdf4;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.card {
+    background: white;
+    border: 1px solid #ededed;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.035);
+}
+
+.card-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 13px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #333;
+}
+
+.card-title:before {
+    content: "";
+    width: 4px;
+    height: 18px;
+    border-radius: 5px;
+    background: #991b1b;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff8f8;
+    border: 1px solid #f3dddd;
+    border-radius: 11px;
+    padding: 13px;
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #991b1b;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.profile-name {
+    color: #7f1d1d;
+    font-size: 14px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.profile-detail {
+    color: #777;
+    font-size: 11px;
+    margin-top: 5px;
+    line-height: 1.5;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+}
+
+.stat {
+    padding: 13px;
+    border-radius: 11px;
+    background: #fafafa;
+    border: 1px solid #eee;
+    min-width: 0;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #777;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.stat-number {
+    font-size: 23px;
+    color: #991b1b;
+    font-weight: bold;
+    margin-top: 7px;
+}
+
+.info {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.7;
+}
+
+.notice {
+    background: #fff7ed;
+    color: #8a5a21;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 11px;
+    line-height: 1.7;
+    margin-top: 12px;
+}
+
+.menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.menu-item-info {
+    min-width: 0;
+}
+
+.menu-item-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    overflow-wrap: anywhere;
+}
+
+.menu-item-detail {
+    font-size: 10px;
+    color: #888;
+    margin-top: 5px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.tag {
+    font-size: 9px;
+    font-weight: bold;
+    padding: 6px 8px;
+    border-radius: 20px;
+    background: #f3f4f6;
+    color: #555;
+    white-space: nowrap;
+}
+
+.tag.active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.tag.inactive {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.empty {
+    text-align: center;
+    padding: 20px 10px;
+    color: #999;
+    font-size: 11px;
+    line-height: 1.7;
+    background: #fafafa;
+    border-radius: 10px;
+}
+
+.data-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.data-row:last-child {
+    border-bottom: none;
+}
+
+.data-label {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 5px;
+    overflow-wrap: anywhere;
+}
+
+.data-value {
+    font-size: 12px;
+    color: #333;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.section-note {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 14px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #991b1b;
+    color: white;
+}
+
+.btn-secondary {
+    background: white;
+    border: 1px solid #ddd;
+    color: #555;
+}
+
+.actions {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+}
+
+.actions button {
+    flex: 1;
+}
+
+.loading {
+    color: #999;
+    font-size: 11px;
+    text-align: center;
+    padding: 20px 5px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+footer {
+    text-align: center;
+    color: #999;
+    font-size: 10px;
+    padding: 20px 10px;
+}
+
+@media(max-width:400px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .card {
+        padding: 13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">WAI<span>NI</span></div>
+        <a href="menu.html" class="btn-back">← Menu Utama</a>
+    </div>
+
+    <div class="header-info">
+        <h1>Pengaturan Sistem</h1>
+        <p>
+            Pusat informasi konfigurasi dan pengawasan
+            sistem WAINI - Divisi Pelabuhan.
+        </p>
+    </div>
+</header>
+
+<main class="container">
+
+    <div id="statusPage" class="status">
+        Memeriksa hak akses Super Admin...
+    </div>
+
+    <div id="isiHalaman" class="hidden">
+
+        <!-- IDENTITAS SUPER ADMIN -->
+
+        <section class="card">
+
+            <div class="card-title">
+                Identitas Pengelola Sistem
+            </div>
+
+            <div class="profile">
+                <div class="avatar" id="avatarAdmin">WA</div>
+
+                <div>
+                    <div class="profile-name" id="namaAdmin">
+                        Memuat...
+                    </div>
+
+                    <div class="profile-detail" id="detailAdmin">
+                        Super Admin
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- RINGKASAN SISTEM -->
+
+        <section class="card">
+
+            <div class="card-title">
+                Ringkasan Sistem
+            </div>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <div class="stat-label">
+                        DOKUMEN PENGATURAN
+                    </div>
+
+                    <div class="stat-number" id="totalPengaturan">
+                        -
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">
+                        MASTER JENIS CUTI
+                    </div>
+
+                    <div class="stat-number" id="totalJenisCuti">
+                        -
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">
+                        MENU UTAMA
+                    </div>
+
+                    <div class="stat-number" id="totalMenu">
+                        -
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">
+                        MENU TUGAS
+                    </div>
+
+                    <div class="stat-number" id="totalMenuTugas">
+                        -
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PENGATURAN UMUM -->
+
+        <section class="card">
+
+            <div class="card-title">
+                Konfigurasi Sistem
+            </div>
+
+            <p class="section-note">
+                Data dibaca langsung dari collection
+                pengaturan_sistem. Tidak ada perubahan
+                data yang dilakukan oleh halaman ini.
+            </p>
+
+            <div id="daftarPengaturan">
+                <div class="loading">
+                    Memuat konfigurasi...
+                </div>
+            </div>
+
+            <div class="notice">
+                Pengaturan sistem belum dapat diedit pada
+                tahap ini. Struktur field harus mengikuti
+                hasil audit dan ketentuan yang telah
+                disahkan agar tidak merusak database WAINI.
+            </div>
+
+        </section>
+
+
+        <!-- KETENTUAN CUTI -->
+
+        <section class="card">
+
+            <div class="card-title">
+                Master Jenis Cuti
+            </div>
+
+            <p class="section-note">
+                Daftar jenis cuti yang tersedia pada
+                collection master_jenis_cuti.
+            </p>
+
+            <div id="daftarJenisCuti">
+                <div class="loading">
+                    Memuat master cuti...
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- MENU UTAMA -->
+
+        <section class="card">
+
+            <div class="card-title">
+                Konfigurasi Menu Utama
+            </div>
+
+            <p class="section-note">
+                Informasi menu yang tersimpan di Firestore.
+            </p>
+
+            <div id="daftarMenu">
+                <div class="loading">
+                    Memuat menu...
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- MENU TUGAS -->
+
+        <section class="card">
+
+            <div class="card-title">
+                Konfigurasi Menu Tugas
+            </div>
+
+            <p class="section-note">
+                Daftar konfigurasi tugas dinamis WAINI.
+            </p>
+
+            <div id="daftarMenuTugas">
+                <div class="loading">
+                    Memuat menu tugas...
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- INFORMASI SISTEM -->
+
+        <section class="card">
+
+            <div class="card-title">
+                Informasi Sistem
+            </div>
+
+            <div class="data-row">
+                <div class="data-label">Nama Aplikasi</div>
+                <div class="data-value">WAINI</div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label">Pengguna Sistem</div>
+                <div class="data-value">Karyawan Divisi Pelabuhan</div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label">Database</div>
+                <div class="data-value">Firebase Firestore</div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label">Autentikasi</div>
+                <div class="data-value">Firebase Authentication</div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label">Hak Pengelolaan</div>
+                <div class="data-value">Super Admin</div>
+            </div>
+
+            <div class="data-row">
+                <div class="data-label">Status Halaman</div>
+                <div class="data-value">Mode pembacaan konfigurasi</div>
+            </div>
+
+        </section>
+
+
+        <!-- TOMBOL -->
+
+        <section class="card">
+
+            <div class="card-title">
+                Tindakan
+            </div>
+
+            <div class="actions">
+
+                <button
+                    class="btn btn-primary"
+                    id="btnRefresh"
+                    type="button">
+                    ↻ Muat Ulang Data
+                </button>
+
+                <a
+                    href="menu.html"
+                    class="btn btn-secondary">
+                    Menu Utama
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<footer>
+    WAINI - Portal Karyawan Divisi Pelabuhan
+</footer>
+
+
+<script type="module">
+
+// =============================================
+// WAINI - PENGATURAN SISTEM
+// =============================================
+
+import { auth, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    query,
+    limit
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// =============================================
+// KONSTANTA COLLECTION
+// =============================================
+
+const C_PENGGUNA = "pengguna";
+const C_PENGATURAN = "pengaturan_sistem";
+const C_JENIS_CUTI = "master_jenis_cuti";
+const C_MENU_UTAMA = "menu_utama";
+const C_MENU_TUGAS = "menu_tugas";
+
+
+// =============================================
+// VARIABEL
+// =============================================
+
+let userLogin = null;
+let dataPengguna = null;
+let sedangMemuat = false;
+
+
+// =============================================
+// ELEMENT
+// =============================================
+
+const $ = id => document.getElementById(id);
+
+function status(pesan, tipe = "") {
+
+    const el = $("statusPage");
+
+    el.textContent = pesan;
+    el.className = "status" + (tipe ? " " + tipe : "");
+
+    el.classList.remove("hidden");
+}
+
+function tampilkanHalaman() {
+
+    $("isiHalaman").classList.remove("hidden");
+    $("statusPage").classList.add("hidden");
+
+}
+
+function escapeHTML(nilai) {
+
+    return String(nilai ?? "").replace(/[&<>"']/g, karakter => {
+
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[karakter];
+
+    });
+
+}
+
+function ambil(data, fields, fallback = "") {
+
+    for (const field of fields) {
+
+        const nilai = data?.[field];
+
+        if (
+            nilai !== undefined &&
+            nilai !== null &&
+            String(nilai).trim() !== ""
+        ) {
+            return nilai;
+        }
+
+    }
+
+    return fallback;
+
+}
+
+function normalisasi(nilai) {
+
+    return String(nilai ?? "")
+        .trim()
+        .toLowerCase();
+
+}
+
+function statusAktif(data) {
+
+    const statusData = normalisasi(data?.status);
+
+    return (
+        data?.aktif === true ||
+        data?.active === true ||
+        statusData === "aktif" ||
+        statusData === "active"
+    );
+
+}
+
+function formatNilai(nilai) {
+
+    if (nilai === null) return "null";
+
+    if (nilai === undefined) return "-";
+
+    if (typeof nilai === "boolean") {
+        return nilai ? "Ya" : "Tidak";
+    }
+
+    if (typeof nilai === "object") {
+
+        if (nilai?.toDate instanceof Function) {
+
+            return nilai.toDate().toLocaleString("id-ID");
+
+        }
+
+        if (nilai instanceof Date) {
+
+            return nilai.toLocaleString("id-ID");
+
+        }
+
+        if (Array.isArray(nilai)) {
+
+            if (!nilai.length) return "(Kosong)";
+
+            return nilai.map(item => {
+
+                if (typeof item === "object") {
+                    return JSON.stringify(item);
+                }
+
+                return String(item);
+
+            }).join(", ");
+
+        }
+
+        return JSON.stringify(nilai, null, 2);
+
+    }
+
+    return String(nilai);
+
+}
+
+function namaField(field) {
+
+    return String(field)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, huruf => huruf.toUpperCase());
+
+}
+
+
+// =============================================
+// TAMPILKAN IDENTITAS ADMIN
+// =============================================
+
+function tampilkanIdentitas(user, data) {
+
+    const nama = ambil(
+        data,
+        ["nama", "nama_lengkap", "nama_pengguna"],
+        user.displayName || user.email || "Super Admin"
+    );
+
+    const nik = ambil(
+        data,
+        ["nik", "NIK", "nik_karyawan"],
+        "-"
+    );
+
+    $("namaAdmin").textContent = nama;
+
+    $("detailAdmin").textContent =
+        "NIK: " + nik + " · SUPER ADMIN";
+
+    const bagianNama = String(nama)
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+    $("avatarAdmin").textContent =
+        bagianNama.length > 1
+            ? (bagianNama[0][0] + bagianNama[1][0]).toUpperCase()
+            : String(nama).slice(0, 2).toUpperCase();
+
+}
+
+
+// =============================================
+// TAMPILKAN DATA PENGATURAN
+// =============================================
+
+function tampilkanPengaturan(data) {
+
+    const tempat = $("daftarPengaturan");
+
+    $("totalPengaturan").textContent = data.length;
+
+    if (!data.length) {
+
+        tempat.innerHTML = `
+            <div class="empty">
+                Belum ditemukan dokumen pada collection
+                pengaturan_sistem.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    tempat.innerHTML = "";
+
+    data.forEach(item => {
+
+        const bagian = document.createElement("div");
+
+        bagian.className = "data-row";
+
+        const judul = document.createElement("div");
+
+        judul.className = "data-label";
+
+        judul.textContent = "ID Dokumen: " + item.id;
+
+        bagian.appendChild(judul);
+
+        const isi = item.data || {};
+
+        const fields = Object.keys(isi);
+
+        if (!fields.length) {
+
+            const kosong = document.createElement("div");
+
+            kosong.className = "data-value";
+            kosong.textContent = "Dokumen belum memiliki field.";
+
+            bagian.appendChild(kosong);
+
+        }
+
+        fields.forEach(field => {
+
+            const row = document.createElement("div");
+
+            row.style.marginTop = "9px";
+
+            const label = document.createElement("div");
+
+            label.className = "data-label";
+            label.textContent = namaField(field);
+
+            const value = document.createElement("div");
+
+            value.className = "data-value";
+            value.textContent = formatNilai(isi[field]);
+
+            row.appendChild(label);
+            row.appendChild(value);
+
+            bagian.appendChild(row);
+
+        });
+
+        tempat.appendChild(bagian);
+
+    });
+
+}
+
+
+// =============================================
+// TAMPILKAN MASTER JENIS CUTI
+// =============================================
+
+function tampilkanJenisCuti(data) {
+
+    const tempat = $("daftarJenisCuti");
+
+    $("totalJenisCuti").textContent = data.length;
+
+    if (!data.length) {
+
+        tempat.innerHTML = `
+            <div class="empty">
+                Belum ada dokumen master jenis cuti.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    tempat.innerHTML = "";
+
+    data.forEach(item => {
+
+        const nama = ambil(
+            item.data,
+            ["nama", "nama_jenis", "jenis_cuti", "label", "judul"],
+            item.id
+        );
+
+        const aktif = statusAktif(item.data);
+
+        const baris = document.createElement("div");
+
+        baris.className = "menu-item";
+
+        const info = document.createElement("div");
+
+        info.className = "menu-item-info";
+
+        const judul = document.createElement("div");
+
+        judul.className = "menu-item-name";
+        judul.textContent = nama;
+
+        const detail = document.createElement("div");
+
+        detail.className = "menu-item-detail";
+        detail.textContent = "ID: " + item.id;
+
+        info.appendChild(judul);
+        info.appendChild(detail);
+
+        const tag = document.createElement("span");
+
+        tag.className = "tag " + (aktif ? "active" : "inactive");
+
+        tag.textContent = aktif ? "AKTIF" : "NONAKTIF";
+
+        baris.appendChild(info);
+        baris.appendChild(tag);
+
+        tempat.appendChild(baris);
+
+    });
+
+}
+
+
+// =============================================
+// TAMPILKAN MENU
+// =============================================
+
+function tampilkanMenu(data, tempatId, counterId) {
+
+    const tempat = $(tempatId);
+
+    $(counterId).textContent = data.length;
+
+    if (!data.length) {
+
+        tempat.innerHTML = `
+            <div class="empty">
+                Belum ada data menu.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    tempat.innerHTML = "";
+
+    data.sort((a, b) => {
+
+        const urutanA = Number(
+            ambil(a.data, ["urutan", "order"], 999)
+        );
+
+        const urutanB = Number(
+            ambil(b.data, ["urutan", "order"], 999)
+        );
+
+        return urutanA - urutanB;
+
+    });
+
+    data.forEach(item => {
+
+        const nama = ambil(
+            item.data,
+            ["nama", "judul", "label"],
+            item.id
+        );
+
+        const halaman = ambil(
+            item.data,
+            ["halaman", "link", "url"],
+            "-"
+        );
+
+        const aktif = statusAktif(item.data);
+
+        const baris = document.createElement("div");
+
+        baris.className = "menu-item";
+
+        const info = document.createElement("div");
+
+        info.className = "menu-item-info";
+
+        const judul = document.createElement("div");
+
+        judul.className = "menu-item-name";
+        judul.textContent = nama;
+
+        const detail = document.createElement("div");
+
+        detail.className = "menu-item-detail";
+
+        detail.textContent =
+            "ID: " + item.id + " · Halaman: " + halaman;
+
+        info.appendChild(judul);
+        info.appendChild(detail);
+
+        const tag = document.createElement("span");
+
+        tag.className = "tag " + (aktif ? "active" : "inactive");
+
+        tag.textContent = aktif ? "AKTIF" : "NONAKTIF";
+
+        baris.appendChild(info);
+        baris.appendChild(tag);
+
+        tempat.appendChild(baris);
+
+    });
+
+}
+
+
+// =============================================
+// MEMUAT COLLECTION
+// =============================================
+
+async function bacaCollection(namaCollection) {
+
+    try {
+
+        const hasil = await getDocs(
+            query(
+                collection(db, namaCollection),
+                limit(100)
+            )
+        );
+
+        return {
+            berhasil: true,
+
+            data: hasil.docs.map(dokumen => ({
+
+                id: dokumen.id,
+
+                data: dokumen.data()
+
+            }))
+
+        };
+
+    } catch (error) {
+
+        console.error(
+            "Gagal membaca collection:",
+            namaCollection,
+            error
+        );
+
+        return {
+            berhasil: false,
+            error: error
+        };
+
+    }
+
+}
+
+
+// =============================================
+// MEMUAT SEMUA PENGATURAN
+// =============================================
+
+async function muatSemuaData() {
+
+    if (sedangMemuat) return;
+
+    sedangMemuat = true;
+
+    $("btnRefresh").disabled = true;
+
+    $("btnRefresh").textContent = "Memuat...";
+
+    try {
+
+        status("Memuat data konfigurasi WAINI...");
+
+        const [
+            pengaturan,
+            jenisCuti,
+            menuUtama,
+            menuTugas
+        ] = await Promise.all([
+
+            bacaCollection(C_PENGATURAN),
+
+            bacaCollection(C_JENIS_CUTI),
+
+            bacaCollection(C_MENU_UTAMA),
+
+            bacaCollection(C_MENU_TUGAS)
+
+        ]);
+
+
+        // PENGATURAN SISTEM
+
+        if (pengaturan.berhasil) {
+
+            tampilkanPengaturan(pengaturan.data);
+
+        } else {
+
+            $("totalPengaturan").textContent = "!";
+
+            $("daftarPengaturan").innerHTML = `
+                <div class="empty">
+                    Tidak dapat membaca pengaturan_sistem.
+                    Periksa Firestore Rules.
+                </div>
+            `;
+
+        }
+
+
+        // MASTER CUTI
+
+        if (jenisCuti.berhasil) {
+
+            tampilkanJenisCuti(jenisCuti.data);
+
+        } else {
+
+            $("totalJenisCuti").textContent = "!";
+
+            $("daftarJenisCuti").innerHTML = `
+                <div class="empty">
+                    Gagal membaca master_jenis_cuti.
+                </div>
+            `;
+
+        }
+
+
+        // MENU UTAMA
+
+        if (menuUtama.berhasil) {
+
+            tampilkanMenu(
+                menuUtama.data,
+                "daftarMenu",
+                "totalMenu"
+            );
+
+        } else {
+
+            $("totalMenu").textContent = "!";
+
+            $("daftarMenu").innerHTML = `
+                <div class="empty">
+                    Gagal membaca menu_utama.
+                </div>
+            `;
+
+        }
+
+
+        // MENU TUGAS
+
+        if (menuTugas.berhasil) {
+
+            tampilkanMenu(
+                menuTugas.data,
+                "daftarMenuTugas",
+                "totalMenuTugas"
+            );
+
+        } else {
+
+            $("totalMenuTugas").textContent = "!";
+
+            $("daftarMenuTugas").innerHTML = `
+                <div class="empty">
+                    Gagal membaca menu_tugas.
+                </div>
+            `;
+
+        }
+
+
+        const semuaBerhasil =
+            pengaturan.berhasil &&
+            jenisCuti.berhasil &&
+            menuUtama.berhasil &&
+            menuTugas.berhasil;
+
+        if (semuaBerhasil) {
+
+            status(
+                "Data konfigurasi berhasil dimuat. Tidak ada data Firestore yang diubah.",
+                "success"
+            );
+
+        } else {
+
+            status(
+                "Sebagian data berhasil dimuat. Periksa collection yang gagal dibaca dan Firestore Rules.",
+                "error"
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        status(
+            "Terjadi kesalahan saat memuat konfigurasi: " +
+            error.message,
+            "error"
+        );
+
+    } finally {
+
+        sedangMemuat = false;
+
+        $("btnRefresh").disabled = false;
+
+        $("btnRefresh").textContent = "↻ Muat Ulang Data";
+
+    }
+
+}
+
+
+// =============================================
+// PEMERIKSAAN AKUN SUPER ADMIN
+// =============================================
+
+async function periksaAkses(user) {
+
+    if (!user) {
+
+        window.location.replace("index.html");
+
+        return;
+
+    }
+
+    userLogin = user;
+
+    status("Memeriksa profil pengguna...");
+
+    const snap = await getDoc(
+        doc(db, C_PENGGUNA, user.uid)
+    );
+
+    if (!snap.exists()) {
+
+        throw new Error(
+            "Dokumen pengguna tidak ditemukan."
+        );
+
+    }
+
+    dataPengguna = snap.data();
+
+    if (normalisasi(dataPengguna.status) !== "aktif") {
+
+        throw new Error(
+            "Akun belum aktif atau telah dinonaktifkan."
+        );
+
+    }
+
+    if (normalisasi(dataPengguna.role) !== "super_admin") {
+
+        status(
+            "Akses ditolak. Halaman ini hanya untuk Super Admin.",
+            "error"
+        );
+
+        setTimeout(() => {
+
+            window.location.replace("menu.html");
+
+        }, 2000);
+
+        return;
+
+    }
+
+    tampilkanIdentitas(user, dataPengguna);
+
+    tampilkanHalaman();
+
+    await muatSemuaData();
+
+}
+
+
+// =============================================
+// EVENT AUTH
+// =============================================
+
+onAuthStateChanged(auth, async user => {
+
+    if (!user) {
+
+        window.location.replace("index.html");
+
+        return;
+
+    }
+
+    try {
+
+        await periksaAkses(user);
+
+    } catch (error) {
+
+        console.error(
+            "Pemeriksaan akses gagal:",
+            error
+        );
+
+        status(
+            error.message || "Gagal memeriksa hak akses.",
+            "error"
+        );
+
+        $("isiHalaman").classList.add("hidden");
+
+    }
+
+});
+
+
+// =============================================
+// TOMBOL MUAT ULANG
+// =============================================
+
+$("btnRefresh").addEventListener("click", async () => {
+
+    if (!userLogin || !dataPengguna) return;
+
+    if (
+        normalisasi(dataPengguna.role) !== "super_admin" ||
+        normalisasi(dataPengguna.status) !== "aktif"
+    ) {
+
+        alert("Akses ditolak.");
+
+        return;
+
+    }
+
+    await muatSemuaData();
+
+});
+
+</script>
+
+</body>
+</html>
