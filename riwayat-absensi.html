@@ -867,12 +867,15 @@ function ambilTanggalData(data) {
 function ambilStatus(data) {
 
     const nilai = nilaiPertama(data, [
+        "nama_kode",
         "status",
         "status_absensi",
         "status_kehadiran",
         "kehadiran",
         "kode_status",
-        "jenis_absensi"
+        "jenis_absensi",
+        "kode",
+        "kode_absensi"
     ], "Tidak diketahui");
 
     return String(nilai).trim();

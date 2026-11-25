@@ -743,7 +743,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
 collection,doc,getDoc,getDocs,query,where,
-setDoc,addDoc,serverTimestamp
+serverTimestamp,writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* =========================================
@@ -1281,21 +1281,36 @@ function processRecord(d){
 
 const data=d.data();
 
-if(!data.tanggal||!data.nik)return;
+// Baca nama field standar dan nama field lama agar
+// dokumen yang sudah ada tetap dapat digunakan.
+const tanggal=firstValue(
+data,["tanggal","tanggal_absensi"],""
+);
+const nik=normalizeNik(
+firstValue(data,["nik","NIK","nik_karyawan"],"")
+);
+const kode=String(
+firstValue(data,["kode","kode_absensi"],"")
+);
+
+if(!tanggal||!nik)return;
 
 if(
-data.tanggal<currentPeriod.start||
-data.tanggal>currentPeriod.end
+tanggal<currentPeriod.start||
+tanggal>currentPeriod.end
 )return;
 
-const key=dataKey(data.tanggal,data.nik);
+const key=dataKey(tanggal,nik);
 
-values[key]=data.kode||"";
+values[key]=kode;
 notes[key]=data.keterangan||"";
 
 savedRecords[key]={
 id:d.id,
-...data
+...data,
+tanggal,
+nik,
+kode
 };
 
 }
@@ -1550,7 +1565,8 @@ ID DOKUMEN ABSENSI
 ========================================= */
 
 function attendanceDocumentId(nik,tanggal){
-return nik+"_"+tanggal;
+const tanggalPadat=String(tanggal||"").replace(/-/g,"");
+return normalizeNik(nik)+"_"+tanggalPadat;
 }
 
 /* =========================================
@@ -1611,9 +1627,27 @@ try{
 const oldSnap=await getDoc(ref);
 const oldData=oldSnap.exists()?oldSnap.data():null;
 
+// Field lama tetap dibaca agar dokumen yang sudah tersimpan
+// tidak dianggap berubah hanya karena perbedaan nama field.
+const oldKode=String(
+firstValue(oldData,["kode","kode_absensi"],"")
+);
+
+const canonicalFields=[
+"absensi_id","periode_id","tanggal","nik","nama","divisi",
+"departemen","jabatan","kode","nama_kode","kategori_kode",
+"keterangan","petugas_nik","petugas_nama","penugasan_id",
+"createdAt","createdBy","updatedAt","updatedBy"
+];
+
+const hasCanonicalSchema=!!oldData&&canonicalFields.every(
+field=>Object.prototype.hasOwnProperty.call(oldData,field)
+);
+
 if(
 oldData&&
-oldData.kode===kode&&
+hasCanonicalSchema&&
+oldKode===kode&&
 (oldData.keterangan||"")===keterangan
 ){
 
@@ -1634,62 +1668,88 @@ throw new Error("ID penugasan tidak ditemukan.");
 
 }
 
+const codeInfo=attendanceCodes.find(
+item=>String(item[0])===String(kode)
+)||[kode,"Tidak diketahui","-"];
+
+const petugasNama=String(firstValue(
+currentProfile,["nama","nama_lengkap","name"],"Petugas"
+));
+
+const now=serverTimestamp();
+
 const payload={
 
+/* 19 FIELD STANDAR data_absensi */
 absensi_id:absensiId,
 periode_id:currentPeriodId,
 tanggal:currentDate,
 nik:employee.nik,
-kode:kode,
+nama:employee.name||"",
+divisi:employee.div||"",
+departemen:employee.dept||"",
+jabatan:employee.jabatan||"",
+kode:String(kode),
+nama_kode:String(codeInfo[1]||""),
+kategori_kode:String(codeInfo[2]||""),
 keterangan:keterangan,
 petugas_nik:currentNik,
-penugasan_id:assignmentId
+petugas_nama:petugasNama,
+penugasan_id:assignmentId,
+
+createdAt:
+oldData?.createdAt||
+oldData?.dibuat_pada||
+now,
+
+createdBy:
+oldData?.createdBy||
+oldData?.dibuat_oleh||
+"",
+
+updatedAt:now,
+updatedBy:currentUser.uid
 
 };
 
-if(oldData){
+// Merge mempertahankan field lama dan data lain yang mungkin
+// masih diperlukan. Tidak menghapus dokumen atau field lama.
+const historyRef=doc(
+collection(db,"riwayat_perubahan_absensi")
+);
 
-payload.createdAt=oldData.createdAt;
-payload.createdBy=oldData.createdBy;
-payload.updatedAt=serverTimestamp();
-payload.updatedBy=currentUser.uid;
-
-}else{
-
-payload.createdAt=serverTimestamp();
-payload.createdBy=currentUser.uid;
-payload.updatedAt=serverTimestamp();
-payload.updatedBy=currentUser.uid;
-
-}
-
-await setDoc(ref,payload);
-
-await addDoc(
-collection(db,"riwayat_perubahan_absensi"),
-{
+const historyPayload={
 
 absensi_id:absensiId,
 periode_id:currentPeriodId,
 tanggal:currentDate,
 nik:employee.nik,
 
-kode_lama:oldData?.kode||"",
-kode_baru:kode,
+kode_lama:oldKode,
+kode_baru:String(kode),
 
 keterangan_lama:oldData?.keterangan||"",
 keterangan_baru:keterangan,
 
-aksi:oldData?"perubahan":"pembuatan",
+aksi:oldData
+?(oldKode===kode?"penyesuaian_struktur":"perubahan")
+:"pembuatan",
 
 petugas_nik:currentNik,
+petugas_nama:petugasNama,
 penugasan_id:assignmentId,
 
-createdAt:serverTimestamp(),
+createdAt:now,
 createdBy:currentUser.uid
 
-}
-);
+};
+
+// Simpan absensi dan riwayat secara atomik.
+// Jika salah satu gagal, keduanya tidak diterapkan.
+const batch=writeBatch(db);
+batch.set(ref,payload,{merge:true});
+batch.set(historyRef,historyPayload);
+await batch.commit();
 
 success++;
 
