@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+
+<title>Riwayat Cuti - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f8;
+    color: #252525;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg,#991b1b,#7f1d1d);
+    color: white;
+    padding: 20px 17px 25px;
+    border-radius: 0 0 22px 22px;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #fecaca;
+}
+
+.tombol-kembali {
+    color: white;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,.45);
+    padding: 9px 13px;
+    border-radius: 9px;
+    font-size: 12px;
+}
+
+.header-info {
+    margin-top: 23px;
+}
+
+.header-info h1 {
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.header-info p {
+    font-size: 12px;
+    line-height: 1.6;
+    opacity: .9;
+}
+
+/* CONTAINER */
+
+.container {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+    padding: 18px 14px 35px;
+}
+
+/* IDENTITAS */
+
+.identitas {
+    background: white;
+    padding: 15px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    border: 1px solid #eee;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.nama {
+    color: #7f1d1d;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.detail-identitas {
+    color: #777;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* RINGKASAN */
+
+.ringkasan {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+    margin-bottom: 17px;
+}
+
+.kartu-ringkasan {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 13px;
+    padding: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.035);
+}
+
+.kartu-ringkasan .angka {
+    font-size: 25px;
+    font-weight: bold;
+    color: #991b1b;
+    margin-bottom: 5px;
+}
+
+.kartu-ringkasan .label {
+    font-size: 11px;
+    color: #777;
+    line-height: 1.5;
+}
+
+/* STATUS */
+
+.status-halaman {
+    padding: 13px;
+    background: white;
+    color: #777;
+    border-radius: 11px;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.status-halaman.error {
+    color: #b91c1c;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+.status-halaman.sukses {
+    color: #166534;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+}
+
+/* FILTER */
+
+.filter-box {
+    background: white;
+    padding: 14px;
+    border-radius: 13px;
+    border: 1px solid #eee;
+    margin-bottom: 17px;
+}
+
+.filter-box label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+.filter-box select,
+.filter-box input {
+    width: 100%;
+    min-height: 43px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    padding: 10px 12px;
+    background: #fff;
+    font-size: 13px;
+    outline: none;
+}
+
+.filter-box select:focus,
+.filter-box input:focus {
+    border-color: #991b1b;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 11px;
+}
+
+/* JUDUL */
+
+.judul-bagian {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 23px 0 13px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.judul-bagian::before {
+    content: "";
+    width: 4px;
+    height: 19px;
+    border-radius: 5px;
+    background: #991b1b;
+}
+
+/* DAFTAR RIWAYAT */
+
+.daftar-riwayat {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.kartu-riwayat {
+    background: white;
+    border: 1px solid #ececec;
+    border-radius: 14px;
+    padding: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.kartu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 13px;
+}
+
+.jenis-cuti {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.nomor-pengajuan {
+    color: #999;
+    font-size: 10px;
+    margin-top: 4px;
+    overflow-wrap: anywhere;
+}
+
+/* BADGE STATUS */
+
+.badge-status {
+    padding: 6px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.status-menunggu {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.status-disetujui {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-ditolak {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-dibatalkan {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.status-proses {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-lain {
+    background: #f3f4f6;
+    color: #555;
+}
+
+/* DETAIL KARTU */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 11px;
+    margin-bottom: 13px;
+}
+
+.detail-item {
+    background: #f8f9fb;
+    padding: 10px;
+    border-radius: 9px;
+    min-width: 0;
+}
+
+.detail-item .label {
+    color: #888;
+    font-size: 10px;
+    margin-bottom: 5px;
+}
+
+.detail-item .nilai {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* ALASAN */
+
+.alasan {
+    background: #fafafa;
+    border-left: 3px solid #e5b4b4;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.alasan .label {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.alasan .nilai {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+/* TOMBOL DETAIL */
+
+.tombol-detail {
+    display: block;
+    width: 100%;
+    border: 1px solid #ead1d1;
+    background: #fffafa;
+    color: #991b1b;
+    border-radius: 9px;
+    padding: 11px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tombol-detail:active {
+    transform: scale(.98);
+}
+
+/* KOSONG */
+
+.kosong {
+    background: white;
+    padding: 28px 18px;
+    text-align: center;
+    border: 1px dashed #ddd;
+    border-radius: 13px;
+    color: #888;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.kosong .ikon {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+/* MODAL DETAIL */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0,0,0,.52);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal-overlay.aktif {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 17px;
+    padding: 18px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    font-size: 16px;
+    color: #7f1d1d;
+}
+
+.tombol-tutup {
+    border: none;
+    background: #f1f1f1;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.modal-section {
+    margin-bottom: 17px;
+}
+
+.modal-section h3 {
+    font-size: 12px;
+    color: #991b1b;
+    margin-bottom: 10px;
+}
+
+.modal-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.modal-row {
+    padding: 10px;
+    background: #f8f9fb;
+    border-radius: 8px;
+}
+
+.modal-row .label {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.modal-row .nilai {
+    font-size: 12px;
+    color: #333;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+/* RIWAYAT STATUS */
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 8px;
+}
+
+.timeline-item {
+    position: relative;
+    padding: 0 0 17px 23px;
+    border-left: 2px solid #e5e5e5;
+    margin-left: 7px;
+}
+
+.timeline-item:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #991b1b;
+    left: -6.5px;
+    top: 2px;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px #ddd;
+}
+
+.timeline-status {
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.timeline-tanggal {
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.timeline-keterangan {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 25px 10px;
+    font-size: 11px;
+    color: #999;
+}
+
+/* RESPONSIVE */
+
+@media(min-width:600px) {
+    .ringkasan {
+        grid-template-columns: repeat(4,minmax(0,1fr));
+    }
+}
+
+@media(max-width:360px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-grid {
+        gap: 8px;
+    }
+
+    .kartu-riwayat {
+        padding: 12px;
+    }
+
+    .badge-status {
+        font-size: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">WAI<span>NI</span></div>
+
+        <a href="menu-utama.html" class="tombol-kembali">
+            ← Menu Utama
+        </a>
+    </div>
+
+    <div class="header-info">
+        <h1>Riwayat Cuti</h1>
+        <p>Informasi seluruh pengajuan cuti yang pernah Anda ajukan.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- IDENTITAS -->
+
+    <section class="identitas">
+        <div class="nama" id="namaPengguna">
+            Memuat identitas...
+        </div>
+
+        <div class="detail-identitas" id="detailIdentitas">
+            Mohon tunggu.
+        </div>
+    </section>
+
+    <!-- STATUS -->
+
+    <div id="statusHalaman" class="status-halaman">
+        Memeriksa akun dan memuat riwayat cuti...
+    </div>
+
+    <!-- RINGKASAN -->
+
+    <section class="ringkasan" id="ringkasan" style="display:none;">
+
+        <div class="kartu-ringkasan">
+            <div class="angka" id="jumlahSemua">0</div>
+            <div class="label">Total Pengajuan</div>
+        </div>
+
+        <div class="kartu-ringkasan">
+            <div class="angka" id="jumlahMenunggu">0</div>
+            <div class="label">Menunggu / Proses</div>
+        </div>
+
+        <div class="kartu-ringkasan">
+            <div class="angka" id="jumlahDisetujui">0</div>
+            <div class="label">Disetujui</div>
+        </div>
+
+        <div class="kartu-ringkasan">
+            <div class="angka" id="jumlahDitolak">0</div>
+            <div class="label">Ditolak</div>
+        </div>
+
+    </section>
+
+    <!-- FILTER -->
+
+    <section class="filter-box" id="filterBox" style="display:none;">
+
+        <div class="filter-grid">
+
+            <div>
+                <label for="filterStatus">Filter Status</label>
+
+                <select id="filterStatus">
+                    <option value="">Semua Status</option>
+                    <option value="menunggu">Menunggu</option>
+                    <option value="proses">Dalam Proses</option>
+                    <option value="disetujui">Disetujui</option>
+                    <option value="ditolak">Ditolak</option>
+                    <option value="dibatalkan">Dibatalkan</option>
+                    <option value="lain">Status Lainnya</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="pencarian">Cari Riwayat</label>
+
+                <input
+                    type="search"
+                    id="pencarian"
+                    placeholder="Jenis cuti, alasan..."
+                >
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- DAFTAR -->
+
+    <section>
+        <div class="judul-bagian">Daftar Pengajuan Cuti</div>
+
+        <div id="daftarRiwayat" class="daftar-riwayat"></div>
+    </section>
+
+</main>
+
+<footer>
+    WAINI - Portal Karyawan Divisi Pelabuhan
+</footer>
+
+<!-- MODAL DETAIL -->
+
+<div class="modal-overlay" id="modalOverlay">
+
+    <div class="modal">
+
+        <div class="modal-header">
+            <h2>Detail Pengajuan Cuti</h2>
+
+            <button
+                type="button"
+                class="tombol-tutup"
+                id="tombolTutupModal"
+                aria-label="Tutup"
+            >×</button>
+        </div>
+
+        <div id="isiModal"></div>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+// ==================================================
+// WAINI - RIWAYAT CUTI
+// Firestore sebagai sumber data utama
+// Pengguna hanya membaca data miliknya sendiri
+// ==================================================
+
+import { auth, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    query,
+    where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ==================================================
+// ELEMEN
+// ==================================================
+
+const namaPenggunaEl = document.getElementById("namaPengguna");
+const detailIdentitasEl = document.getElementById("detailIdentitas");
+const statusHalamanEl = document.getElementById("statusHalaman");
+
+const ringkasanEl = document.getElementById("ringkasan");
+const filterBoxEl = document.getElementById("filterBox");
+const daftarRiwayatEl = document.getElementById("daftarRiwayat");
+
+const filterStatusEl = document.getElementById("filterStatus");
+const pencarianEl = document.getElementById("pencarian");
+
+const modalOverlay = document.getElementById("modalOverlay");
+const isiModalEl = document.getElementById("isiModal");
+const tombolTutupModal = document.getElementById("tombolTutupModal");
+
+// ==================================================
+// VARIABEL
+// ==================================================
+
+let penggunaAktif = null;
+let userFirebase = null;
+let daftarPengajuan = [];
+
+// ==================================================
+// UTILITAS
+// ==================================================
+
+function nilaiPertama(data, daftarField, fallback = "") {
+
+    for (const field of daftarField) {
+
+        const nilai = data?.[field];
+
+        if (
+            nilai !== undefined &&
+            nilai !== null &&
+            String(nilai).trim() !== ""
+        ) {
+            return nilai;
+        }
+    }
+
+    return fallback;
+}
+
+function ambilNIK() {
+
+    return String(
+        nilaiPertama(
+            penggunaAktif,
+            [
+                "nik",
+                "NIK",
+                "nomor_induk",
+                "nomor_induk_karyawan"
+            ],
+            ""
+        )
+    ).trim();
+}
+
+function normalisasi(value) {
+
+    return String(value ?? "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "_")
+        .replace(/-/g, "_");
+}
+
+function teks(value, fallback = "-") {
+
+    if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+    ) {
+        return fallback;
+    }
+
+    return String(value);
+}
+
+function formatTanggal(value) {
+
+    if (!value) return "-";
+
+    let tanggal = null;
+
+    // Timestamp Firebase
+    if (typeof value?.toDate === "function") {
+        tanggal = value.toDate();
+    }
+
+    // Timestamp berupa detik atau milidetik
+    else if (typeof value === "number") {
+
+        tanggal = new Date(
+            value < 1000000000000
+                ? value * 1000
+                : value
+        );
+    }
+
+    // String atau Date
+    else if (value instanceof Date) {
+        tanggal = value;
+    }
+
+    else if (typeof value === "string") {
+
+        const bersih = value.trim();
+
+        if (!bersih) return "-";
+
+        // Format YYYY-MM-DD
+        const cocok = bersih.match(
+            /^(\d{4})-(\d{2})-(\d{2})$/
+        );
+
+        if (cocok) {
+
+            const [ , tahun, bulan, hari ] = cocok;
+
+            tanggal = new Date(
+                Number(tahun),
+                Number(bulan) - 1,
+                Number(hari)
+            );
+
+        } else {
+
+            tanggal = new Date(bersih);
+        }
+    }
+
+    else if (typeof value === "object") {
+
+        if (
+            value.tanggal &&
+            typeof value.tanggal === "string"
+        ) {
+            return formatTanggal(value.tanggal);
+        }
+
+        if (
+            value.seconds !== undefined
+        ) {
+            tanggal = new Date(value.seconds * 1000);
+        }
+    }
+
+    if (!tanggal || isNaN(tanggal.getTime())) {
+        return String(value);
+    }
+
+    return tanggal.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+}
+
+function formatTanggalWaktu(value) {
+
+    if (!value) return "-";
+
+    let tanggal = null;
+
+    if (typeof value?.toDate === "function") {
+        tanggal = value.toDate();
+    }
+
+    else if (typeof value === "number") {
+
+        tanggal = new Date(
+            value < 1000000000000
+                ? value * 1000
+                : value
+        );
+    }
+
+    else if (value instanceof Date) {
+        tanggal = value;
+    }
+
+    else if (typeof value === "string") {
+        tanggal = new Date(value);
+    }
+
+    else if (typeof value === "object" && value.seconds !== undefined) {
+        tanggal = new Date(value.seconds * 1000);
+    }
+
+    if (!tanggal || isNaN(tanggal.getTime())) {
+        return formatTanggal(value);
+    }
+
+    return tanggal.toLocaleString("id-ID", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+function statusAktif(data) {
+
+    if (
+        data?.aktif === true ||
+        data?.active === true
+    ) {
+        return true;
+    }
+
+    const status = normalisasi(data?.status);
+
+    return status === "aktif" || status === "active";
+}
+
+function tampilkanStatus(pesan, jenis = "") {
+
+    statusHalamanEl.textContent = pesan;
+    statusHalamanEl.className = "status-halaman";
+
+    if (jenis) {
+        statusHalamanEl.classList.add(jenis);
+    }
+
+    statusHalamanEl.style.display = "block";
+}
+
+function sembunyikanStatus() {
+
+    statusHalamanEl.style.display = "none";
+}
+
+// ==================================================
+// IDENTITAS PENGGUNA
+// ==================================================
+
+async function muatIdentitas(user) {
+
+    const ref = doc(db, "pengguna", user.uid);
+    const snapshot = await getDoc(ref);
+
+    if (!snapshot.exists()) {
+
+        throw new Error(
+            "Data pengguna tidak ditemukan di Firestore."
+        );
+    }
+
+    penggunaAktif = snapshot.data();
+
+    if (!statusAktif(penggunaAktif)) {
+
+        throw new Error(
+            "Akun Anda belum aktif. Silakan hubungi administrator."
+        );
+    }
+
+    const nama = nilaiPertama(
+        penggunaAktif,
+        ["nama", "nama_lengkap", "name"],
+        user.displayName || "Karyawan"
+    );
+
+    const nik = ambilNIK();
+
+    namaPenggunaEl.textContent = nama;
+
+    detailIdentitasEl.textContent =
+        "NIK: " + (nik || "-") +
+        " | Riwayat cuti milik akun Anda";
+}
+
+// ==================================================
+// PEMBACA FIELD PENGAJUAN
+// ==================================================
+
+function ambilStatus(data) {
+
+    return String(
+        nilaiPertama(
+            data,
+            [
+                "status",
+                "status_pengajuan",
+                "status_cuti",
+                "status_terakhir"
+            ],
+            "Belum diketahui"
+        )
+    );
+}
+
+function ambilJenisCuti(data) {
+
+    return nilaiPertama(
+        data,
+        [
+            "jenis_cuti",
+            "nama_jenis_cuti",
+            "jenis",
+            "kategori_cuti",
+            "nama_cuti"
+        ],
+        "Pengajuan Cuti"
+    );
+}
+
+function ambilTanggalMulai(data) {
+
+    return nilaiPertama(
+        data,
+        [
+            "tanggal_mulai",
+            "mulai_cuti",
+            "tgl_mulai",
+            "tanggal_awal",
+            "tanggal_cuti_mulai"
+        ],
+        ""
+    );
+}
+
+function ambilTanggalSelesai(data) {
+
+    return nilaiPertama(
+        data,
+        [
+            "tanggal_selesai",
+            "selesai_cuti",
+            "tgl_selesai",
+            "tanggal_akhir",
+            "tanggal_cuti_selesai"
+        ],
+        ""
+    );
+}
+
+function ambilJumlahHari(data) {
+
+    return nilaiPertama(
+        data,
+        [
+            "jumlah_hari",
+            "lama_cuti",
+            "total_hari",
+            "durasi",
+            "hari_cuti"
+        ],
+        ""
+    );
+}
+
+function ambilAlasan(data) {
+
+    return nilaiPertama(
+        data,
+        [
+            "alasan",
+            "alasan_cuti",
+            "keterangan",
+            "keperluan",
+            "uraian"
+        ],
+        ""
+    );
+}
+
+function ambilWaktuPengajuan(data) {
+
+    return nilaiPertama(
+        data,
+        [
+            "created_at",
+            "createdAt",
+            "tanggal_pengajuan",
+            "waktu_pengajuan",
+            "dibuat_pada",
+            "timestamp"
+        ],
+        ""
+    );
+}
+
+function ambilIDPengajuan(data, id) {
+
+    return nilaiPertama(
+        data,
+        [
+            "nomor_pengajuan",
+            "no_pengajuan",
+            "kode_pengajuan",
+            "id_pengajuan"
+        ],
+        id
+    );
+}
+
+// ==================================================
+// STATUS
+// ==================================================
+
+function kelompokStatus(status) {
+
+    const s = normalisasi(status);
+
+    if (
+        s.includes("setuju") ||
+        s === "approved" ||
+        s === "approve"
+    ) {
+        return "disetujui";
+    }
+
+    if (
+        s.includes("tolak") ||
+        s === "rejected" ||
+        s === "reject"
+    ) {
+        return "ditolak";
+    }
+
+    if (
+        s.includes("batal") ||
+        s === "cancelled" ||
+        s === "canceled"
+    ) {
+        return "dibatalkan";
+    }
+
+    if (
+        s.includes("tunggu") ||
+        s.includes("pending") ||
+        s.includes("menunggu")
+    ) {
+        return "menunggu";
+    }
+
+    if (
+        s.includes("proses") ||
+        s.includes("verifikasi") ||
+        s.includes("review") ||
+        s.includes("diperiksa")
+    ) {
+        return "proses";
+    }
+
+    return "lain";
+}
+
+function namaStatus(status) {
+
+    const s = kelompokStatus(status);
+
+    if (s === "menunggu") return "Menunggu";
+    if (s === "proses") return "Dalam Proses";
+    if (s === "disetujui") return "Disetujui";
+    if (s === "ditolak") return "Ditolak";
+    if (s === "dibatalkan") return "Dibatalkan";
+
+    return status || "Belum diketahui";
+}
+
+function classStatus(status) {
+
+    const s = kelompokStatus(status);
+
+    if (s === "menunggu") return "status-menunggu";
+    if (s === "proses") return "status-proses";
+    if (s === "disetujui") return "status-disetujui";
+    if (s === "ditolak") return "status-ditolak";
+    if (s === "dibatalkan") return "status-dibatalkan";
+
+    return "status-lain";
+}
+
+// ==================================================
+// AMBIL DATA FIRESTORE
+// ==================================================
+
+function fieldIdentitasPengajuan() {
+
+    return [
+        "nik",
+        "nik_karyawan",
+        "NIK",
+        "pemohon_nik",
+        "pengaju_nik",
+        "nik_pengaju",
+        "nomor_induk",
+        "nomor_induk_karyawan"
+    ];
+}
+
+async function ambilPengajuanBerdasarkanField(field, value) {
+
+    const hasil = [];
+
+    try {
+
+        const ref = collection(db, "pengajuan_cuti");
+
+        const q = query(
+            ref,
+            where(field, "==", value)
+        );
+
+        const snapshot = await getDocs(q);
+
+        snapshot.forEach(dokumen => {
+
+            hasil.push({
+                id: dokumen.id,
+                ...dokumen.data()
+            });
+        });
+
+        return {
+            berhasil: true,
+            data: hasil
+        };
+
+    } catch (error) {
+
+        console.warn(
+            "Query pengajuan_cuti field " + field + " gagal:",
+            error
+        );
+
+        return {
+            berhasil: false,
+            data: [],
+            error
+        };
+    }
+}
+
+async function muatRiwayatFirestore() {
+
+    const nik = ambilNIK();
+
+    const uid = userFirebase?.uid;
+
+    const daftarIdentitas = [];
+
+    if (nik) {
+
+        fieldIdentitasPengajuan().forEach(field => {
+
+            daftarIdentitas.push({
+                field,
+                value: nik
+            });
+        });
+    }
+
+    if (uid) {
+
+        [
+            "uid",
+            "user_uid",
+            "pengguna_uid",
+            "userId",
+            "user_id"
+        ].forEach(field => {
+
+            daftarIdentitas.push({
+                field,
+                value: uid
+            });
+        });
+    }
+
+    if (!daftarIdentitas.length) {
+
+        throw new Error(
+            "NIK atau UID pengguna tidak ditemukan. Data pengajuan tidak dapat dicocokkan."
+        );
+    }
+
+    const hasilGabungan = new Map();
+    let minimalSatuQueryBerhasil = false;
+
+    for (const identitas of daftarIdentitas) {
+
+        const hasil = await ambilPengajuanBerdasarkanField(
+            identitas.field,
+            identitas.value
+        );
+
+        if (hasil.berhasil) {
+
+            minimalSatuQueryBerhasil = true;
+
+            hasil.data.forEach(data => {
+
+                hasilGabungan.set(data.id, data);
+            });
+        }
+    }
+
+    if (!minimalSatuQueryBerhasil) {
+
+        throw new Error(
+            "Gagal membaca riwayat pengajuan cuti. Periksa koneksi atau Firestore Rules."
+        );
+    }
+
+    const semua = [...hasilGabungan.values()];
+
+    // Pemeriksaan ulang kepemilikan berdasarkan identitas.
+    const nikLogin = String(nik || "").trim();
+    const uidLogin = String(uid || "").trim();
+
+    daftarPengajuan = semua.filter(data => {
+
+        const nikData = String(
+            nilaiPertama(
+                data,
+                fieldIdentitasPengajuan(),
+                ""
+            )
+        ).trim();
+
+        const uidData = String(
+            nilaiPertama(
+                data,
+                [
+                    "uid",
+                    "user_uid",
+                    "pengguna_uid",
+                    "userId",
+                    "user_id"
+                ],
+                ""
+            )
+        ).trim();
+
+        if (nikLogin && nikData === nikLogin) {
+            return true;
+        }
+
+        if (uidLogin && uidData === uidLogin) {
+            return true;
+        }
+
+        return false;
+    });
+
+    // Urutkan dari pengajuan terbaru.
+    daftarPengajuan.sort((a, b) => {
+
+        const waktuA = ambilWaktuPengajuan(a);
+        const waktuB = ambilWaktuPengajuan(b);
+
+        const tanggalA = konversiWaktu(waktuA);
+        const tanggalB = konversiWaktu(waktuB);
+
+        return tanggalB - tanggalA;
+    });
+}
+
+function konversiWaktu(value) {
+
+    if (!value) return 0;
+
+    if (typeof value?.toDate === "function") {
+        return value.toDate().getTime();
+    }
+
+    if (typeof value === "number") {
+
+        return value < 1000000000000
+            ? value * 1000
+            : value;
+    }
+
+    if (value instanceof Date) {
+        return value.getTime();
+    }
+
+    if (typeof value === "string") {
+
+        const tanggal = new Date(value);
+
+        if (!isNaN(tanggal.getTime())) {
+            return tanggal.getTime();
+        }
+    }
+
+    if (typeof value === "object" && value.seconds) {
+        return value.seconds * 1000;
+    }
+
+    return 0;
+}
+
+// ==================================================
+// RINGKASAN
+// ==================================================
+
+function muatRingkasan() {
+
+    const total = daftarPengajuan.length;
+
+    let menunggu = 0;
+    let disetujui = 0;
+    let ditolak = 0;
+
+    daftarPengajuan.forEach(data => {
+
+        const status = kelompokStatus(ambilStatus(data));
+
+        if (
+            status === "menunggu" ||
+            status === "proses"
+        ) {
+            menunggu++;
+        }
+
+        if (status === "disetujui") {
+            disetujui++;
+        }
+
+        if (status === "ditolak") {
+            ditolak++;
+        }
+    });
+
+    document.getElementById("jumlahSemua").textContent = total;
+    document.getElementById("jumlahMenunggu").textContent = menunggu;
+    document.getElementById("jumlahDisetujui").textContent = disetujui;
+    document.getElementById("jumlahDitolak").textContent = ditolak;
+
+    ringkasanEl.style.display = "grid";
+    filterBoxEl.style.display = "block";
+}
+
+// ==================================================
+// ELEMEN DOM AMAN
+// ==================================================
+
+function buatElemen(tag, className, isi = "") {
+
+    const el = document.createElement(tag);
+
+    if (className) {
+        el.className = className;
+    }
+
+    if (isi !== undefined && isi !== null) {
+        el.textContent = String(isi);
+    }
+
+    return el;
+}
+
+function buatDetailItem(label, nilai) {
+
+    const item = buatElemen("div", "detail-item");
+
+    item.appendChild(
+        buatElemen("div", "label", label)
+    );
+
+    item.appendChild(
+        buatElemen("div", "nilai", nilai)
+    );
+
+    return item;
+}
+
+// ==================================================
+// KARTU RIWAYAT
+// ==================================================
+
+function buatKartuRiwayat(data) {
+
+    const kartu = buatElemen("article", "kartu-riwayat");
+
+    const header = buatElemen("div", "kartu-header");
+
+    const bagianKiri = document.createElement("div");
+
+    const jenis = buatElemen(
+        "div",
+        "jenis-cuti",
+        ambilJenisCuti(data)
+    );
+
+    const nomor = buatElemen(
+        "div",
+        "nomor-pengajuan",
+        "Nomor: " + ambilIDPengajuan(data, data.id)
+    );
+
+    bagianKiri.append(jenis, nomor);
+
+    const status = buatElemen(
+        "span",
+        "badge-status " + classStatus(ambilStatus(data)),
+        namaStatus(ambilStatus(data))
+    );
+
+    header.append(bagianKiri, status);
+
+    kartu.appendChild(header);
+
+    const detail = buatElemen("div", "detail-grid");
+
+    detail.appendChild(
+        buatDetailItem(
+            "Tanggal Mulai",
+            formatTanggal(ambilTanggalMulai(data))
+        )
+    );
+
+    detail.appendChild(
+        buatDetailItem(
+            "Tanggal Selesai",
+            formatTanggal(ambilTanggalSelesai(data))
+        )
+    );
+
+    detail.appendChild(
+        buatDetailItem(
+            "Jumlah Hari",
+            ambilJumlahHari(data)
+                ? ambilJumlahHari(data) + " hari"
+                : "-"
+        )
+    );
+
+    detail.appendChild(
+        buatDetailItem(
+            "Tanggal Pengajuan",
+            formatTanggal(ambilWaktuPengajuan(data))
+        )
+    );
+
+    kartu.appendChild(detail);
+
+    const alasan = ambilAlasan(data);
+
+    if (alasan) {
+
+        const boxAlasan = buatElemen("div", "alasan");
+
+        boxAlasan.appendChild(
+            buatElemen("div", "label", "Alasan Pengajuan")
+        );
+
+        boxAlasan.appendChild(
+            buatElemen("div", "nilai", alasan)
+        );
+
+        kartu.appendChild(boxAlasan);
+    }
+
+    const tombol = buatElemen(
+        "button",
+        "tombol-detail",
+        "Lihat Detail dan Riwayat Status"
+    );
+
+    tombol.type = "button";
+
+    tombol.addEventListener("click", () => {
+
+        bukaDetailPengajuan(data);
+    });
+
+    kartu.appendChild(tombol);
+
+    return kartu;
+}
+
+// ==================================================
+// RIWAYAT STATUS
+// ==================================================
+
+function ambilRiwayatStatus(data) {
+
+    const riwayat = nilaiPertama(
+        data,
+        [
+            "riwayat_status",
+            "history_status",
+            "histori_status",
+            "log_status"
+        ],
+        []
+    );
+
+    if (Array.isArray(riwayat)) {
+        return riwayat;
+    }
+
+    return [];
+}
+
+function statusDariRiwayat(item) {
+
+    return nilaiPertama(
+        item,
+        [
+            "status",
+            "status_baru",
+            "status_pengajuan",
+            "nilai_status"
+        ],
+        "Perubahan Status"
+    );
+}
+
+function tanggalDariRiwayat(item) {
+
+    return nilaiPertama(
+        item,
+        [
+            "tanggal",
+            "waktu",
+            "created_at",
+            "timestamp",
+            "updated_at",
+            "tanggal_perubahan"
+        ],
+        ""
+    );
+}
+
+function keteranganDariRiwayat(item) {
+
+    return nilaiPertama(
+        item,
+        [
+            "keterangan",
+            "catatan",
+            "alasan",
+            "komentar",
+            "deskripsi"
+        ],
+        ""
+    );
+}
+
+function pelakuDariRiwayat(item) {
+
+    return nilaiPertama(
+        item,
+        [
+            "nama",
+            "oleh",
+            "petugas",
+            "nama_petugas",
+            "user",
+            "aktor",
+            "nama_pengubah"
+        ],
+        ""
+    );
+}
+
+function buatTimeline(riwayat) {
+
+    const timeline = buatElemen("div", "timeline");
+
+    if (!riwayat.length) {
+
+        timeline.appendChild(
+            buatElemen(
+                "div",
+                "kosong",
+                "Riwayat perubahan status belum tersedia."
+            )
+        );
+
+        return timeline;
+    }
+
+    // Riwayat disalin agar data asli tidak berubah.
+    const daftar = [...riwayat];
+
+    daftar.forEach(item => {
+
+        const elemen = buatElemen("div", "timeline-item");
+
+        const status = buatElemen(
+            "div",
+            "timeline-status",
+            namaStatus(statusDariRiwayat(item))
+        );
+
+        const tanggal = buatElemen(
+            "div",
+            "timeline-tanggal",
+            formatTanggalWaktu(tanggalDariRiwayat(item))
+        );
+
+        const keterangan = buatElemen(
+            "div",
+            "timeline-keterangan",
+            keteranganDariRiwayat(item) || "Tidak ada catatan."
+        );
+
+        const pelaku = pelakuDariRiwayat(item);
+
+        if (pelaku) {
+
+            keterangan.textContent +=
+                "\nPetugas: " + pelaku;
+        }
+
+        elemen.append(status, tanggal, keterangan);
+
+        timeline.appendChild(elemen);
+    });
+
+    return timeline;
+}
+
+// ==================================================
+// DETAIL MODAL
+// ==================================================
+
+function buatBarisModal(label, nilai) {
+
+    const row = buatElemen("div", "modal-row");
+
+    row.appendChild(
+        buatElemen("div", "label", label)
+    );
+
+    row.appendChild(
+        buatElemen("div", "nilai", nilai)
+    );
+
+    return row;
+}
+
+function bukaDetailPengajuan(data) {
+
+    isiModalEl.innerHTML = "";
+
+    // BAGIAN INFORMASI PENGAJUAN
+
+    const sectionInformasi = buatElemen(
+        "section",
+        "modal-section"
+    );
+
+    sectionInformasi.appendChild(
+        buatElemen(
+            "h3",
+            "",
+            "Informasi Pengajuan"
+        )
+    );
+
+    const detail = buatElemen("div", "modal-detail");
+
+    detail.appendChild(
+        buatBarisModal(
+            "Nomor Pengajuan",
+            ambilIDPengajuan(data, data.id)
+        )
+    );
+
+    detail.appendChild(
+        buatBarisModal(
+            "Jenis Cuti",
+            ambilJenisCuti(data)
+        )
+    );
+
+    detail.appendChild(
+        buatBarisModal(
+            "Status Saat Ini",
+            namaStatus(ambilStatus(data))
+        )
+    );
+
+    detail.appendChild(
+        buatBarisModal(
+            "Tanggal Mulai",
+            formatTanggal(ambilTanggalMulai(data))
+        )
+    );
+
+    detail.appendChild(
+        buatBarisModal(
+            "Tanggal Selesai",
+            formatTanggal(ambilTanggalSelesai(data))
+        )
+    );
+
+    detail.appendChild(
+        buatBarisModal(
+            "Jumlah Hari",
+            ambilJumlahHari(data)
+                ? ambilJumlahHari(data) + " hari"
+                : "-"
+        )
+    );
+
+    detail.appendChild(
+        buatBarisModal(
+            "Tanggal Pengajuan",
+            formatTanggalWaktu(ambilWaktuPengajuan(data))
+        )
+    );
+
+    detail.appendChild(
+        buatBarisModal(
+            "Alasan",
+            ambilAlasan(data) || "-"
+        )
+    );
+
+    sectionInformasi.appendChild(detail);
+
+    isiModalEl.appendChild(sectionInformasi);
+
+    // CATATAN / KETERANGAN TAMBAHAN
+
+    const catatan = nilaiPertama(
+        data,
+        [
+            "catatan",
+            "catatan_petugas",
+            "keterangan_status",
+            "catatan_verifikasi",
+            "komentar"
+        ],
+        ""
+    );
+
+    if (catatan) {
+
+        const sectionCatatan = buatElemen(
+            "section",
+            "modal-section"
+        );
+
+        sectionCatatan.appendChild(
+            buatElemen(
+                "h3",
+                "",
+                "Catatan"
+            )
+        );
+
+        sectionCatatan.appendChild(
+            buatBarisModal(
+                "Catatan Pengajuan",
+                catatan
+            )
+        );
+
+        isiModalEl.appendChild(sectionCatatan);
+    }
+
+    // RIWAYAT STATUS
+
+    const sectionRiwayat = buatElemen(
+        "section",
+        "modal-section"
+    );
+
+    sectionRiwayat.appendChild(
+        buatElemen(
+            "h3",
+            "",
+            "Riwayat Perubahan Status"
+        )
+    );
+
+    const riwayat = ambilRiwayatStatus(data);
+
+    sectionRiwayat.appendChild(
+        buatTimeline(riwayat)
+    );
+
+    isiModalEl.appendChild(sectionRiwayat);
+
+    modalOverlay.classList.add("aktif");
+
+    document.body.style.overflow = "hidden";
+}
+
+function tutupModal() {
+
+    modalOverlay.classList.remove("aktif");
+
+    document.body.style.overflow = "";
+}
+
+tombolTutupModal.addEventListener(
+    "click",
+    tutupModal
+);
+
+modalOverlay.addEventListener(
+    "click",
+    event => {
+
+        if (event.target === modalOverlay) {
+            tutupModal();
+        }
+    }
+);
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Escape") {
+            tutupModal();
+        }
+    }
+);
+
+// ==================================================
+// FILTER
+// ==================================================
+
+function cocokFilter(data) {
+
+    const statusFilter = filterStatusEl.value;
+
+    const kata = normalisasi(pencarianEl.value);
+
+    const statusData = kelompokStatus(ambilStatus(data));
+
+    if (
+        statusFilter &&
+        statusData !== statusFilter
+    ) {
+        return false;
+    }
+
+    if (kata) {
+
+        const bahanCari = normalisasi([
+            ambilJenisCuti(data),
+            ambilStatus(data),
+            ambilAlasan(data),
+            ambilIDPengajuan(data, data.id),
+            formatTanggal(ambilTanggalMulai(data)),
+            formatTanggal(ambilTanggalSelesai(data))
+        ].join(" "));
+
+        if (!bahanCari.includes(kata)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function tampilkanDaftarRiwayat() {
+
+    daftarRiwayatEl.innerHTML = "";
+
+    const hasilFilter = daftarPengajuan.filter(cocokFilter);
+
+    if (!hasilFilter.length) {
+
+        const kosong = buatElemen("div", "kosong");
+
+        kosong.appendChild(
+            buatElemen("div", "ikon", "📋")
+        );
+
+        kosong.appendChild(
+            buatElemen(
+                "div",
+                "",
+                daftarPengajuan.length
+                    ? "Tidak ada riwayat yang sesuai dengan filter."
+                    : "Anda belum memiliki data pengajuan cuti."
+            )
+        );
+
+        daftarRiwayatEl.appendChild(kosong);
+
+        return;
+    }
+
+    hasilFilter.forEach(data => {
+
+        daftarRiwayatEl.appendChild(
+            buatKartuRiwayat(data)
+        );
+    });
+}
+
+filterStatusEl.addEventListener(
+    "change",
+    tampilkanDaftarRiwayat
+);
+
+pencarianEl.addEventListener(
+    "input",
+    tampilkanDaftarRiwayat
+);
+
+// ==================================================
+// INISIALISASI
+// ==================================================
+
+async function jalankanHalaman(user) {
+
+    userFirebase = user;
+
+    tampilkanStatus(
+        "Memeriksa identitas pengguna..."
+    );
+
+    await muatIdentitas(user);
+
+    tampilkanStatus(
+        "Mengambil data riwayat cuti..."
+    );
+
+    await muatRiwayatFirestore();
+
+    muatRingkasan();
+
+    tampilkanDaftarRiwayat();
+
+    if (daftarPengajuan.length) {
+
+        tampilkanStatus(
+            "Riwayat cuti berhasil dimuat. Data yang ditampilkan hanya pengajuan milik akun Anda.",
+            "sukses"
+        );
+
+    } else {
+
+        tampilkanStatus(
+            "Data pengajuan cuti belum ditemukan. Jika Anda pernah mengajukan cuti, pastikan data pengajuan tersimpan menggunakan NIK atau UID yang sesuai.",
+            ""
+        );
+    }
+}
+
+onAuthStateChanged(auth, async user => {
+
+    if (!user) {
+
+        window.location.replace("index.html");
+
+        return;
+    }
+
+    try {
+
+        await jalankanHalaman(user);
+
+    } catch (error) {
+
+        console.error(
+            "Riwayat cuti gagal dimuat:",
+            error
+        );
+
+        tampilkanStatus(
+            error.message ||
+            "Terjadi kesalahan saat memuat riwayat cuti.",
+            "error"
+        );
+    }
+});
+
+</script>
+
+</body>
+</html>
