@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -711,7 +710,7 @@ transition:none!important
       stroke-linecap="round"
       stroke-linejoin="round"
     >
-      <path d="M6 59h207M18 59V25h8v34M14 25h18M18 25 53 8l36 17M53 8v51M33 25l20-17M53 8l36 17M89 25v34M26 37h63M42 37v22M72 37v22M100 50h76l-9 9h-58zM116 43h24v7M122 37h14v6M142 50v9M151 50v9M167 50v9M178 59h22M184 50h14v9M5 64h210"/>
+      <path d="M6 59h207M18 59V25h8v34M14 25h18M18 25 53 8l36 17M53 8v51M33 25l20-17M53 8l36 17M89 25v34M26 37h63M42 37v22M72 37v22M100 50h76l-9 9h-58zM116 43h24v7M122 37h14v6M142 50v9M151 50v9M167 50v9M178 59h22M184 50h14v9M5 64h215"/>
       <path d="M32 25h57M48 16h8M74 18h8M104 45h70"/>
     </svg>
 
@@ -761,7 +760,7 @@ const EMAIL_SUPER_ADMIN = "superadmin@portalwhw.com";
 
 const DOMAIN_KARYAWAN = "@waini-dtk.invalid";
 
-const KOLEKSI_AKSES = "akses_karyawan";
+const KOLEKSI_PENGGUNA = "pengguna";
 
 
 /* =====================================
@@ -795,7 +794,9 @@ function tampilkanPesan(teks, tipe) {
 
 nik.addEventListener("input", () => {
 
-  nik.value = nik.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  nik.value = nik.value
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "");
 
 });
 
@@ -825,7 +826,39 @@ togglePassword.addEventListener("click", () => {
 
 
 /* =====================================
-   6. PROSES LOGIN
+   6. TOMBOL LOADING
+===================================== */
+
+function tombolLoading(aktif) {
+
+  btn.disabled = aktif;
+
+  if (aktif) {
+
+    btn.innerHTML = "MEMERIKSA AKUN...";
+
+  } else {
+
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M10 17l5-5-5-5M15 12H3"/>
+        <path d="M13 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>
+      </svg>
+      MASUK
+    `;
+
+  }
+
+}
+
+
+/* =====================================
+   7. PROSES LOGIN
 ===================================== */
 
 form.addEventListener("submit", async (e) => {
@@ -853,8 +886,7 @@ form.addEventListener("submit", async (e) => {
 
   }
 
-  btn.disabled = true;
-  btn.textContent = "MEMERIKSA AKUN...";
+  tombolLoading(true);
   msg.className = "msg";
 
   let sesiAuthTerbentuk = false;
@@ -893,37 +925,50 @@ form.addEventListener("submit", async (e) => {
     const user = hasilLogin.user;
 
 
-    /* =================================
-       C. AMBIL AKSES BERDASARKAN NIK
+    if (!user || !user.uid) {
 
-       Document ID = NIK
-    ================================= */
-
-    const referensiAkses = doc(
-      db,
-      KOLEKSI_AKSES,
-      id
-    );
-
-    const hasilAkses = await getDoc(referensiAkses);
-
-
-    if (!hasilAkses.exists()) {
-
-      throw new Error("AKSES_TIDAK_DITEMUKAN");
+      throw new Error("UID_AUTH_TIDAK_DITEMUKAN");
 
     }
 
-    const data = hasilAkses.data();
+
+    /* =================================
+       C. BACA PENGGUNA BERDASARKAN UID
+
+       Path:
+       pengguna/{UID Firebase}
+
+       Bukan:
+       akses_karyawan/{NIK}
+    ================================= */
+
+    const referensiPengguna = doc(
+      db,
+      KOLEKSI_PENGGUNA,
+      user.uid
+    );
+
+    const hasilPengguna = await getDoc(
+      referensiPengguna
+    );
+
+    if (!hasilPengguna.exists()) {
+
+      throw new Error("DATA_PENGGUNA_TIDAK_DITEMUKAN");
+
+    }
+
+    const data = hasilPengguna.data();
 
 
     /* =================================
-       D. COCOKKAN UID AUTH
+       D. VALIDASI UID
     ================================= */
 
-    const uidTerdaftar = String(data.uid_auth || "").trim();
+    const uidDatabase = String(data.uid || "")
+      .trim();
 
-    if (!uidTerdaftar || uidTerdaftar !== user.uid) {
+    if (uidDatabase !== user.uid) {
 
       throw new Error("UID_TIDAK_SESUAI");
 
@@ -931,14 +976,14 @@ form.addEventListener("submit", async (e) => {
 
 
     /* =================================
-       E. COCOKKAN NIK
+       E. VALIDASI NIK
     ================================= */
 
-    const nikTerdaftar = String(data.nik || id)
+    const nikDatabase = String(data.nik || "")
       .trim()
       .toUpperCase();
 
-    if (nikTerdaftar !== id) {
+    if (nikDatabase !== id) {
 
       throw new Error("NIK_TIDAK_SESUAI");
 
@@ -946,72 +991,43 @@ form.addEventListener("submit", async (e) => {
 
 
     /* =================================
-       F. PERIKSA STATUS
+       F. VALIDASI STATUS AKUN
     ================================= */
 
-    const statusAkses = String(data.status_akses || "")
+    const status = String(data.status || "")
       .trim()
       .toLowerCase();
 
-    const statusAkun = String(data.status_akun || "")
-      .trim()
-      .toLowerCase();
+    if (status !== "aktif") {
 
-    if (statusAkses !== "aktif" || statusAkun !== "aktif") {
+      if (status === "menunggu_verifikasi") {
 
-      throw new Error("AKUN_NONAKTIF");
+        throw new Error("AKUN_MENUNGGU_VERIFIKASI");
+
+      }
+
+      if (status === "ditolak") {
+
+        throw new Error("AKUN_DITOLAK");
+
+      }
+
+      if (status === "nonaktif") {
+
+        throw new Error("AKUN_NONAKTIF");
+
+      }
+
+      throw new Error("STATUS_AKUN_TIDAK_VALID");
 
     }
 
 
     /* =================================
-       G. PERIKSA IZIN LOGIN
+       G. VALIDASI ROLE
     ================================= */
 
-    if (data.boleh_login !== true) {
-
-      throw new Error("LOGIN_TIDAK_DIIZINKAN");
-
-    }
-
-    if (data.verifikasi_akun !== true) {
-
-      throw new Error("AKUN_BELUM_DIVERIFIKASI");
-
-    }
-
-    const statusVerifikasi = String(data.status_verifikasi || "")
-      .trim()
-      .toLowerCase();
-
-    if (statusVerifikasi !== "terverifikasi") {
-
-      throw new Error("STATUS_VERIFIKASI_TIDAK_VALID");
-
-    }
-
-    if (data.akun_auth_terhubung !== true) {
-
-      throw new Error("AUTH_BELUM_TERHUBUNG");
-
-    }
-
-    const metodeAuth = String(data.metode_autentikasi || "")
-      .trim()
-      .toLowerCase();
-
-    if (metodeAuth !== "firebase_auth") {
-
-      throw new Error("METODE_AUTH_TIDAK_VALID");
-
-    }
-
-
-    /* =================================
-       H. PERIKSA ROLE
-    ================================= */
-
-    const role = String(data.role_akses || "")
+    const role = String(data.role || "")
       .trim()
       .toLowerCase();
 
@@ -1019,7 +1035,9 @@ form.addEventListener("submit", async (e) => {
 
       if (role !== "super_admin") {
 
-        throw new Error("ROLE_SUPER_ADMIN_TIDAK_SESUAI");
+        throw new Error(
+          "ROLE_SUPER_ADMIN_TIDAK_SESUAI"
+        );
 
       }
 
@@ -1027,9 +1045,33 @@ form.addEventListener("submit", async (e) => {
 
       if (role !== "karyawan") {
 
-        throw new Error("ROLE_KARYAWAN_TIDAK_SESUAI");
+        throw new Error(
+          "ROLE_KARYAWAN_TIDAK_SESUAI"
+        );
 
       }
+
+    }
+
+
+    /* =================================
+       H. VALIDASI EMAIL DATABASE
+    ================================= */
+
+    const emailDatabase = String(data.email || "")
+      .trim()
+      .toLowerCase();
+
+    const emailAuth = String(user.email || "")
+      .trim()
+      .toLowerCase();
+
+    if (
+      emailDatabase &&
+      emailDatabase !== emailAuth
+    ) {
+
+      throw new Error("EMAIL_TIDAK_SESUAI");
 
     }
 
@@ -1043,8 +1085,10 @@ form.addEventListener("submit", async (e) => {
       "success"
     );
 
-    // Jangan signOut.
-    // Sesi diperlukan oleh menu.html.
+    /*
+      Jangan signOut di sini.
+      Sesi Firebase dibutuhkan menu.html.
+    */
 
     window.location.replace("menu.html");
 
@@ -1083,40 +1127,44 @@ form.addEventListener("submit", async (e) => {
         pesan = "Akun Firebase dinonaktifkan.";
         break;
 
-      case "AKSES_TIDAK_DITEMUKAN":
-        pesan = "Dokumen NIK tidak ditemukan di collection akses_karyawan.";
+      case "auth/invalid-email":
+        pesan = "Format email internal Firebase tidak valid.";
+        break;
+
+      case "auth/operation-not-allowed":
+        pesan = "Metode login Email/Password belum diaktifkan di Firebase.";
+        break;
+
+      case "DATA_PENGGUNA_TIDAK_DITEMUKAN":
+        pesan = "Data akun tidak ditemukan di collection pengguna.";
+        break;
+
+      case "UID_AUTH_TIDAK_DITEMUKAN":
+        pesan = "UID Firebase Authentication tidak ditemukan.";
         break;
 
       case "UID_TIDAK_SESUAI":
-        pesan = "UID Firebase tidak cocok dengan uid_auth di database.";
+        pesan = "UID Firebase tidak cocok dengan data pengguna.";
         break;
 
       case "NIK_TIDAK_SESUAI":
-        pesan = "NIK pada database tidak sesuai.";
+        pesan = "NIK login tidak cocok dengan data pengguna.";
+        break;
+
+      case "AKUN_MENUNGGU_VERIFIKASI":
+        pesan = "Akun masih menunggu verifikasi Super Admin.";
+        break;
+
+      case "AKUN_DITOLAK":
+        pesan = "Pendaftaran akun ditolak oleh Admin.";
         break;
 
       case "AKUN_NONAKTIF":
         pesan = "Akun tidak aktif. Hubungi Super Admin.";
         break;
 
-      case "LOGIN_TIDAK_DIIZINKAN":
-        pesan = "Akun belum diizinkan untuk login.";
-        break;
-
-      case "AKUN_BELUM_DIVERIFIKASI":
-        pesan = "Akun belum diverifikasi oleh Admin.";
-        break;
-
-      case "STATUS_VERIFIKASI_TIDAK_VALID":
-        pesan = "Status verifikasi akun belum valid.";
-        break;
-
-      case "AUTH_BELUM_TERHUBUNG":
-        pesan = "Akun belum terhubung dengan Firebase Authentication.";
-        break;
-
-      case "METODE_AUTH_TIDAK_VALID":
-        pesan = "Metode autentikasi akun tidak sesuai.";
+      case "STATUS_AKUN_TIDAK_VALID":
+        pesan = "Status akun tidak valid.";
         break;
 
       case "ROLE_SUPER_ADMIN_TIDAK_SESUAI":
@@ -1127,8 +1175,12 @@ form.addEventListener("submit", async (e) => {
         pesan = "Role karyawan tidak sesuai dengan database.";
         break;
 
+      case "EMAIL_TIDAK_SESUAI":
+        pesan = "Email Firebase tidak cocok dengan data pengguna.";
+        break;
+
       case "permission-denied":
-        pesan = "Akses Firestore ditolak. Periksa Firestore Rules.";
+        pesan = "Akses Firestore ditolak. Periksa izin membaca pengguna.";
         break;
 
       case "unavailable":
@@ -1142,7 +1194,7 @@ form.addEventListener("submit", async (e) => {
           err.message.includes("Missing or insufficient permissions")
         ) {
 
-          pesan = "Tidak memiliki izin membaca akses_karyawan. Periksa Firestore Rules.";
+          pesan = "Tidak memiliki izin membaca data pengguna. Periksa Firestore Rules.";
 
         }
 
@@ -1150,7 +1202,7 @@ form.addEventListener("submit", async (e) => {
 
 
     /* =================================
-       J. HAPUS SESI JIKA LOGIN GAGAL
+       J. LOGOUT JIKA VALIDASI GAGAL
     ================================= */
 
     if (sesiAuthTerbentuk) {
@@ -1170,25 +1222,17 @@ form.addEventListener("submit", async (e) => {
 
     }
 
+
+    /* =================================
+       K. TAMPILKAN PESAN ERROR
+    ================================= */
+
     tampilkanPesan(pesan, "error");
 
 
   } finally {
 
-    btn.disabled = false;
-
-    btn.innerHTML = `
-      <svg viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round">
-        <path d="M10 17l5-5-5-5M15 12H3"/>
-        <path d="M13 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>
-      </svg>
-      MASUK
-    `;
+    tombolLoading(false);
 
   }
 
