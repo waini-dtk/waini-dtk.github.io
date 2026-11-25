@@ -1,0 +1,1562 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#991b1b">
+<title>Riwayat Absensi - WAINI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f5f8;
+    color: #252525;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg,#991b1b,#7f1d1d);
+    color: white;
+    padding: 20px 18px 25px;
+    border-radius: 0 0 22px 22px;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #fecaca;
+}
+
+.tombol-kembali {
+    border: 1px solid rgba(255,255,255,.55);
+    color: white;
+    background: rgba(255,255,255,.08);
+    padding: 9px 13px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.header-info {
+    margin-top: 22px;
+}
+
+.header-info h2 {
+    font-size: 21px;
+    margin-bottom: 7px;
+}
+
+.header-info p {
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: .9;
+}
+
+/* CONTAINER */
+
+.container {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+    padding: 18px 14px 35px;
+}
+
+/* IDENTITAS */
+
+.identitas {
+    background: white;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.nama {
+    font-size: 16px;
+    font-weight: bold;
+    color: #7f1d1d;
+    margin-bottom: 6px;
+}
+
+.detail-identitas {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.7;
+}
+
+/* STATUS HALAMAN */
+
+.status-halaman {
+    padding: 13px;
+    background: white;
+    color: #777;
+    border-radius: 10px;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 15px;
+    line-height: 1.6;
+    display: none;
+}
+
+.status-halaman.error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+}
+
+.status-halaman.warning {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+
+/* FILTER */
+
+.filter-box {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #eee;
+    padding: 16px;
+    margin-bottom: 17px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.04);
+}
+
+.filter-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 13px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.form-group select {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    padding: 11px;
+    font-size: 13px;
+    background: white;
+    outline: none;
+}
+
+.form-group select:focus {
+    border-color: #991b1b;
+}
+
+.tombol-filter {
+    width: 100%;
+    margin-top: 12px;
+    border: none;
+    background: #991b1b;
+    color: white;
+    border-radius: 9px;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.tombol-filter:active {
+    transform: scale(.98);
+}
+
+.tombol-filter:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* RINGKASAN */
+
+.judul-bagian {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+    margin: 23px 0 13px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.judul-bagian::before {
+    content: "";
+    width: 4px;
+    height: 19px;
+    background: #991b1b;
+    border-radius: 5px;
+}
+
+.ringkasan-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 10px;
+}
+
+.ringkasan-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 13px;
+    padding: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.035);
+}
+
+.ringkasan-card .angka {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.ringkasan-card .label {
+    font-size: 12px;
+    color: #777;
+}
+
+.ringkasan-card.hadir .angka {
+    color: #15803d;
+}
+
+.ringkasan-card.terlambat .angka {
+    color: #d97706;
+}
+
+.ringkasan-card.izin .angka {
+    color: #2563eb;
+}
+
+.ringkasan-card.sakit .angka {
+    color: #7c3aed;
+}
+
+.ringkasan-card.alpa .angka {
+    color: #dc2626;
+}
+
+.ringkasan-card.total .angka {
+    color: #991b1b;
+}
+
+/* DAFTAR */
+
+.keterangan-periode {
+    color: #777;
+    font-size: 12px;
+    margin-top: -5px;
+    margin-bottom: 12px;
+}
+
+.daftar {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.kartu-riwayat {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 13px;
+    padding: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.035);
+}
+
+.kartu-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.tanggal {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.5;
+}
+
+.hari {
+    font-size: 11px;
+    color: #888;
+    margin-top: 3px;
+}
+
+.badge-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.badge-hadir {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-terlambat {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-izin {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.badge-sakit {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.badge-alpa {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.badge-lain {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.detail-riwayat {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 9px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.detail-item .label {
+    font-size: 10px;
+    color: #999;
+    margin-bottom: 4px;
+}
+
+.detail-item .nilai {
+    font-size: 12px;
+    color: #444;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.keterangan {
+    margin-top: 11px;
+    padding: 10px;
+    background: #f8f9fb;
+    border-radius: 8px;
+    font-size: 11px;
+    color: #777;
+    line-height: 1.6;
+}
+
+.keterangan strong {
+    color: #555;
+}
+
+.kosong {
+    background: white;
+    border: 1px dashed #ddd;
+    border-radius: 12px;
+    color: #888;
+    padding: 25px 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.footer {
+    text-align: center;
+    font-size: 11px;
+    color: #999;
+    padding: 25px 10px;
+}
+
+/* RESPONSIVE */
+
+@media(min-width:600px) {
+    .ringkasan-grid {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+
+    .detail-riwayat {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+}
+
+@media(max-width:360px) {
+    .container {
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+    .ringkasan-card {
+        padding: 12px;
+    }
+
+    .ringkasan-card .angka {
+        font-size: 21px;
+    }
+
+    .kartu-riwayat {
+        padding: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">WAI<span>NI</span></div>
+        <a href="menu-utama.html" class="tombol-kembali">
+            ← Menu Utama
+        </a>
+    </div>
+
+    <div class="header-info">
+        <h2>Riwayat Absensi</h2>
+        <p>Informasi kehadiran pribadi karyawan.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- IDENTITAS -->
+
+    <section class="identitas">
+        <div class="nama" id="namaPengguna">
+            Memuat data pengguna...
+        </div>
+
+        <div class="detail-identitas" id="detailPengguna">
+            Mohon tunggu sebentar.
+        </div>
+    </section>
+
+    <!-- STATUS -->
+
+    <div id="statusHalaman" class="status-halaman">
+        Memuat data absensi...
+    </div>
+
+    <!-- FILTER -->
+
+    <section class="filter-box">
+        <div class="filter-title">Filter Riwayat Absensi</div>
+
+        <div class="filter-grid">
+
+            <div class="form-group">
+                <label for="filterBulan">Bulan</label>
+                <select id="filterBulan">
+                    <option value="1">Januari</option>
+                    <option value="2">Februari</option>
+                    <option value="3">Maret</option>
+                    <option value="4">April</option>
+                    <option value="5">Mei</option>
+                    <option value="6">Juni</option>
+                    <option value="7">Juli</option>
+                    <option value="8">Agustus</option>
+                    <option value="9">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="filterTahun">Tahun</label>
+                <select id="filterTahun"></select>
+            </div>
+
+        </div>
+
+        <button id="tombolFilter" class="tombol-filter">
+            Tampilkan Riwayat
+        </button>
+    </section>
+
+    <!-- RINGKASAN -->
+
+    <section>
+        <div class="judul-bagian">Ringkasan Absensi</div>
+
+        <div class="ringkasan-grid">
+
+            <div class="ringkasan-card total">
+                <div class="angka" id="jumlahTotal">0</div>
+                <div class="label">Total Data</div>
+            </div>
+
+            <div class="ringkasan-card hadir">
+                <div class="angka" id="jumlahHadir">0</div>
+                <div class="label">Hadir</div>
+            </div>
+
+            <div class="ringkasan-card terlambat">
+                <div class="angka" id="jumlahTerlambat">0</div>
+                <div class="label">Terlambat</div>
+            </div>
+
+            <div class="ringkasan-card izin">
+                <div class="angka" id="jumlahIzin">0</div>
+                <div class="label">Izin</div>
+            </div>
+
+            <div class="ringkasan-card sakit">
+                <div class="angka" id="jumlahSakit">0</div>
+                <div class="label">Sakit</div>
+            </div>
+
+            <div class="ringkasan-card alpa">
+                <div class="angka" id="jumlahAlpa">0</div>
+                <div class="label">Alpa</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- DAFTAR RIWAYAT -->
+
+    <section>
+        <div class="judul-bagian">Daftar Riwayat</div>
+
+        <div class="keterangan-periode" id="keteranganPeriode">
+            Riwayat absensi berdasarkan periode.
+        </div>
+
+        <div class="daftar" id="daftarRiwayat">
+            <div class="kosong">Memuat riwayat absensi...</div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    WAINI - Portal Karyawan Divisi Pelabuhan
+</footer>
+
+<script type="module">
+
+// ================================================
+// WAINI - RIWAYAT ABSENSI KARYAWAN
+// Database utama: Firestore
+// Identitas: NIK
+// ================================================
+
+import { auth, db } from "./firebase.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    query,
+    where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ================================================
+// ELEMEN HALAMAN
+// ================================================
+
+const namaPenggunaEl =
+    document.getElementById("namaPengguna");
+
+const detailPenggunaEl =
+    document.getElementById("detailPengguna");
+
+const statusHalamanEl =
+    document.getElementById("statusHalaman");
+
+const filterBulanEl =
+    document.getElementById("filterBulan");
+
+const filterTahunEl =
+    document.getElementById("filterTahun");
+
+const tombolFilter =
+    document.getElementById("tombolFilter");
+
+const daftarRiwayatEl =
+    document.getElementById("daftarRiwayat");
+
+const keteranganPeriodeEl =
+    document.getElementById("keteranganPeriode");
+
+// ================================================
+// VARIABEL
+// ================================================
+
+let penggunaAktif = null;
+let nikPengguna = "";
+let seluruhRiwayat = [];
+let dataBerhasilDimuat = false;
+
+// ================================================
+// HELPER
+// ================================================
+
+function nilaiPertama(data, daftarField, fallback = "") {
+    for (const field of daftarField) {
+        const nilai = data?.[field];
+
+        if (
+            nilai !== undefined &&
+            nilai !== null &&
+            String(nilai).trim() !== ""
+        ) {
+            return nilai;
+        }
+    }
+
+    return fallback;
+}
+
+function ambilNIK(data) {
+    return String(
+        nilaiPertama(data, [
+            "nik",
+            "NIK",
+            "nomor_induk",
+            "nomor_induk_karyawan"
+        ], "")
+    ).trim();
+}
+
+function tampilkanStatus(pesan, jenis = "") {
+    statusHalamanEl.textContent = pesan;
+
+    statusHalamanEl.className = "status-halaman";
+
+    if (jenis) {
+        statusHalamanEl.classList.add(jenis);
+    }
+
+    statusHalamanEl.style.display = "block";
+}
+
+function sembunyikanStatus() {
+    statusHalamanEl.style.display = "none";
+}
+
+function namaBulan(bulan) {
+    const daftar = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+    ];
+
+    return daftar[bulan - 1] || "";
+}
+
+function formatTanggal(tanggal) {
+    if (!(tanggal instanceof Date) || isNaN(tanggal)) {
+        return "-";
+    }
+
+    return tanggal.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+}
+
+function formatHari(tanggal) {
+    if (!(tanggal instanceof Date) || isNaN(tanggal)) {
+        return "-";
+    }
+
+    return tanggal.toLocaleDateString("id-ID", {
+        weekday: "long"
+    });
+}
+
+function formatWaktu(nilai) {
+    if (nilai === undefined || nilai === null || nilai === "") {
+        return "-";
+    }
+
+    // Firestore Timestamp
+    if (typeof nilai?.toDate === "function") {
+        const date = nilai.toDate();
+
+        return date.toLocaleTimeString("id-ID", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+        });
+    }
+
+    // Date
+    if (nilai instanceof Date) {
+        return nilai.toLocaleTimeString("id-ID", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+        });
+    }
+
+    // String waktu
+    const teks = String(nilai).trim();
+
+    const cocok = teks.match(
+        /(\d{1,2}):(\d{2})(?::(\d{2}))?/
+    );
+
+    if (cocok) {
+        return cocok[1].padStart(2, "0") + ":" + cocok[2];
+    }
+
+    return teks;
+}
+
+// ================================================
+// KONVERSI TANGGAL
+// ================================================
+
+function konversiTanggal(nilai) {
+
+    if (nilai === undefined || nilai === null || nilai === "") {
+        return null;
+    }
+
+    // Firestore Timestamp
+    if (typeof nilai?.toDate === "function") {
+        const hasil = nilai.toDate();
+
+        return isNaN(hasil) ? null : hasil;
+    }
+
+    // JavaScript Date
+    if (nilai instanceof Date) {
+        return isNaN(nilai) ? null : nilai;
+    }
+
+    // Timestamp milidetik
+    if (typeof nilai === "number") {
+        const hasil = new Date(nilai);
+
+        return isNaN(hasil) ? null : hasil;
+    }
+
+    const teks = String(nilai).trim();
+
+    if (!teks) return null;
+
+    // Format DD/MM/YYYY
+    let cocok = teks.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+    );
+
+    if (cocok) {
+        const hasil = new Date(
+            Number(cocok[3]),
+            Number(cocok[2]) - 1,
+            Number(cocok[1])
+        );
+
+        return isNaN(hasil) ? null : hasil;
+    }
+
+    // Format DD-MM-YYYY
+    cocok = teks.match(
+        /^(\d{1,2})-(\d{1,2})-(\d{4})$/
+    );
+
+    if (cocok) {
+        const hasil = new Date(
+            Number(cocok[3]),
+            Number(cocok[2]) - 1,
+            Number(cocok[1])
+        );
+
+        return isNaN(hasil) ? null : hasil;
+    }
+
+    // Format YYYY-MM-DD
+    cocok = teks.match(
+        /^(\d{4})-(\d{1,2})-(\d{1,2})$/
+    );
+
+    if (cocok) {
+        const hasil = new Date(
+            Number(cocok[1]),
+            Number(cocok[2]) - 1,
+            Number(cocok[3])
+        );
+
+        return isNaN(hasil) ? null : hasil;
+    }
+
+    // ISO datetime / format lain
+    const hasil = new Date(teks);
+
+    return isNaN(hasil) ? null : hasil;
+}
+
+// ================================================
+// TANGGAL DATA ABSENSI
+// ================================================
+
+function ambilTanggalData(data) {
+
+    const nilai = nilaiPertama(data, [
+        "tanggal",
+        "tanggal_absensi",
+        "tanggal_absen",
+        "tgl_absensi",
+        "tgl",
+        "date",
+        "waktu_absensi",
+        "created_at",
+        "createdAt"
+    ], null);
+
+    return konversiTanggal(nilai);
+}
+
+// ================================================
+// STATUS ABSENSI
+// ================================================
+
+function ambilStatus(data) {
+
+    const nilai = nilaiPertama(data, [
+        "status",
+        "status_absensi",
+        "status_kehadiran",
+        "kehadiran",
+        "kode_status",
+        "jenis_absensi"
+    ], "Tidak diketahui");
+
+    return String(nilai).trim();
+}
+
+function normalisasiStatus(status) {
+    return String(status || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s-]+/g, "_");
+}
+
+function kategoriStatus(status) {
+
+    const kode = normalisasiStatus(status);
+
+    if (
+        kode === "hadir" ||
+        kode === "h" ||
+        kode === "masuk" ||
+        kode === "normal" ||
+        kode === "tepat_waktu" ||
+        kode === "tepatwaktu"
+    ) {
+        return "hadir";
+    }
+
+    if (
+        kode.includes("terlambat") ||
+        kode === "telat" ||
+        kode === "late"
+    ) {
+        return "terlambat";
+    }
+
+    if (
+        kode === "izin" ||
+        kode === "i" ||
+        kode === "ijin"
+    ) {
+        return "izin";
+    }
+
+    if (
+        kode === "sakit" ||
+        kode === "s"
+    ) {
+        return "sakit";
+    }
+
+    if (
+        kode === "alpa" ||
+        kode === "alpha" ||
+        kode === "a" ||
+        kode === "tidak_hadir" ||
+        kode === "tanpa_keterangan"
+    ) {
+        return "alpa";
+    }
+
+    return "lain";
+}
+
+function kelasBadge(status) {
+
+    const kategori = kategoriStatus(status);
+
+    switch (kategori) {
+        case "hadir":
+            return "badge-hadir";
+
+        case "terlambat":
+            return "badge-terlambat";
+
+        case "izin":
+            return "badge-izin";
+
+        case "sakit":
+            return "badge-sakit";
+
+        case "alpa":
+            return "badge-alpa";
+
+        default:
+            return "badge-lain";
+    }
+}
+
+// ================================================
+// INISIALISASI FILTER
+// ================================================
+
+function siapkanFilter() {
+
+    const sekarang = new Date();
+
+    filterBulanEl.value = String(
+        sekarang.getMonth() + 1
+    );
+
+    const tahunSekarang = sekarang.getFullYear();
+
+    filterTahunEl.innerHTML = "";
+
+    // Pilihan tahun: 5 tahun ke belakang sampai tahun ini.
+    for (
+        let tahun = tahunSekarang;
+        tahun >= tahunSekarang - 5;
+        tahun--
+    ) {
+        const opsi = document.createElement("option");
+
+        opsi.value = String(tahun);
+        opsi.textContent = String(tahun);
+
+        filterTahunEl.appendChild(opsi);
+    }
+
+    filterTahunEl.value = String(tahunSekarang);
+}
+
+// ================================================
+// MEMUAT IDENTITAS
+// ================================================
+
+async function muatIdentitas(user) {
+
+    const snapshot = await getDoc(
+        doc(db, "pengguna", user.uid)
+    );
+
+    if (!snapshot.exists()) {
+        throw new Error(
+            "Data pengguna tidak ditemukan di Firestore."
+        );
+    }
+
+    penggunaAktif = snapshot.data();
+
+    nikPengguna = ambilNIK(penggunaAktif);
+
+    if (!nikPengguna) {
+        throw new Error(
+            "NIK pada data pengguna belum tersedia. " +
+            "Hubungi administrator."
+        );
+    }
+
+    const nama = nilaiPertama(
+        penggunaAktif,
+        ["nama", "nama_lengkap", "name"],
+        user.displayName || "Karyawan"
+    );
+
+    namaPenggunaEl.textContent = nama;
+
+    detailPenggunaEl.textContent =
+        "NIK: " + nikPengguna +
+        " | Riwayat absensi pribadi";
+}
+
+// ================================================
+// IDENTIFIKASI NIK DALAM DOKUMEN ABSENSI
+// ================================================
+
+function nikDariData(data) {
+
+    return String(
+        nilaiPertama(data, [
+            "nik",
+            "NIK",
+            "nik_karyawan",
+            "nomor_induk",
+            "nomor_induk_karyawan",
+            "karyawan_nik"
+        ], "")
+    ).trim();
+}
+
+// ================================================
+// MEMUAT DATA ABSENSI
+// ================================================
+
+async function muatDataAbsensi() {
+
+    seluruhRiwayat = [];
+
+    const referensi = collection(db, "data_absensi");
+
+    const fieldNIK = [
+        "nik",
+        "NIK",
+        "nik_karyawan",
+        "nomor_induk",
+        "nomor_induk_karyawan",
+        "karyawan_nik"
+    ];
+
+    const hasilDokumen = new Map();
+
+    let minimalSatuQueryBerhasil = false;
+
+    let jumlahQueryGagal = 0;
+
+    for (const field of fieldNIK) {
+
+        try {
+
+            const q = query(
+                referensi,
+                where(field, "==", nikPengguna)
+            );
+
+            const snap = await getDocs(q);
+
+            minimalSatuQueryBerhasil = true;
+
+            snap.forEach(dokumen => {
+
+                hasilDokumen.set(
+                    dokumen.id,
+                    {
+                        id: dokumen.id,
+                        ...dokumen.data()
+                    }
+                );
+            });
+
+        } catch (error) {
+
+            jumlahQueryGagal++;
+
+            console.warn(
+                "Query absensi menggunakan field " +
+                field + " gagal:",
+                error
+            );
+        }
+    }
+
+    if (!minimalSatuQueryBerhasil) {
+
+        throw new Error(
+            "Data absensi tidak dapat dibaca. " +
+            "Periksa Firestore Rules dan struktur " +
+            "field NIK pada collection data_absensi."
+        );
+    }
+
+    // FILTER KEAMANAN:
+    // Data harus benar-benar memiliki NIK pengguna login.
+    seluruhRiwayat = [...hasilDokumen.values()]
+        .filter(data => nikDariData(data) === nikPengguna)
+        .map(data => {
+
+            return {
+                ...data,
+                tanggalData: ambilTanggalData(data),
+                statusData: ambilStatus(data)
+            };
+
+        });
+
+    // Data yang tidak memiliki tanggal tidak dapat
+    // dimasukkan ke filter periode.
+    seluruhRiwayat.sort((a, b) => {
+
+        const tanggalA = a.tanggalData
+            ? a.tanggalData.getTime()
+            : 0;
+
+        const tanggalB = b.tanggalData
+            ? b.tanggalData.getTime()
+            : 0;
+
+        return tanggalB - tanggalA;
+    });
+
+    if (jumlahQueryGagal > 0) {
+
+        console.warn(
+            "Sebagian query NIK tidak berhasil. " +
+            "Query yang berhasil tetap digunakan."
+        );
+    }
+
+    return seluruhRiwayat;
+}
+
+// ================================================
+// MEMBUAT ELEMEN
+// ================================================
+
+function buatElemen(tag, className, teks = "") {
+
+    const elemen = document.createElement(tag);
+
+    if (className) {
+        elemen.className = className;
+    }
+
+    if (teks !== "") {
+        elemen.textContent = teks;
+    }
+
+    return elemen;
+}
+
+// ================================================
+// MEMBUAT KARTU RIWAYAT
+// ================================================
+
+function buatKartuRiwayat(data) {
+
+    const kartu = buatElemen(
+        "div",
+        "kartu-riwayat"
+    );
+
+    // Bagian atas
+    const top = buatElemen("div", "kartu-top");
+
+    const blokTanggal = buatElemen("div", "");
+
+    const tanggal = buatElemen(
+        "div",
+        "tanggal",
+        formatTanggal(data.tanggalData)
+    );
+
+    const hari = buatElemen(
+        "div",
+        "hari",
+        formatHari(data.tanggalData)
+    );
+
+    blokTanggal.append(tanggal, hari);
+
+    const badge = buatElemen(
+        "span",
+        "badge-status " + kelasBadge(data.statusData),
+        data.statusData
+    );
+
+    top.append(blokTanggal, badge);
+
+    kartu.appendChild(top);
+
+    // Detail
+    const detail = buatElemen(
+        "div",
+        "detail-riwayat"
+    );
+
+    const jamMasuk = nilaiPertama(data, [
+        "jam_masuk",
+        "waktu_masuk",
+        "absen_masuk",
+        "check_in",
+        "checkin",
+        "clock_in"
+    ], "");
+
+    const jamPulang = nilaiPertama(data, [
+        "jam_pulang",
+        "waktu_pulang",
+        "absen_pulang",
+        "check_out",
+        "checkout",
+        "clock_out"
+    ], "");
+
+    const lokasi = nilaiPertama(data, [
+        "lokasi",
+        "lokasi_absensi",
+        "tempat",
+        "lokasi_masuk"
+    ], "");
+
+    const petugas = nilaiPertama(data, [
+        "petugas",
+        "nama_petugas",
+        "petugas_nama"
+    ], "");
+
+    const keterangan = nilaiPertama(data, [
+        "keterangan",
+        "catatan",
+        "alasan",
+        "deskripsi"
+    ], "");
+
+    function tambahDetail(label, nilai) {
+
+        const item = buatElemen(
+            "div",
+            "detail-item"
+        );
+
+        const labelEl = buatElemen(
+            "div",
+            "label",
+            label
+        );
+
+        const nilaiEl = buatElemen(
+            "div",
+            "nilai",
+            nilai || "-"
+        );
+
+        item.append(labelEl, nilaiEl);
+
+        detail.appendChild(item);
+    }
+
+    tambahDetail(
+        "Jam Masuk",
+        jamMasuk ? formatWaktu(jamMasuk) : "-"
+    );
+
+    tambahDetail(
+        "Jam Pulang",
+        jamPulang ? formatWaktu(jamPulang) : "-"
+    );
+
+    if (lokasi) {
+        tambahDetail("Lokasi", lokasi);
+    }
+
+    if (petugas) {
+        tambahDetail("Petugas", petugas);
+    }
+
+    kartu.appendChild(detail);
+
+    // Keterangan
+    if (keterangan) {
+
+        const bagianKeterangan = buatElemen(
+            "div",
+            "keterangan"
+        );
+
+        const labelKeterangan = buatElemen(
+            "strong",
+            "",
+            "Keterangan: "
+        );
+
+        bagianKeterangan.append(
+            labelKeterangan,
+            document.createTextNode(keterangan)
+        );
+
+        kartu.appendChild(bagianKeterangan);
+    }
+
+    return kartu;
+}
+
+// ================================================
+// FILTER PERIODE
+// ================================================
+
+function filterDataPeriode() {
+
+    const bulan = Number(filterBulanEl.value);
+
+    const tahun = Number(filterTahunEl.value);
+
+    return seluruhRiwayat.filter(data => {
+
+        if (!data.tanggalData) {
+            return false;
+        }
+
+        return (
+            data.tanggalData.getMonth() + 1 === bulan &&
+            data.tanggalData.getFullYear() === tahun
+        );
+    });
+}
+
+// ================================================
+// RINGKASAN
+// ================================================
+
+function hitungRingkasan(data) {
+
+    const ringkasan = {
+        total: data.length,
+        hadir: 0,
+        terlambat: 0,
+        izin: 0,
+        sakit: 0,
+        alpa: 0
+    };
+
+    data.forEach(item => {
+
+        const kategori = kategoriStatus(
+            item.statusData
+        );
+
+        if (kategori === "hadir") {
+            ringkasan.hadir++;
+        }
+
+        if (kategori === "terlambat") {
+            ringkasan.terlambat++;
+        }
+
+        if (kategori === "izin") {
+            ringkasan.izin++;
+        }
+
+        if (kategori === "sakit") {
+            ringkasan.sakit++;
+        }
+
+        if (kategori === "alpa") {
+            ringkasan.alpa++;
+        }
+    });
+
+    return ringkasan;
+}
+
+function tampilkanRingkasan(data) {
+
+    const ringkasan = hitungRingkasan(data);
+
+    document.getElementById("jumlahTotal").textContent =
+        ringkasan.total;
+
+    document.getElementById("jumlahHadir").textContent =
+        ringkasan.hadir;
+
+    document.getElementById("jumlahTerlambat").textContent =
+        ringkasan.terlambat;
+
+    document.getElementById("jumlahIzin").textContent =
+        ringkasan.izin;
+
+    document.getElementById("jumlahSakit").textContent =
+        ringkasan.sakit;
+
+    document.getElementById("jumlahAlpa").textContent =
+        ringkasan.alpa;
+}
+
+// ================================================
+// MENAMPILKAN RIWAYAT
+// ================================================
+
+function tampilkanRiwayat() {
+
+    const dataFilter = filterDataPeriode();
+
+    const bulan = Number(filterBulanEl.value);
+
+    const tahun = Number(filterTahunEl.value);
+
+    keteranganPeriodeEl.textContent =
+        "Periode " + namaBulan(bulan) +
+        " " + tahun +
+        " | " + dataFilter.length +
+        " data absensi";
+
+    tampilkanRingkasan(dataFilter);
+
+    daftarRiwayatEl.innerHTML = "";
+
+    if (!dataFilter.length) {
+
+        const kosong = buatElemen(
+            "div",
+            "kosong"
+        );
+
+        kosong.textContent =
+            "Tidak ada data absensi pada " +
+            namaBulan(bulan) +
+            " " + tahun +
+            ". Jika Anda merasa seharusnya ada data, " +
+            "silakan hubungi petugas absensi.";
+
+        daftarRiwayatEl.appendChild(kosong);
+
+        return;
+    }
+
+    dataFilter.forEach(data => {
+
+        daftarRiwayatEl.appendChild(
+            buatKartuRiwayat(data)
+        );
+    });
+}
+
+// ================================================
+// TOMBOL FILTER
+// ================================================
+
+tombolFilter.addEventListener("click", () => {
+
+    if (!dataBerhasilDimuat) {
+        return;
+    }
+
+    tampilkanRiwayat();
+});
+
+// ================================================
+// PROSES UTAMA
+// ================================================
+
+async function prosesHalaman(user) {
+
+    tampilkanStatus(
+        "Memeriksa identitas dan memuat riwayat absensi..."
+    );
+
+    await muatIdentitas(user);
+
+    await muatDataAbsensi();
+
+    dataBerhasilDimuat = true;
+
+    sembunyikanStatus();
+
+    tampilkanRiwayat();
+}
+
+// ================================================
+// AUTH FIREBASE
+// ================================================
+
+onAuthStateChanged(auth, async user => {
+
+    if (!user) {
+
+        window.location.replace("index.html");
+
+        return;
+    }
+
+    try {
+
+        await prosesHalaman(user);
+
+    } catch (error) {
+
+        console.error(
+            "Riwayat absensi gagal dimuat:",
+            error
+        );
+
+        tampilkanStatus(
+            error.message ||
+            "Terjadi kesalahan saat memuat riwayat absensi.",
+            "error"
+        );
+
+        daftarRiwayatEl.innerHTML = "";
+
+        const kosong = buatElemen(
+            "div",
+            "kosong",
+            "Data riwayat absensi belum dapat ditampilkan."
+        );
+
+        daftarRiwayatEl.appendChild(kosong);
+    }
+});
+
+// ================================================
+// MULAI
+// ================================================
+
+siapkanFilter();
+
+</script>
+
+</body>
+</html>
