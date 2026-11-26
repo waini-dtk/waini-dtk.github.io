@@ -45,12 +45,101 @@ select.status{min-width:170px;padding:8px;font-size:12px}
 .chip{display:inline-block;padding:4px 8px;border-radius:30px;background:#e6eefc;font-weight:bold;font-size:11px}
 .legend{background:#fff8e9;border:1px solid #f2d9a8;font-size:12px;line-height:2}
 .legend .chip{margin:2px;background:white;border:1px solid #ead6a8}
-.summary{border:1px solid #ead1d3;background:white;overflow:hidden;padding:0}
-.summary h3{background:#8d171d;color:white;padding:11px;font-size:14px}
-.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
-.stat{padding:11px;border-bottom:1px solid #eee;border-right:1px solid #eee;min-width:0}
-.stat span{display:block;color:#647084;font-size:11px;margin-bottom:5px}
-.stat strong{font-size:18px}
+
+/* RINGKASAN ABSENSI - TAMPILAN BARU */
+.summary{
+border:1px solid #ead1d3;
+background:#fff;
+overflow:hidden;
+padding:0;
+box-shadow:0 2px 8px #00000008;
+}
+.summary h3{
+background:linear-gradient(135deg,#7d1018,#a51e28);
+color:white;
+padding:14px;
+font-size:14px;
+}
+.stats{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+padding:12px;
+}
+.stat{
+background:#f7f8fa;
+border:1px solid #e8ebf0;
+border-radius:11px;
+padding:13px;
+min-width:0;
+min-height:88px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+.stat span{
+display:block;
+color:#647084;
+font-size:11px;
+line-height:1.4;
+margin-bottom:7px;
+}
+.stat strong{
+font-size:23px;
+line-height:1.2;
+color:#202938;
+}
+.stat.present-stat strong,
+.stat.filled-stat strong{
+color:#15803d;
+}
+.stat.empty-stat strong{
+color:#b45309;
+}
+.stat.percent-stat{
+grid-column:1/-1;
+min-height:auto;
+background:#f7f8fa;
+}
+.percent-heading{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:8px;
+margin-bottom:10px;
+}
+.percent-heading span{
+margin:0;
+font-weight:bold;
+color:#424b5b;
+}
+.percent-heading strong{
+font-size:22px;
+color:#15803d;
+white-space:nowrap;
+}
+.progress-track{
+height:11px;
+width:100%;
+background:#e1e5eb;
+border-radius:20px;
+overflow:hidden;
+}
+.progress-bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#16a34a,#22c55e);
+border-radius:20px;
+transition:width .3s ease;
+}
+.percent-detail{
+display:block;
+font-size:10px;
+color:#687385;
+margin-top:8px;
+line-height:1.5;
+}
+
 .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
 .btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:12px 8px;font-weight:bold;font-size:12px;width:100%;min-height:45px;overflow-wrap:anywhere}
 .btn.primary{background:#8d171d;color:white}
@@ -62,6 +151,7 @@ select.status{min-width:170px;padding:8px;font-size:12px}
 .loading{background:white;border:1px solid #ddd;text-align:center}
 .error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;line-height:1.6;overflow-wrap:anywhere}
 footer{text-align:center;color:#7b8493;font-size:10px;padding:15px}
+
 @media(max-width:600px){
 main{padding:10px}
 header{padding:11px}
@@ -76,18 +166,23 @@ header p{font-size:10px}
 .tabs .tab{padding:10px 7px;font-size:11px}
 .actions{grid-template-columns:1fr 1fr;gap:8px}
 .btn{padding:11px 6px;font-size:11px}
-.stats{grid-template-columns:1fr 1fr}
-.stat{padding:10px}
-.stat strong{font-size:17px}
+.stats{grid-template-columns:1fr 1fr;gap:9px;padding:10px}
+.stat{padding:11px;min-height:83px}
+.stat strong{font-size:21px}
+.stat.percent-stat{grid-column:1/-1}
+.percent-heading strong{font-size:21px}
 .table-wrap{max-height:65vh}
 table{min-width:1050px}
 }
+
 @media(min-width:700px){
 .controls{grid-template-columns:1fr 1fr 1fr}
-.stats{grid-template-columns:repeat(5,1fr)}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+.stat.percent-stat{grid-column:1/-1}
 .actions{display:flex;flex-wrap:wrap}
 .actions .btn{width:auto}
 }
+
 @media print{
 header,.tabs,.controls,.actions,.legend,footer{display:none!important}
 body{background:white}
@@ -208,13 +303,42 @@ Setiap perubahan dicatat pada riwayat_perubahan_absensi.
 </p>
 
 <div class="summary">
-<h3>Ringkasan Tanggal Terpilih</h3>
+<h3>📊 Ringkasan Tanggal Terpilih</h3>
 <div class="stats">
-<div class="stat"><span>Total Karyawan</span><strong id="total">0</strong></div>
-<div class="stat"><span>Kode 1 - Masuk</span><strong id="present">0</strong></div>
-<div class="stat"><span>Status Terisi</span><strong id="other">0</strong></div>
-<div class="stat"><span>Belum Diisi</span><strong id="empty">0</strong></div>
-<div class="stat"><span>Persentase Kode 1</span><strong id="percent">0%</strong></div>
+
+<div class="stat">
+<span>Total Karyawan</span>
+<strong id="total">0</strong>
+</div>
+
+<div class="stat present-stat">
+<span>Kode 1 - Masuk</span>
+<strong id="present">0</strong>
+</div>
+
+<div class="stat filled-stat">
+<span>Status Terisi</span>
+<strong id="other">0</strong>
+</div>
+
+<div class="stat empty-stat">
+<span>Belum Diisi</span>
+<strong id="empty">0</strong>
+</div>
+
+<div class="stat percent-stat">
+<div class="percent-heading">
+<span>Persentase Kode 1</span>
+<strong id="percent">0%</strong>
+</div>
+<div class="progress-track">
+<div class="progress-bar" id="percentBar"></div>
+</div>
+<small class="percent-detail" id="percentDetail">
+0 dari 0 karyawan tercatat dengan kode 1
+</small>
+</div>
+
 </div>
 </div>
 </section>
@@ -610,11 +734,8 @@ throw new Error("Tidak ada kode absensi aktif pada master_kode_absensi.");
 attendanceCodes=result.map(x=>[x.kode,x.nama,x.kategori]);
 }
 
-/*
-Membaca data periode dari Firestore.
-Data yang sudah dibaca disimpan di savedRecords.
-*/
 async function loadAttendanceFromFirebase(){
+
 loadingStage="Membaca data_absensi";
 
 const oldValues={...values};
@@ -668,14 +789,12 @@ values[key]=list[0].kode;
 notes[key]=String(list[0].keterangan||"");
 }
 
-/* Pertahankan input lokal yang belum disimpan. */
 for(const key of oldDirty){
 if(oldValues[key]!==undefined)values[key]=oldValues[key];
 if(oldNotes[key]!==undefined)notes[key]=oldNotes[key];
 }
 }
 
-/* Validasi periode Firestore sebelum menyimpan. */
 async function validateActivePeriod(){
 loadingStage="Memeriksa periode_absensi";
 
@@ -802,37 +921,41 @@ dirtyKeys.add(key);
 });
 }
 
+/* PERBAIKAN PERHITUNGAN RINGKASAN */
 function stats(){
-let masuk=0,terisi=0;
+let masuk=0;
+let terisi=0;
+
 authorizedStaff.forEach(s=>{
 const code=values[dataKey(currentDate,s.nik)]||"";
+
 if(code)terisi++;
 if(code==="1")masuk++;
 });
+
 const total=authorizedStaff.length;
+const belumDiisi=Math.max(0,total-terisi);
+const persentase=total?Math.round(masuk/total*100):0;
+
 $("total").textContent=total;
 $("present").textContent=masuk;
-$("other").textContent=terisi-masuk;
-$("empty").textContent=total-terisi;
-$("percent").textContent=(total?Math.round(masuk/total*100):0)+"%";
+
+/* Status Terisi adalah SEMUA kode absensi yang sudah diisi. */
+$("other").textContent=terisi;
+
+$("empty").textContent=belumDiisi;
+$("percent").textContent=persentase+"%";
+
+/* Perbarui batang progres persentase kode 1. */
+$("percentBar").style.width=persentase+"%";
+$("percentDetail").textContent=
+masuk+" dari "+total+" karyawan tercatat dengan kode 1";
 }
 
 function attendanceDocumentId(nik,tanggal){
 return normalizeNik(nik)+"_"+String(tanggal||"").replace(/-/g,"");
 }
 
-/*
-PENYIMPANAN ABSENSI - PERBAIKAN PEMBACAAN.
-
-Data lama diambil dari savedRecords yang sudah dibaca
-oleh loadAttendanceFromFirebase() melalui query.
-
-Tidak ada getDoc(ref) langsung ke dokumen data_absensi
-pada proses penyimpanan.
-
-Batch tetap atomik: absensi dan riwayat tidak akan tersimpan
-separuh apabila salah satu penulisan ditolak.
-*/
 async function saveAttendance(){
 
 if(!currentUser){
@@ -913,11 +1036,6 @@ const canonicalId=attendanceDocumentId(
 employee.nik,currentDate
 );
 
-/*
-PERBAIKAN UTAMA:
-Gunakan data dari hasil query yang sudah dimuat.
-Jangan melakukan getDoc(ref) langsung pada data_absensi.
-*/
 tahap="MENGAMBIL DATA LAMA DARI HASIL PEMBACAAN data_absensi";
 
 const existingRecord=savedRecords[key]||null;
@@ -1115,7 +1233,6 @@ errors.join("\n\n--------------------\n\n");
 alert(message);
 }
 
-/* Kosongkan hanya input lokal, bukan data Firebase. */
 $("reset").onclick=()=>{
 if(!confirm("Kosongkan input tanggal ini? Data Firebase tidak akan dihapus."))return;
 authorizedStaff.forEach(s=>{
@@ -1175,8 +1292,6 @@ render();
 
 $("search").oninput=render;
 
-/* Data satu periode sudah dibaca; tanggal lain di periode yang sama
-tidak perlu mengambil ulang data dan tidak menghapus input lokal. */
 $("datePick").onchange=async e=>{
 const selectedDate=e.target.value;
 if(!validISODate(selectedDate)){
