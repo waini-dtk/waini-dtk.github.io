@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnosa Firebase WAINI</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:20px;
+  background:#f2f4f8;
+  font-family:Arial,sans-serif;
+  color:#222b3d;
+}
+.container{
+  max-width:500px;
+  margin:auto;
+  background:white;
+  padding:22px;
+  border-radius:18px;
+  box-shadow:0 5px 20px #0001;
+}
+h2{margin-top:0;color:#c90016}
+input,button{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border-radius:10px;
+  font-size:16px;
+}
+input{border:1px solid #ccc}
+button{
+  border:0;
+  background:#d60018;
+  color:white;
+  font-weight:bold;
+}
+pre{
+  white-space:pre-wrap;
+  word-break:break-word;
+  background:#f1f3f7;
+  padding:14px;
+  border-radius:10px;
+  font-size:13px;
+}
+.status{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:#fff3d6;
+  line-height:1.5;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>Diagnosa Firebase WAINI</h2>
+
+<p>Halaman pemeriksaan koneksi Authentication dan Firestore.</p>
+
+<input id="nik" placeholder="NIK Super Admin" value="28B03150560">
+
+<input id="password" type="password" placeholder="Password Firebase">
+
+<button id="cek">PERIKSA KONEKSI</button>
+
+<div id="status" class="status">
+Belum dilakukan pemeriksaan.
+</div>
+
+<pre id="hasil">Hasil akan ditampilkan di sini.</pre>
+
+</div>
+
+<script type="module">
+
+import {
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+  auth,
+  db,
+  firebaseConfig
+} from "./firebase.js";
+
+const tombol = document.getElementById("cek");
+const inputNik = document.getElementById("nik");
+const inputPassword = document.getElementById("password");
+const status = document.getElementById("status");
+const hasil = document.getElementById("hasil");
+
+tombol.addEventListener("click", async () => {
+
+  const nik = inputNik.value.trim().toUpperCase();
+  const password = inputPassword.value;
+
+  if (!nik || !password) {
+    status.textContent = "NIK dan password harus diisi.";
+    return;
+  }
+
+  tombol.disabled = true;
+  tombol.textContent = "MEMERIKSA...";
+  status.textContent = "Sedang menghubungkan Firebase...";
+  hasil.textContent = "";
+
+  let laporan = {};
+
+  try {
+
+    // 1. Periksa project Firebase
+    laporan.project_config = {
+      projectId: firebaseConfig.projectId,
+      authDomain: firebaseConfig.authDomain,
+      appId: firebaseConfig.appId
+    };
+
+    laporan.auth_app_project = auth.app.options.projectId;
+    laporan.firestore_app_project = db.app.options.projectId;
+
+    // 2. Tentukan email login sama seperti login WAINI
+    let email;
+
+    if (nik === "28B03150560") {
+      email = "superadmin@portalwhw.com";
+    } else {
+      email = nik.toLowerCase() + "@waini-dtk.invalid";
+    }
+
+    laporan.email_login = email;
+
+    // 3. Login Firebase Authentication
+    const login = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    const user = login.user;
+
+    laporan.authentication = {
+      berhasil: true,
+      uid: user.uid,
+      email: user.email,
+      projectId: user.auth.app.options.projectId
+    };
+
+    // 4. Baca dokumen akses_karyawan
+    const ref = doc(db, "akses_karyawan", nik);
+    const snap = await getDoc(ref);
+
+    laporan.firestore = {
+      collection: "akses_karyawan",
+      documentId: nik,
+      ditemukan: snap.exists()
+    };
+
+    if (snap.exists()) {
+
+      const data = snap.data();
+
+      laporan.data_firestore = {
+        uid_auth: data.uid_auth,
+        uid_auth_type: typeof data.uid_auth,
+
+        akun_auth_terhubung: data.akun_auth_terhubung,
+        akun_auth_terhubung_type:
+          typeof data.akun_auth_terhubung,
+
+        metode_autentikasi: data.metode_autentikasi,
+        metode_autentikasi_type:
+          typeof data.metode_autentikasi,
+
+        boleh_login: data.boleh_login,
+        boleh_login_type: typeof data.boleh_login,
+
+        verifikasi_akun: data.verifikasi_akun,
+        verifikasi_akun_type: typeof data.verifikasi_akun,
+
+        status_verifikasi: data.status_verifikasi,
+        status_verifikasi_type:
+          typeof data.status_verifikasi,
+
+        status_akses: data.status_akses,
+        status_akun: data.status_akun,
+
+        role_akses: data.role_akses
+      };
+
+      // 5. Bandingkan UID
+      laporan.pencocokan_uid = {
+        uid_auth_firestore: data.uid_auth,
+        uid_authentication: user.uid,
+        sama: data.uid_auth === user.uid
+      };
+
+      // 6. Pemeriksaan Boolean secara ketat
+      laporan.pemeriksaan_boolean = {
+        akun_auth_terhubung_true:
+          data.akun_auth_terhubung === true,
+
+        boleh_login_true:
+          data.boleh_login === true,
+
+        verifikasi_akun_true:
+          data.verifikasi_akun === true
+      };
+
+    }
+
+    status.textContent =
+      "Pemeriksaan selesai. Lihat hasil di bawah.";
+
+  } catch (error) {
+
+    laporan.error = {
+      code: error.code || "",
+      message: error.message || String(error)
+    };
+
+    status.textContent =
+      "Pemeriksaan mengalami kesalahan. Hasil error ditampilkan.";
+
+  } finally {
+
+    // Logout dari halaman diagnosa
+    try {
+      await signOut(auth);
+      laporan.logout_diagnosa = "Berhasil logout";
+    } catch (e) {
+      laporan.logout_diagnosa = e.message;
+    }
+
+    hasil.textContent = JSON.stringify(laporan, null, 2);
+
+    tombol.disabled = false;
+    tombol.textContent = "PERIKSA KONEKSI";
+
+  }
+
+});
+
+</script>
+</body>
+</html>
