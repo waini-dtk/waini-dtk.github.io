@@ -554,20 +554,55 @@ $("historyList").innerHTML=records.slice(0,100).map(r=>`
 }
 
 /* ==========================================================
-   PEMBUATAN EXCEL WAINI - HEADER BERTINGKAT
-   Kolom perhitungan/bonus tetap kosong untuk pengisian manual.
+   EXCEL WAINI - TEMA MARUN PROFESIONAL
+   - Kolom tetap sama
+   - Tidak menggunakan Freeze Panes
+   - Tidak membuat sheet Keterangan Kode
+   - Baris zebra lembut
+   - Border minimalis
+   - Warna kode absensi pastel
 ========================================================== */
-function excelCellStyle(cell,fill="FFFFFF",fontColor="000000",bold=false,align="center"){
-cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF"+fill}};
-cell.font={name:"Arial",size:9,bold,color:{argb:"FF"+fontColor}};
-cell.alignment={horizontal:align,vertical:"middle",wrapText:true};
-cell.border={
-top:{style:"thin",color:{argb:"FF555555"}},
-left:{style:"thin",color:{argb:"FF555555"}},
-bottom:{style:"thin",color:{argb:"FF555555"}},
-right:{style:"thin",color:{argb:"FF555555"}}
+
+const EXCEL_COLORS={
+maroon:"FF8D171D",
+maroonDark:"FF741219",
+maroonLight:"FFF5E6E8",
+rose:"FFF8ECEE",
+roseAlt:"FFFFF7F8",
+white:"FFFFFFFF",
+text:"FF30343B",
+muted:"FF6B7280",
+border:"FFE3D9DC",
+borderStrong:"FFD2B5BA",
+green:"FFE2F2E8",
+blue:"FFE4EDF8",
+yellow:"FFFFF1D6",
+pink:"FFF9E2EE",
+cyan:"FFE0F3F5",
+red:"FFFBE4E4",
+purple:"FFEEE7F8",
+orange:"FFFFE9D8",
+gray:"FFF0F2F4"
 };
+
+function excelCellStyle(cell,fill="FFFFFFFF",fontColor="FF30343B",bold=false,align="center",options={}){
+cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:fill}};
+cell.font={name:"Aptos",size:10,bold,color:{argb:fontColor}};
+cell.alignment={horizontal:align,vertical:"middle",wrapText:options.wrap!==false};
+cell.border={
+top:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+left:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+bottom:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+right:{style:"thin",color:{argb:EXCEL_COLORS.border}}
+};
+if(options.bottomStrong){
+cell.border.bottom={style:"medium",color:{argb:EXCEL_COLORS.borderStrong}};
 }
+if(options.rightStrong){
+cell.border.right={style:"medium",color:{argb:EXCEL_COLORS.borderStrong}};
+}
+}
+
 function excelDateLabel(date){
 const d=new Date(date+"T00:00:00");
 return d.toLocaleDateString("id-ID",{weekday:"short"});
@@ -577,6 +612,19 @@ const d=new Date(date+"T00:00:00");
 return d.toLocaleDateString("id-ID",{month:"long",year:"numeric"}).toUpperCase();
 }
 function excelDateNumber(date){return Number(date.slice(8,10));}
+
+function excelCodeColor(code){
+const value=String(code||"").toUpperCase();
+if(value==="1")return EXCEL_COLORS.green;
+if(value==="1A")return EXCEL_COLORS.blue;
+if(value==="2")return EXCEL_COLORS.yellow;
+if(value==="3")return EXCEL_COLORS.pink;
+if(value==="4"||value==="4A")return EXCEL_COLORS.purple;
+if(value==="4B"||value==="6")return EXCEL_COLORS.cyan;
+if(value==="5")return EXCEL_COLORS.orange;
+if(value==="7"||value==="9")return EXCEL_COLORS.red;
+return EXCEL_COLORS.gray;
+}
 
 async function createWainiExcel(){
 if(typeof ExcelJS==="undefined"){
@@ -593,9 +641,9 @@ wb.company="WAINI";
 wb.created=new Date();
 
 const ws=wb.addWorksheet("Laporan Absensi",{
-views:[{state:"frozen",ySplit:6,xSplit:3,showGridLines:false}],
+views:[{showGridLines:false}],
 pageSetup:{orientation:"landscape",paperSize:9,fitToPage:true,fitToWidth:1,fitToHeight:0},
-properties:{defaultRowHeight:20}
+properties:{defaultRowHeight:21}
 });
 
 const fixedHeaders=[
@@ -616,12 +664,13 @@ const calcHeaders=[
 ];
 const lastCol=calcStart+calcHeaders.length-1;
 
+/* Header laporan */
 ws.mergeCells(1,1,1,lastCol);
 ws.getCell(1,1).value="LAPORAN ABSENSI KARYAWAN WAINI";
-ws.getCell(1,1).font={name:"Arial",size:16,bold:true,color:{argb:"FFFFFFFF"}};
-ws.getCell(1,1).fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF8D171D"}};
+ws.getCell(1,1).font={name:"Aptos Display",size:16,bold:true,color:{argb:EXCEL_COLORS.white}};
+ws.getCell(1,1).fill={type:"pattern",pattern:"solid",fgColor:{argb:EXCEL_COLORS.maroon}};
 ws.getCell(1,1).alignment={horizontal:"center",vertical:"middle"};
-ws.getRow(1).height=32;
+ws.getRow(1).height=34;
 
 ws.mergeCells(2,1,2,3);
 ws.getCell(2,1).value="PERIODE";
@@ -631,146 +680,218 @@ ws.mergeCells(2,8,2,10);
 ws.getCell(2,8).value="PETUGAS: "+currentNik;
 ws.mergeCells(2,11,2,lastCol);
 ws.getCell(2,11).value="WAINI • SISTEM INFORMASI MANAJEMEN KARYAWAN";
-for(let c=1;c<=lastCol;c++)excelCellStyle(ws.getCell(2,c),"FCE4D6","7D1018",true);
-ws.getRow(2).height=24;
 
-/* PERBAIKAN: setiap kolom identitas digabung satu kali saja.
-   Tidak ada lagi merge besar yang bertumpuk dengan merge per kolom. */
+for(let c=1;c<=lastCol;c++){
+excelCellStyle(ws.getCell(2,c),EXCEL_COLORS.rose,EXCEL_COLORS.maroon,true);
+}
+ws.getRow(2).height=25;
+
+/* Kolom identitas - merge vertikal per kolom, tidak saling tumpang tindih */
 for(let i=0;i<fixedHeaders.length;i++){
 const c=1+i;
 const cell=ws.getCell(4,c);
 cell.value=fixedHeaders[i];
-excelCellStyle(cell,"FFF200","000000",true);
+excelCellStyle(cell,EXCEL_COLORS.maroon,EXCEL_COLORS.white,true,"center",{bottomStrong:true});
 ws.mergeCells(4,c,6,c);
+cell.alignment={horizontal:i===2?"left":"center",vertical:"middle",wrapText:true};
+cell.border={
+top:{style:"thin",color:{argb:EXCEL_COLORS.maroonDark}},
+left:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+bottom:{style:"medium",color:{argb:EXCEL_COLORS.maroon}},
+right:{style:"thin",color:{argb:EXCEL_COLORS.border}}
+};
 }
 
+/* Header tanggal */
 let col=dateStart;
 let monthGroups=[];
 let groupStart=dateStart;
 let currentMonth=excelMonthLabel(dates[0]);
-dates.forEach((date,index)=>{
+
+dates.forEach(date=>{
 const month=excelMonthLabel(date);
 if(month!==currentMonth){
 monthGroups.push({start:groupStart,end:col-1,label:currentMonth});
-groupStart=col;currentMonth=month;
+groupStart=col;
+currentMonth=month;
 }
 ws.getCell(5,col).value=excelDateNumber(date);
 ws.getCell(6,col).value=excelDateLabel(date);
-excelCellStyle(ws.getCell(5,col),"F8CBAD","000000",true);
-excelCellStyle(ws.getCell(6,col),"FCE4D6","C00000",true);
+
+excelCellStyle(ws.getCell(5,col),EXCEL_COLORS.rose,EXCEL_COLORS.maroon,true);
+excelCellStyle(ws.getCell(6,col),EXCEL_COLORS.roseAlt,EXCEL_COLORS.maroon,true);
+
+ws.getCell(5,col).border={
+top:{style:"thin",color:{argb:EXCEL_COLORS.borderStrong}},
+left:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+bottom:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+right:{style:"thin",color:{argb:EXCEL_COLORS.border}}
+};
 col++;
 });
+
 monthGroups.push({start:groupStart,end:dateEnd,label:currentMonth});
 monthGroups.forEach(g=>{
 ws.mergeCells(4,g.start,4,g.end);
 ws.getCell(4,g.start).value=g.label;
-excelCellStyle(ws.getCell(4,g.start),"F4B183","000000",true);
+excelCellStyle(ws.getCell(4,g.start),EXCEL_COLORS.maroon,EXCEL_COLORS.white,true);
+ws.getCell(4,g.start).border={
+top:{style:"thin",color:{argb:EXCEL_COLORS.maroonDark}},
+left:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+bottom:{style:"medium",color:{argb:EXCEL_COLORS.maroon}},
+right:{style:"thin",color:{argb:EXCEL_COLORS.border}}
+};
 });
 
+/* Header kode absensi */
 ws.mergeCells(4,codeStart,4,codeEnd);
 ws.getCell(4,codeStart).value="ABSENCE CODE";
-excelCellStyle(ws.getCell(4,codeStart),"FFF200","000000",true);
+excelCellStyle(ws.getCell(4,codeStart),EXCEL_COLORS.maroon,EXCEL_COLORS.white,true);
+
 codes.forEach((code,i)=>{
-const c=codeStart+i;ws.getCell(5,c).value=code[0];ws.getCell(6,c).value=code[1];
-excelCellStyle(ws.getCell(5,c),"FFF200","000000",true);
-excelCellStyle(ws.getCell(6,c),"FFF2CC","000000",true);
+const c=codeStart+i;
+ws.getCell(5,c).value=code[0];
+ws.getCell(6,c).value=code[1];
+
+excelCellStyle(ws.getCell(5,c),EXCEL_COLORS.rose,EXCEL_COLORS.maroon,true);
+excelCellStyle(ws.getCell(6,c),EXCEL_COLORS.roseAlt,EXCEL_COLORS.text,true);
 });
 
+/* Header perhitungan */
 const groups=[
-{title:"Total Potongan Absensi & Insentif Tanggal Merah",start:calcStart,count:4,color:"00D600"},
-{title:"Masa Kerja",start:calcStart+4,count:7,color:"FFF200"},
-{title:"Bonus Kehadiran Pribadi",start:calcStart+11,count:3,color:"FFF200"},
-{title:"Bonus Kehadiran Team",start:calcStart+14,count:1,color:"F4B183"},
-{title:"Total Bonus Kehadiran",start:calcStart+15,count:1,color:"FFF200"}
+{title:"Total Potongan Absensi & Insentif Tanggal Merah",start:calcStart,count:4},
+{title:"Masa Kerja",start:calcStart+4,count:7},
+{title:"Bonus Kehadiran Pribadi",start:calcStart+11,count:3},
+{title:"Bonus Kehadiran Team",start:calcStart+14,count:1},
+{title:"Total Bonus Kehadiran",start:calcStart+15,count:1}
 ];
+
 groups.forEach(g=>{
 ws.mergeCells(4,g.start,4,g.start+g.count-1);
 ws.getCell(4,g.start).value=g.title;
-excelCellStyle(ws.getCell(4,g.start),g.color,"000000",true);
+excelCellStyle(ws.getCell(4,g.start),EXCEL_COLORS.maroon,EXCEL_COLORS.white,true);
 });
+
 calcHeaders.forEach((h,i)=>{
-const c=calcStart+i;ws.getCell(5,c).value=h;
+const c=calcStart+i;
+ws.getCell(5,c).value=h;
 ws.mergeCells(5,c,6,c);
-excelCellStyle(ws.getCell(5,c),i<4?"00D600":"FFF200","000000",true);
+excelCellStyle(ws.getCell(5,c),EXCEL_COLORS.rose,EXCEL_COLORS.maroon,true);
 });
 
-ws.getRow(4).height=28;ws.getRow(5).height=38;ws.getRow(6).height=28;
+ws.getRow(4).height=27;
+ws.getRow(5).height=32;
+ws.getRow(6).height=26;
 
+/* Isi tabel */
 authorizedStaff.forEach((s,index)=>{
 const r=7+index;
+const rowFill=index%2===0?EXCEL_COLORS.white:EXCEL_COLORS.roseAlt;
+
 const fixedValues=[
 index+1,s.nik,s.name,s.div,s.dept,s.jabatan,
 s.tmk,s.poh,s.sched||s.cuti,""
 ];
-fixedValues.forEach((v,i)=>ws.getCell(r,i+1).value=v||"");
 
+fixedValues.forEach((v,i)=>{
+const cell=ws.getCell(r,i+1);
+cell.value=v||"";
+excelCellStyle(cell,rowFill,EXCEL_COLORS.text,false,i===2?"left":"center");
+});
+
+/* Data tanggal */
 dates.forEach((date,i)=>{
 const code=values[dataKey(date,s.nik)]||"";
 const cell=ws.getCell(r,dateStart+i);
-cell.value=code;
-if(code==="1"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFFFFFF"}};}
-else if(code==="2"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFFC000"}};}
-else if(code==="3"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFF99CC"}};}
-else if(code==="4B"||code==="6"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF00DDEB"}};}
-else if(code==="7"||code==="9"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFF9999"}};}
-else if(code){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF9CC2E5"}};}
-cell.font={name:"Arial",size:9,color:{argb:"FF000000"}};
-cell.alignment={horizontal:"center",vertical:"middle"};
-cell.border={top:{style:"thin"},left:{style:"thin"},bottom:{style:"thin"},right:{style:"thin"}};
+cell.value=code||"";
+
+const fill=code?excelCodeColor(code):rowFill;
+excelCellStyle(cell,fill,EXCEL_COLORS.text,!!code,"center");
+
+cell.border={
+top:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+left:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+bottom:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+right:{style:"thin",color:{argb:EXCEL_COLORS.border}}
+};
 });
 
+/* Rekap jumlah setiap kode */
 codes.forEach((code,i)=>{
 const count=dates.filter(date=>String(values[dataKey(date,s.nik)]||"")===String(code[0])).length;
-ws.getCell(r,codeStart+i).value=count||"";
+const cell=ws.getCell(r,codeStart+i);
+cell.value=count||"";
+excelCellStyle(cell,rowFill,EXCEL_COLORS.text,false,"center");
 });
 
+/* Kolom perhitungan tetap kosong untuk input manual */
 for(let c=calcStart;c<=lastCol;c++){
-ws.getCell(r,c).value="";
-excelCellStyle(ws.getCell(r,c),"FFFFFFFF","000000",false);
+const cell=ws.getCell(r,c);
+cell.value="";
+excelCellStyle(cell,rowFill,EXCEL_COLORS.text,false,"center");
 }
-for(let c=1;c<dateStart;c++){
-excelCellStyle(ws.getCell(r,c),"FFFFFFFF","000000",false,c===3?"left":"center");
+
+/* Garis pemisah antar kelompok kolom */
+for(let c=1;c<=lastCol;c++){
+const cell=ws.getCell(r,c);
+cell.border={
+top:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+left:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+bottom:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+right:{style:"thin",color:{argb:EXCEL_COLORS.border}}
+};
 }
-ws.getRow(r).height=21;
+
+[fixedCount,dateEnd,codeEnd].forEach(c=>{
+ws.getCell(r,c).border={
+top:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+left:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+bottom:{style:"thin",color:{argb:EXCEL_COLORS.border}},
+right:{style:"medium",color:{argb:EXCEL_COLORS.borderStrong}}
+};
 });
 
-const widths=[7,16,25,20,20,23,15,16,15,22];
+ws.getRow(r).height=22;
+});
+
+/* Lebar kolom */
+const widths=[7,16,27,19,19,23,15,16,16,22];
 widths.forEach((w,i)=>ws.getColumn(i+1).width=w);
+
 for(let c=dateStart;c<=dateEnd;c++)ws.getColumn(c).width=5.5;
-for(let c=codeStart;c<=codeEnd;c++)ws.getColumn(c).width=7;
-const calcWidths=[10,11,14,15,10,13,13,14,15,9,9,13,8,13,17,18];
+for(let c=codeStart;c<=codeEnd;c++)ws.getColumn(c).width=8;
+
+const calcWidths=[11,12,15,17,11,14,15,14,16,10,10,14,9,14,19,20];
 calcWidths.forEach((w,i)=>ws.getColumn(calcStart+i).width=w);
 
-ws.autoFilter={from:{row:6,column:1},to:{row:6+authorizedStaff.length,column:lastCol}};
+/* Filter dan pengaturan cetak */
+ws.autoFilter={
+from:{row:6,column:1},
+to:{row:6+authorizedStaff.length,column:lastCol}
+};
+
 ws.pageSetup.printArea=`A1:${ws.getColumn(lastCol).letter}${Math.max(7,6+authorizedStaff.length)}`;
 ws.pageSetup.horizontalCentered=true;
+ws.pageSetup.printTitlesRow="1:6";
+ws.pageSetup.fitToPage=true;
+ws.pageSetup.fitToWidth=1;
+ws.pageSetup.fitToHeight=0;
 ws.headerFooter.oddFooter="WAINI • Laporan Absensi • Halaman &P dari &N";
 
-const legend=wb.addWorksheet("Keterangan Kode");
-legend.views=[{state:"frozen",ySplit:3,showGridLines:false}];
-legend.mergeCells("A1:C1");
-legend.getCell("A1").value="KETERANGAN KODE ABSENSI WAINI";
-legend.getCell("A1").font={name:"Arial",size:15,bold:true,color:{argb:"FFFFFFFF"}};
-legend.getCell("A1").fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF8D171D"}};
-legend.getCell("A1").alignment={horizontal:"center",vertical:"middle"};
-legend.getRow(1).height=30;
-["Kode","Nama Absensi","Kategori"].forEach((v,i)=>{
-legend.getCell(3,i+1).value=v;excelCellStyle(legend.getCell(3,i+1),"FFF200","000000",true);
-});
-codes.forEach((c,i)=>{
-legend.getCell(i+4,1).value=c[0];legend.getCell(i+4,2).value=c[1];legend.getCell(i+4,3).value=c[2];
-for(let j=1;j<=3;j++)excelCellStyle(legend.getCell(i+4,j),"FFFFFFFF","000000",false,j===2?"left":"center");
-});
-legend.getColumn(1).width=15;legend.getColumn(2).width=38;legend.getColumn(3).width=22;
-legend.autoFilter={from:"A3",to:`C${3+codes.length}`};
+/* Tidak menggunakan Freeze Panes dan tidak membuat sheet keterangan kode */
 
 const filename="WAINI_Laporan_Absensi_"+currentPeriod.start+"_sd_"+currentPeriod.end+".xlsx";
 const buffer=await wb.xlsx.writeBuffer();
 const blob=new Blob([buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
 const url=URL.createObjectURL(blob);
-const a=document.createElement("a");a.href=url;a.download=filename;
-document.body.appendChild(a);a.click();a.remove();
+const a=document.createElement("a");
+a.href=url;
+a.download=filename;
+document.body.appendChild(a);
+a.click();
+a.remove();
 setTimeout(()=>URL.revokeObjectURL(url),1500);
+
 }catch(error){
 console.error("Gagal membuat Excel WAINI:",error);
 alert("Gagal membuat laporan Excel:\n"+(error.message||String(error)));
