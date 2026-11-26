@@ -632,9 +632,12 @@ footer{
 
   <div class="info">
     <strong>ⓘ Informasi Penting</strong><br>
-    Setelah akun disetujui, status akan otomatis diperbarui
-    pada halaman publik <b>Status Pendaftaran</b>.
-    Pengguna yang disetujui langsung dapat login ke WAINI.
+    Perubahan status akun disimpan pada data pengguna.
+    Status publik juga akan dicoba diperbarui secara otomatis.
+    Jika sinkronisasi publik gagal karena izin Firebase atau dokumen
+    tidak ditemukan, status akun tetap tersimpan dan pemberitahuan
+    akan ditampilkan kepada Admin.
+    Pengguna yang disetujui dapat login apabila status akunnya aktif.
   </div>
 
 </main>
@@ -812,7 +815,7 @@ function showMessage(text,type="success"){
 
   setTimeout(()=>{
     box.classList.remove("show");
-  },6000);
+  },8000);
 }
 
 
@@ -899,7 +902,7 @@ async function loadApplicants(){
 
       const data=item.data();
 
-      // PERBAIKAN: role pendaftar adalah "karyawan"
+      // Hanya pendaftar dengan role karyawan
       if(normalize(data.role)!=="karyawan") return;
 
       applicants.push({
@@ -952,7 +955,6 @@ async function loadEmployeeMatches(){
 
     try{
 
-      // COLLECTION YANG BENAR: data_karyawan
       const employeeRef=doc(db,"data_karyawan",nik);
       const employeeSnap=await getDoc(employeeRef);
 
@@ -1337,6 +1339,7 @@ function openAction(type,id){
 
 /* =====================================
    12. SIMPAN PERUBAHAN STATUS
+   SINKRONISASI STATUS PUBLIK
 ===================================== */
 
 async function saveAction(){
@@ -1355,13 +1358,18 @@ async function saveAction(){
     const item=actionTarget;
 
     let newStatus="";
+    let publicStatus="";
     let note="";
     let userUpdate={};
-    
+
+    /* ---------------------------------
+       TENTUKAN STATUS DAN DATA UPDATE
+    --------------------------------- */
 
     if(actionType==="setujui"){
 
       newStatus="aktif";
+      publicStatus="Disetujui";
 
       userUpdate={
         status:"aktif",
@@ -1381,6 +1389,7 @@ async function saveAction(){
       }
 
       newStatus="ditolak";
+      publicStatus="Ditolak";
 
       userUpdate={
         status:"ditolak",
@@ -1401,6 +1410,7 @@ async function saveAction(){
       }
 
       newStatus="perlu_melengkapi_data";
+      publicStatus="Perlu Melengkapi Data";
 
       userUpdate={
         status:"perlu_melengkapi_data",
@@ -1410,19 +1420,114 @@ async function saveAction(){
 
     }
 
+    /* ---------------------------------
+       LANGKAH 1:
+       SIMPAN STATUS AKUN DI PENGGUNA
+    --------------------------------- */
+
     const userRef=doc(db,"pengguna",item.id);
+
     await updateDoc(userRef,userUpdate);
+
+    /*
+      PENTING:
+      Sampai di sini status akun sudah berhasil disimpan.
+      Sinkronisasi publik adalah langkah terpisah.
+      Kegagalan sinkronisasi tidak membatalkan status akun.
+    */
+
+    /* ---------------------------------
+       LANGKAH 2:
+       COBA SINKRONKAN STATUS PUBLIK
+    --------------------------------- */
+
+    let publicSync=true;
+    let publicSyncMessage="";
+
+    try{
+
+      const publicRef=doc(
+        db,
+        "status_pendaftaran_public",
+        item.id
+      );
+
+      const publicSnap=await getDoc(publicRef);
+
+      if(!publicSnap.exists()){
+
+        publicSync=false;
+
+        publicSyncMessage=
+          "Dokumen status_pendaftaran_public tidak ditemukan dengan UID akun ini. Dokumen publik tidak dibuat otomatis.";
+
+      }else{
+
+        /*
+          Hanya memperbarui field minimal:
+          nama dan status.
+
+          Tidak menambahkan NIK.
+          Tidak menambahkan catatan admin.
+          Tidak menambahkan informasi privat.
+        */
+
+        await updateDoc(publicRef,{
+          nama:String(item.nama||""),
+          status:publicStatus
+        });
+
+      }
+
+    }catch(publicError){
+
+      console.error(
+        "Status akun berhasil disimpan, tetapi sinkronisasi status publik gagal:",
+        publicError
+      );
+
+      publicSync=false;
+
+      if(
+        publicError.code==="permission-denied" ||
+        publicError.code==="firestore/permission-denied"
+      ){
+
+        publicSyncMessage=
+          "Firebase menolak pembaruan status publik karena izin akses. Berdasarkan Rules yang diaudit, pembaruan status_pendaftaran_public hanya diizinkan untuk Super Admin.";
+
+      }else{
+
+        publicSyncMessage=
+          "Sinkronisasi status publik gagal: "+publicError.message;
+
+      }
+
+    }
+
+    /* ---------------------------------
+       LANGKAH 3:
+       PERBARUI TAMPILAN LOKAL
+    --------------------------------- */
 
     const localItem=applicants.find(x=>x.id===item.id);
 
     if(localItem){
+
       localItem.status=newStatus;
 
-      if(note) localItem.catatan_admin=note;
+      if(note){
+        localItem.catatan_admin=note;
+      }
 
       if(actionType==="setujui"){
         localItem.approvedAt=new Date();
       }
+
+      if(actionType==="tolak"){
+        localItem.rejectedAt=new Date();
+      }
+
     }
 
     actionModal.classList.remove("show");
@@ -1430,17 +1535,44 @@ async function saveAction(){
     updateSummary();
     renderCards();
 
-    showMessage(
-      actionType==="setujui"
-        ? "Pendaftaran "+item.nama+" berhasil disetujui. Akun sudah aktif."
-        : actionType==="tolak"
-          ? "Pendaftaran berhasil ditolak."
-          : "Permintaan melengkapi data berhasil dikirim."
-    );
+    /* ---------------------------------
+       LANGKAH 4:
+       TAMPILKAN HASIL
+    --------------------------------- */
+
+    if(publicSync){
+
+      showMessage(
+        actionType==="setujui"
+          ? "Pendaftaran "+item.nama+" berhasil disetujui. Status akun aktif dan status publik berhasil diperbarui."
+          : actionType==="tolak"
+            ? "Pendaftaran "+item.nama+" berhasil ditolak. Status publik berhasil diperbarui."
+            : "Permintaan melengkapi data berhasil dikirim. Status publik berhasil diperbarui.",
+        "success"
+      );
+
+    }else{
+
+      showMessage(
+        "STATUS AKUN BERHASIL DISIMPAN, tetapi status publik belum tersinkron. "+publicSyncMessage,
+        "error"
+      );
+
+    }
 
   }catch(error){
 
-    showMessage("Gagal menyimpan perubahan: "+error.message,"error");
+    /*
+      Bagian ini menangani kegagalan penyimpanan
+      status utama pada collection pengguna.
+    */
+
+    console.error("Gagal menyimpan status akun:",error);
+
+    showMessage(
+      "Gagal menyimpan perubahan status akun: "+error.message,
+      "error"
+    );
 
   }finally{
 
