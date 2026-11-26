@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -8,459 +9,93 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-
-body{
-font-family:Arial,sans-serif;
-background:#f3f5f8;
-color:#202938;
-padding-bottom:30px;
-overflow-x:hidden
-}
-
-header{
-background:linear-gradient(135deg,#7d1018,#a51e28);
-color:white;
-padding:13px;
-display:flex;
-align-items:center;
-gap:10px;
-box-shadow:0 3px 12px #0002
-}
-
+body{font-family:Arial,sans-serif;background:#f3f5f8;color:#202938;padding-bottom:30px;overflow-x:hidden}
+header{background:linear-gradient(135deg,#7d1018,#a51e28);color:white;padding:13px;display:flex;align-items:center;gap:10px;box-shadow:0 3px 12px #0002}
 .logo{font-size:28px}
-
 header h1{font-size:18px}
-
 header p{font-size:11px;margin-top:3px}
-
-.user{
-margin-left:auto;
-text-align:right;
-font-size:11px;
-line-height:1.5;
-max-width:150px;
-overflow-wrap:anywhere
-}
-
-main{
-width:100%;
-max-width:1200px;
-margin:auto;
-padding:12px
-}
-
-.headline{
-display:flex;
-gap:10px;
-margin:10px 0 15px;
-align-items:center
-}
-
+.user{margin-left:auto;text-align:right;font-size:11px;line-height:1.5;max-width:150px;overflow-wrap:anywhere}
+main{width:100%;max-width:1200px;margin:auto;padding:12px}
+.headline{display:flex;gap:10px;margin:10px 0 15px;align-items:center}
 .headline .icon{font-size:28px}
-
-.headline h2{
-font-size:19px;
-margin-bottom:4px
-}
-
-.headline p,.note{
-font-size:12px;
-color:#687385;
-line-height:1.6
-}
-
-.period,.scope,.legend,.summary,.recap-card,.loading,.error{
-border-radius:11px;
-padding:13px;
-margin:12px 0
-}
-
-.period{
-background:#fbe9eb;
-border:1px solid #f4c9cd
-}
-
-.period b{
-display:block;
-color:#81151d;
-margin-bottom:6px;
-font-size:12px
-}
-
-.period span{
-font-size:13px;
-font-weight:bold
-}
-
-.tabs{
-display:flex;
-gap:6px;
-overflow-x:auto;
-margin:14px 0;
-padding-bottom:3px
-}
-
-.tab{
-border:1px solid #ddd;
-background:white;
-color:#424b5b;
-border-radius:9px;
-padding:10px 12px;
-font-weight:bold;
-white-space:nowrap;
-font-size:12px;
-flex:1
-}
-
-.tab.active{
-background:#8d171d;
-color:white;
-border-color:#8d171d
-}
-
-.scope{
-background:#e7f1ff;
-border:1px solid #b8d5ff;
-font-size:12px;
-display:flex;
-justify-content:space-between;
-gap:10px;
-flex-wrap:wrap
-}
-
-.scope>div{
-min-width:120px;
-flex:1
-}
-
-.controls{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin:12px 0
-}
-
-label{
-font-size:12px;
-font-weight:bold;
-display:block;
-margin-bottom:6px
-}
-
+.headline h2{font-size:19px;margin-bottom:4px}
+.headline p,.note{font-size:12px;color:#687385;line-height:1.6}
+.period,.scope,.legend,.summary,.recap-card,.loading,.error{border-radius:11px;padding:13px;margin:12px 0}
+.period{background:#fbe9eb;border:1px solid #f4c9cd}
+.period b{display:block;color:#81151d;margin-bottom:6px;font-size:12px}
+.period span{font-size:13px;font-weight:bold}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:14px 0;padding-bottom:3px}
+.tab{border:1px solid #ddd;background:white;color:#424b5b;border-radius:9px;padding:10px 12px;font-weight:bold;white-space:nowrap;font-size:12px;flex:1}
+.tab.active{background:#8d171d;color:white;border-color:#8d171d}
+.scope{background:#e7f1ff;border:1px solid #b8d5ff;font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.scope>div{min-width:120px;flex:1}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+label{font-size:12px;font-weight:bold;display:block;margin-bottom:6px}
 input,select,button{font:inherit}
-
-input[type=date],
-input[type=search],
-input[type=text],
-select{
-width:100%;
-padding:11px;
-border:1px solid #d6dce5;
-border-radius:9px;
-background:white;
-color:#202938;
-min-width:0
-}
-
-.mode{
-display:flex;
-background:#eee;
-border-radius:10px;
-padding:3px;
-width:100%
-}
-
-.mode button{
-flex:1;
-border:0;
-background:transparent;
-padding:9px 4px;
-border-radius:8px;
-font-size:11px
-}
-
-.mode button.selected{
-background:#8d171d;
-color:white
-}
-
-.table-wrap{
-overflow:auto;
--webkit-overflow-scrolling:touch;
-background:white;
-border:1px solid #e0e4eb;
-border-radius:11px;
-max-height:70vh;
-width:100%;
-margin-top:12px
-}
-
-table{
-border-collapse:collapse;
-width:100%;
-min-width:1050px;
-font-size:12px
-}
-
-th{
-background:#8d171d;
-color:white;
-text-align:left;
-padding:10px;
-white-space:nowrap;
-position:sticky;
-top:0;
-z-index:2
-}
-
-td{
-padding:8px;
-border-bottom:1px solid #e8ebf0;
-vertical-align:middle;
-white-space:nowrap
-}
-
-select.status{
-min-width:170px;
-padding:8px;
-font-size:12px
-}
-
-.noteInput{
-min-width:140px;
-padding:8px;
-border:1px solid #ddd;
-border-radius:7px
-}
-
-.chip{
-display:inline-block;
-padding:4px 8px;
-border-radius:30px;
-background:#e6eefc;
-font-weight:bold;
-font-size:11px
-}
-
-.legend{
-background:#fff8e9;
-border:1px solid #f2d9a8;
-font-size:12px;
-line-height:2
-}
-
-.legend .chip{
-margin:2px;
-background:white;
-border:1px solid #ead6a8
-}
-
-.summary{
-border:1px solid #ead1d3;
-background:white;
-overflow:hidden;
-padding:0
-}
-
-.summary h3{
-background:#8d171d;
-color:white;
-padding:11px;
-font-size:14px
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr))
-}
-
-.stat{
-padding:11px;
-border-bottom:1px solid #eee;
-border-right:1px solid #eee;
-min-width:0
-}
-
-.stat span{
-display:block;
-color:#647084;
-font-size:11px;
-margin-bottom:5px
-}
-
+input[type=date],input[type=search],input[type=text],select{width:100%;padding:11px;border:1px solid #d6dce5;border-radius:9px;background:white;color:#202938;min-width:0}
+.mode{display:flex;background:#eee;border-radius:10px;padding:3px;width:100%}
+.mode button{flex:1;border:0;background:transparent;padding:9px 4px;border-radius:8px;font-size:11px}
+.mode button.selected{background:#8d171d;color:white}
+.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;background:white;border:1px solid #e0e4eb;border-radius:11px;max-height:70vh;width:100%;margin-top:12px}
+table{border-collapse:collapse;width:100%;min-width:1050px;font-size:12px}
+th{background:#8d171d;color:white;text-align:left;padding:10px;white-space:nowrap;position:sticky;top:0;z-index:2}
+td{padding:8px;border-bottom:1px solid #e8ebf0;vertical-align:middle;white-space:nowrap}
+select.status{min-width:170px;padding:8px;font-size:12px}
+.noteInput{min-width:140px;padding:8px;border:1px solid #ddd;border-radius:7px}
+.chip{display:inline-block;padding:4px 8px;border-radius:30px;background:#e6eefc;font-weight:bold;font-size:11px}
+.legend{background:#fff8e9;border:1px solid #f2d9a8;font-size:12px;line-height:2}
+.legend .chip{margin:2px;background:white;border:1px solid #ead6a8}
+.summary{border:1px solid #ead1d3;background:white;overflow:hidden;padding:0}
+.summary h3{background:#8d171d;color:white;padding:11px;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.stat{padding:11px;border-bottom:1px solid #eee;border-right:1px solid #eee;min-width:0}
+.stat span{display:block;color:#647084;font-size:11px;margin-bottom:5px}
 .stat strong{font-size:18px}
-
-.actions{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:8px;
-margin:12px 0
-}
-
-.btn{
-border:1px solid #8d171d;
-color:#8d171d;
-background:white;
-border-radius:9px;
-padding:12px 8px;
-font-weight:bold;
-font-size:12px;
-width:100%;
-min-height:45px;
-overflow-wrap:anywhere
-}
-
-.btn.primary{
-background:#8d171d;
-color:white
-}
-
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:12px 8px;font-weight:bold;font-size:12px;width:100%;min-height:45px;overflow-wrap:anywhere}
+.btn.primary{background:#8d171d;color:white}
 .btn:disabled{opacity:.6}
-
 .hidden{display:none!important}
-
-.recap-card{
-background:white;
-border:1px solid #e0e4eb;
-padding:12px
-}
-
+.recap-card{background:white;border:1px solid #e0e4eb;padding:12px}
 .recap-card h4{margin-bottom:8px}
+.badge{display:inline-block;padding:4px 8px;background:#e7f1ff;border-radius:20px;font-size:11px}
+.loading{background:white;border:1px solid #ddd;text-align:center}
+.error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;line-height:1.6;overflow-wrap:anywhere}
+footer{text-align:center;color:#7b8493;font-size:10px;padding:15px}
 
-.badge{
-display:inline-block;
-padding:4px 8px;
-background:#e7f1ff;
-border-radius:20px;
-font-size:11px
-}
-
-.loading{
-background:white;
-border:1px solid #ddd;
-text-align:center
-}
-
-.error{
-background:#ffeded;
-color:#8d171d;
-border:1px solid #f2b9bf;
-line-height:1.6;
-overflow-wrap:anywhere
-}
-
-footer{
-text-align:center;
-color:#7b8493;
-font-size:10px;
-padding:15px
-}
-
-/* TAMPILAN HP */
 @media(max-width:600px){
-
 main{padding:10px}
-
 header{padding:11px}
-
 header h1{font-size:16px}
-
 header p{font-size:10px}
-
 .user{font-size:10px}
-
 .headline h2{font-size:17px}
-
-.period,.scope,.legend,.recap-card{
-padding:11px
-}
-
-.controls{
-grid-template-columns:1fr 1fr;
-gap:8px
-}
-
-.scope{
-flex-direction:row
-}
-
-.scope>div{
-flex:1 1 45%
-}
-
-.tabs .tab{
-padding:10px 7px;
-font-size:11px
-}
-
-.actions{
-grid-template-columns:1fr 1fr;
-gap:8px
-}
-
-.btn{
-padding:11px 6px;
-font-size:11px
-}
-
-.stats{
-grid-template-columns:1fr 1fr
-}
-
+.period,.scope,.legend,.recap-card{padding:11px}
+.controls{grid-template-columns:1fr 1fr;gap:8px}
+.scope{flex-direction:row}
+.scope>div{flex:1 1 45%}
+.tabs .tab{padding:10px 7px;font-size:11px}
+.actions{grid-template-columns:1fr 1fr;gap:8px}
+.btn{padding:11px 6px;font-size:11px}
+.stats{grid-template-columns:1fr 1fr}
 .stat{padding:10px}
-
 .stat strong{font-size:17px}
-
 .table-wrap{max-height:65vh}
-
 table{min-width:1050px}
 }
-
-/* TABLET DAN KOMPUTER */
 @media(min-width:700px){
-
-.controls{
-grid-template-columns:1fr 1fr 1fr
-}
-
-.stats{
-grid-template-columns:repeat(5,1fr)
-}
-
-.actions{
-display:flex;
-flex-wrap:wrap
-}
-
+.controls{grid-template-columns:1fr 1fr 1fr}
+.stats{grid-template-columns:repeat(5,1fr)}
+.actions{display:flex;flex-wrap:wrap}
 .actions .btn{width:auto}
 }
-
-/* CETAK */
 @media print{
-
-header,.tabs,.controls,.actions,.legend,footer{
-display:none!important
-}
-
+header,.tabs,.controls,.actions,.legend,footer{display:none!important}
 body{background:white}
-
-main{
-max-width:none;
-padding:0
-}
-
-.table-wrap{
-max-height:none;
-overflow:visible
-}
-
-table{
-min-width:0;
-font-size:8px
-}
-
+main{max-width:none;padding:0}
+.table-wrap{max-height:none;overflow:visible}
+table{min-width:0;font-size:8px}
 th{position:static}
-
 .summary{break-inside:avoid}
 }
 </style>
@@ -470,32 +105,24 @@ th{position:static}
 
 <header>
 <div class="logo">⚓</div>
-
 <div>
 <h1>WAINI</h1>
 <p>Sistem Informasi Manajemen Karyawan</p>
 </div>
-
-<div class="user" id="userInfo">
-Memeriksa akun...
-</div>
+<div class="user" id="userInfo">Memeriksa akun...</div>
 </header>
 
 <main>
 
 <div class="headline">
 <div class="icon">🗓️</div>
-
 <div>
 <h2>Pengelolaan Absensi</h2>
 <p>Pengisian absensi sesuai lingkup penugasan.</p>
 </div>
 </div>
 
-<div id="loading" class="loading">
-⏳ Menghubungkan ke Firebase...
-</div>
-
+<div id="loading" class="loading">⏳ Menghubungkan ke Firebase...</div>
 <div id="errorBox" class="hidden"></div>
 
 <div id="app" class="hidden">
@@ -507,58 +134,36 @@ Memeriksa akun...
 </div>
 
 <div class="tabs">
-
-<button class="tab active" data-tab="input">
-✍️ Input Harian
-</button>
-
-<button class="tab" data-tab="recap">
-📊 Rekap Periode
-</button>
-
-<button class="tab" data-tab="history">
-🕘 Riwayat
-</button>
-
+<button class="tab active" data-tab="input">✍️ Input Harian</button>
+<button class="tab" data-tab="recap">📊 Rekap Periode</button>
+<button class="tab" data-tab="history">🕘 Riwayat</button>
 </div>
 
 <section id="inputPanel">
 
 <div class="scope">
-
 <div>
 <b>Lingkup Penugasan</b><br>
 <span id="scopeText"></span>
 </div>
-
 <div>
 <b id="employeeCount">0 Karyawan</b><br>
 <small>Data karyawan WAINI</small>
 </div>
-
 </div>
 
 <div class="controls">
-
 <div>
 <label>Tanggal Absensi</label>
 <input type="date" id="datePick">
 </div>
-
 <div>
 <label>Mode Input</label>
-
 <div class="mode">
-<button class="selected" id="individual">
-Per Karyawan
-</button>
-
-<button id="mass">
-Massal
-</button>
+<button class="selected" id="individual">Per Karyawan</button>
+<button id="mass">Massal</button>
 </div>
 </div>
-
 </div>
 
 <div>
@@ -567,35 +172,21 @@ Massal
 </div>
 
 <div class="table-wrap">
-
 <table>
-
 <thead>
 <tr>
-<th>No</th>
-<th>NIK</th>
-<th>Nama</th>
-<th>Divisi</th>
-<th>Departemen</th>
-<th>Jabatan</th>
-<th>TMK</th>
-<th>POH</th>
-<th>Sistem Cuti</th>
-<th>Jadwal</th>
-<th>Status Absensi</th>
+<th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th>
+<th>Departemen</th><th>Jabatan</th><th>TMK</th><th>POH</th>
+<th>Sistem Cuti</th><th>Jadwal</th><th>Status Absensi</th>
 <th>Keterangan</th>
 </tr>
 </thead>
-
 <tbody id="rows"></tbody>
-
 </table>
 </div>
 
 <div class="legend">
-
 <b>Keterangan Kode Absensi</b><br>
-
 <span class="chip">1 Masuk</span>
 <span class="chip">1A Perjalanan Dinas</span>
 <span class="chip">2 Cuti</span>
@@ -607,27 +198,13 @@ Massal
 <span class="chip">6 Masuk Libur Nasional</span>
 <span class="chip">7 LWOP</span>
 <span class="chip">9 Mangki</span>
-
 </div>
 
 <div class="actions">
-
-<button class="btn" id="reset">
-↺ Kosongkan Input
-</button>
-
-<button class="btn primary" id="save">
-💾 Simpan ke Firebase
-</button>
-
-<button class="btn" id="excel">
-📥 Download Excel
-</button>
-
-<button class="btn" id="print">
-🖨️ Cetak / PDF
-</button>
-
+<button class="btn" id="reset">↺ Kosongkan Input</button>
+<button class="btn primary" id="save">💾 Simpan ke Firebase</button>
+<button class="btn" id="excel">📥 Download Excel</button>
+<button class="btn" id="print">🖨️ Cetak / PDF</button>
 </div>
 
 <p class="note">
@@ -636,101 +213,50 @@ Setiap perubahan dicatat pada riwayat_perubahan_absensi.
 </p>
 
 <div class="summary">
-
 <h3>Ringkasan Tanggal Terpilih</h3>
-
 <div class="stats">
-
-<div class="stat">
-<span>Total Karyawan</span>
-<strong id="total">0</strong>
-</div>
-
-<div class="stat">
-<span>Kode 1 - Masuk</span>
-<strong id="present">0</strong>
-</div>
-
-<div class="stat">
-<span>Status Terisi</span>
-<strong id="other">0</strong>
-</div>
-
-<div class="stat">
-<span>Belum Diisi</span>
-<strong id="empty">0</strong>
-</div>
-
-<div class="stat">
-<span>Persentase Kode 1</span>
-<strong id="percent">0%</strong>
-</div>
-
+<div class="stat"><span>Total Karyawan</span><strong id="total">0</strong></div>
+<div class="stat"><span>Kode 1 - Masuk</span><strong id="present">0</strong></div>
+<div class="stat"><span>Status Terisi</span><strong id="other">0</strong></div>
+<div class="stat"><span>Belum Diisi</span><strong id="empty">0</strong></div>
+<div class="stat"><span>Persentase Kode 1</span><strong id="percent">0%</strong></div>
 </div>
 </div>
 
 </section>
 
 <section id="recapPanel" class="hidden">
-
 <div class="scope">
 <b>Rekap Periode 11–10</b>
 <span id="recapPeriod"></span>
 </div>
-
 <div class="recap-card">
-
 <h4>Rekapitulasi Kehadiran</h4>
-
-<p class="note">
-Rekap berdasarkan data absensi dari Firebase.
-</p>
-
+<p class="note">Rekap berdasarkan data absensi dari Firebase.</p>
 </div>
-
 <div class="table-wrap">
-
 <table>
 <thead id="recapHead"></thead>
 <tbody id="recapRows"></tbody>
 </table>
-
 </div>
-
 <div class="actions">
-
-<button class="btn primary" id="recapExcel">
-📥 Download Rekap Excel
-</button>
-
-<button class="btn" id="recapPrint">
-🖨️ Cetak Rekap
-</button>
-
+<button class="btn primary" id="recapExcel">📥 Download Rekap Excel</button>
+<button class="btn" id="recapPrint">🖨️ Cetak Rekap</button>
 </div>
-
 </section>
 
 <section id="historyPanel" class="hidden">
-
 <div class="recap-card">
-
 <h4>Riwayat Perubahan Absensi</h4>
-
-<div id="historyList">
-Memuat riwayat...
+<div id="historyList">Memuat riwayat...</div>
 </div>
-
-</div>
-
 </section>
 
 </div>
 </main>
 
-<footer>
-WAINI • Pengelolaan Absensi • Firebase
-</footer>
+<footer>WAINI • Pengelolaan Absensi • Firebase</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -869,15 +395,11 @@ const d=new Date(dateString+"T00:00:00");
 let start,end;
 
 if(d.getDate()>=11){
-
 start=new Date(d.getFullYear(),d.getMonth(),11);
 end=new Date(d.getFullYear(),d.getMonth()+1,10);
-
 }else{
-
 start=new Date(d.getFullYear(),d.getMonth()-1,11);
 end=new Date(d.getFullYear(),d.getMonth(),10);
-
 }
 
 return {start:toISO(start),end:toISO(end)};
@@ -888,7 +410,6 @@ return start.substring(0,7);
 }
 
 function getDates(start,end){
-
 const result=[];
 let d=new Date(start+"T00:00:00");
 const last=new Date(end+"T00:00:00");
@@ -1225,10 +746,8 @@ collection(db,"master_kode_absensi")
 );
 
 if(snap.empty){
-
 attendanceCodes=defaultCodes;
 return;
-
 }
 
 attendanceCodes=snap.docs
@@ -1281,14 +800,14 @@ function processRecord(d){
 
 const data=d.data();
 
-// Baca nama field standar dan nama field lama agar
-// dokumen yang sudah ada tetap dapat digunakan.
 const tanggal=firstValue(
 data,["tanggal","tanggal_absensi"],""
 );
+
 const nik=normalizeNik(
 firstValue(data,["nik","NIK","nik_karyawan"],"")
 );
+
 const kode=String(
 firstValue(data,["kode","kode_absensi"],"")
 );
@@ -1376,22 +895,14 @@ if(
 data.tanggal_mulai&&
 data.tanggal_mulai!==currentPeriod.start
 ){
-
-throw new Error(
-"Tanggal mulai periode Firebase tidak sesuai."
-);
-
+throw new Error("Tanggal mulai periode Firebase tidak sesuai.");
 }
 
 if(
 data.tanggal_selesai&&
 data.tanggal_selesai!==currentPeriod.end
 ){
-
-throw new Error(
-"Tanggal selesai periode Firebase tidak sesuai."
-);
-
+throw new Error("Tanggal selesai periode Firebase tidak sesuai.");
 }
 
 return data;
@@ -1438,46 +949,25 @@ ${escapeHTML(c[0]+" - "+c[1])}
 rows.insertAdjacentHTML("beforeend",`
 
 <tr>
-
 <td>${i+1}</td>
-
 <td>${escapeHTML(s.nik)}</td>
-
 <td><b>${escapeHTML(s.name)}</b></td>
-
 <td>${escapeHTML(s.div)}</td>
-
 <td>${escapeHTML(s.dept)}</td>
-
 <td>${escapeHTML(s.jabatan)}</td>
-
 <td>${escapeHTML(formatDate(s.tmk))}</td>
-
 <td>${escapeHTML(s.poh)}</td>
-
 <td>${escapeHTML(s.cuti)}</td>
-
+<td><span class="chip">${escapeHTML(s.sched)}</span></td>
 <td>
-<span class="chip">${escapeHTML(s.sched)}</span>
-</td>
-
-<td>
-
 <select class="status" data-nik="${escapeHTML(s.nik)}">
 ${options}
 </select>
-
 </td>
-
 <td>
-
-<input class="noteInput"
-data-nik="${escapeHTML(s.nik)}"
-value="${escapeHTML(note)}"
-placeholder="Keterangan">
-
+<input class="noteInput" data-nik="${escapeHTML(s.nik)}"
+value="${escapeHTML(note)}" placeholder="Keterangan">
 </td>
-
 </tr>
 
 `);
@@ -1502,14 +992,11 @@ el.onchange=()=>{
 const nik=el.dataset.nik;
 
 if(!authorizedStaff.some(s=>s.nik===nik)){
-
 alert("Karyawan di luar penugasan.");
 return;
-
 }
 
 values[dataKey(currentDate,nik)]=el.value;
-
 stats();
 
 };
@@ -1521,7 +1008,6 @@ document.querySelectorAll(".noteInput").forEach(el=>{
 el.oninput=()=>{
 
 const nik=el.dataset.nik;
-
 notes[dataKey(currentDate,nik)]=el.value;
 
 };
@@ -1565,8 +1051,10 @@ ID DOKUMEN ABSENSI
 ========================================= */
 
 function attendanceDocumentId(nik,tanggal){
+
 const tanggalPadat=String(tanggal||"").replace(/-/g,"");
 return normalizeNik(nik)+"_"+tanggalPadat;
+
 }
 
 /* =========================================
@@ -1591,18 +1079,14 @@ values[dataKey(currentDate,s.nik)]
 );
 
 if(!selectedStaff.length){
-
 alert("Isi minimal satu status absensi.");
 return;
-
 }
 
 if(!confirm(
-
 "Simpan "+selectedStaff.length+
 " data absensi ke Firebase untuk tanggal "+
 formatDate(currentDate)+"?"
-
 ))return;
 
 $("save").disabled=true;
@@ -1627,8 +1111,6 @@ try{
 const oldSnap=await getDoc(ref);
 const oldData=oldSnap.exists()?oldSnap.data():null;
 
-// Field lama tetap dibaca agar dokumen yang sudah tersimpan
-// tidak dianggap berubah hanya karena perbedaan nama field.
 const oldKode=String(
 firstValue(oldData,["kode","kode_absensi"],"")
 );
@@ -1656,6 +1138,41 @@ continue;
 
 }
 
+/*
+================================================
+VALIDASI CREATEDBY DOKUMEN LAMA
+================================================
+
+Dokumen baru:
+createdBy = UID Firebase pengguna pembuat.
+
+Dokumen lama:
+createdBy tidak boleh diganti.
+Nilai lama dipertahankan dengan tidak mengirim
+field createdBy pada operasi update.
+
+Jika field createdBy tidak tersedia pada dokumen lama,
+proses koreksi dihentikan untuk dokumen tersebut.
+Hal ini mencegah perubahan yang berpotensi ditolak
+oleh Firestore Rules.
+
+Tidak melakukan backfill atau mengubah dokumen lama.
+================================================
+*/
+
+if(
+oldData&&
+!Object.prototype.hasOwnProperty.call(oldData,"createdBy")
+){
+
+throw new Error(
+"Dokumen absensi lama tidak memiliki field createdBy. "+
+"Data tidak diubah untuk menjaga Firestore Rules. "+
+"Perlu pemeriksaan khusus terhadap dokumen ini."
+);
+
+}
+
 const access=accessByNik[employee.nik]||{};
 
 const assignmentId=isSuperAdmin
@@ -1663,9 +1180,7 @@ const assignmentId=isSuperAdmin
 :(employee.penugasan_id||access.penugasan_id||"");
 
 if(!isSuperAdmin&&!assignmentId){
-
 throw new Error("ID penugasan tidak ditemukan.");
-
 }
 
 const codeInfo=attendanceCodes.find(
@@ -1678,9 +1193,16 @@ currentProfile,["nama","nama_lengkap","name"],"Petugas"
 
 const now=serverTimestamp();
 
+/*
+FIELD STANDAR data_absensi
+
+createdAt dan createdBy hanya dikirim saat CREATE.
+Pada UPDATE keduanya tidak dikirim sehingga nilai
+asli dokumen lama tetap dipertahankan oleh merge.
+*/
+
 const payload={
 
-/* 19 FIELD STANDAR data_absensi */
 absensi_id:absensiId,
 periode_id:currentPeriodId,
 tanggal:currentDate,
@@ -1691,29 +1213,40 @@ departemen:employee.dept||"",
 jabatan:employee.jabatan||"",
 kode:String(kode),
 nama_kode:String(codeInfo[1]||""),
-kategori_kode:String(codeInfo[2]||""),
+kategori_kode:String(codeInfo[2]||"-"),
 keterangan:keterangan,
 petugas_nik:currentNik,
 petugas_nama:petugasNama,
 penugasan_id:assignmentId,
-
-createdAt:
-oldData?.createdAt||
-oldData?.dibuat_pada||
-now,
-
-createdBy:
-oldData?.createdBy||
-oldData?.dibuat_oleh||
-"",
 
 updatedAt:now,
 updatedBy:currentUser.uid
 
 };
 
-// Merge mempertahankan field lama dan data lain yang mungkin
-// masih diperlukan. Tidak menghapus dokumen atau field lama.
+/*
+CREATE:
+Isi createdAt dan createdBy.
+
+UPDATE:
+Jangan mengirim createdAt maupun createdBy.
+Firestore merge mempertahankan nilai lama.
+*/
+
+if(!oldData){
+
+payload.createdAt=now;
+payload.createdBy=currentUser.uid;
+
+}
+
+/*
+RIWAYAT PERUBAHAN
+
+Dokumen riwayat dibuat baru dan tidak mengubah
+dokumen riwayat yang sudah ada.
+*/
+
 const historyRef=doc(
 collection(db,"riwayat_perubahan_absensi")
 );
@@ -1744,11 +1277,18 @@ createdBy:currentUser.uid
 
 };
 
-// Simpan absensi dan riwayat secara atomik.
-// Jika salah satu gagal, keduanya tidak diterapkan.
+/*
+SIMPAN ATOMIK
+
+Absensi dan riwayat disimpan bersama.
+Jika salah satu operasi gagal, batch tidak diterapkan.
+*/
+
 const batch=writeBatch(db);
+
 batch.set(ref,payload,{merge:true});
 batch.set(historyRef,historyPayload);
+
 await batch.commit();
 
 success++;
@@ -1784,9 +1324,7 @@ let message=
 "Gagal: "+failed;
 
 if(errors.length){
-
 message+="\n\nRincian kegagalan:\n"+errors.join("\n");
-
 }
 
 alert(message);
@@ -1808,10 +1346,8 @@ authorizedStaff.forEach(s=>{
 const key=dataKey(currentDate,s.nik);
 
 if(!savedRecords[key]){
-
 values[key]="";
 notes[key]="";
-
 }
 
 });
@@ -1855,10 +1391,8 @@ attendanceCodes.map(c=>c[0]+" = "+c[1]).join("\n")+
 if(code===null||code==="")return;
 
 if(!attendanceCodes.some(c=>c[0]===code)){
-
 alert("Kode tidak ditemukan atau tidak aktif.");
 return;
-
 }
 
 const search=$("search").value.toLowerCase();
@@ -1871,16 +1405,12 @@ const filtered=authorizedStaff.filter(s=>
 );
 
 if(!confirm(
-
 "Terapkan kode "+code+
 " kepada "+filtered.length+" karyawan?"
-
 ))return;
 
 filtered.forEach(s=>{
-
 values[dataKey(currentDate,s.nik)]=code;
-
 });
 
 render();
@@ -1956,25 +1486,20 @@ currentPeriod.end
 let head=`
 
 <tr>
-
 <th>No</th>
 <th>NIK</th>
 <th>Nama</th>
 <th>Divisi</th>
 <th>Departemen</th>
 <th>Jabatan</th>
-
 `;
 
 dates.forEach(d=>head+=`<th>${formatShort(d)}</th>`);
 
 head+=`
-
 <th>Jumlah Kode 1</th>
 <th>Status Terisi</th>
-
 </tr>
-
 `;
 
 $("recapHead").innerHTML=head;
@@ -1987,16 +1512,13 @@ let masuk=0;
 let terisi=0;
 
 body+=`
-
 <tr>
-
 <td>${i+1}</td>
 <td>${escapeHTML(s.nik)}</td>
 <td>${escapeHTML(s.name)}</td>
 <td>${escapeHTML(s.div)}</td>
 <td>${escapeHTML(s.dept)}</td>
 <td>${escapeHTML(s.jabatan)}</td>
-
 `;
 
 dates.forEach(date=>{
@@ -2011,12 +1533,9 @@ body+=`<td>${escapeHTML(code)}</td>`;
 });
 
 body+=`
-
 <td>${masuk}</td>
 <td>${terisi}</td>
-
 </tr>
-
 `;
 
 });
@@ -2124,10 +1643,8 @@ EXCEL HARIAN
 $("excel").onclick=()=>{
 
 if(typeof XLSX==="undefined"){
-
 alert("Pustaka Excel belum termuat.");
 return;
-
 }
 
 const data=[
@@ -2190,10 +1707,8 @@ EXCEL REKAP
 $("recapExcel").onclick=()=>{
 
 if(typeof XLSX==="undefined"){
-
 alert("Pustaka Excel belum termuat.");
 return;
-
 }
 
 const dates=getDates(
@@ -2241,7 +1756,6 @@ if(code==="1")masuk++;
 });
 
 row.push(masuk,terisi);
-
 data.push(row);
 
 });
@@ -2310,15 +1824,11 @@ currentProfile,["nik","NIK","nomor_induk"],""
 currentRole=normalize(currentProfile.role||"");
 
 if(!activeStatus(currentProfile.status)){
-
 throw new Error("Akun WAINI tidak aktif.");
-
 }
 
 if(!currentNik){
-
 throw new Error("NIK pengguna tidak ditemukan.");
-
 }
 
 isSuperAdmin=[
@@ -2441,7 +1951,6 @@ await loadAttendanceFromFirebase();
 /* TAMPILKAN */
 
 $("loading").classList.add("hidden");
-
 $("app").classList.remove("hidden");
 
 render();
