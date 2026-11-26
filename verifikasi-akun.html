@@ -899,7 +899,8 @@ async function loadApplicants(){
 
       const data=item.data();
 
-      if(normalize(data.role)!=="data_karyawan") return;
+      // PERBAIKAN: role pendaftar adalah "karyawan"
+      if(normalize(data.role)!=="karyawan") return;
 
       applicants.push({
         id:item.id,
@@ -951,6 +952,7 @@ async function loadEmployeeMatches(){
 
     try{
 
+      // COLLECTION YANG BENAR: data_karyawan
       const employeeRef=doc(db,"data_karyawan",nik);
       const employeeSnap=await getDoc(employeeRef);
 
