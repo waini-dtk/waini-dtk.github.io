@@ -151,9 +151,7 @@ line-height:1.42;
 color:#30374b
 }
 
-.form-group{
-margin:12px 0
-}
+.form-group{margin:12px 0}
 
 .input-shell{
 display:flex;
@@ -183,10 +181,7 @@ background:linear-gradient(145deg,#ff172e,#bd0014);
 color:white
 }
 
-.icon-disc svg{
-width:21px;
-height:21px
-}
+.icon-disc svg{width:21px;height:21px}
 
 .input-shell input{
 width:100%;
@@ -218,10 +213,7 @@ flex-shrink:0;
 padding:0 10px
 }
 
-.eye svg{
-width:22px;
-height:22px
-}
+.eye svg{width:22px;height:22px}
 
 .forgot-row{
 display:flex;
@@ -237,9 +229,7 @@ text-decoration:none;
 padding:4px 0
 }
 
-.forgot-link:hover{
-text-decoration:underline
-}
+.forgot-link:hover{text-decoration:underline}
 
 .login{
 height:58px;
@@ -260,19 +250,14 @@ align-items:center;
 gap:10px
 }
 
-.login:active{
-transform:scale(.985)
-}
+.login:active{transform:scale(.985)}
 
 .login:disabled{
 opacity:.7;
 cursor:wait
 }
 
-.login svg{
-width:25px;
-height:25px
-}
+.login svg{width:25px;height:25px}
 
 .separator{
 display:flex;
@@ -283,8 +268,7 @@ font-weight:600;
 margin:15px 4px 12px
 }
 
-.separator:before,
-.separator:after{
+.separator:before,.separator:after{
 content:"";
 height:2px;
 background:#d9deeb;
@@ -308,10 +292,7 @@ text-decoration:none;
 margin:0 auto 14px
 }
 
-.register svg{
-width:22px;
-height:22px
-}
+.register svg{width:22px;height:22px}
 
 .help{
 background:linear-gradient(100deg,#ffe0e6,#ffd6df);
@@ -344,9 +325,7 @@ display:block;
 font-size:14px
 }
 
-.help span{
-color:#bd0014
-}
+.help span{color:#bd0014}
 
 .msg{
 display:none;
@@ -404,10 +383,7 @@ flex-shrink:0;
 opacity:.9
 }
 
-.port-art svg{
-width:100%;
-height:100%
-}
+.port-art svg{width:100%;height:100%}
 
 .footer-divider{
 height:42px;
@@ -437,92 +413,28 @@ padding:8px 12px 0
 }
 
 @media(min-width:480px){
-
-.hero{
-min-height:290px;
-padding:26px 26px 44px
-}
-
-.card{
-margin-left:20px;
-margin-right:20px;
-padding:24px
-}
-
-.people{
-height:175px
-}
-
-.footer{
-padding-left:26px;
-padding-right:26px
-}
-
+.hero{min-height:290px;padding:26px 26px 44px}
+.card{margin-left:20px;margin-right:20px;padding:24px}
+.people{height:175px}
+.footer{padding-left:26px;padding-right:26px}
 }
 
 @media(max-width:360px){
-
-.hero{
-min-height:230px;
-padding:20px 17px 34px
-}
-
-.logo-wrap{
-width:120px
-}
-
-.card{
-margin-left:10px;
-margin-right:10px;
-padding:16px 14px;
-border-radius:23px
-}
-
-.welcome-row{
-grid-template-columns:40% 60%
-}
-
-.people{
-height:125px
-}
-
-.welcome-copy p{
-font-size:12px;
-margin-top:6px
-}
-
-.input-shell{
-height:54px;
-border-radius:16px
-}
-
-.icon-disc{
-width:38px;
-height:38px;
-flex-basis:38px
-}
-
-.login{
-height:54px
-}
-
-.help{
-padding:10px;
-font-size:12px
-}
-
-.help strong{
-font-size:13px
-}
-
+.hero{min-height:230px;padding:20px 17px 34px}
+.logo-wrap{width:120px}
+.card{margin-left:10px;margin-right:10px;padding:16px 14px;border-radius:23px}
+.welcome-row{grid-template-columns:40% 60%}
+.people{height:125px}
+.welcome-copy p{font-size:12px;margin-top:6px}
+.input-shell{height:54px;border-radius:16px}
+.icon-disc{width:38px;height:38px;flex-basis:38px}
+.login{height:54px}
+.help{padding:10px;font-size:12px}
+.help strong{font-size:13px}
 }
 
 @media(prefers-reduced-motion:reduce){
-
-*{
-transition:none!important
-}
-
+*{transition:none!important}
 }
 </style>
 </head>
@@ -755,13 +667,17 @@ import {
    1. KONFIGURASI WAINI
 ===================================== */
 
+// NIK Super Admin
 const NIK_SUPER_ADMIN = "28B03150560";
 
+// Email Super Admin sesuai Firebase Auth
 const EMAIL_SUPER_ADMIN = "superadmin@portalwhw.com";
 
+// Domain email virtual karyawan
 const DOMAIN_KARYAWAN = "@waini-dtk.invalid";
 
-const KOLEKSI_AKSES = "akses_karyawan";
+// Collection identitas akun
+const KOLEKSI_PENGGUNA = "pengguna";
 
 
 /* =====================================
@@ -825,7 +741,24 @@ togglePassword.addEventListener("click", () => {
 
 
 /* =====================================
-   6. PROSES LOGIN
+   6. KONVERSI NIK MENJADI EMAIL
+===================================== */
+
+function emailBerdasarkanNIK(id) {
+
+  if (id === NIK_SUPER_ADMIN) {
+
+    return EMAIL_SUPER_ADMIN;
+
+  }
+
+  return id.toLowerCase() + DOMAIN_KARYAWAN;
+
+}
+
+
+/* =====================================
+   7. PROSES LOGIN
 ===================================== */
 
 form.addEventListener("submit", async (e) => {
@@ -837,7 +770,11 @@ form.addEventListener("submit", async (e) => {
 
   if (!id || !pw) {
 
-    tampilkanPesan("NIK dan password wajib diisi.", "error");
+    tampilkanPesan(
+      "NIK dan password wajib diisi.",
+      "error"
+    );
+
     return;
 
   }
@@ -854,7 +791,9 @@ form.addEventListener("submit", async (e) => {
   }
 
   btn.disabled = true;
-  btn.textContent = "MEMERIKSA AKUN...";
+
+  btn.innerHTML = "MEMERIKSA AKUN...";
+
   msg.className = "msg";
 
   let sesiAuthTerbentuk = false;
@@ -865,17 +804,7 @@ form.addEventListener("submit", async (e) => {
        A. TENTUKAN EMAIL LOGIN
     ================================= */
 
-    let emailLogin;
-
-    if (id === NIK_SUPER_ADMIN) {
-
-      emailLogin = EMAIL_SUPER_ADMIN;
-
-    } else {
-
-      emailLogin = id.toLowerCase() + DOMAIN_KARYAWAN;
-
-    }
+    const emailLogin = emailBerdasarkanNIK(id);
 
 
     /* =================================
@@ -894,36 +823,42 @@ form.addEventListener("submit", async (e) => {
 
 
     /* =================================
-       C. AMBIL AKSES BERDASARKAN NIK
+       C. AMBIL IDENTITAS PENGGUNA
 
-       Document ID = NIK
+       Collection : pengguna
+       Document ID: UID Firebase
     ================================= */
 
-    const referensiAkses = doc(
+    const referensiPengguna = doc(
       db,
-      KOLEKSI_AKSES,
-      id
+      KOLEKSI_PENGGUNA,
+      user.uid
     );
 
-    const hasilAkses = await getDoc(referensiAkses);
+    const hasilPengguna = await getDoc(
+      referensiPengguna
+    );
 
 
-    if (!hasilAkses.exists()) {
+    if (!hasilPengguna.exists()) {
 
-      throw new Error("AKSES_TIDAK_DITEMUKAN");
+      throw new Error("PENGGUNA_TIDAK_DITEMUKAN");
 
     }
 
-    const data = hasilAkses.data();
+    const data = hasilPengguna.data();
 
 
     /* =================================
-       D. COCOKKAN UID AUTH
+       D. COCOKKAN UID
     ================================= */
 
-    const uidTerdaftar = String(data.uid_auth || "").trim();
+    const uidTerdaftar = String(data.uid || "").trim();
 
-    if (!uidTerdaftar || uidTerdaftar !== user.uid) {
+    if (
+      !uidTerdaftar ||
+      uidTerdaftar !== user.uid
+    ) {
 
       throw new Error("UID_TIDAK_SESUAI");
 
@@ -934,7 +869,7 @@ form.addEventListener("submit", async (e) => {
        E. COCOKKAN NIK
     ================================= */
 
-    const nikTerdaftar = String(data.nik || id)
+    const nikTerdaftar = String(data.nik || "")
       .trim()
       .toUpperCase();
 
@@ -946,18 +881,14 @@ form.addEventListener("submit", async (e) => {
 
 
     /* =================================
-       F. PERIKSA STATUS
+       F. PERIKSA STATUS AKUN
     ================================= */
 
-    const statusAkses = String(data.status_akses || "")
+    const statusAkun = String(data.status || "")
       .trim()
       .toLowerCase();
 
-    const statusAkun = String(data.status_akun || "")
-      .trim()
-      .toLowerCase();
-
-    if (statusAkses !== "aktif" || statusAkun !== "aktif") {
+    if (statusAkun !== "aktif") {
 
       throw new Error("AKUN_NONAKTIF");
 
@@ -965,53 +896,10 @@ form.addEventListener("submit", async (e) => {
 
 
     /* =================================
-       G. PERIKSA IZIN LOGIN
+       G. PERIKSA ROLE
     ================================= */
 
-    if (data.boleh_login !== true) {
-
-      throw new Error("LOGIN_TIDAK_DIIZINKAN");
-
-    }
-
-    if (data.verifikasi_akun !== true) {
-
-      throw new Error("AKUN_BELUM_DIVERIFIKASI");
-
-    }
-
-    const statusVerifikasi = String(data.status_verifikasi || "")
-      .trim()
-      .toLowerCase();
-
-    if (statusVerifikasi !== "terverifikasi") {
-
-      throw new Error("STATUS_VERIFIKASI_TIDAK_VALID");
-
-    }
-
-    if (data.akun_auth_terhubung !== true) {
-
-      throw new Error("AUTH_BELUM_TERHUBUNG");
-
-    }
-
-    const metodeAuth = String(data.metode_autentikasi || "")
-      .trim()
-      .toLowerCase();
-
-    if (metodeAuth !== "firebase_auth") {
-
-      throw new Error("METODE_AUTH_TIDAK_VALID");
-
-    }
-
-
-    /* =================================
-       H. PERIKSA ROLE
-    ================================= */
-
-    const role = String(data.role_akses || "")
+    const role = String(data.role || "")
       .trim()
       .toLowerCase();
 
@@ -1035,16 +923,16 @@ form.addEventListener("submit", async (e) => {
 
 
     /* =================================
-       I. LOGIN BERHASIL
+       H. LOGIN BERHASIL
+
+       Sesi Firebase dipertahankan.
+       menu.html menggunakan sesi ini.
     ================================= */
 
     tampilkanPesan(
       "Login berhasil. Mengalihkan halaman...",
       "success"
     );
-
-    // Jangan signOut.
-    // Sesi diperlukan oleh menu.html.
 
     window.location.replace("menu.html");
 
@@ -1053,13 +941,24 @@ form.addEventListener("submit", async (e) => {
 
   } catch (err) {
 
-    console.error("Kesalahan login WAINI:", err);
+    console.error(
+      "Kesalahan login WAINI:",
+      err
+    );
 
     let pesan = "Login gagal. Periksa kembali NIK dan password.";
 
-    switch (err.code || err.message) {
+    const kodeError = err.code || err.message;
+
+
+    /* =================================
+       I. TERJEMAHAN PESAN ERROR
+    ================================= */
+
+    switch (kodeError) {
 
       case "auth/invalid-credential":
+      case "auth/invalid-login-credentials":
         pesan = "NIK atau password salah.";
         break;
 
@@ -1083,40 +982,24 @@ form.addEventListener("submit", async (e) => {
         pesan = "Akun Firebase dinonaktifkan.";
         break;
 
-      case "AKSES_TIDAK_DITEMUKAN":
-        pesan = "Dokumen NIK tidak ditemukan di collection akses_karyawan.";
+      case "auth/operation-not-allowed":
+        pesan = "Metode login Email/Password belum diaktifkan di Firebase.";
+        break;
+
+      case "PENGGUNA_TIDAK_DITEMUKAN":
+        pesan = "Dokumen pengguna tidak ditemukan berdasarkan UID Firebase.";
         break;
 
       case "UID_TIDAK_SESUAI":
-        pesan = "UID Firebase tidak cocok dengan uid_auth di database.";
+        pesan = "UID Firebase tidak cocok dengan field uid di database.";
         break;
 
       case "NIK_TIDAK_SESUAI":
-        pesan = "NIK pada database tidak sesuai.";
+        pesan = "NIK pada dokumen pengguna tidak sesuai dengan NIK login.";
         break;
 
       case "AKUN_NONAKTIF":
         pesan = "Akun tidak aktif. Hubungi Super Admin.";
-        break;
-
-      case "LOGIN_TIDAK_DIIZINKAN":
-        pesan = "Akun belum diizinkan untuk login.";
-        break;
-
-      case "AKUN_BELUM_DIVERIFIKASI":
-        pesan = "Akun belum diverifikasi oleh Admin.";
-        break;
-
-      case "STATUS_VERIFIKASI_TIDAK_VALID":
-        pesan = "Status verifikasi akun belum valid.";
-        break;
-
-      case "AUTH_BELUM_TERHUBUNG":
-        pesan = "Akun belum terhubung dengan Firebase Authentication.";
-        break;
-
-      case "METODE_AUTH_TIDAK_VALID":
-        pesan = "Metode autentikasi akun tidak sesuai.";
         break;
 
       case "ROLE_SUPER_ADMIN_TIDAK_SESUAI":
@@ -1128,7 +1011,7 @@ form.addEventListener("submit", async (e) => {
         break;
 
       case "permission-denied":
-        pesan = "Akses Firestore ditolak. Periksa Firestore Rules.";
+        pesan = "Akses Firestore ditolak saat membaca dokumen pengguna. Periksa Firestore Rules.";
         break;
 
       case "unavailable":
@@ -1142,9 +1025,11 @@ form.addEventListener("submit", async (e) => {
           err.message.includes("Missing or insufficient permissions")
         ) {
 
-          pesan = "Tidak memiliki izin membaca akses_karyawan. Periksa Firestore Rules.";
+          pesan = "Tidak memiliki izin membaca dokumen pengguna. Periksa Firestore Rules.";
 
         }
+
+        break;
 
     }
 
@@ -1170,7 +1055,10 @@ form.addEventListener("submit", async (e) => {
 
     }
 
-    tampilkanPesan(pesan, "error");
+    tampilkanPesan(
+      pesan,
+      "error"
+    );
 
 
   } finally {
