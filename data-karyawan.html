@@ -453,7 +453,7 @@ collection,doc,getDoc,getDocs,addDoc,setDoc,updateDoc,deleteDoc,
 serverTimestamp,writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const C_KARYAWAN="data_karyawan";
+const C_KARYAWAN="karyawan";
 const C_PENGGUNA="pengguna";
 const C_RIWAYAT="riwayat_penugasan";
 
@@ -549,7 +549,6 @@ e.target.value=v;
 });
 
 async function simpanRiwayat(data){
-try{
 await addDoc(collection(db,C_RIWAYAT),{
 ...data,
 pelaku_uid:penggunaLogin.uid,
@@ -558,12 +557,6 @@ pelaku_nama:penggunaLogin.nama||"",
 waktu:serverTimestamp(),
 createdAt:serverTimestamp()
 });
-return true;
-}catch(err){
-// Riwayat tidak boleh membuat operasi utama (karyawan) dianggap gagal.
-console.error("Gagal menyimpan riwayat karyawan:",err);
-return false;
-}
 }
 
 /* =========================
@@ -779,13 +772,12 @@ if(!nilai("jabatan"))return toast("Jabatan wajib diisi.");
 if(!validasiTMK(nilai("tmk")))return toast("Format TMK harus dd/mm/yy dan tanggal valid.");
 if(!nilai("sistemCuti"))return toast("Sistem cuti wajib dipilih.");
 if(!nilai("shiftKerja"))return toast("Shift kerja wajib dipilih.");
-if(nilai("grade").trim()==="")return toast("Grade wajib diisi.");
+if(nilai("grade")===""||Number(nilai("grade"))<0)return toast("Grade tidak valid.");
 
 btn.disabled=true;
 btn.textContent="Menyimpan...";
 
 try{
-let riwayatTersimpan=true;
 const data={
 divisi:"Terminal Khusus",
 departemen:nilai("departemen"),
@@ -796,7 +788,7 @@ tmk:nilai("tmk"),
 poh:nilai("poh"),
 sistem_cuti:nilai("sistemCuti"),
 shift_kerja:nilai("shiftKerja"),
-grade:String(nilai("grade")).trim(),
+grade:Number(nilai("grade")),
 nowa:nilai("nowa"),
 updatedAt:serverTimestamp(),
 updated_by:penggunaLogin.uid
@@ -817,26 +809,26 @@ data.created_by=penggunaLogin.uid;
 
 await setDoc(doc(db,C_KARYAWAN,nik),data);
 
-riwayatTersimpan=await simpanRiwayat({
+await simpanRiwayat({
 aksi:"tambah_karyawan",
 nik_karyawan:nik,
 nama_karyawan:data.nama,
 detail:"Menambahkan data karyawan"
 });
 
-toast(riwayatTersimpan?"Data karyawan berhasil ditambahkan.":"Data karyawan tersimpan, tetapi riwayat gagal disimpan (izin riwayat)." );
+toast("Data karyawan berhasil ditambahkan.");
 
 }else{
 await updateDoc(doc(db,C_KARYAWAN,idLama),data);
 
-riwayatTersimpan=await simpanRiwayat({
+await simpanRiwayat({
 aksi:"edit_karyawan",
 nik_karyawan:idLama,
 nama_karyawan:data.nama,
 detail:"Memperbarui data karyawan"
 });
 
-toast(riwayatTersimpan?"Data karyawan berhasil diperbarui.":"Data karyawan diperbarui, tetapi riwayat gagal disimpan (izin riwayat)." );
+toast("Data karyawan berhasil diperbarui.");
 }
 
 tutup("modalKaryawan");
@@ -845,9 +837,9 @@ await muatKaryawan();
 
 }catch(err){
 console.error(err);
-toast("GAGAL MENYIMPAN DATA KARYAWAN: "+(
+toast("GAGAL MENYIMPAN: "+(
 err.code==="permission-denied"
-?"Firestore Rules menolak penulisan ke collection karyawan. Data belum dapat dipastikan tersimpan."
+?"Akses ditolak Firestore Rules. Periksa izin tulis koleksi karyawan."
 :err.message
 ));
 }finally{
@@ -871,14 +863,14 @@ if(!confirm("Hapus data karyawan berikut?\n\n"+k.nama+"\nNIK: "+nik+"\n\nData ya
 try{
 await deleteDoc(doc(db,C_KARYAWAN,nik));
 
-const riwayatTersimpan=await simpanRiwayat({
+await simpanRiwayat({
 aksi:"hapus_karyawan",
 nik_karyawan:nik,
 nama_karyawan:k.nama,
 detail:"Menghapus data karyawan"
 });
 
-toast(riwayatTersimpan?"Data karyawan berhasil dihapus.":"Data karyawan terhapus, tetapi riwayat gagal disimpan (izin riwayat)." );
+toast("Data karyawan berhasil dihapus.");
 await muatKaryawan();
 
 }catch(err){
@@ -1021,7 +1013,7 @@ tmk:tanggalExcel(cariKolom(row,["TMK","Tanggal Masuk","Tanggal Mulai Kerja"])),
 poh:String(cariKolom(row,["POH","Tempat POH"])||"").trim(),
 sistem_cuti:normalisasiSistemCuti(cariKolom(row,["Sistem Cuti","Cuti"])),
 shift_kerja:normalisasiShift(cariKolom(row,["Shift Kerja","Shift"])),
-grade:String(cariKolom(row,["Grade","Golongan"])||"").trim(),
+grade:Number(cariKolom(row,["Grade","Golongan"])),
 nowa:String(cariKolom(row,["NOWA","No WA","WhatsApp","Nomor WhatsApp"])||"").trim()
 };
 }
@@ -1065,7 +1057,7 @@ continue;
 }
 
 if(!data.departemen||!data.jabatan||!validasiTMK(data.tmk)||
-!data.sistem_cuti||!data.shift_kerja||!data.grade){
+!data.sistem_cuti||!data.shift_kerja||!Number.isFinite(data.grade)){
 gagal++;
 daftarGagal.push("Baris "+(i+2)+" ("+data.nik+"): data wajib tidak valid.");
 continue;
@@ -1113,16 +1105,14 @@ $("hasilImport").textContent=
 (daftarGagal.length?"\n\nDetail:\n"+daftarGagal.slice(0,30).join("\n"):"");
 
 if(berhasil>0){
-const riwayatImportTersimpan=await simpanRiwayat({
+await simpanRiwayat({
 aksi:"import_karyawan",
 detail:"Import Excel: "+berhasil+" data berhasil, "+duplikat+" duplikat, "+gagal+" gagal"
 });
 
 halamanAktif=1;
 await muatKaryawan();
-toast(riwayatImportTersimpan
-?"Import selesai. "+berhasil+" data berhasil ditambahkan."
-:"Import selesai; data tersimpan, tetapi riwayat gagal disimpan.");
+toast("Import selesai. "+berhasil+" data berhasil ditambahkan.");
 }
 
 }catch(err){
