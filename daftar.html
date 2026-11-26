@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -307,8 +306,6 @@ input:disabled {
 
         <form id="formPendaftaran">
 
-            <!-- NIK -->
-
             <label>NIK Karyawan</label>
 
             <input
@@ -325,8 +322,6 @@ input:disabled {
                 Masukkan NIK sesuai identitas Anda.
             </div>
 
-            <!-- NAMA -->
-
             <label>Nama Lengkap</label>
 
             <input
@@ -338,8 +333,6 @@ input:disabled {
                 required
             >
 
-            <!-- JABATAN -->
-
             <label>Jabatan</label>
 
             <input
@@ -349,8 +342,6 @@ input:disabled {
                 maxlength="100"
                 required
             >
-
-            <!-- PASSWORD -->
 
             <label>Password</label>
 
@@ -367,8 +358,6 @@ input:disabled {
                 Password minimal 6 karakter.
             </div>
 
-            <!-- KONFIRMASI PASSWORD -->
-
             <label>Konfirmasi Password</label>
 
             <input
@@ -380,11 +369,7 @@ input:disabled {
                 required
             >
 
-            <!-- PESAN -->
-
             <div id="pesan" class="pesan"></div>
-
-            <!-- TOMBOL DAFTAR -->
 
             <button
                 type="submit"
@@ -399,8 +384,6 @@ input:disabled {
     </div>
 
     <hr class="divider">
-
-    <!-- INFORMASI PENDAFTARAN -->
 
     <div class="info-card">
 
@@ -476,6 +459,8 @@ const db = getFirestore(app);
 
 const KOLEKSI_PENGGUNA = "pengguna";
 
+const KOLEKSI_STATUS_PUBLIK =
+    "status_pendaftaran_public";
 
 // =====================================
 // 3. ELEMEN FORM
@@ -629,10 +614,6 @@ form.addEventListener("submit", async (e) => {
 
     hapusPesan();
 
-    // =================================
-    // AMBIL DATA FORM
-    // =================================
-
     const nik = nikInput.value
         .trim()
         .toUpperCase();
@@ -756,10 +737,6 @@ form.addEventListener("submit", async (e) => {
 
     try {
 
-        // =================================
-        // EMAIL INTERNAL BERDASARKAN NIK
-        // =================================
-
         const emailInternal =
             nik.toLowerCase() +
             "@waini-dtk.invalid";
@@ -784,7 +761,7 @@ form.addEventListener("submit", async (e) => {
         const batch = writeBatch(db);
 
         // =================================
-        // 10. DATA PENGGUNA
+        // 10. DATA PENGGUNA (PRIBADI)
         // =================================
 
         const referensiPengguna = doc(
@@ -807,17 +784,9 @@ form.addEventListener("submit", async (e) => {
 
                 email: emailInternal,
 
-                // Semua pendaftar menjadi karyawan biasa.
-                // Tidak ada pembuatan Super Admin dari halaman ini.
-
                 role: "karyawan",
 
-                // Akun belum boleh digunakan
-                // sebelum diverifikasi Admin.
-
                 status: "menunggu_verifikasi",
-
-                // Hak akses awal kosong.
 
                 hak_akses: [],
 
@@ -829,7 +798,32 @@ form.addEventListener("submit", async (e) => {
         );
 
         // =================================
-        // 11. SIMPAN DATA
+        // 11. STATUS PUBLIK
+        // HANYA NAMA DAN STATUS
+        // TIDAK MENYIMPAN NIK
+        // =================================
+
+        const referensiStatusPublik = doc(
+            db,
+            KOLEKSI_STATUS_PUBLIK,
+            userBaru.uid
+        );
+
+        batch.set(
+            referensiStatusPublik,
+            {
+
+                nama: nama,
+
+                status: "Menunggu Verifikasi",
+
+                createdAt: serverTimestamp()
+
+            }
+        );
+
+        // =================================
+        // 12. SIMPAN KEDUA DOKUMEN
         // =================================
 
         await batch.commit();
@@ -837,7 +831,7 @@ form.addEventListener("submit", async (e) => {
         dataBerhasilTersimpan = true;
 
         // =================================
-        // 12. KELUAR OTOMATIS
+        // 13. KELUAR OTOMATIS
         // =================================
 
         try {
@@ -854,11 +848,11 @@ form.addEventListener("submit", async (e) => {
         }
 
         // =================================
-        // 13. PENDAFTARAN BERHASIL
+        // 14. PENDAFTARAN BERHASIL
         // =================================
 
         tampilPesan(
-            "Pendaftaran berhasil! Akun Anda sedang menunggu verifikasi Admin. Silakan cek status pendaftaran secara berkala.",
+            "Pendaftaran berhasil! Status Anda: Menunggu Verifikasi. Silakan cek status pendaftaran secara berkala.",
             "sukses"
         );
 
@@ -877,7 +871,7 @@ form.addEventListener("submit", async (e) => {
         );
 
         // =================================
-        // 14. HAPUS AUTH JIKA PENYIMPANAN GAGAL
+        // 15. HAPUS AUTH JIKA PENYIMPANAN GAGAL
         // =================================
 
         if (
@@ -930,7 +924,7 @@ form.addEventListener("submit", async (e) => {
         }
 
         // =================================
-        // 15. TAMPILKAN ERROR
+        // 16. TAMPILKAN ERROR
         // =================================
 
         tampilPesan(
@@ -948,7 +942,7 @@ form.addEventListener("submit", async (e) => {
 });
 
 // =====================================
-// 16. KONDISI AWAL
+// 17. KONDISI AWAL
 // =====================================
 
 tombolDaftar.disabled = false;
