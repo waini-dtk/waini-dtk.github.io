@@ -6,24 +6,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#8d171d">
 <title>Pengelolaan Absensi - WAINI</title>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f3f5f8;color:#202938;padding-bottom:30px;overflow-x:hidden}
 header{background:linear-gradient(135deg,#7d1018,#a51e28);color:white;padding:13px;display:flex;align-items:center;gap:10px;box-shadow:0 3px 12px #0002}
-.logo{font-size:28px}
-header h1{font-size:18px}
-header p{font-size:11px;margin-top:3px}
+.logo{font-size:28px}header h1{font-size:18px}header p{font-size:11px;margin-top:3px}
 .user{margin-left:auto;text-align:right;font-size:11px;line-height:1.5;max-width:150px;overflow-wrap:anywhere}
 main{width:100%;max-width:1200px;margin:auto;padding:12px}
 .headline{display:flex;gap:10px;margin:10px 0 15px;align-items:center}
-.headline .icon{font-size:28px}
-.headline h2{font-size:19px;margin-bottom:4px}
+.headline .icon{font-size:28px}.headline h2{font-size:19px;margin-bottom:4px}
 .headline p,.note{font-size:12px;color:#687385;line-height:1.6}
 .period,.scope,.legend,.summary,.recap-card,.loading,.error{border-radius:11px;padding:13px;margin:12px 0}
-.period{background:#fbe9eb;border:1px solid #f4c9cd}
-.period b{display:block;color:#81151d;margin-bottom:6px;font-size:12px}
-.period span{font-size:13px;font-weight:bold}
+.period{background:#fbe9eb;border:1px solid #f4c9cd}.period b{display:block;color:#81151d;margin-bottom:6px;font-size:12px}.period span{font-size:13px;font-weight:bold}
 .tabs{display:flex;gap:6px;overflow-x:auto;margin:14px 0;padding-bottom:3px}
 .tab{border:1px solid #ddd;background:white;color:#424b5b;border-radius:9px;padding:10px 12px;font-weight:bold;white-space:nowrap;font-size:12px;flex:1}
 .tab.active{background:#8d171d;color:white;border-color:#8d171d}
@@ -45,609 +39,261 @@ select.status{min-width:170px;padding:8px;font-size:12px}
 .chip{display:inline-block;padding:4px 8px;border-radius:30px;background:#e6eefc;font-weight:bold;font-size:11px}
 .legend{background:#fff8e9;border:1px solid #f2d9a8;font-size:12px;line-height:2}
 .legend .chip{margin:2px;background:white;border:1px solid #ead6a8}
-
-/* RINGKASAN ABSENSI - TAMPILAN BARU */
-.summary{
-border:1px solid #ead1d3;
-background:#fff;
-overflow:hidden;
-padding:0;
-box-shadow:0 2px 8px #00000008;
-}
-.summary h3{
-background:linear-gradient(135deg,#7d1018,#a51e28);
-color:white;
-padding:14px;
-font-size:14px;
-}
-.stats{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px;
-padding:12px;
-}
-.stat{
-background:#f7f8fa;
-border:1px solid #e8ebf0;
-border-radius:11px;
-padding:13px;
-min-width:0;
-min-height:88px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-}
-.stat span{
-display:block;
-color:#647084;
-font-size:11px;
-line-height:1.4;
-margin-bottom:7px;
-}
-.stat strong{
-font-size:23px;
-line-height:1.2;
-color:#202938;
-}
-.stat.present-stat strong,
-.stat.filled-stat strong{
-color:#15803d;
-}
-.stat.empty-stat strong{
-color:#b45309;
-}
-.stat.percent-stat{
-grid-column:1/-1;
-min-height:auto;
-background:#f7f8fa;
-}
-.percent-heading{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:8px;
-margin-bottom:10px;
-}
-.percent-heading span{
-margin:0;
-font-weight:bold;
-color:#424b5b;
-}
-.percent-heading strong{
-font-size:22px;
-color:#15803d;
-white-space:nowrap;
-}
-.progress-track{
-height:11px;
-width:100%;
-background:#e1e5eb;
-border-radius:20px;
-overflow:hidden;
-}
-.progress-bar{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#16a34a,#22c55e);
-border-radius:20px;
-transition:width .3s ease;
-}
-.percent-detail{
-display:block;
-font-size:10px;
-color:#687385;
-margin-top:8px;
-line-height:1.5;
-}
-
+.summary{border:1px solid #ead1d3;background:#fff;overflow:hidden;padding:0;box-shadow:0 2px 8px #00000008}
+.summary h3{background:linear-gradient(135deg,#7d1018,#a51e28);color:white;padding:14px;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}
+.stat{background:#f7f8fa;border:1px solid #e8ebf0;border-radius:11px;padding:13px;min-width:0;min-height:88px;display:flex;flex-direction:column;justify-content:center}
+.stat span{display:block;color:#647084;font-size:11px;line-height:1.4;margin-bottom:7px}
+.stat strong{font-size:23px;line-height:1.2;color:#202938}
+.stat.present-stat strong,.stat.filled-stat strong{color:#15803d}
+.stat.empty-stat strong{color:#b45309}
+.stat.percent-stat{grid-column:1/-1;min-height:auto;background:#f7f8fa}
+.percent-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.percent-heading span{margin:0;font-weight:bold;color:#424b5b}
+.percent-heading strong{font-size:22px;color:#15803d;white-space:nowrap}
+.progress-track{height:11px;width:100%;background:#e1e5eb;border-radius:20px;overflow:hidden}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#16a34a,#22c55e);border-radius:20px;transition:width .3s ease}
+.percent-detail{display:block;font-size:10px;color:#687385;margin-top:8px;line-height:1.5}
 .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
 .btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:12px 8px;font-weight:bold;font-size:12px;width:100%;min-height:45px;overflow-wrap:anywhere}
-.btn.primary{background:#8d171d;color:white}
-.btn:disabled{opacity:.6}
+.btn.primary{background:#8d171d;color:white}.btn:disabled{opacity:.6}
 .hidden{display:none!important}
 .recap-card{background:white;border:1px solid #e0e4eb;padding:12px}
-.recap-card h4{margin-bottom:8px}
-.badge{display:inline-block;padding:4px 8px;background:#e7f1ff;border-radius:20px;font-size:11px}
+.recap-card h4{margin-bottom:8px}.badge{display:inline-block;padding:4px 8px;background:#e7f1ff;border-radius:20px;font-size:11px}
 .loading{background:white;border:1px solid #ddd;text-align:center}
 .error{background:#ffeded;color:#8d171d;border:1px solid #f2b9bf;line-height:1.6;overflow-wrap:anywhere}
 footer{text-align:center;color:#7b8493;font-size:10px;padding:15px}
-
 @media(max-width:600px){
-main{padding:10px}
-header{padding:11px}
-header h1{font-size:16px}
-header p{font-size:10px}
-.user{font-size:10px}
-.headline h2{font-size:17px}
+main{padding:10px}header{padding:11px}header h1{font-size:16px}header p{font-size:10px}
+.user{font-size:10px}.headline h2{font-size:17px}
 .period,.scope,.legend,.recap-card{padding:11px}
 .controls{grid-template-columns:1fr 1fr;gap:8px}
-.scope{flex-direction:row}
-.scope>div{flex:1 1 45%}
+.scope{flex-direction:row}.scope>div{flex:1 1 45%}
 .tabs .tab{padding:10px 7px;font-size:11px}
 .actions{grid-template-columns:1fr 1fr;gap:8px}
 .btn{padding:11px 6px;font-size:11px}
 .stats{grid-template-columns:1fr 1fr;gap:9px;padding:10px}
-.stat{padding:11px;min-height:83px}
-.stat strong{font-size:21px}
-.stat.percent-stat{grid-column:1/-1}
-.percent-heading strong{font-size:21px}
-.table-wrap{max-height:65vh}
-table{min-width:1050px}
+.stat{padding:11px;min-height:83px}.stat strong{font-size:21px}
+.stat.percent-stat{grid-column:1/-1}.percent-heading strong{font-size:21px}
+.table-wrap{max-height:65vh}table{min-width:1050px}
 }
-
 @media(min-width:700px){
 .controls{grid-template-columns:1fr 1fr 1fr}
 .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
 .stat.percent-stat{grid-column:1/-1}
-.actions{display:flex;flex-wrap:wrap}
-.actions .btn{width:auto}
+.actions{display:flex;flex-wrap:wrap}.actions .btn{width:auto}
 }
-
 @media print{
 header,.tabs,.controls,.actions,.legend,footer{display:none!important}
-body{background:white}
-main{max-width:none;padding:0}
+body{background:white}main{max-width:none;padding:0}
 .table-wrap{max-height:none;overflow:visible}
-table{min-width:0;font-size:8px}
-th{position:static}
+table{min-width:0;font-size:8px}th{position:static}
 .summary{break-inside:avoid}
 }
 </style>
 </head>
-
 <body>
 <header>
 <div class="logo">⚓</div>
-<div>
-<h1>WAINI</h1>
-<p>Sistem Informasi Manajemen Karyawan</p>
-</div>
+<div><h1>WAINI</h1><p>Sistem Informasi Manajemen Karyawan</p></div>
 <div class="user" id="userInfo">Memeriksa akun...</div>
 </header>
-
 <main>
 <div class="headline">
 <div class="icon">🗓️</div>
-<div>
-<h2>Pengelolaan Absensi</h2>
-<p>Pengisian absensi sesuai lingkup penugasan.</p>
+<div><h2>Pengelolaan Absensi</h2><p>Pengisian absensi sesuai lingkup penugasan.</p></div>
 </div>
-</div>
-
 <div id="loading" class="loading">⏳ Menghubungkan ke Firebase...</div>
 <div id="errorBox" class="hidden"></div>
-
 <div id="app" class="hidden">
 <div class="period">
-<b>PERIODE ABSENSI</b>
-<span id="periodText"></span>
+<b>PERIODE ABSENSI</b><span id="periodText"></span>
 <p class="note" id="periodInfo"></p>
 </div>
-
 <div class="tabs">
 <button class="tab active" data-tab="input">✍️ Input Harian</button>
 <button class="tab" data-tab="recap">📊 Rekap Periode</button>
 <button class="tab" data-tab="history">🕘 Riwayat</button>
 </div>
-
 <section id="inputPanel">
 <div class="scope">
-<div>
-<b>Lingkup Penugasan</b><br>
-<span id="scopeText"></span>
+<div><b>Lingkup Penugasan</b><br><span id="scopeText"></span></div>
+<div><b id="employeeCount">0 Karyawan</b><br><small>Data karyawan WAINI</small></div>
 </div>
-<div>
-<b id="employeeCount">0 Karyawan</b><br>
-<small>Data karyawan WAINI</small>
-</div>
-</div>
-
 <div class="controls">
-<div>
-<label>Tanggal Absensi</label>
-<input type="date" id="datePick">
-</div>
-<div>
-<label>Mode Input</label>
-<div class="mode">
+<div><label>Tanggal Absensi</label><input type="date" id="datePick"></div>
+<div><label>Mode Input</label><div class="mode">
 <button class="selected" id="individual">Per Karyawan</button>
 <button id="mass">Massal</button>
+</div></div>
 </div>
-</div>
-</div>
-
-<div>
-<label>Cari Karyawan</label>
-<input type="search" id="search" placeholder="Nama / NIK / Divisi">
-</div>
-
+<div><label>Cari Karyawan</label><input type="search" id="search" placeholder="Nama / NIK / Divisi"></div>
 <div class="table-wrap">
 <table>
-<thead>
-<tr>
-<th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th>
-<th>Departemen</th><th>Jabatan</th><th>TMK</th><th>POH</th>
-<th>Sistem Cuti</th><th>Jadwal</th><th>Status Absensi</th>
-<th>Keterangan</th>
-</tr>
-</thead>
+<thead><tr>
+<th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th><th>Departemen</th><th>Jabatan</th>
+<th>TMK</th><th>POH</th><th>Sistem Cuti</th><th>Jadwal</th><th>Status Absensi</th><th>Keterangan</th>
+</tr></thead>
 <tbody id="rows"></tbody>
 </table>
 </div>
-
 <div class="legend">
 <b>Keterangan Kode Absensi</b><br>
-<span class="chip">1 Masuk</span>
-<span class="chip">1A Perjalanan Dinas</span>
-<span class="chip">2 Cuti</span>
-<span class="chip">3 Sakit</span>
-<span class="chip">4 Ijin Resmi</span>
-<span class="chip">4A Panggilan Negara</span>
-<span class="chip">4B Libur Nasional</span>
-<span class="chip">5 Terlambat/Pulang Cepat</span>
-<span class="chip">6 Masuk Libur Nasional</span>
-<span class="chip">7 LWOP</span>
-<span class="chip">9 Mangki</span>
+<span class="chip">1 Masuk</span><span class="chip">1A Perjalanan Dinas</span>
+<span class="chip">2 Cuti</span><span class="chip">3 Sakit</span>
+<span class="chip">4 Ijin Resmi</span><span class="chip">4A Panggilan Negara</span>
+<span class="chip">4B Libur Nasional</span><span class="chip">5 Terlambat/Pulang Cepat</span>
+<span class="chip">6 Masuk Libur Nasional</span><span class="chip">7 LWOP</span><span class="chip">9 Mangki</span>
 </div>
-
 <div class="actions">
 <button class="btn" id="reset">↺ Kosongkan Input</button>
 <button class="btn primary" id="save">💾 Simpan ke Firebase</button>
 <button class="btn" id="excel">📥 Download Excel</button>
 <button class="btn" id="print">🖨️ Cetak / PDF</button>
 </div>
-
-<p class="note">
-Data absensi disimpan ke Firestore collection data_absensi.
-Setiap perubahan dicatat pada riwayat_perubahan_absensi.
-</p>
-
+<p class="note">Data absensi disimpan ke Firestore collection data_absensi. Setiap perubahan dicatat pada riwayat_perubahan_absensi.</p>
 <div class="summary">
 <h3>📊 Ringkasan Tanggal Terpilih</h3>
 <div class="stats">
-
-<div class="stat">
-<span>Total Karyawan</span>
-<strong id="total">0</strong>
-</div>
-
-<div class="stat present-stat">
-<span>Kode 1 - Masuk</span>
-<strong id="present">0</strong>
-</div>
-
-<div class="stat filled-stat">
-<span>Status Terisi</span>
-<strong id="other">0</strong>
-</div>
-
-<div class="stat empty-stat">
-<span>Belum Diisi</span>
-<strong id="empty">0</strong>
-</div>
-
+<div class="stat"><span>Total Karyawan</span><strong id="total">0</strong></div>
+<div class="stat present-stat"><span>Kode 1 - Masuk</span><strong id="present">0</strong></div>
+<div class="stat filled-stat"><span>Status Terisi</span><strong id="other">0</strong></div>
+<div class="stat empty-stat"><span>Belum Diisi</span><strong id="empty">0</strong></div>
 <div class="stat percent-stat">
-<div class="percent-heading">
-<span>Persentase Kode 1</span>
-<strong id="percent">0%</strong>
+<div class="percent-heading"><span>Persentase Kode 1</span><strong id="percent">0%</strong></div>
+<div class="progress-track"><div class="progress-bar" id="percentBar"></div></div>
+<small class="percent-detail" id="percentDetail">0 dari 0 karyawan tercatat dengan kode 1</small>
 </div>
-<div class="progress-track">
-<div class="progress-bar" id="percentBar"></div>
-</div>
-<small class="percent-detail" id="percentDetail">
-0 dari 0 karyawan tercatat dengan kode 1
-</small>
-</div>
-
 </div>
 </div>
 </section>
-
 <section id="recapPanel" class="hidden">
-<div class="scope">
-<b>Rekap Periode 11–10</b>
-<span id="recapPeriod"></span>
-</div>
-<div class="recap-card">
-<h4>Rekapitulasi Kehadiran</h4>
-<p class="note">Rekap berdasarkan data absensi dari Firebase.</p>
-</div>
-<div class="table-wrap">
-<table>
-<thead id="recapHead"></thead>
-<tbody id="recapRows"></tbody>
-</table>
-</div>
+<div class="scope"><b>Rekap Periode 11–10</b><span id="recapPeriod"></span></div>
+<div class="recap-card"><h4>Rekapitulasi Kehadiran</h4><p class="note">Rekap berdasarkan data absensi dari Firebase.</p></div>
+<div class="table-wrap"><table><thead id="recapHead"></thead><tbody id="recapRows"></tbody></table></div>
 <div class="actions">
 <button class="btn primary" id="recapExcel">📥 Download Rekap Excel</button>
 <button class="btn" id="recapPrint">🖨️ Cetak Rekap</button>
 </div>
 </section>
-
 <section id="historyPanel" class="hidden">
-<div class="recap-card">
-<h4>Riwayat Perubahan Absensi</h4>
-<div id="historyList">Memuat riwayat...</div>
-</div>
+<div class="recap-card"><h4>Riwayat Perubahan Absensi</h4><div id="historyList">Memuat riwayat...</div></div>
 </section>
 </div>
 </main>
-
 <footer>WAINI • Pengelolaan Absensi • Firebase</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- ExcelJS dipakai untuk membuat header bertingkat dan format tabel Excel -->
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 
 <script type="module">
 import {auth,db} from "./firebase.js";
-
-import {onAuthStateChanged}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+import {onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
-collection,doc,getDoc,getDocs,query,where,
-serverTimestamp,writeBatch
+collection,doc,getDoc,getDocs,query,where,serverTimestamp,writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const $=id=>document.getElementById(id);
-
-let currentUser=null;
-let currentProfile=null;
-let currentNik="";
-let currentRole="";
-let isSuperAdmin=false;
-
-let authorizedStaff=[];
-let assignmentList=[];
-let attendanceAssignments=[];
-let authorizedAccess=[];
-let accessByNik={};
-
-let values={};
-let notes={};
-let savedRecords={};
-let duplicateRecords={};
-let dirtyKeys=new Set();
-
-let currentDate="";
-let currentPeriod={};
-let currentPeriodId="";
-let attendanceMenu=null;
-let attendanceCodes=[];
-let loadingStage="Memulai aplikasi";
-let dateLoadToken=0;
-
+let currentUser=null,currentProfile=null,currentNik="",currentRole="",isSuperAdmin=false;
+let authorizedStaff=[],assignmentList=[],attendanceAssignments=[],authorizedAccess=[],accessByNik={};
+let values={},notes={},savedRecords={},duplicateRecords={},dirtyKeys=new Set();
+let currentDate="",currentPeriod={},currentPeriodId="",attendanceMenu=null,attendanceCodes=[];
+let loadingStage="Memulai aplikasi",dateLoadToken=0;
 const rows=$("rows");
 
 const defaultCodes=[
-["1","Masuk","Hadir"],
-["1A","Perjalanan Dinas","Hadir"],
-["2","Cuti","Cuti"],
-["3","Sakit dengan Surat Dokter","Izin"],
-["4","Ijin Resmi","Izin"],
-["4A","Panggilan Negara","Izin"],
-["4B","Libur Nasional","Libur"],
-["5","Terlambat / Pulang Cepat","Hadir"],
-["6","Masuk Kerja pada Libur Nasional","Hadir"],
-["7","LWOP","Tidak Hadir"],
-["9","Mangki","Tidak Hadir"]
+["1","Masuk","Hadir"],["1A","Perjalanan Dinas","Hadir"],["2","Cuti","Cuti"],
+["3","Sakit dengan Surat Dokter","Izin"],["4","Ijin Resmi","Izin"],
+["4A","Panggilan Negara","Izin"],["4B","Libur Nasional","Libur"],
+["5","Terlambat / Pulang Cepat","Hadir"],["6","Masuk Kerja pada Libur Nasional","Hadir"],
+["7","LWOP","Tidak Hadir"],["9","Mangki","Tidak Hadir"]
 ];
 
 function firstValue(obj,keys,fallback=""){
-for(const key of keys){
-const v=obj?.[key];
-if(v!==undefined&&v!==null&&v!=="")return v;
-}
+for(const key of keys){const v=obj?.[key];if(v!==undefined&&v!==null&&v!=="")return v;}
 return fallback;
 }
-
-function normalize(v){
-return String(v??"").trim().toLowerCase();
-}
-
-function normalizeNik(v){
-return String(v??"").trim();
-}
-
-function activeStatus(v){
-if(v===true)return true;
-return ["aktif","active","1","true","ya","yes"].includes(normalize(v));
-}
-
-function escapeHTML(v){
-return String(v??"")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-}
-
+function normalize(v){return String(v??"").trim().toLowerCase();}
+function normalizeNik(v){return String(v??"").trim();}
+function activeStatus(v){if(v===true)return true;return ["aktif","active","1","true","ya","yes"].includes(normalize(v));}
+function escapeHTML(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
 function formatDate(v){
-if(!v)return "";
-const d=new Date(v+"T00:00:00");
-if(Number.isNaN(d.getTime()))return String(v);
-return d.toLocaleDateString("id-ID",{
-day:"numeric",month:"long",year:"numeric"
-});
+if(!v)return "";const d=new Date(v+"T00:00:00");if(Number.isNaN(d.getTime()))return String(v);
+return d.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
 }
-
 function formatShort(v){
-if(!v)return "";
-const d=new Date(v+"T00:00:00");
-if(Number.isNaN(d.getTime()))return String(v);
-return d.toLocaleDateString("id-ID",{
-day:"2-digit",month:"2-digit"
-});
+if(!v)return "";const d=new Date(v+"T00:00:00");if(Number.isNaN(d.getTime()))return String(v);
+return d.toLocaleDateString("id-ID",{day:"2-digit",month:"2-digit"});
 }
-
-function toISO(d){
-return [
-d.getFullYear(),
-String(d.getMonth()+1).padStart(2,"0"),
-String(d.getDate()).padStart(2,"0")
-].join("-");
-}
-
+function toISO(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");}
 function validISODate(value){
 if(!/^\d{4}-\d{2}-\d{2}$/.test(String(value||"")))return false;
-const d=new Date(value+"T00:00:00");
-return !Number.isNaN(d.getTime())&&toISO(d)===value;
+const d=new Date(value+"T00:00:00");return !Number.isNaN(d.getTime())&&toISO(d)===value;
 }
-
-function dataKey(date,nik){
-return date+"_"+nik;
-}
-
+function dataKey(date,nik){return date+"_"+nik;}
 function timestampValue(v){
-if(v?.toMillis)return v.toMillis();
-if(v instanceof Date)return v.getTime();
-if(typeof v==="number")return v;
-if(typeof v==="string"){
-const t=Date.parse(v);
-return Number.isNaN(t)?0:t;
+if(v?.toMillis)return v.toMillis();if(v instanceof Date)return v.getTime();if(typeof v==="number")return v;
+if(typeof v==="string"){const t=Date.parse(v);return Number.isNaN(t)?0:t;}return 0;
 }
-return 0;
-}
-
 function getPeriod(dateString){
-if(!validISODate(dateString)){
-throw new Error("Tanggal absensi tidak valid.");
-}
-const d=new Date(dateString+"T00:00:00");
-let start,end;
-if(d.getDate()>=11){
-start=new Date(d.getFullYear(),d.getMonth(),11);
-end=new Date(d.getFullYear(),d.getMonth()+1,10);
-}else{
-start=new Date(d.getFullYear(),d.getMonth()-1,11);
-end=new Date(d.getFullYear(),d.getMonth(),10);
-}
+if(!validISODate(dateString))throw new Error("Tanggal absensi tidak valid.");
+const d=new Date(dateString+"T00:00:00");let start,end;
+if(d.getDate()>=11){start=new Date(d.getFullYear(),d.getMonth(),11);end=new Date(d.getFullYear(),d.getMonth()+1,10);}
+else{start=new Date(d.getFullYear(),d.getMonth()-1,11);end=new Date(d.getFullYear(),d.getMonth(),10);}
 return {start:toISO(start),end:toISO(end)};
 }
-
-function getPeriodId(start){
-return start.substring(0,7);
-}
-
+function getPeriodId(start){return start.substring(0,7);}
 function getDates(start,end){
-const result=[];
-let d=new Date(start+"T00:00:00");
-const last=new Date(end+"T00:00:00");
-while(d<=last){
-result.push(toISO(d));
-d.setDate(d.getDate()+1);
+const result=[];let d=new Date(start+"T00:00:00");const last=new Date(end+"T00:00:00");
+while(d<=last){result.push(toISO(d));d.setDate(d.getDate()+1);}return result;
 }
-return result;
-}
-
 function updatePeriod(){
-currentPeriod=getPeriod(currentDate);
-currentPeriodId=getPeriodId(currentPeriod.start);
-$("periodText").textContent=
-formatDate(currentPeriod.start)+" – "+formatDate(currentPeriod.end);
-$("periodInfo").textContent=
-"ID periode: "+currentPeriodId+
-" • Periode otomatis tanggal 11 sampai 10.";
-$("recapPeriod").textContent=
-formatShort(currentPeriod.start)+" – "+formatShort(currentPeriod.end);
+currentPeriod=getPeriod(currentDate);currentPeriodId=getPeriodId(currentPeriod.start);
+$("periodText").textContent=formatDate(currentPeriod.start)+" – "+formatDate(currentPeriod.end);
+$("periodInfo").textContent="ID periode: "+currentPeriodId+" • Periode otomatis tanggal 11 sampai 10.";
+$("recapPeriod").textContent=formatShort(currentPeriod.start)+" – "+formatShort(currentPeriod.end);
 }
-
 async function getUserProfile(user){
-loadingStage="Membaca profil pengguna";
-const snap=await getDoc(doc(db,"pengguna",user.uid));
-if(!snap.exists()){
-throw new Error("Profil pengguna tidak ditemukan.");
+loadingStage="Membaca profil pengguna";const snap=await getDoc(doc(db,"pengguna",user.uid));
+if(!snap.exists())throw new Error("Profil pengguna tidak ditemukan.");return snap.data();
 }
-return snap.data();
-}
-
 function isAttendanceMenu(data,id){
-const text=[
-id,data.nama,data.judul,data.menu_id,data.menu_kode,
-data.kode_menu,data.kode,data.tugas_id,data.tugas_kode,
-data.halaman,data.link,data.url
-].join(" ").toLowerCase();
-return text.includes("absensi")||
-text.includes("pengelolaan_absensi")||
-text.includes("pengelolaan-absensi");
+const text=[id,data.nama,data.judul,data.menu_id,data.menu_kode,data.kode_menu,data.kode,data.tugas_id,data.tugas_kode,data.halaman,data.link,data.url].join(" ").toLowerCase();
+return text.includes("absensi")||text.includes("pengelolaan_absensi")||text.includes("pengelolaan-absensi");
 }
-
 async function loadAttendanceMenu(){
-loadingStage="Membaca menu_tugas";
-const snap=await getDocs(collection(db,"menu_tugas"));
+loadingStage="Membaca menu_tugas";const snap=await getDocs(collection(db,"menu_tugas"));
 const menus=snap.docs.map(d=>({id:d.id,...d.data()}));
-const found=menus.find(m=>
-activeStatus(firstValue(m,["aktif","status","active"],false))
-&&isAttendanceMenu(m,m.id)
-);
+const found=menus.find(m=>activeStatus(firstValue(m,["aktif","status","active"],false))&&isAttendanceMenu(m,m.id));
 if(found)return found;
-
 const exact=snap.docs.find(d=>d.id==="xCPwUphMweEgFQu0xMUI");
-if(exact){
-const data=exact.data();
-if(data.aktif===true&&
-normalize(data.halaman)==="pengelolaan_absensi.html"){
-return {id:exact.id,...data};
-}
-}
+if(exact){const data=exact.data();if(data.aktif===true&&normalize(data.halaman)==="pengelolaan_absensi.html")return {id:exact.id,...data};}
 return null;
 }
-
 function getMenuIdentifiers(menu){
-return [
-menu.id,menu.menu_id,menu.menu_kode,menu.kode_menu,
-menu.kode,menu.tugas_id,menu.tugas_kode,
-menu.halaman,menu.link,menu.url
-].filter(Boolean).map(normalize);
+return [menu.id,menu.menu_id,menu.menu_kode,menu.kode_menu,menu.kode,menu.tugas_id,menu.tugas_kode,menu.halaman,menu.link,menu.url].filter(Boolean).map(normalize);
 }
-
 async function loadAssignments(nik){
-loadingStage="Membaca penugasan_karyawan";
-const collectionRef=collection(db,"penugasan_karyawan");
-let result=[];
-for(const field of ["petugas_nik","nik"]){
-try{
-const q=query(collectionRef,where(field,"==",nik));
-const snap=await getDocs(q);
-snap.docs.forEach(d=>{
-if(!result.some(x=>x.id===d.id)){
-result.push({id:d.id,...d.data()});
-}
-});
-}catch(error){
-console.warn("Pencarian penugasan melalui field",field,error);
-}
-}
+loadingStage="Membaca penugasan_karyawan";const collectionRef=collection(db,"penugasan_karyawan");let result=[];
+for(const field of ["petugas_nik","nik"]){try{
+const snap=await getDocs(query(collectionRef,where(field,"==",nik)));
+snap.docs.forEach(d=>{if(!result.some(x=>x.id===d.id))result.push({id:d.id,...d.data()});});
+}catch(error){console.warn("Pencarian penugasan melalui field",field,error);}}
 return result;
 }
-
-function assignmentIsActive(a){
-return activeStatus(firstValue(a,["aktif","status","active"],false));
-}
-
+function assignmentIsActive(a){return activeStatus(firstValue(a,["aktif","status","active"],false));}
 function assignmentMatchesMenu(a,menu){
-const id=firstValue(a,[
-"menu_id","menu_kode","kode_menu","kode",
-"tugas_id","tugas_kode","menu_tugas_id"
-],"");
+const id=firstValue(a,["menu_id","menu_kode","kode_menu","kode","tugas_id","tugas_kode","menu_tugas_id"],"");
 return !!id&&getMenuIdentifiers(menu).includes(normalize(id));
 }
-
 async function loadEmployeeAccess(nik){
 loadingStage="Membaca akses_karyawan";
-const q=query(collection(db,"akses_karyawan"),
-where("petugas_nik","==",nik));
-const snap=await getDocs(q);
+const snap=await getDocs(query(collection(db,"akses_karyawan"),where("petugas_nik","==",nik)));
 return snap.docs.map(d=>({id:d.id,...d.data()}));
 }
-
 function getAuthorizedAccess(accessList,assignments){
-return accessList.filter(a=>
-activeStatus(firstValue(a,["aktif","status","active"],false))&&
-assignments.some(x=>x.id===a.penugasan_id)
-);
+return accessList.filter(a=>activeStatus(firstValue(a,["aktif","status","active"],false))&&assignments.some(x=>x.id===a.penugasan_id));
 }
-
 function mapEmployee(id,data){
 return {
 nik:normalizeNik(firstValue(data,["nik","NIK","nomor_induk"],id)),
@@ -658,676 +304,221 @@ jabatan:firstValue(data,["jabatan","position","nama_jabatan"],"-"),
 tmk:firstValue(data,["tmk","tanggal_masuk","tgl_masuk"],""),
 poh:firstValue(data,["poh","place_of_hire","lokasi","lokasi_kerja"],"-"),
 cuti:firstValue(data,["sistem_cuti","sistem cuti","cuti","jenis_cuti"],"-"),
-sched:firstValue(data,["jadwal","schedule","shift"],"-"),
-raw:data
+sched:firstValue(data,["jadwal","schedule","shift"],"-"),raw:data
 };
 }
-
 function employeeIsActive(data){
-return activeStatus(firstValue(data,[
-"status","status_karyawan","status_kerja","aktif","active"
-],"aktif"));
+return activeStatus(firstValue(data,["status","status_karyawan","status_kerja","aktif","active"],"aktif"));
 }
-
 async function loadEmployeesForSuperAdmin(){
-loadingStage="Membaca seluruh karyawan";
-const snap=await getDocs(collection(db,"data_karyawan"));
-const result=[];
-snap.forEach(d=>{
-const data=d.data();
-if(employeeIsActive(data))result.push(mapEmployee(d.id,data));
-});
-return result;
+loadingStage="Membaca seluruh karyawan";const snap=await getDocs(collection(db,"data_karyawan"));const result=[];
+snap.forEach(d=>{const data=d.data();if(employeeIsActive(data))result.push(mapEmployee(d.id,data));});return result;
 }
-
 async function loadEmployeesByAccess(accessList){
-loadingStage="Membaca data karyawan sesuai akses";
-const result=[];
-const unique=new Set();
-
+loadingStage="Membaca data karyawan sesuai akses";const result=[];const unique=new Set();
 for(const access of accessList){
-const nik=normalizeNik(firstValue(access,[
-"target_nik","nik_target","karyawan_nik","nik"
-],""));
-if(!nik||unique.has(nik))continue;
-unique.add(nik);
-
-loadingStage="Membaca karyawan NIK "+nik;
-const snap=await getDoc(doc(db,"data_karyawan",nik));
-if(!snap.exists())continue;
-
-const data=snap.data();
-if(!employeeIsActive(data))continue;
-
-const employee=mapEmployee(snap.id,data);
-employee.penugasan_id=access.penugasan_id;
-employee.akses_id=access.id;
-employee.petugas_nik=access.petugas_nik;
-result.push(employee);
-accessByNik[nik]=access;
+const nik=normalizeNik(firstValue(access,["target_nik","nik_target","karyawan_nik","nik"],""));
+if(!nik||unique.has(nik))continue;unique.add(nik);
+loadingStage="Membaca karyawan NIK "+nik;const snap=await getDoc(doc(db,"data_karyawan",nik));
+if(!snap.exists())continue;const data=snap.data();if(!employeeIsActive(data))continue;
+const employee=mapEmployee(snap.id,data);employee.penugasan_id=access.penugasan_id;employee.akses_id=access.id;employee.petugas_nik=access.petugas_nik;
+result.push(employee);accessByNik[nik]=access;
 }
 return result;
 }
-
 async function loadCodes(){
-loadingStage="Membaca master_kode_absensi";
-const snap=await getDocs(collection(db,"master_kode_absensi"));
-
-if(snap.empty){
-attendanceCodes=defaultCodes;
-return;
-}
-
-const result=snap.docs.map(d=>{
-const x=d.data();
-return {
+loadingStage="Membaca master_kode_absensi";const snap=await getDocs(collection(db,"master_kode_absensi"));
+if(snap.empty){attendanceCodes=defaultCodes;return;}
+const result=snap.docs.map(d=>{const x=d.data();return {
 kode:String(firstValue(x,["kode","kode_absensi"],d.id)),
 nama:String(firstValue(x,["nama","nama_kode","keterangan"],d.id)),
 kategori:String(firstValue(x,["kategori","kategori_kode"],"-")),
 aktif:activeStatus(firstValue(x,["aktif","status","active"],false))
-};
-}).filter(x=>x.aktif);
-
-if(!result.length){
-throw new Error("Tidak ada kode absensi aktif pada master_kode_absensi.");
-}
+};}).filter(x=>x.aktif);
+if(!result.length)throw new Error("Tidak ada kode absensi aktif pada master_kode_absensi.");
 attendanceCodes=result.map(x=>[x.kode,x.nama,x.kategori]);
 }
-
 async function loadAttendanceFromFirebase(){
-
 loadingStage="Membaca data_absensi";
-
-const oldValues={...values};
-const oldNotes={...notes};
-const oldDirty=new Set(dirtyKeys);
-
-values={};
-notes={};
-savedRecords={};
-duplicateRecords={};
-
-const allowedNiks=new Set(authorizedStaff.map(s=>normalizeNik(s.nik)));
-const grouped={};
-
+const oldValues={...values},oldNotes={...notes},oldDirty=new Set(dirtyKeys);
+values={};notes={};savedRecords={};duplicateRecords={};
+const allowedNiks=new Set(authorizedStaff.map(s=>normalizeNik(s.nik)));const grouped={};
 function processRecord(d){
-const data=d.data();
-const tanggal=String(firstValue(data,["tanggal","tanggal_absensi"],""));
+const data=d.data();const tanggal=String(firstValue(data,["tanggal","tanggal_absensi"],""));
 const nik=normalizeNik(firstValue(data,["nik","NIK","nik_karyawan"],""));
 const kode=String(firstValue(data,["kode","kode_absensi"],""));
-
-if(!tanggal||!nik||!validISODate(tanggal))return;
-if(tanggal<currentPeriod.start||tanggal>currentPeriod.end)return;
-if(!allowedNiks.has(nik))return;
-
-const key=dataKey(tanggal,nik);
-if(!grouped[key])grouped[key]=[];
-grouped[key].push({
-id:d.id,...data,tanggal,nik,kode
-});
+if(!tanggal||!nik||!validISODate(tanggal)||tanggal<currentPeriod.start||tanggal>currentPeriod.end||!allowedNiks.has(nik))return;
+const key=dataKey(tanggal,nik);if(!grouped[key])grouped[key]=[];
+grouped[key].push({id:d.id,...data,tanggal,nik,kode});
 }
-
-if(isSuperAdmin){
-const snap=await getDocs(collection(db,"data_absensi"));
+if(isSuperAdmin){const snap=await getDocs(collection(db,"data_absensi"));snap.forEach(processRecord);}
+else{for(const employee of authorizedStaff){
+const snap=await getDocs(query(collection(db,"data_absensi"),where("nik","==",employee.nik)));
 snap.forEach(processRecord);
-}else{
-for(const employee of authorizedStaff){
-const q=query(collection(db,"data_absensi"),
-where("nik","==",employee.nik));
-const snap=await getDocs(q);
-snap.forEach(processRecord);
-}
-}
-
+}}
 for(const [key,list] of Object.entries(grouped)){
-if(list.length>1){
-duplicateRecords[key]=list;
-continue;
+if(list.length>1){duplicateRecords[key]=list;continue;}
+savedRecords[key]=list[0];values[key]=list[0].kode;notes[key]=String(list[0].keterangan||"");
 }
-savedRecords[key]=list[0];
-values[key]=list[0].kode;
-notes[key]=String(list[0].keterangan||"");
+for(const key of oldDirty){if(oldValues[key]!==undefined)values[key]=oldValues[key];if(oldNotes[key]!==undefined)notes[key]=oldNotes[key];}
 }
-
-for(const key of oldDirty){
-if(oldValues[key]!==undefined)values[key]=oldValues[key];
-if(oldNotes[key]!==undefined)notes[key]=oldNotes[key];
-}
-}
-
 async function validateActivePeriod(){
 loadingStage="Memeriksa periode_absensi";
-
-if(!validISODate(currentDate)){
-throw new Error("Tanggal absensi kosong atau tidak valid.");
-}
-
+if(!validISODate(currentDate))throw new Error("Tanggal absensi kosong atau tidak valid.");
 const expected=getPeriod(currentDate);
-
-if(expected.start!==currentPeriod.start||
-expected.end!==currentPeriod.end){
-throw new Error("Periode internal tidak sesuai tanggal yang dipilih.");
-}
-
+if(expected.start!==currentPeriod.start||expected.end!==currentPeriod.end)throw new Error("Periode internal tidak sesuai tanggal yang dipilih.");
 const expectedId=getPeriodId(expected.start);
-if(currentPeriodId!==expectedId){
-throw new Error("ID periode tidak sesuai. Seharusnya "+expectedId+".");
-}
-
-const ref=doc(db,"periode_absensi",expectedId);
-const snap=await getDoc(ref);
-
-if(!snap.exists()){
-throw new Error("Dokumen periode_absensi/"+expectedId+
-" tidak ditemukan. Penyimpanan dihentikan.");
-}
-
+if(currentPeriodId!==expectedId)throw new Error("ID periode tidak sesuai. Seharusnya "+expectedId+".");
+const snap=await getDoc(doc(db,"periode_absensi",expectedId));
+if(!snap.exists())throw new Error("Dokumen periode_absensi/"+expectedId+" tidak ditemukan. Penyimpanan dihentikan.");
 const data=snap.data();
-
-if(normalize(data.status)!=="aktif"){
-throw new Error("Periode "+expectedId+" tidak aktif. Status Firebase: "+
-String(data.status??"(kosong)"));
-}
-
-if(data.tanggal_mulai&&data.tanggal_mulai!==expected.start){
-throw new Error("Tanggal mulai periode di Firebase tidak sesuai. "+
-"Firebase: "+data.tanggal_mulai+", seharusnya: "+expected.start);
-}
-
-if(data.tanggal_selesai&&data.tanggal_selesai!==expected.end){
-throw new Error("Tanggal selesai periode di Firebase tidak sesuai. "+
-"Firebase: "+data.tanggal_selesai+", seharusnya: "+expected.end);
-}
+if(normalize(data.status)!=="aktif")throw new Error("Periode "+expectedId+" tidak aktif. Status Firebase: "+String(data.status??"(kosong)"));
+if(data.tanggal_mulai&&data.tanggal_mulai!==expected.start)throw new Error("Tanggal mulai periode di Firebase tidak sesuai. Firebase: "+data.tanggal_mulai+", seharusnya: "+expected.start);
+if(data.tanggal_selesai&&data.tanggal_selesai!==expected.end)throw new Error("Tanggal selesai periode di Firebase tidak sesuai. Firebase: "+data.tanggal_selesai+", seharusnya: "+expected.end);
 return data;
 }
-
 function render(){
-const search=$("search").value.toLowerCase();
-rows.innerHTML="";
-
-const filtered=authorizedStaff.filter(s=>
-[s.name,s.nik,s.div,s.dept,s.jabatan]
-.join(" ").toLowerCase().includes(search)
-);
-
+const search=$("search").value.toLowerCase();rows.innerHTML="";
+const filtered=authorizedStaff.filter(s=>[s.name,s.nik,s.div,s.dept,s.jabatan].join(" ").toLowerCase().includes(search));
 $("employeeCount").textContent=authorizedStaff.length+" Karyawan";
-
 filtered.forEach((s,i)=>{
-const key=dataKey(currentDate,s.nik);
-const selected=values[key]||"";
-const note=notes[key]||"";
-const duplicate=duplicateRecords[key];
-
-const options=
-'<option value="">— Pilih Kode —</option>'+
-attendanceCodes.map(c=>
-`<option value="${escapeHTML(c[0])}" ${selected===c[0]?"selected":""}>
-${escapeHTML(c[0]+" - "+c[1])}
-</option>`
-).join("");
-
-rows.insertAdjacentHTML("beforeend",`
-<tr>
-<td>${i+1}</td>
-<td>${escapeHTML(s.nik)}</td>
-<td><b>${escapeHTML(s.name)}</b></td>
-<td>${escapeHTML(s.div)}</td>
-<td>${escapeHTML(s.dept)}</td>
-<td>${escapeHTML(s.jabatan)}</td>
-<td>${escapeHTML(formatDate(s.tmk))}</td>
-<td>${escapeHTML(s.poh)}</td>
-<td>${escapeHTML(s.cuti)}</td>
+const key=dataKey(currentDate,s.nik),selected=values[key]||"",note=notes[key]||"",duplicate=duplicateRecords[key];
+const options='<option value="">— Pilih Kode —</option>'+attendanceCodes.map(c=>`<option value="${escapeHTML(c[0])}" ${selected===c[0]?"selected":""}>${escapeHTML(c[0]+" - "+c[1])}</option>`).join("");
+rows.insertAdjacentHTML("beforeend",`<tr>
+<td>${i+1}</td><td>${escapeHTML(s.nik)}</td><td><b>${escapeHTML(s.name)}</b></td>
+<td>${escapeHTML(s.div)}</td><td>${escapeHTML(s.dept)}</td><td>${escapeHTML(s.jabatan)}</td>
+<td>${escapeHTML(formatDate(s.tmk))}</td><td>${escapeHTML(s.poh)}</td><td>${escapeHTML(s.cuti)}</td>
 <td><span class="chip">${escapeHTML(s.sched)}</span></td>
-<td>
-${duplicate?
-'<span class="chip">KONFLIK DATA GANDA</span>':
-`<select class="status" data-nik="${escapeHTML(s.nik)}">${options}</select>`}
-</td>
-<td>
-<input class="noteInput" data-nik="${escapeHTML(s.nik)}"
-value="${escapeHTML(note)}" placeholder="Keterangan"
-${duplicate?"disabled":""}>
-</td>
-</tr>
-`);
+<td>${duplicate?'<span class="chip">KONFLIK DATA GANDA</span>':`<select class="status" data-nik="${escapeHTML(s.nik)}">${options}</select>`}</td>
+<td><input class="noteInput" data-nik="${escapeHTML(s.nik)}" value="${escapeHTML(note)}" placeholder="Keterangan" ${duplicate?"disabled":""}></td>
+</tr>`);
 });
-
-bindEvents();
-stats();
+bindEvents();stats();
 }
-
 function bindEvents(){
-document.querySelectorAll(".status").forEach(el=>{
-el.onchange=()=>{
-const nik=el.dataset.nik;
-if(!authorizedStaff.some(s=>s.nik===nik)){
-alert("Karyawan di luar penugasan.");
-el.value="";
-return;
+document.querySelectorAll(".status").forEach(el=>{el.onchange=()=>{
+const nik=el.dataset.nik;if(!authorizedStaff.some(s=>s.nik===nik)){alert("Karyawan di luar penugasan.");el.value="";return;}
+const key=dataKey(currentDate,nik);values[key]=el.value;dirtyKeys.add(key);stats();
+};});
+document.querySelectorAll(".noteInput").forEach(el=>{el.oninput=()=>{
+const key=dataKey(currentDate,el.dataset.nik);notes[key]=el.value;dirtyKeys.add(key);
+};});
 }
-const key=dataKey(currentDate,nik);
-values[key]=el.value;
-dirtyKeys.add(key);
-stats();
-};
-});
-
-document.querySelectorAll(".noteInput").forEach(el=>{
-el.oninput=()=>{
-const key=dataKey(currentDate,el.dataset.nik);
-notes[key]=el.value;
-dirtyKeys.add(key);
-};
-});
-}
-
-/* PERBAIKAN PERHITUNGAN RINGKASAN */
 function stats(){
-let masuk=0;
-let terisi=0;
-
-authorizedStaff.forEach(s=>{
-const code=values[dataKey(currentDate,s.nik)]||"";
-
-if(code)terisi++;
-if(code==="1")masuk++;
-});
-
-const total=authorizedStaff.length;
-const belumDiisi=Math.max(0,total-terisi);
-const persentase=total?Math.round(masuk/total*100):0;
-
-$("total").textContent=total;
-$("present").textContent=masuk;
-
-/* Status Terisi adalah SEMUA kode absensi yang sudah diisi. */
-$("other").textContent=terisi;
-
-$("empty").textContent=belumDiisi;
-$("percent").textContent=persentase+"%";
-
-/* Perbarui batang progres persentase kode 1. */
-$("percentBar").style.width=persentase+"%";
-$("percentDetail").textContent=
-masuk+" dari "+total+" karyawan tercatat dengan kode 1";
+let masuk=0,terisi=0;
+authorizedStaff.forEach(s=>{const code=values[dataKey(currentDate,s.nik)]||"";if(code)terisi++;if(code==="1")masuk++;});
+const total=authorizedStaff.length,belumDiisi=Math.max(0,total-terisi),persentase=total?Math.round(masuk/total*100):0;
+$("total").textContent=total;$("present").textContent=masuk;$("other").textContent=terisi;
+$("empty").textContent=belumDiisi;$("percent").textContent=persentase+"%";
+$("percentBar").style.width=persentase+"%";$("percentDetail").textContent=masuk+" dari "+total+" karyawan tercatat dengan kode 1";
 }
-
-function attendanceDocumentId(nik,tanggal){
-return normalizeNik(nik)+"_"+String(tanggal||"").replace(/-/g,"");
-}
+function attendanceDocumentId(nik,tanggal){return normalizeNik(nik)+"_"+String(tanggal||"").replace(/-/g,"");}
 
 async function saveAttendance(){
-
-if(!currentUser){
-throw new Error("Pengguna belum login.");
+if(!currentUser)throw new Error("Pengguna belum login.");
+if(!validISODate(currentDate))throw new Error("Tanggal absensi tidak valid.");
+try{await validateActivePeriod();}catch(error){
+alert("GAGAL MEMERIKSA PERIODE\n\nTahap: Validasi periode_absensi\nKode Firebase: "+(error.code||"-")+"\nPesan: "+(error.message||String(error)));return;
 }
-
-if(!validISODate(currentDate)){
-throw new Error("Tanggal absensi tidak valid.");
-}
-
+const selectedStaff=authorizedStaff.filter(s=>values[dataKey(currentDate,s.nik)]);
+if(!selectedStaff.length){alert("Isi minimal satu status absensi.");return;}
+if(!confirm("Simpan "+selectedStaff.length+" data absensi ke Firebase untuk tanggal "+formatDate(currentDate)+"?"))return;
+$("save").disabled=true;$("save").textContent="Menyimpan...";
+let success=0,failed=0,unchanged=0;const errors=[];
 try{
-await validateActivePeriod();
-}catch(error){
-alert(
-"GAGAL MEMERIKSA PERIODE\n\n"+
-"Tahap: Validasi periode_absensi\n"+
-"Kode Firebase: "+(error.code||"-")+"\n"+
-"Pesan: "+(error.message||String(error))
-);
-return;
-}
-
-const selectedStaff=authorizedStaff.filter(s=>
-values[dataKey(currentDate,s.nik)]
-);
-
-if(!selectedStaff.length){
-alert("Isi minimal satu status absensi.");
-return;
-}
-
-if(!confirm(
-"Simpan "+selectedStaff.length+
-" data absensi ke Firebase untuk tanggal "+
-formatDate(currentDate)+"?"
-)){
-return;
-}
-
-$("save").disabled=true;
-$("save").textContent="Menyimpan...";
-
-let success=0;
-let failed=0;
-let unchanged=0;
-const errors=[];
-
-try{
-
 for(const employee of selectedStaff){
-
-const key=dataKey(currentDate,employee.nik);
-const kode=String(values[key]||"");
-const keterangan=String(notes[key]||"");
-
-let tahap="Memulai pemeriksaan";
-let targetId="-";
-let firebaseCode="-";
-
+const key=dataKey(currentDate,employee.nik),kode=String(values[key]||""),keterangan=String(notes[key]||"");
+let tahap="Memulai pemeriksaan",targetId="-",firebaseCode="-";
 try{
-
 tahap="Memeriksa kemungkinan data ganda";
-
-if(duplicateRecords[key]){
-throw new Error(
-"Ditemukan "+duplicateRecords[key].length+
-" dokumen untuk tanggal dan NIK yang sama."
-);
-}
-
+if(duplicateRecords[key])throw new Error("Ditemukan "+duplicateRecords[key].length+" dokumen untuk tanggal dan NIK yang sama.");
 tahap="Memvalidasi kode absensi";
-
-if(!attendanceCodes.some(c=>String(c[0])===kode)){
-throw new Error("Kode absensi tidak valid atau tidak aktif.");
-}
-
-const canonicalId=attendanceDocumentId(
-employee.nik,currentDate
-);
-
+if(!attendanceCodes.some(c=>String(c[0])===kode))throw new Error("Kode absensi tidak valid atau tidak aktif.");
+const canonicalId=attendanceDocumentId(employee.nik,currentDate);
 tahap="MENGAMBIL DATA LAMA DARI HASIL PEMBACAAN data_absensi";
-
-const existingRecord=savedRecords[key]||null;
-const oldData=existingRecord||null;
-
+const existingRecord=savedRecords[key]||null,oldData=existingRecord||null;
 targetId=existingRecord?.id||canonicalId;
-
 const ref=doc(db,"data_absensi",targetId);
-
-const oldKode=String(
-firstValue(oldData,["kode","kode_absensi"],"")
-);
-
+const oldKode=String(firstValue(oldData,["kode","kode_absensi"],""));
 const oldKeterangan=String(oldData?.keterangan||"");
-
-if(oldData&&oldKode===kode&&oldKeterangan===keterangan){
-unchanged++;
-dirtyKeys.delete(key);
-continue;
-}
-
-if(oldData&&
-!Object.prototype.hasOwnProperty.call(oldData,"createdBy")){
-throw new Error(
-"Dokumen lama tidak memiliki createdBy. "+
-"Data tidak diubah demi menjaga kecocokan Firestore Rules."
-);
-}
-
+if(oldData&&oldKode===kode&&oldKeterangan===keterangan){unchanged++;dirtyKeys.delete(key);continue;}
+if(oldData&&!Object.prototype.hasOwnProperty.call(oldData,"createdBy"))throw new Error("Dokumen lama tidak memiliki createdBy. Data tidak diubah demi menjaga kecocokan Firestore Rules.");
 tahap="Memeriksa ID penugasan";
-
 const access=accessByNik[employee.nik]||{};
-
-const assignmentId=isSuperAdmin
-?"super_admin"
-:(employee.penugasan_id||access.penugasan_id||"");
-
-if(!isSuperAdmin&&!assignmentId){
-throw new Error("ID penugasan tidak ditemukan.");
-}
-
-const codeInfo=attendanceCodes.find(
-c=>String(c[0])===kode
-);
-
-if(!codeInfo){
-throw new Error("Kode tidak ditemukan dalam master absensi.");
-}
-
-const petugasNama=String(firstValue(
-currentProfile,
-["nama","nama_lengkap","name"],
-"Petugas"
-));
-
+const assignmentId=isSuperAdmin?"super_admin":(employee.penugasan_id||access.penugasan_id||"");
+if(!isSuperAdmin&&!assignmentId)throw new Error("ID penugasan tidak ditemukan.");
+const codeInfo=attendanceCodes.find(c=>String(c[0])===kode);
+if(!codeInfo)throw new Error("Kode tidak ditemukan dalam master absensi.");
+const petugasNama=String(firstValue(currentProfile,["nama","nama_lengkap","name"],"Petugas"));
 const now=serverTimestamp();
-
 const payload={
-absensi_id:canonicalId,
-periode_id:currentPeriodId,
-tanggal:currentDate,
-nik:employee.nik,
-nama:employee.name||"",
-divisi:employee.div||"",
-departemen:employee.dept||"",
-jabatan:employee.jabatan||"",
-kode:String(kode),
-nama_kode:String(codeInfo[1]||""),
-kategori_kode:String(codeInfo[2]||"-"),
-keterangan:keterangan,
-petugas_nik:currentNik,
-petugas_nama:petugasNama,
-penugasan_id:assignmentId,
-updatedAt:now,
-updatedBy:currentUser.uid
+absensi_id:canonicalId,periode_id:currentPeriodId,tanggal:currentDate,nik:employee.nik,
+nama:employee.name||"",divisi:employee.div||"",departemen:employee.dept||"",jabatan:employee.jabatan||"",
+kode:String(kode),nama_kode:String(codeInfo[1]||""),kategori_kode:String(codeInfo[2]||"-"),
+keterangan:keterangan,petugas_nik:currentNik,petugas_nama:petugasNama,penugasan_id:assignmentId,
+updatedAt:now,updatedBy:currentUser.uid
 };
-
-if(!oldData){
-payload.createdAt=now;
-payload.createdBy=currentUser.uid;
-}
-
+if(!oldData){payload.createdAt=now;payload.createdBy=currentUser.uid;}
 tahap="Menyiapkan dokumen riwayat perubahan";
-
-const historyRef=doc(
-collection(db,"riwayat_perubahan_absensi")
-);
-
+const historyRef=doc(collection(db,"riwayat_perubahan_absensi"));
 const historyPayload={
-absensi_id:canonicalId,
-periode_id:currentPeriodId,
-tanggal:currentDate,
-nik:employee.nik,
-kode_lama:oldKode,
-kode_baru:String(kode),
-keterangan_lama:oldKeterangan,
-keterangan_baru:keterangan,
-aksi:oldData
-?(oldKode===kode?"penyesuaian":"perubahan")
-:"pembuatan",
-petugas_nik:currentNik,
-petugas_nama:petugasNama,
-penugasan_id:assignmentId,
-createdAt:now,
-createdBy:currentUser.uid
+absensi_id:canonicalId,periode_id:currentPeriodId,tanggal:currentDate,nik:employee.nik,
+kode_lama:oldKode,kode_baru:String(kode),keterangan_lama:oldKeterangan,keterangan_baru:keterangan,
+aksi:oldData?(oldKode===kode?"penyesuaian":"perubahan"):"pembuatan",
+petugas_nik:currentNik,petugas_nama:petugasNama,penugasan_id:assignmentId,
+createdAt:now,createdBy:currentUser.uid
 };
-
-const batch=writeBatch(db);
-
-batch.set(ref,payload,{merge:true});
-batch.set(historyRef,historyPayload);
-
-tahap=
-"MENGIRIM BATCH FIRESTORE: data_absensi/"+targetId+
-" DAN riwayat_perubahan_absensi";
-
-try{
-
-await batch.commit();
-
-}catch(error){
-
+const batch=writeBatch(db);batch.set(ref,payload,{merge:true});batch.set(historyRef,historyPayload);
+tahap="MENGIRIM BATCH FIRESTORE: data_absensi/"+targetId+" DAN riwayat_perubahan_absensi";
+try{await batch.commit();}catch(error){
 firebaseCode=error.code||"-";
-
-throw new Error(
-"Firestore menolak batch penyimpanan. "+
-"Batch berisi dua penulisan: data_absensi/"+targetId+
-" dan satu dokumen baru pada riwayat_perubahan_absensi. "+
-"Batch bersifat atomik, sehingga jika salah satu penulisan "+
-"ditolak, keduanya tidak disimpan. "+
-"Detail Firebase: "+(error.message||String(error))
-);
+throw new Error("Firestore menolak batch penyimpanan. Batch berisi dua penulisan: data_absensi/"+targetId+" dan satu dokumen baru pada riwayat_perubahan_absensi. Batch bersifat atomik, sehingga jika salah satu penulisan ditolak, keduanya tidak disimpan. Detail Firebase: "+(error.message||String(error)));
 }
-
-success++;
-dirtyKeys.delete(key);
-
+success++;dirtyKeys.delete(key);
 }catch(error){
-
-failed++;
-
-console.error("WAINI GAGAL SIMPAN:",{
-nik:employee.nik,
-tahap:tahap,
-dokumen:targetId,
-kodeFirebase:error.code||firebaseCode,
-error:error
-});
-
-errors.push(
-"NIK: "+employee.nik+
-"\nTahap: "+tahap+
-"\nDokumen: "+targetId+
-"\nKode Firebase: "+(error.code||firebaseCode||"-")+
-"\nPesan: "+(error.message||String(error))
-);
-
+failed++;console.error("WAINI GAGAL SIMPAN:",{nik:employee.nik,tahap,dokumen:targetId,kodeFirebase:error.code||firebaseCode,error});
+errors.push("NIK: "+employee.nik+"\nTahap: "+tahap+"\nDokumen: "+targetId+"\nKode Firebase: "+(error.code||firebaseCode||"-")+"\nPesan: "+(error.message||String(error)));
 }
-
 }
-
-}finally{
-
-$("save").disabled=false;
-$("save").textContent="💾 Simpan ke Firebase";
-
+}finally{$("save").disabled=false;$("save").textContent="💾 Simpan ke Firebase";}
+try{await loadAttendanceFromFirebase();render();}catch(error){
+errors.push("Gagal memuat ulang data setelah penyimpanan.\nKode Firebase: "+(error.code||"-")+"\nPesan: "+(error.message||String(error)));
 }
-
-try{
-
-await loadAttendanceFromFirebase();
-render();
-
-}catch(error){
-
-errors.push(
-"Gagal memuat ulang data setelah penyimpanan."+
-"\nKode Firebase: "+(error.code||"-")+
-"\nPesan: "+(error.message||String(error))
-);
-
-}
-
-let message=
-"PROSES PENYIMPANAN SELESAI\n\n"+
-"Berhasil: "+success+"\n"+
-"Tidak berubah: "+unchanged+"\n"+
-"Gagal: "+failed;
-
-if(errors.length){
-message+="\n\nRINCIAN PEMERIKSAAN:\n\n"+
-errors.join("\n\n--------------------\n\n");
-}
-
+let message="PROSES PENYIMPANAN SELESAI\n\nBerhasil: "+success+"\nTidak berubah: "+unchanged+"\nGagal: "+failed;
+if(errors.length)message+="\n\nRINCIAN PEMERIKSAAN:\n\n"+errors.join("\n\n--------------------\n\n");
 alert(message);
 }
 
 $("reset").onclick=()=>{
 if(!confirm("Kosongkan input tanggal ini? Data Firebase tidak akan dihapus."))return;
-authorizedStaff.forEach(s=>{
-const key=dataKey(currentDate,s.nik);
-if(!savedRecords[key]&&!duplicateRecords[key]){
-values[key]="";
-notes[key]="";
-dirtyKeys.delete(key);
-}
-});
+authorizedStaff.forEach(s=>{const key=dataKey(currentDate,s.nik);if(!savedRecords[key]&&!duplicateRecords[key]){values[key]="";notes[key]="";dirtyKeys.delete(key);}});
 render();
 };
-
-$("individual").onclick=()=>{
-$("individual").classList.add("selected");
-$("mass").classList.remove("selected");
-};
-
+$("individual").onclick=()=>{$("individual").classList.add("selected");$("mass").classList.remove("selected");};
 $("mass").onclick=()=>{
-$("mass").classList.add("selected");
-$("individual").classList.remove("selected");
-
-const code=prompt(
-"Masukkan kode absensi:\n"+
-attendanceCodes.map(c=>c[0]+" = "+c[1]).join("\n")+
-"\n\nKosongkan untuk membatalkan."
-);
+$("mass").classList.add("selected");$("individual").classList.remove("selected");
+const code=prompt("Masukkan kode absensi:\n"+attendanceCodes.map(c=>c[0]+" = "+c[1]).join("\n")+"\n\nKosongkan untuk membatalkan.");
 if(code===null||code.trim()==="")return;
-
-const selectedCode=code.trim();
-if(!attendanceCodes.some(c=>String(c[0])===selectedCode)){
-alert("Kode tidak ditemukan atau tidak aktif.");
-return;
-}
-
+const selectedCode=code.trim();if(!attendanceCodes.some(c=>String(c[0])===selectedCode)){alert("Kode tidak ditemukan atau tidak aktif.");return;}
 const search=$("search").value.toLowerCase();
-const filtered=authorizedStaff.filter(s=>
-[s.name,s.nik,s.div,s.dept,s.jabatan]
-.join(" ").toLowerCase().includes(search)
-).filter(s=>!duplicateRecords[dataKey(currentDate,s.nik)]);
-
-if(!filtered.length){
-alert("Tidak ada karyawan yang dapat diisi berdasarkan pencarian.");
-return;
-}
-
-if(!confirm("Terapkan kode "+selectedCode+
-" kepada "+filtered.length+" karyawan?"))return;
-
-filtered.forEach(s=>{
-const key=dataKey(currentDate,s.nik);
-values[key]=selectedCode;
-dirtyKeys.add(key);
-});
-render();
+const filtered=authorizedStaff.filter(s=>[s.name,s.nik,s.div,s.dept,s.jabatan].join(" ").toLowerCase().includes(search)).filter(s=>!duplicateRecords[dataKey(currentDate,s.nik)]);
+if(!filtered.length){alert("Tidak ada karyawan yang dapat diisi berdasarkan pencarian.");return;}
+if(!confirm("Terapkan kode "+selectedCode+" kepada "+filtered.length+" karyawan?"))return;
+filtered.forEach(s=>{const key=dataKey(currentDate,s.nik);values[key]=selectedCode;dirtyKeys.add(key);});render();
 };
-
 $("search").oninput=render;
-
 $("datePick").onchange=async e=>{
-const selectedDate=e.target.value;
-if(!validISODate(selectedDate)){
-alert("Tanggal yang dipilih tidak valid.");
-e.target.value=currentDate;
-return;
-}
-
-const token=++dateLoadToken;
-const oldPeriodId=currentPeriodId;
-currentDate=selectedDate;
-
-try{
-updatePeriod();
-if(currentPeriodId!==oldPeriodId){
-await loadAttendanceFromFirebase();
-}
-if(token!==dateLoadToken)return;
-render();
-}catch(error){
-if(token!==dateLoadToken)return;
-showError("Gagal membaca absensi tanggal terpilih: "+error.message);
-}
+const selectedDate=e.target.value;if(!validISODate(selectedDate)){alert("Tanggal yang dipilih tidak valid.");e.target.value=currentDate;return;}
+const token=++dateLoadToken,oldPeriodId=currentPeriodId;currentDate=selectedDate;
+try{updatePeriod();if(currentPeriodId!==oldPeriodId)await loadAttendanceFromFirebase();if(token!==dateLoadToken)return;render();}
+catch(error){if(token!==dateLoadToken)return;showError("Gagal membaca absensi tanggal terpilih: "+error.message);}
 };
-
 document.querySelectorAll(".tab").forEach(button=>{
 button.onclick=()=>{
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-button.classList.add("active");
-
-["inputPanel","recapPanel","historyPanel"]
-.forEach(id=>$(id).classList.add("hidden"));
-
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));button.classList.add("active");
+["inputPanel","recapPanel","historyPanel"].forEach(id=>$(id).classList.add("hidden"));
 $(button.dataset.tab+"Panel").classList.remove("hidden");
-if(button.dataset.tab==="recap")renderRecap();
-if(button.dataset.tab==="history")loadHistory();
+if(button.dataset.tab==="recap")renderRecap();if(button.dataset.tab==="history")loadHistory();
 };
 });
 
@@ -1335,253 +526,303 @@ async function renderRecap(){
 $("recapRows").innerHTML="<tr><td colspan='20'>Memuat data rekap...</td></tr>";
 try{
 const dates=getDates(currentPeriod.start,currentPeriod.end);
-let head=`<tr>
-<th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th>
-<th>Departemen</th><th>Jabatan</th>`;
-dates.forEach(d=>head+=`<th>${formatShort(d)}</th>`);
-head+="<th>Jumlah Kode 1</th><th>Status Terisi</th></tr>";
-$("recapHead").innerHTML=head;
-
-let body="";
+let head="<tr><th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th><th>Departemen</th><th>Jabatan</th>";
+dates.forEach(d=>head+=`<th>${formatShort(d)}</th>`);head+="<th>Jumlah Kode 1</th><th>Status Terisi</th></tr>";
+$("recapHead").innerHTML=head;let body="";
 authorizedStaff.forEach((s,i)=>{
 let masuk=0,terisi=0;
-body+=`<tr>
-<td>${i+1}</td><td>${escapeHTML(s.nik)}</td>
-<td>${escapeHTML(s.name)}</td><td>${escapeHTML(s.div)}</td>
-<td>${escapeHTML(s.dept)}</td><td>${escapeHTML(s.jabatan)}</td>`;
-
-dates.forEach(date=>{
-const key=dataKey(date,s.nik);
-const code=values[key]||"";
-if(code)terisi++;
-if(code==="1")masuk++;
-body+=`<td>${escapeHTML(code)}</td>`;
-});
-
+body+=`<tr><td>${i+1}</td><td>${escapeHTML(s.nik)}</td><td>${escapeHTML(s.name)}</td><td>${escapeHTML(s.div)}</td><td>${escapeHTML(s.dept)}</td><td>${escapeHTML(s.jabatan)}</td>`;
+dates.forEach(date=>{const code=values[dataKey(date,s.nik)]||"";if(code)terisi++;if(code==="1")masuk++;body+=`<td>${escapeHTML(code)}</td>`;});
 body+=`<td>${masuk}</td><td>${terisi}</td></tr>`;
 });
 $("recapRows").innerHTML=body||"<tr><td>Belum ada data karyawan.</td></tr>";
-}catch(error){
-$("recapRows").innerHTML=`<tr><td>${escapeHTML(error.message)}</td></tr>`;
-alert("Gagal memuat rekap: "+error.message);
+}catch(error){$("recapRows").innerHTML=`<tr><td>${escapeHTML(error.message)}</td></tr>`;alert("Gagal memuat rekap: "+error.message);}
 }
-}
-
 async function loadHistory(){
 $("historyList").textContent="Memuat riwayat Firebase...";
 try{
-loadingStage="Membaca riwayat_perubahan_absensi";
-let records=[];
-
-if(isSuperAdmin){
-const snap=await getDocs(collection(db,"riwayat_perubahan_absensi"));
-records=snap.docs.map(d=>({id:d.id,...d.data()}));
-}else{
-for(const employee of authorizedStaff){
-const q=query(collection(db,"riwayat_perubahan_absensi"),
-where("nik","==",employee.nik));
-const snap=await getDocs(q);
-snap.forEach(d=>records.push({id:d.id,...d.data()}));
-}
-}
-
-const uniqueRecords=new Map();
-records.forEach(r=>uniqueRecords.set(r.id,r));
-records=[...uniqueRecords.values()];
-
+loadingStage="Membaca riwayat_perubahan_absensi";let records=[];
+if(isSuperAdmin){const snap=await getDocs(collection(db,"riwayat_perubahan_absensi"));records=snap.docs.map(d=>({id:d.id,...d.data()}));}
+else{for(const employee of authorizedStaff){const snap=await getDocs(query(collection(db,"riwayat_perubahan_absensi"),where("nik","==",employee.nik)));snap.forEach(d=>records.push({id:d.id,...d.data()}));}}
+const uniqueRecords=new Map();records.forEach(r=>uniqueRecords.set(r.id,r));records=[...uniqueRecords.values()];
 records.sort((a,b)=>timestampValue(b.createdAt)-timestampValue(a.createdAt));
-
-if(!records.length){
-$("historyList").textContent="Belum ada riwayat perubahan.";
-return;
-}
-
+if(!records.length){$("historyList").textContent="Belum ada riwayat perubahan.";return;}
 $("historyList").innerHTML=records.slice(0,100).map(r=>`
-<div class="recap-card">
-<b>${escapeHTML(r.aksi||"Perubahan absensi")}</b>
-<p>NIK: ${escapeHTML(r.nik)}</p>
-<p>Tanggal: ${escapeHTML(formatDate(r.tanggal))}</p>
-<p>Kode lama: ${escapeHTML(r.kode_lama||"-")}</p>
-<p>Kode baru: ${escapeHTML(r.kode_baru||"-")}</p>
-<p>Petugas: ${escapeHTML(r.petugas_nik||"-")}</p>
-<p>ID Absensi: ${escapeHTML(r.absensi_id||"-")}</p>
-</div>
-`).join("");
-}catch(error){
-$("historyList").innerHTML=`<div class="error">${escapeHTML(error.message)}</div>`;
-}
+<div class="recap-card"><b>${escapeHTML(r.aksi||"Perubahan absensi")}</b>
+<p>NIK: ${escapeHTML(r.nik)}</p><p>Tanggal: ${escapeHTML(formatDate(r.tanggal))}</p>
+<p>Kode lama: ${escapeHTML(r.kode_lama||"-")}</p><p>Kode baru: ${escapeHTML(r.kode_baru||"-")}</p>
+<p>Petugas: ${escapeHTML(r.petugas_nik||"-")}</p><p>ID Absensi: ${escapeHTML(r.absensi_id||"-")}</p></div>`).join("");
+}catch(error){$("historyList").innerHTML=`<div class="error">${escapeHTML(error.message)}</div>`;}
 }
 
-$("excel").onclick=()=>{
-if(typeof XLSX==="undefined"){
-alert("Pustaka Excel belum termuat.");
-return;
-}
-
-const data=[
-["LAPORAN ABSENSI WAINI"],
-["Tanggal",currentDate],
-["Periode",currentPeriodId],
-["Petugas",currentNik],
-[],
-["No","NIK","Nama","Divisi","Departemen","Jabatan",
-"TMK","POH","Sistem Cuti","Jadwal","Kode Absensi","Keterangan"]
-];
-
-authorizedStaff.forEach((s,i)=>{
-const key=dataKey(currentDate,s.nik);
-data.push([
-i+1,s.nik,s.name,s.div,s.dept,s.jabatan,
-s.tmk,s.poh,s.cuti,s.sched,values[key]||"",notes[key]||""
-]);
-});
-
-const wb=XLSX.utils.book_new();
-XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),"Absensi Harian");
-XLSX.writeFile(wb,"WAINI_Absensi_"+currentDate+".xlsx");
+/* ==========================================================
+   PEMBUATAN EXCEL WAINI - HEADER BERTINGKAT SEPERTI CONTOH
+   Semua kolom perhitungan/bonus yang ditandai manual
+   sengaja dikosongkan dan hanya ada di file Excel.
+========================================================== */
+function excelCellStyle(cell,fill="FFFFFF",fontColor="000000",bold=false,align="center"){
+cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF"+fill}};
+cell.font={name:"Arial",size:9,bold,color:{argb:"FF"+fontColor}};
+cell.alignment={horizontal:align,vertical:"middle",wrapText:true};
+cell.border={
+top:{style:"thin",color:{argb:"FF555555"}},
+left:{style:"thin",color:{argb:"FF555555"}},
+bottom:{style:"thin",color:{argb:"FF555555"}},
+right:{style:"thin",color:{argb:"FF555555"}}
 };
-
-$("recapExcel").onclick=()=>{
-if(typeof XLSX==="undefined"){
-alert("Pustaka Excel belum termuat.");
-return;
 }
+function excelDateLabel(date){
+const d=new Date(date+"T00:00:00");
+return d.toLocaleDateString("id-ID",{weekday:"short"});
+}
+function excelMonthLabel(date){
+const d=new Date(date+"T00:00:00");
+return d.toLocaleDateString("id-ID",{month:"long",year:"numeric"}).toUpperCase();
+}
+function excelDateNumber(date){return Number(date.slice(8,10));}
+function safeExcelText(v){return v===undefined||v===null?"":String(v);}
 
+async function createWainiExcel(){
+if(typeof ExcelJS==="undefined"){
+alert("Pustaka Excel belum termuat. Periksa koneksi internet lalu muat ulang halaman.");return;
+}
 try{
 const dates=getDates(currentPeriod.start,currentPeriod.end);
-const header=["No","NIK","Nama","Divisi","Departemen","Jabatan",
-...dates,"Jumlah Kode 1","Status Terisi"];
-const data=[
-["REKAP ABSENSI WAINI"],
-["Periode",currentPeriod.start,"s.d.",currentPeriod.end],
-["Petugas",currentNik],
-[],
-header
+const codes=attendanceCodes.length?attendanceCodes:defaultCodes;
+const wb=new ExcelJS.Workbook();
+wb.creator="WAINI";
+wb.subject="Laporan Absensi Karyawan";
+wb.title="Laporan Absensi WAINI";
+wb.company="WAINI";
+wb.created=new Date();
+
+const ws=wb.addWorksheet("Laporan Absensi",{
+views:[{state:"frozen",ySplit:6,xSplit:3,showGridLines:false}],
+pageSetup:{orientation:"landscape",paperSize:9,fitToPage:true,fitToWidth:1,fitToHeight:0},
+properties:{defaultRowHeight:20}
+});
+
+const fixedHeaders=[
+"No","NIK","Nama","Divisi","Dept","Position",
+"Date of Joint","POH","Roster / Lokal","Description"
 ];
+const fixedCount=fixedHeaders.length;
+const dateStart=fixedCount+1;
+const dateEnd=dateStart+dates.length-1;
+const codeStart=dateEnd+1;
+const codeEnd=codeStart+codes.length-1;
+const calcStart=codeEnd+1;
+const calcHeaders=[
+"Hari kerja","Masuk Kerja","Potongan Absensi","Insentif Tanggal Merah",
+"Hari kerja","Kehadiran kerja","Kehadiran kerja (%)","TMK",
+"Cut-Off Date","Tahun","Bulan",
+"Amount","%","Total","Bonus Kehadiran Team","Total Bonus Kehadiran"
+];
+const lastCol=calcStart+calcHeaders.length-1;
 
-authorizedStaff.forEach((s,i)=>{
-let masuk=0,terisi=0;
-const row=[i+1,s.nik,s.name,s.div,s.dept,s.jabatan];
-dates.forEach(date=>{
-const code=values[dataKey(date,s.nik)]||"";
-row.push(code);
-if(code)terisi++;
-if(code==="1")masuk++;
-});
-row.push(masuk,terisi);
-data.push(row);
-});
+ws.mergeCells(1,1,1,lastCol);
+ws.getCell(1,1).value="LAPORAN ABSENSI KARYAWAN WAINI";
+ws.getCell(1,1).font={name:"Arial",size:16,bold:true,color:{argb:"FFFFFFFF"}};
+ws.getCell(1,1).fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF8D171D"}};
+ws.getCell(1,1).alignment={horizontal:"center",vertical:"middle"};
+ws.getRow(1).height=32;
 
-const wb=XLSX.utils.book_new();
-XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),"Rekap Periode");
-XLSX.writeFile(wb,"WAINI_Rekap_"+currentPeriodId+".xlsx");
-}catch(error){
-alert("Gagal membuat rekap Excel: "+error.message);
+ws.mergeCells(2,1,2,3);
+ws.getCell(2,1).value="PERIODE";
+ws.mergeCells(2,4,2,7);
+ws.getCell(2,4).value=formatDate(currentPeriod.start)+" s.d. "+formatDate(currentPeriod.end);
+ws.mergeCells(2,8,2,10);
+ws.getCell(2,8).value="PETUGAS: "+currentNik;
+ws.mergeCells(2,11,2,lastCol);
+ws.getCell(2,11).value="WAINI • SISTEM INFORMASI MANAJEMEN KARYAWAN";
+for(let c=1;c<=lastCol;c++)excelCellStyle(ws.getCell(2,c),"FCE4D6","7D1018",true);
+ws.getRow(2).height=24;
+
+ws.mergeCells(4,1,6,fixedCount);
+for(let i=0;i<fixedHeaders.length;i++){
+const cell=ws.getCell(4,1+i);cell.value=fixedHeaders[i];
+excelCellStyle(cell,"FFF200","000000",true);
 }
-};
+for(let c=1;c<=fixedCount;c++)ws.mergeCells(4,c,6,c);
 
+let col=dateStart;
+let monthGroups=[];
+let groupStart=dateStart;
+let currentMonth=excelMonthLabel(dates[0]);
+dates.forEach((date,index)=>{
+const month=excelMonthLabel(date);
+if(month!==currentMonth){
+monthGroups.push({start:groupStart,end:col-1,label:currentMonth});
+groupStart=col;currentMonth=month;
+}
+ws.getCell(5,col).value=excelDateNumber(date);
+ws.getCell(6,col).value=excelDateLabel(date);
+excelCellStyle(ws.getCell(5,col),"F8CBAD","000000",true);
+excelCellStyle(ws.getCell(6,col),"FCE4D6","C00000",true);
+col++;
+});
+monthGroups.push({start:groupStart,end:dateEnd,label:currentMonth});
+monthGroups.forEach(g=>{
+ws.mergeCells(4,g.start,4,g.end);
+ws.getCell(4,g.start).value=g.label;
+excelCellStyle(ws.getCell(4,g.start),"F4B183","000000",true);
+});
+
+ws.mergeCells(4,codeStart,4,codeEnd);
+ws.getCell(4,codeStart).value="ABSENCE CODE";
+excelCellStyle(ws.getCell(4,codeStart),"FFF200","000000",true);
+codes.forEach((code,i)=>{
+const c=codeStart+i;ws.getCell(5,c).value=code[0];ws.getCell(6,c).value=code[1];
+excelCellStyle(ws.getCell(5,c),"FFF200","000000",true);
+excelCellStyle(ws.getCell(6,c),"FFF2CC","000000",true);
+});
+
+const groups=[
+{title:"Total Potongan Absensi & Insentif Tanggal Merah",start:calcStart,count:4,color:"00D600"},
+{title:"Masa Kerja",start:calcStart+4,count:7,color:"FFF200"},
+{title:"Bonus Kehadiran Pribadi",start:calcStart+11,count:3,color:"FFF200"},
+{title:"Bonus Kehadiran Team",start:calcStart+14,count:1,color:"F4B183"},
+{title:"Total Bonus Kehadiran",start:calcStart+15,count:1,color:"FFF200"}
+];
+groups.forEach(g=>{
+ws.mergeCells(4,g.start,4,g.start+g.count-1);
+ws.getCell(4,g.start).value=g.title;
+excelCellStyle(ws.getCell(4,g.start),g.color,"000000",true);
+});
+calcHeaders.forEach((h,i)=>{
+const c=calcStart+i;ws.getCell(5,c).value=h;
+ws.mergeCells(5,c,6,c);
+excelCellStyle(ws.getCell(5,c),i<4?"00D600":"FFF200","000000",true);
+});
+
+ws.getRow(4).height=28;ws.getRow(5).height=38;ws.getRow(6).height=28;
+
+authorizedStaff.forEach((s,index)=>{
+const r=7+index;
+const fixedValues=[
+index+1,s.nik,s.name,s.div,s.dept,s.jabatan,
+s.tmk,s.poh,s.sched||s.cuti,""
+];
+fixedValues.forEach((v,i)=>ws.getCell(r,i+1).value=v||"");
+
+dates.forEach((date,i)=>{
+const code=values[dataKey(date,s.nik)]||"";
+const cell=ws.getCell(r,dateStart+i);
+cell.value=code;
+if(code==="1"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFFFFFF"}};}
+else if(code==="2"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFFC000"}};}
+else if(code==="3"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFF99CC"}};}
+else if(code==="4B"||code==="6"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF00DDEB"}};}
+else if(code==="7"||code==="9"){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFFF9999"}};}
+else if(code){cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF9CC2E5"}};}
+cell.font={name:"Arial",size:9,color:{argb:"FF000000"}};
+cell.alignment={horizontal:"center",vertical:"middle"};
+cell.border={top:{style:"thin"},left:{style:"thin"},bottom:{style:"thin"},right:{style:"thin"}};
+});
+
+codes.forEach((code,i)=>{
+const count=dates.filter(date=>String(values[dataKey(date,s.nik)]||"")===String(code[0])).length;
+ws.getCell(r,codeStart+i).value=count||"";
+});
+
+for(let c=calcStart;c<=lastCol;c++){
+ws.getCell(r,c).value="";
+excelCellStyle(ws.getCell(r,c),"FFFFFFFF","000000",false);
+}
+for(let c=1;c<dateStart;c++){
+excelCellStyle(ws.getCell(r,c),"FFFFFFFF","000000",false,c===3?"left":"center");
+}
+ws.getRow(r).height=21;
+});
+
+const widths=[
+7,16,25,20,20,23,15,16,15,22
+];
+widths.forEach((w,i)=>ws.getColumn(i+1).width=w);
+for(let c=dateStart;c<=dateEnd;c++)ws.getColumn(c).width=5.5;
+for(let c=codeStart;c<=codeEnd;c++)ws.getColumn(c).width=7;
+const calcWidths=[10,11,14,15,10,13,13,14,15,9,9,13,8,13,17,18];
+calcWidths.forEach((w,i)=>ws.getColumn(calcStart+i).width=w);
+
+ws.autoFilter={from:{row:6,column:1},to:{row:6+authorizedStaff.length,column:lastCol}};
+ws.pageSetup.printArea=`A1:${ws.getColumn(lastCol).letter}${Math.max(7,6+authorizedStaff.length)}`;
+ws.pageSetup.horizontalCentered=true;
+ws.headerFooter.oddFooter="WAINI • Laporan Absensi • Halaman &P dari &N";
+
+const legend=wb.addWorksheet("Keterangan Kode");
+legend.views=[{state:"frozen",ySplit:3,showGridLines:false}];
+legend.mergeCells("A1:C1");
+legend.getCell("A1").value="KETERANGAN KODE ABSENSI WAINI";
+legend.getCell("A1").font={name:"Arial",size:15,bold:true,color:{argb:"FFFFFFFF"}};
+legend.getCell("A1").fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF8D171D"}};
+legend.getCell("A1").alignment={horizontal:"center",vertical:"middle"};
+legend.getRow(1).height=30;
+["Kode","Nama Absensi","Kategori"].forEach((v,i)=>{
+legend.getCell(3,i+1).value=v;excelCellStyle(legend.getCell(3,i+1),"FFF200","000000",true);
+});
+codes.forEach((c,i)=>{
+legend.getCell(i+4,1).value=c[0];legend.getCell(i+4,2).value=c[1];legend.getCell(i+4,3).value=c[2];
+for(let j=1;j<=3;j++)excelCellStyle(legend.getCell(i+4,j),"FFFFFFFF","000000",false,j===2?"left":"center");
+});
+legend.getColumn(1).width=15;legend.getColumn(2).width=38;legend.getColumn(3).width=22;
+legend.autoFilter={from:"A3",to:`C${3+codes.length}`};
+
+const filename="WAINI_Laporan_Absensi_"+currentPeriod.start+"_sd_"+currentPeriod.end+".xlsx";
+const buffer=await wb.xlsx.writeBuffer();
+const blob=new Blob([buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");a.href=url;a.download=filename;
+document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),1500);
+}catch(error){
+console.error("Gagal membuat Excel WAINI:",error);
+alert("Gagal membuat laporan Excel:\n"+(error.message||String(error)));
+}
+}
+
+$("excel").onclick=createWainiExcel;
+$("recapExcel").onclick=createWainiExcel;
 $("save").onclick=saveAttendance;
 $("print").onclick=()=>window.print();
 $("recapPrint").onclick=()=>window.print();
 
 function showError(message){
 $("errorBox").classList.remove("hidden");
-$("errorBox").innerHTML=`
-<div class="error">
-<b>Gagal memuat data absensi.</b><br><br>
-${escapeHTML(message)}
-</div>`;
+$("errorBox").innerHTML=`<div class="error"><b>Gagal memuat data absensi.</b><br><br>${escapeHTML(message)}</div>`;
 }
-
 async function startApp(user){
-currentUser=user;
-currentProfile=await getUserProfile(user);
-
-currentNik=normalizeNik(firstValue(
-currentProfile,["nik","NIK","nomor_induk"],""
-));
+currentUser=user;currentProfile=await getUserProfile(user);
+currentNik=normalizeNik(firstValue(currentProfile,["nik","NIK","nomor_induk"],""));
 currentRole=normalize(currentProfile.role||"");
-
-if(!activeStatus(currentProfile.status)){
-throw new Error("Akun WAINI tidak aktif.");
-}
-if(!currentNik){
-throw new Error("NIK pengguna tidak ditemukan.");
-}
-
+if(!activeStatus(currentProfile.status))throw new Error("Akun WAINI tidak aktif.");
+if(!currentNik)throw new Error("NIK pengguna tidak ditemukan.");
 isSuperAdmin=["super_admin","superadmin","super admin"].includes(currentRole);
-
-$("userInfo").innerHTML=`
-👤 ${escapeHTML(currentProfile.nama||"Pengguna")}<br>
-<b>${escapeHTML(currentNik)} • ${escapeHTML(currentRole)}</b>
-`;
-
+$("userInfo").innerHTML=`👤 ${escapeHTML(currentProfile.nama||"Pengguna")}<br><b>${escapeHTML(currentNik)} • ${escapeHTML(currentRole)}</b>`;
 if(isSuperAdmin){
 authorizedStaff=await loadEmployeesForSuperAdmin();
 $("scopeText").textContent="Super Admin • Seluruh karyawan aktif";
 }else{
 attendanceMenu=await loadAttendanceMenu();
-if(!attendanceMenu){
-throw new Error("Menu Pengelolaan Absensi tidak ditemukan atau tidak aktif.");
-}
-
+if(!attendanceMenu)throw new Error("Menu Pengelolaan Absensi tidak ditemukan atau tidak aktif.");
 assignmentList=await loadAssignments(currentNik);
-attendanceAssignments=assignmentList.filter(a=>
-assignmentIsActive(a)&&assignmentMatchesMenu(a,attendanceMenu)
-);
-
-if(!attendanceAssignments.length){
-throw new Error("Tidak ada penugasan absensi aktif untuk NIK "+
-currentNik+". Periksa petugas_nik, aktif, dan menu_id.");
-}
-
+attendanceAssignments=assignmentList.filter(a=>assignmentIsActive(a)&&assignmentMatchesMenu(a,attendanceMenu));
+if(!attendanceAssignments.length)throw new Error("Tidak ada penugasan absensi aktif untuk NIK "+currentNik+". Periksa petugas_nik, aktif, dan menu_id.");
 const accessList=await loadEmployeeAccess(currentNik);
 authorizedAccess=getAuthorizedAccess(accessList,attendanceAssignments);
-
-if(!authorizedAccess.length){
-throw new Error("Belum ada akses_karyawan aktif yang sesuai penugasan. "+
-"Petugas NIK: "+currentNik+
-". Periksa aktif, petugas_nik, dan penugasan_id.");
-}
-
+if(!authorizedAccess.length)throw new Error("Belum ada akses_karyawan aktif yang sesuai penugasan. Petugas NIK: "+currentNik+". Periksa aktif, petugas_nik, dan penugasan_id.");
 authorizedStaff=await loadEmployeesByAccess(authorizedAccess);
-$("scopeText").textContent=attendanceAssignments.map(a=>
-a.nama_tugas||a.nama||a.judul||"Pengelolaan Absensi"
-).join(" | ");
+$("scopeText").textContent=attendanceAssignments.map(a=>a.nama_tugas||a.nama||a.judul||"Pengelolaan Absensi").join(" | ");
 }
-
-if(!authorizedStaff.length){
-throw new Error("Tidak ada karyawan aktif dalam lingkup akses Anda.");
-}
-
+if(!authorizedStaff.length)throw new Error("Tidak ada karyawan aktif dalam lingkup akses Anda.");
 await loadCodes();
-
-currentDate=toISO(new Date());
-$("datePick").value=currentDate;
-updatePeriod();
-
+currentDate=toISO(new Date());$("datePick").value=currentDate;updatePeriod();
 await loadAttendanceFromFirebase();
-
-$("loading").classList.add("hidden");
-$("app").classList.remove("hidden");
-render();
+$("loading").classList.add("hidden");$("app").classList.remove("hidden");render();
 }
-
 onAuthStateChanged(auth,async user=>{
-if(!user){
-$("loading").classList.add("hidden");
-showError("Anda belum login. Silakan login ke WAINI terlebih dahulu.");
-return;
-}
-
-try{
-await startApp(user);
-}catch(error){
-console.error("WAINI ABSENSI:",error);
-$("loading").classList.add("hidden");
-showError("Tahap yang gagal: "+loadingStage+
-"\n\nPesan kesalahan: "+(error.message||String(error)));
-}
+if(!user){$("loading").classList.add("hidden");showError("Anda belum login. Silakan login ke WAINI terlebih dahulu.");return;}
+try{await startApp(user);}
+catch(error){console.error("WAINI ABSENSI:",error);$("loading").classList.add("hidden");showError("Tahap yang gagal: "+loadingStage+"\n\nPesan kesalahan: "+(error.message||String(error)));}
 });
 </script>
 </body>
