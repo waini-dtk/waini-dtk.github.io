@@ -822,11 +822,40 @@ function attendanceDocumentId(nik,tanggal){
 return normalizeNik(nik)+"_"+String(tanggal||"").replace(/-/g,"");
 }
 
-async function saveAttendance(){
-if(!currentUser)throw new Error("Pengguna belum login.");
-if(!validISODate(currentDate))throw new Error("Tanggal absensi tidak valid.");
+/*
+PENYIMPANAN ABSENSI DENGAN DIAGNOSTIK TAHAP.
 
+Tahap yang dibedakan:
+1. Validasi periode.
+2. Membaca dokumen data_absensi.
+3. Validasi data dan penugasan.
+4. Menyiapkan riwayat.
+5. Mengirim batch ke Firestore.
+
+Batch tetap atomik: absensi dan riwayat tidak akan tersimpan
+separuh apabila salah satu penulisan ditolak.
+*/
+async function saveAttendance(){
+
+if(!currentUser){
+throw new Error("Pengguna belum login.");
+}
+
+if(!validISODate(currentDate)){
+throw new Error("Tanggal absensi tidak valid.");
+}
+
+try{
 await validateActivePeriod();
+}catch(error){
+alert(
+"GAGAL MEMERIKSA PERIODE\n\n"+
+"Tahap: Validasi periode_absensi\n"+
+"Kode Firebase: "+(error.code||"-")+"\n"+
+"Pesan: "+(error.message||String(error))
+);
+return;
+}
 
 const selectedStaff=authorizedStaff.filter(s=>
 values[dataKey(currentDate,s.nik)]
@@ -837,40 +866,81 @@ alert("Isi minimal satu status absensi.");
 return;
 }
 
-if(!confirm("Simpan "+selectedStaff.length+
-" data absensi ke Firebase untuk tanggal "+formatDate(currentDate)+"?"))return;
+if(!confirm(
+"Simpan "+selectedStaff.length+
+" data absensi ke Firebase untuk tanggal "+
+formatDate(currentDate)+"?"
+)){
+return;
+}
 
 $("save").disabled=true;
 $("save").textContent="Menyimpan...";
 
-let success=0,failed=0,unchanged=0;
+let success=0;
+let failed=0;
+let unchanged=0;
 const errors=[];
 
 try{
+
 for(const employee of selectedStaff){
+
 const key=dataKey(currentDate,employee.nik);
 const kode=String(values[key]||"");
 const keterangan=String(notes[key]||"");
 
+let tahap="Memulai pemeriksaan";
+let targetId="-";
+let firebaseCode="-";
+
 try{
+
+tahap="Memeriksa kemungkinan data ganda";
+
 if(duplicateRecords[key]){
-throw new Error("Ditemukan "+duplicateRecords[key].length+
-" dokumen untuk tanggal dan NIK yang sama. Perlu audit data ganda terlebih dahulu.");
+throw new Error(
+"Ditemukan "+duplicateRecords[key].length+
+" dokumen untuk tanggal dan NIK yang sama."
+);
 }
+
+tahap="Memvalidasi kode absensi";
 
 if(!attendanceCodes.some(c=>String(c[0])===kode)){
 throw new Error("Kode absensi tidak valid atau tidak aktif.");
 }
 
-const canonicalId=attendanceDocumentId(employee.nik,currentDate);
+const canonicalId=attendanceDocumentId(
+employee.nik,currentDate
+);
+
 const existingRecord=savedRecords[key]||null;
-const targetId=existingRecord?.id||canonicalId;
+targetId=existingRecord?.id||canonicalId;
+
 const ref=doc(db,"data_absensi",targetId);
 
-const oldSnap=await getDoc(ref);
+tahap="MEMBACA dokumen data_absensi/"+targetId;
+
+let oldSnap;
+
+try{
+oldSnap=await getDoc(ref);
+}catch(error){
+firebaseCode=error.code||"-";
+throw new Error(
+"Firestore menolak pembacaan dokumen absensi. "+
+"Dokumen: data_absensi/"+targetId+
+". Detail: "+(error.message||String(error))
+);
+}
+
 const oldData=oldSnap.exists()?oldSnap.data():null;
 
-const oldKode=String(firstValue(oldData,["kode","kode_absensi"],""));
+const oldKode=String(
+firstValue(oldData,["kode","kode_absensi"],"")
+);
+
 const oldKeterangan=String(oldData?.keterangan||"");
 
 if(oldData&&oldKode===kode&&oldKeterangan===keterangan){
@@ -881,24 +951,36 @@ continue;
 
 if(oldData&&
 !Object.prototype.hasOwnProperty.call(oldData,"createdBy")){
-throw new Error("Dokumen lama tidak memiliki createdBy. "+
-"Data tidak diubah demi menjaga keamanan dan kecocokan Firestore Rules.");
+throw new Error(
+"Dokumen lama tidak memiliki createdBy. "+
+"Data tidak diubah demi menjaga kecocokan Firestore Rules."
+);
 }
 
+tahap="Memeriksa ID penugasan";
+
 const access=accessByNik[employee.nik]||{};
-const assignmentId=isSuperAdmin?
-"super_admin":
-(employee.penugasan_id||access.penugasan_id||"");
+
+const assignmentId=isSuperAdmin
+?"super_admin"
+:(employee.penugasan_id||access.penugasan_id||"");
 
 if(!isSuperAdmin&&!assignmentId){
 throw new Error("ID penugasan tidak ditemukan.");
 }
 
-const codeInfo=attendanceCodes.find(c=>String(c[0])===kode);
-if(!codeInfo)throw new Error("Kode tidak ditemukan dalam master absensi.");
+const codeInfo=attendanceCodes.find(
+c=>String(c[0])===kode
+);
+
+if(!codeInfo){
+throw new Error("Kode tidak ditemukan dalam master absensi.");
+}
 
 const petugasNama=String(firstValue(
-currentProfile,["nama","nama_lengkap","name"],"Petugas"
+currentProfile,
+["nama","nama_lengkap","name"],
+"Petugas"
 ));
 
 const now=serverTimestamp();
@@ -928,7 +1010,11 @@ payload.createdAt=now;
 payload.createdBy=currentUser.uid;
 }
 
-const historyRef=doc(collection(db,"riwayat_perubahan_absensi"));
+tahap="Menyiapkan dokumen riwayat perubahan";
+
+const historyRef=doc(
+collection(db,"riwayat_perubahan_absensi")
+);
 
 const historyPayload={
 absensi_id:canonicalId,
@@ -939,7 +1025,9 @@ kode_lama:oldKode,
 kode_baru:String(kode),
 keterangan_lama:oldKeterangan,
 keterangan_baru:keterangan,
-aksi:oldData?(oldKode===kode?"penyesuaian":"perubahan"):"pembuatan",
+aksi:oldData
+?(oldKode===kode?"penyesuaian":"perubahan")
+:"pembuatan",
 petugas_nik:currentNik,
 petugas_nama:petugasNama,
 penugasan_id:assignmentId,
@@ -948,39 +1036,92 @@ createdBy:currentUser.uid
 };
 
 const batch=writeBatch(db);
+
 batch.set(ref,payload,{merge:true});
 batch.set(historyRef,historyPayload);
+
+tahap=
+"MENGIRIM BATCH FIRESTORE: data_absensi/"+targetId+
+" DAN riwayat_perubahan_absensi";
+
+try{
+
 await batch.commit();
+
+}catch(error){
+
+firebaseCode=error.code||"-";
+
+throw new Error(
+"Firestore menolak batch penyimpanan. "+
+"Batch berisi dua penulisan: data_absensi/"+targetId+
+" dan satu dokumen baru pada riwayat_perubahan_absensi. "+
+"Batch bersifat atomik, sehingga jika salah satu penulisan "+
+"ditolak, keduanya tidak disimpan. "+
+"Detail Firebase: "+(error.message||String(error))
+);
+}
 
 success++;
 dirtyKeys.delete(key);
 
 }catch(error){
+
 failed++;
-errors.push(employee.nik+": "+(error.message||String(error)));
+
+console.error("WAINI GAGAL SIMPAN:",{
+nik:employee.nik,
+tahap:tahap,
+dokumen:targetId,
+kodeFirebase:error.code||firebaseCode,
+error:error
+});
+
+errors.push(
+"NIK: "+employee.nik+
+"\nTahap: "+tahap+
+"\nDokumen: "+targetId+
+"\nKode Firebase: "+(error.code||firebaseCode||"-")+
+"\nPesan: "+(error.message||String(error))
+);
+
 }
+
 }
-}catch(error){
-alert("Gagal memproses penyimpanan: "+error.message);
-return;
+
 }finally{
+
 $("save").disabled=false;
 $("save").textContent="💾 Simpan ke Firebase";
+
 }
 
 try{
+
 await loadAttendanceFromFirebase();
 render();
+
 }catch(error){
-errors.push("Gagal memuat ulang data: "+error.message);
+
+errors.push(
+"Gagal memuat ulang data setelah penyimpanan."+
+"\nKode Firebase: "+(error.code||"-")+
+"\nPesan: "+(error.message||String(error))
+);
+
 }
 
-let message="Proses penyimpanan selesai.\n\n"+
+let message=
+"PROSES PENYIMPANAN SELESAI\n\n"+
 "Berhasil: "+success+"\n"+
 "Tidak berubah: "+unchanged+"\n"+
 "Gagal: "+failed;
 
-if(errors.length)message+="\n\nRincian kegagalan:\n"+errors.join("\n");
+if(errors.length){
+message+="\n\nRINCIAN PEMERIKSAAN:\n\n"+
+errors.join("\n\n--------------------\n\n");
+}
+
 alert(message);
 }
 
