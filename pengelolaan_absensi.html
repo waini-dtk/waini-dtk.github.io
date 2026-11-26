@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -183,7 +182,6 @@ table{min-width:0;font-size:8px}th{position:static}
 </main>
 <footer>WAINI • Pengelolaan Absensi • Firebase</footer>
 
-<!-- ExcelJS dipakai untuk membuat header bertingkat dan format tabel Excel -->
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 
 <script type="module">
@@ -556,9 +554,8 @@ $("historyList").innerHTML=records.slice(0,100).map(r=>`
 }
 
 /* ==========================================================
-   PEMBUATAN EXCEL WAINI - HEADER BERTINGKAT SEPERTI CONTOH
-   Semua kolom perhitungan/bonus yang ditandai manual
-   sengaja dikosongkan dan hanya ada di file Excel.
+   PEMBUATAN EXCEL WAINI - HEADER BERTINGKAT
+   Kolom perhitungan/bonus tetap kosong untuk pengisian manual.
 ========================================================== */
 function excelCellStyle(cell,fill="FFFFFF",fontColor="000000",bold=false,align="center"){
 cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF"+fill}};
@@ -580,7 +577,6 @@ const d=new Date(date+"T00:00:00");
 return d.toLocaleDateString("id-ID",{month:"long",year:"numeric"}).toUpperCase();
 }
 function excelDateNumber(date){return Number(date.slice(8,10));}
-function safeExcelText(v){return v===undefined||v===null?"":String(v);}
 
 async function createWainiExcel(){
 if(typeof ExcelJS==="undefined"){
@@ -638,12 +634,15 @@ ws.getCell(2,11).value="WAINI • SISTEM INFORMASI MANAJEMEN KARYAWAN";
 for(let c=1;c<=lastCol;c++)excelCellStyle(ws.getCell(2,c),"FCE4D6","7D1018",true);
 ws.getRow(2).height=24;
 
-ws.mergeCells(4,1,6,fixedCount);
+/* PERBAIKAN: setiap kolom identitas digabung satu kali saja.
+   Tidak ada lagi merge besar yang bertumpuk dengan merge per kolom. */
 for(let i=0;i<fixedHeaders.length;i++){
-const cell=ws.getCell(4,1+i);cell.value=fixedHeaders[i];
+const c=1+i;
+const cell=ws.getCell(4,c);
+cell.value=fixedHeaders[i];
 excelCellStyle(cell,"FFF200","000000",true);
+ws.mergeCells(4,c,6,c);
 }
-for(let c=1;c<=fixedCount;c++)ws.mergeCells(4,c,6,c);
 
 let col=dateStart;
 let monthGroups=[];
@@ -735,9 +734,7 @@ excelCellStyle(ws.getCell(r,c),"FFFFFFFF","000000",false,c===3?"left":"center");
 ws.getRow(r).height=21;
 });
 
-const widths=[
-7,16,25,20,20,23,15,16,15,22
-];
+const widths=[7,16,25,20,20,23,15,16,15,22];
 widths.forEach((w,i)=>ws.getColumn(i+1).width=w);
 for(let c=dateStart;c<=dateEnd;c++)ws.getColumn(c).width=5.5;
 for(let c=codeStart;c<=codeEnd;c++)ws.getColumn(c).width=7;
