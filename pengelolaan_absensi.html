@@ -611,9 +611,8 @@ attendanceCodes=result.map(x=>[x.kode,x.nama,x.kategori]);
 }
 
 /*
-Membaca seluruh data periode.
-Dokumen dengan ID lama tetap dicocokkan dari tanggal dan NIK.
-Jika ada duplikat, penyimpanan untuk pasangan tersebut diblokir.
+Membaca data periode dari Firestore.
+Data yang sudah dibaca disimpan di savedRecords.
 */
 async function loadAttendanceFromFirebase(){
 loadingStage="Membaca data_absensi";
@@ -823,14 +822,13 @@ return normalizeNik(nik)+"_"+String(tanggal||"").replace(/-/g,"");
 }
 
 /*
-PENYIMPANAN ABSENSI DENGAN DIAGNOSTIK TAHAP.
+PENYIMPANAN ABSENSI - PERBAIKAN PEMBACAAN.
 
-Tahap yang dibedakan:
-1. Validasi periode.
-2. Membaca dokumen data_absensi.
-3. Validasi data dan penugasan.
-4. Menyiapkan riwayat.
-5. Mengirim batch ke Firestore.
+Data lama diambil dari savedRecords yang sudah dibaca
+oleh loadAttendanceFromFirebase() melalui query.
+
+Tidak ada getDoc(ref) langsung ke dokumen data_absensi
+pada proses penyimpanan.
 
 Batch tetap atomik: absensi dan riwayat tidak akan tersimpan
 separuh apabila salah satu penulisan ditolak.
@@ -915,27 +913,19 @@ const canonicalId=attendanceDocumentId(
 employee.nik,currentDate
 );
 
+/*
+PERBAIKAN UTAMA:
+Gunakan data dari hasil query yang sudah dimuat.
+Jangan melakukan getDoc(ref) langsung pada data_absensi.
+*/
+tahap="MENGAMBIL DATA LAMA DARI HASIL PEMBACAAN data_absensi";
+
 const existingRecord=savedRecords[key]||null;
+const oldData=existingRecord||null;
+
 targetId=existingRecord?.id||canonicalId;
 
 const ref=doc(db,"data_absensi",targetId);
-
-tahap="MEMBACA dokumen data_absensi/"+targetId;
-
-let oldSnap;
-
-try{
-oldSnap=await getDoc(ref);
-}catch(error){
-firebaseCode=error.code||"-";
-throw new Error(
-"Firestore menolak pembacaan dokumen absensi. "+
-"Dokumen: data_absensi/"+targetId+
-". Detail: "+(error.message||String(error))
-);
-}
-
-const oldData=oldSnap.exists()?oldSnap.data():null;
 
 const oldKode=String(
 firstValue(oldData,["kode","kode_absensi"],"")
