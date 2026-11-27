@@ -554,15 +554,24 @@ $("historyList").innerHTML=records.slice(0,100).map(r=>`
 }
 
 /* ==========================================================
-   EXCEL WAINI - PROFESSIONAL MAROON
-   - Header perusahaan
-   - SUMMARY ABSENSI
-   - Periode otomatis
-   - Rentang waktu otomatis
-   - Cut-Off Date otomatis
-   - Tanpa AutoFilter
-   - Tanpa Freeze Panes
-   - Tanpa sheet tambahan
+   EXCEL WAINI - SUMMARY ABSENSI
+   REVISI ATURAN:
+   AZ = jumlah hari kalender periode inklusif
+   BA = kode terisi selain kode 7 dan 9
+   BB = jumlah kode 7 dan 9
+   BC = jumlah kode 6
+   BD = sama dengan AZ
+   BE = sama dengan BA
+   BF = BE / BD
+   BG = TMK dari data_karyawan berdasarkan NIK
+   BH = Cut-Off Date (tanggal awal periode)
+   BI = masa kerja tahun penuh
+   BJ = sisa bulan setelah tahun penuh
+   Judul rata kiri
+   Sistem Cuti mengambil data_karyawan
+   Tanpa AutoFilter
+   Tanpa Freeze Panes
+   Tanpa sheet tambahan
 ========================================================== */
 
 const EXCEL_COLORS={
@@ -639,6 +648,98 @@ if(value==="7"||value==="9")return EXCEL_COLORS.red;
 return EXCEL_COLORS.gray;
 }
 
+/* Mengubah nilai TMK menjadi Date yang valid */
+function excelParseDate(value){
+if(!value)return null;
+
+if(value instanceof Date){
+return Number.isNaN(value.getTime())?null:new Date(value.getFullYear(),value.getMonth(),value.getDate());
+}
+
+if(typeof value==="object"){
+if(typeof value.toDate==="function"){
+const d=value.toDate();
+return Number.isNaN(d.getTime())?null:new Date(d.getFullYear(),d.getMonth(),d.getDate());
+}
+if(typeof value.seconds==="number"){
+const d=new Date(value.seconds*1000);
+return Number.isNaN(d.getTime())?null:new Date(d.getFullYear(),d.getMonth(),d.getDate());
+}
+}
+
+const text=String(value).trim();
+if(!text)return null;
+
+/* Format YYYY-MM-DD */
+if(/^\d{4}-\d{2}-\d{2}$/.test(text)){
+const d=new Date(text+"T00:00:00");
+return validISODate(text)?d:null;
+}
+
+/* Format DD/MM/YYYY atau DD-MM-YYYY */
+const match=text.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+if(match){
+const day=Number(match[1]),month=Number(match[2]),year=Number(match[3]);
+const d=new Date(year,month-1,day);
+if(d.getFullYear()===year&&d.getMonth()===month-1&&d.getDate()===day)return d;
+return null;
+}
+
+const parsed=new Date(text);
+if(Number.isNaN(parsed.getTime()))return null;
+return new Date(parsed.getFullYear(),parsed.getMonth(),parsed.getDate());
+}
+
+/* Menghitung masa kerja pada Cut-Off Date */
+function excelCalculateTenure(tmkValue,cutoffValue){
+const tmk=excelParseDate(tmkValue);
+const cutoff=excelParseDate(cutoffValue);
+
+if(!tmk||!cutoff||tmk>cutoff)return {years:"",months:""};
+
+let years=cutoff.getFullYear()-tmk.getFullYear();
+let months=cutoff.getMonth()-tmk.getMonth();
+
+if(cutoff.getDate()<tmk.getDate())months--;
+
+if(months<0){
+years--;
+months+=12;
+}
+if(years<0)return {years:"",months:""};
+
+return {years,months};
+}
+
+/* Menghitung jumlah kode pada satu karyawan selama periode */
+function excelCountCode(employee,dateList,code){
+let total=0;
+dateList.forEach(date=>{
+if(String(values[dataKey(date,employee.nik)]||"")===String(code))total++;
+});
+return total;
+}
+
+/* BA = seluruh status terisi kecuali kode 7 dan 9 */
+function excelCountWork(employee,dateList){
+let total=0;
+dateList.forEach(date=>{
+const code=String(values[dataKey(date,employee.nik)]||"");
+if(code!==""&&code!=="7"&&code!=="9")total++;
+});
+return total;
+}
+
+/* BB = jumlah kode 7 + kode 9 */
+function excelCountDeduction(employee,dateList){
+return excelCountCode(employee,dateList,"7")+excelCountCode(employee,dateList,"9");
+}
+
+/* BC = jumlah kode 6 */
+function excelCountHolidayIncentive(employee,dateList){
+return excelCountCode(employee,dateList,"6");
+}
+
 async function createWainiExcel(){
 if(typeof ExcelJS==="undefined"){
 alert("Pustaka Excel belum termuat. Periksa koneksi internet lalu muat ulang halaman.");return;
@@ -683,23 +784,23 @@ const lastDataRow=9+authorizedStaff.length;
    HEADER LAPORAN
 ============================ */
 
-/* Baris 1: Nama Perusahaan */
+/* Baris 1: Nama Perusahaan - RATA KIRI */
 ws.mergeCells(1,1,1,lastCol);
 ws.getCell(1,1).value="PT. WELL HARVEST WINNING ALUMINA REFINERY";
 ws.getCell(1,1).font={name:"Aptos Display",size:18,bold:true,color:{argb:EXCEL_COLORS.white}};
 ws.getCell(1,1).fill={type:"pattern",pattern:"solid",fgColor:{argb:EXCEL_COLORS.maroonDark}};
-ws.getCell(1,1).alignment={horizontal:"center",vertical:"middle"};
+ws.getCell(1,1).alignment={horizontal:"left",vertical:"middle",indent:1};
 ws.getCell(1,1).border={
 bottom:{style:"medium",color:{argb:EXCEL_COLORS.maroon}}
 };
 ws.getRow(1).height=38;
 
-/* Baris 2: Judul */
+/* Baris 2: Judul - RATA KIRI */
 ws.mergeCells(2,1,2,lastCol);
 ws.getCell(2,1).value="SUMMARY ABSENSI";
 ws.getCell(2,1).font={name:"Aptos Display",size:20,bold:true,color:{argb:EXCEL_COLORS.maroon}};
 ws.getCell(2,1).fill={type:"pattern",pattern:"solid",fgColor:{argb:EXCEL_COLORS.white}};
-ws.getCell(2,1).alignment={horizontal:"center",vertical:"middle"};
+ws.getCell(2,1).alignment={horizontal:"left",vertical:"middle",indent:1};
 ws.getRow(2).height=35;
 
 /* Baris 3: Periode */
@@ -830,8 +931,16 @@ const r=10+index;
 const rowFill=index%2===0?EXCEL_COLORS.white:EXCEL_COLORS.roseAlt;
 
 const fixedValues=[
-index+1,s.nik,s.name,s.div,s.dept,s.jabatan,
-s.tmk,s.poh,s.sched||s.cuti,""
+index+1,
+s.nik,
+s.name,
+s.div,
+s.dept,
+s.jabatan,
+excelParseDate(s.tmk)||s.tmk||"",
+s.poh,
+s.cuti||"", /* Roster / Lokal = Sistem Cuti */
+""
 ];
 
 fixedValues.forEach((v,i)=>{
@@ -840,7 +949,10 @@ cell.value=v||"";
 excelCellStyle(cell,rowFill,EXCEL_COLORS.text,false,i===2?"left":"center");
 });
 
-/* Data tanggal */
+/* TMK format tanggal */
+ws.getCell(r,7).numFmt="dd/mm/yyyy";
+
+/* Data tanggal absensi */
 dates.forEach((date,i)=>{
 const code=values[dataKey(date,s.nik)]||"";
 const cell=ws.getCell(r,dateStart+i);
@@ -851,14 +963,109 @@ excelCellStyle(cell,fill,EXCEL_COLORS.text,!!code,"center");
 
 /* Rekap jumlah setiap kode */
 codes.forEach((code,i)=>{
-const count=dates.filter(date=>String(values[dataKey(date,s.nik)]||"")===String(code[0])).length;
+const count=excelCountCode(s,dates,code[0]);
 const cell=ws.getCell(r,codeStart+i);
 cell.value=count||"";
 excelCellStyle(cell,rowFill,EXCEL_COLORS.text,false,"center");
 });
 
-/* Kolom perhitungan manual tetap kosong */
-for(let c=calcStart;c<=lastCol;c++){
+/* ============================
+   PERHITUNGAN SUMMARY
+============================ */
+
+const calendarDays=dates.length;
+const ba=excelCountWork(s,dates);
+const bb=excelCountDeduction(s,dates);
+const bc=excelCountHolidayIncentive(s,dates);
+const bd=calendarDays;
+const be=ba;
+const bf=bd>0?be/bd:0;
+const bg=excelParseDate(s.tmk)||"";
+const bh=excelParseDate(currentPeriod.start);
+const tenure=excelCalculateTenure(s.tmk,currentPeriod.start);
+
+/* AZ = Hari Kerja = jumlah hari kalender periode */
+const AZ=calcStart;
+
+/* BA = Masuk Kerja */
+const BA=calcStart+1;
+
+/* BB = Potongan Absensi */
+const BB=calcStart+2;
+
+/* BC = Insentif Tanggal Merah */
+const BC=calcStart+3;
+
+/* BD = Hari Kerja */
+const BD=calcStart+4;
+
+/* BE = Kehadiran Kerja */
+const BE=calcStart+5;
+
+/* BF = Kehadiran Kerja (%) */
+const BF=calcStart+6;
+
+/* BG = TMK */
+const BG=calcStart+7;
+
+/* BH = Cut-Off Date */
+const BH=calcStart+8;
+
+/* BI = Tahun Masa Kerja */
+const BI=calcStart+9;
+
+/* BJ = Bulan Masa Kerja */
+const BJ=calcStart+10;
+
+/* AZ */
+ws.getCell(r,AZ).value=calendarDays;
+excelCellStyle(ws.getCell(r,AZ),EXCEL_COLORS.blue,EXCEL_COLORS.text,true,"center");
+
+/* BA */
+ws.getCell(r,BA).value=ba;
+excelCellStyle(ws.getCell(r,BA),EXCEL_COLORS.green,EXCEL_COLORS.text,true,"center");
+
+/* BB */
+ws.getCell(r,BB).value=bb;
+excelCellStyle(ws.getCell(r,BB),bb?EXCEL_COLORS.orange:rowFill,EXCEL_COLORS.text,true,"center");
+
+/* BC */
+ws.getCell(r,BC).value=bc;
+excelCellStyle(ws.getCell(r,BC),bc?EXCEL_COLORS.cyan:rowFill,EXCEL_COLORS.text,true,"center");
+
+/* BD = AZ */
+ws.getCell(r,BD).value=bd;
+excelCellStyle(ws.getCell(r,BD),EXCEL_COLORS.blue,EXCEL_COLORS.text,true,"center");
+
+/* BE = BA */
+ws.getCell(r,BE).value=be;
+excelCellStyle(ws.getCell(r,BE),EXCEL_COLORS.green,EXCEL_COLORS.text,true,"center");
+
+/* BF = BE / BD */
+ws.getCell(r,BF).value=bd>0?bf:0;
+ws.getCell(r,BF).numFmt="0.00%";
+excelCellStyle(ws.getCell(r,BF),EXCEL_COLORS.green,EXCEL_COLORS.text,true,"center");
+
+/* BG = TMK dari data karyawan berdasarkan NIK */
+ws.getCell(r,BG).value=bg;
+ws.getCell(r,BG).numFmt="dd/mm/yyyy";
+excelCellStyle(ws.getCell(r,BG),rowFill,EXCEL_COLORS.text,false,"center");
+
+/* BH = Cut-Off Date, tanggal awal periode */
+ws.getCell(r,BH).value=bh;
+ws.getCell(r,BH).numFmt="dd/mm/yyyy";
+excelCellStyle(ws.getCell(r,BH),EXCEL_COLORS.blue,EXCEL_COLORS.text,true,"center");
+
+/* BI = Tahun masa kerja penuh */
+ws.getCell(r,BI).value=tenure.years;
+excelCellStyle(ws.getCell(r,BI),rowFill,EXCEL_COLORS.text,false,"center");
+
+/* BJ = Sisa bulan masa kerja */
+ws.getCell(r,BJ).value=tenure.months;
+excelCellStyle(ws.getCell(r,BJ),rowFill,EXCEL_COLORS.text,false,"center");
+
+/* Kolom perhitungan bonus yang belum ditentukan tetap kosong */
+for(let c=calcStart+11;c<=lastCol;c++){
 const cell=ws.getCell(r,c);
 cell.value="";
 excelCellStyle(cell,rowFill,EXCEL_COLORS.text,false,"center");
@@ -876,7 +1083,7 @@ right:{style:"thin",color:{argb:EXCEL_COLORS.border}}
 }
 
 /* Garis pemisah grup */
-[fixedCount,dateEnd,codeEnd].forEach(c=>{
+[fixedCount,dateEnd,codeEnd,calcStart+3,calcStart+10,calcStart+13,calcStart+14].forEach(c=>{
 ws.getCell(r,c).border={
 top:{style:"thin",color:{argb:EXCEL_COLORS.border}},
 left:{style:"thin",color:{argb:EXCEL_COLORS.border}},
@@ -905,8 +1112,7 @@ calcWidths.forEach((w,i)=>ws.getColumn(calcStart+i).width=w);
    FILTER SENGAJA TIDAK DIBUAT
 ============================ */
 ws.pageSetup.printArea=`A1:${lastLetter}${Math.max(10,lastDataRow)}`;
-ws.pageSetup.horizontalCentered=true;
-ws.pageSetup.printTitlesRow="1:9";
+ws.pageSetup.horizontalCentered=false;
 ws.pageSetup.fitToPage=true;
 ws.pageSetup.fitToWidth=1;
 ws.pageSetup.fitToHeight=0;
