@@ -87,12 +87,31 @@ main{padding:10px}header{padding:11px}header h1{font-size:16px}header p{font-siz
 .stat.percent-stat{grid-column:1/-1}
 .actions{display:flex;flex-wrap:wrap}.actions .btn{width:auto}
 }
+/* Tampilan laporan khusus pimpinan saat dicetak */
+#printReport{display:none}
 @media print{
-header,.tabs,.controls,.actions,.legend,footer{display:none!important}
-body{background:white}main{max-width:none;padding:0}
-.table-wrap{max-height:none;overflow:visible}
-table{min-width:0;font-size:8px}th{position:static}
-.summary{break-inside:avoid}
+@page{size:A4 landscape;margin:10mm}
+html,body{background:#fff!important;color:#111!important;padding:0!important;margin:0!important}
+body>*{display:none!important}
+#printReport{display:block!important;font-family:Arial,sans-serif;color:#111;font-size:9pt}
+#printReport .print-title{text-align:center;border-bottom:2px solid #7d1018;padding-bottom:7px;margin-bottom:8px}
+#printReport .print-title h1{font-size:16pt;margin-bottom:3px;color:#7d1018}
+#printReport .print-title h2{font-size:12pt;margin-bottom:3px}
+#printReport .print-meta{font-size:9pt;margin:7px 0 10px;display:flex;justify-content:space-between;gap:12px}
+#printReport .print-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+#printReport .print-kpi{border:1px solid #777;padding:6px;text-align:center}
+#printReport .print-kpi b{display:block;font-size:15pt;margin-top:2px}
+#printReport h3{font-size:10pt;margin:10px 0 5px;color:#7d1018}
+#printReport table{border-collapse:collapse;width:100%;min-width:0;font-size:7.5pt;table-layout:auto}
+#printReport th,#printReport td{border:1px solid #777;padding:3px 4px;white-space:normal;vertical-align:middle}
+#printReport th{background:#e8e8e8!important;color:#111!important;text-align:center;font-weight:bold}
+#printReport .summary-table td{text-align:center}
+#printReport .summary-table td.name{text-align:left;min-width:120px}
+#printReport .code-summary{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px}
+#printReport .code-pill{border:1px solid #888;padding:3px 6px;font-size:8pt}
+#printReport .print-note{font-size:8pt;margin-top:8px}
+#printReport tr{break-inside:avoid}
+#printReport thead{display:table-header-group}
 }
 </style>
 </head>
@@ -189,6 +208,7 @@ table{min-width:0;font-size:8px}th{position:static}
 </section>
 </div>
 </main>
+<div id="printReport"></div>
 <footer>WAINI • Pengelolaan Absensi • Firebase</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
@@ -1190,8 +1210,39 @@ alert("Gagal membuat laporan Excel:\n"+(error.message||String(error)));
 $("excel").onclick=createWainiExcel;
 $("recapExcel").onclick=createWainiExcel;
 $("save").onclick=saveAttendance;
-$("print").onclick=()=>window.print();
-$("recapPrint").onclick=()=>window.print();
+$("print").onclick=()=>printLeadershipReport("harian");
+$("recapPrint").onclick=()=>printLeadershipReport("periode");
+
+function printLeadershipReport(mode="periode"){
+const reportDates=mode==="harian"?[currentDate]:getDates(currentPeriod.start,currentPeriod.end);
+const title=mode==="harian"?"LAPORAN ABSENSI HARIAN":"LAPORAN REKAP ABSENSI PERIODE";
+const dateLabel=mode==="harian"?formatDate(currentDate):formatDate(currentPeriod.start)+" s.d. "+formatDate(currentPeriod.end);
+const codeCounts={};attendanceCodes.forEach(c=>codeCounts[String(c[0])]=0);
+let totalFilled=0,totalPresent=0,totalCodes=0;
+const employees=authorizedStaff.map(employee=>{
+const counts={};attendanceCodes.forEach(c=>counts[String(c[0])]=0);let filled=0,present=0;
+reportDates.forEach(date=>{const code=String(values[dataKey(date,employee.nik)]||"");if(!code)return;filled++;counts[code]=(counts[code]||0)+1;codeCounts[code]=(codeCounts[code]||0)+1;if(code==="1")present++;});
+totalFilled+=filled;totalPresent+=present;totalCodes+=filled;
+return {...employee,counts,filled,present,percent:reportDates.length?Math.round(present/reportDates.length*100):0};
+});
+const staffTotal=employees.length,dayCount=reportDates.length,possible=staffTotal*dayCount;
+const fillPercent=possible?Math.round(totalFilled/possible*100):0;
+const presentPercent=possible?Math.round(totalPresent/possible*100):0;
+const codePills=attendanceCodes.map(c=>`<span class="code-pill"><b>${escapeHTML(c[0])}</b> ${escapeHTML(c[1])}: <b>${codeCounts[String(c[0])]||0}</b></span>`).join("");
+const rows=employees.map((e,i)=>{
+const codeCells=attendanceCodes.map(c=>`<td>${e.counts[String(c[0])]||0}</td>`).join("");
+return `<tr><td>${i+1}</td><td>${escapeHTML(e.nik)}</td><td class="name"><b>${escapeHTML(e.name)}</b></td><td>${escapeHTML(e.div)}</td><td>${escapeHTML(e.dept)}</td><td>${escapeHTML(e.jabatan)}</td><td>${escapeHTML(formatDate(e.tmk))}</td><td>${escapeHTML(e.poh)}</td><td>${escapeHTML(e.cuti)}</td>${codeCells}<td><b>${e.filled}</b></td><td>${e.percent}%</td></tr>`;
+}).join("");
+const codeHeaders=attendanceCodes.map(c=>`<th>${escapeHTML(c[0])}</th>`).join("");
+$("printReport").innerHTML=`<div class="print-title"><h1>WAINI</h1><h2>${title}</h2><div>Sistem Informasi Manajemen Karyawan • Divisi</div></div>
+<div class="print-meta"><span><b>Periode:</b> ${escapeHTML(dateLabel)}</span><span><b>Dicetak:</b> ${escapeHTML(new Date().toLocaleString("id-ID"))}</span><span><b>Lingkup:</b> ${escapeHTML(isSuperAdmin?"Seluruh Karyawan":"Sesuai Lingkup Penugasan")}</span></div>
+<div class="print-kpis"><div class="print-kpi">Total Karyawan<b>${staffTotal}</b></div><div class="print-kpi">Total Hari Periode/Karyawan<b>${dayCount}</b></div><div class="print-kpi">Status Terisi<b>${totalFilled} / ${possible}</b></div><div class="print-kpi">Kode 1 (Masuk)<b>${totalPresent}</b></div><div class="print-kpi">Persentase Kode 1<b>${presentPercent}%</b></div></div>
+<h3>Ringkasan Kode Absensi</h3><div class="code-summary">${codePills}</div>
+<h3>Rekapitulasi Per Karyawan</h3><table class="summary-table"><thead><tr><th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th><th>Departemen</th><th>Jabatan</th><th>TMK</th><th>POH</th><th>Sistem Cuti</th>${codeHeaders}<th>Status Terisi</th><th>% Kode 1</th></tr></thead><tbody>${rows}</tbody></table>
+<p class="print-note">Catatan: angka kolom kode menunjukkan jumlah hari tercatat untuk setiap kode selama rentang laporan. Persentase Kode 1 dihitung dari jumlah Kode 1 dibanding total hari kalender periode. Data bersumber dari absensi yang telah dimuat dari Firebase.</p>`;
+window.print();
+}
+
 
 function showError(message){
 $("errorBox").classList.remove("hidden");
