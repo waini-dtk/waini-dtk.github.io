@@ -15,32 +15,45 @@
     padding: 0;
 }
 
+:root {
+    --merah: #991b1b;
+    --merah-gelap: #7f1d1d;
+    --merah-muda: #fef2f2;
+    --merah-border: #fee2e2;
+    --teks: #252525;
+    --abu: #777;
+    --background: #f4f5f8;
+    --putih: #ffffff;
+    --border: #eeeeee;
+    --hijau: #15803d;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background: #f4f5f8;
-    color: #252525;
+    background: var(--background);
+    color: var(--teks);
     min-height: 100vh;
 }
 
 /* HEADER */
 
-header {
+.header {
     background: linear-gradient(135deg, #991b1b, #7f1d1d);
     color: white;
-    padding: 20px 18px 27px;
-    border-radius: 0 0 22px 22px;
+    padding: 19px 18px 25px;
+    border-radius: 0 0 24px 24px;
 }
 
 .header-top {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 10px;
 }
 
 .logo {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 900;
     letter-spacing: 1px;
 }
 
@@ -49,40 +62,37 @@ header {
 }
 
 .btn-kembali {
-    border: 1px solid rgba(255,255,255,.65);
-    color: white;
-    background: rgba(255,255,255,.1);
-    padding: 9px 13px;
-    border-radius: 9px;
-    font-size: 12px;
     text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    color: white;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.35);
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 12px;
 }
 
 .header-info {
-    margin-top: 23px;
+    margin-top: 22px;
 }
 
 .header-info h1 {
-    font-size: 21px;
-    margin-bottom: 7px;
+    font-size: 22px;
+    margin-bottom: 6px;
 }
 
 .header-info p {
-    font-size: 13px;
-    opacity: .9;
+    font-size: 12px;
     line-height: 1.5;
+    opacity: .85;
 }
 
 /* CONTAINER */
 
 .container {
     width: 100%;
-    max-width: 800px;
+    max-width: 760px;
     margin: auto;
-    padding: 20px 15px 35px;
+    padding: 18px 14px 35px;
 }
 
 /* STATUS */
@@ -90,69 +100,126 @@ header {
 .status {
     background: white;
     color: #777;
-    font-size: 12px;
-    text-align: center;
-    line-height: 1.6;
-    padding: 14px;
-    border-radius: 11px;
-    margin-bottom: 17px;
+    padding: 13px;
+    border-radius: 12px;
     border: 1px solid #eee;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 16px;
 }
 
 .status.error {
-    color: #b91c1c;
     background: #fef2f2;
+    color: #b91c1c;
     border-color: #fecaca;
 }
 
 .status.success {
-    color: #15803d;
     background: #f0fdf4;
+    color: #15803d;
     border-color: #bbf7d0;
 }
 
-/* KARTU PROFIL */
-
-.kartu-profil {
-    background: white;
-    border-radius: 17px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,.05);
-    border: 1px solid #ededed;
-    margin-bottom: 17px;
-}
-
-.profil-header {
-    background: linear-gradient(135deg,#fff,#fff7f7);
-    padding: 23px 17px;
+.loading {
     display: flex;
     align-items: center;
-    gap: 15px;
-    border-bottom: 1px solid #f1eeee;
+    justify-content: center;
+    gap: 9px;
+}
+
+.spinner {
+    width: 17px;
+    height: 17px;
+    border: 2px solid #ddd;
+    border-top-color: var(--merah);
+    border-radius: 50%;
+    animation: putar .8s linear infinite;
+}
+
+@keyframes putar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* KARTU IDENTITAS */
+
+.kartu-identitas {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #ededed;
+    box-shadow: 0 4px 15px rgba(0,0,0,.045);
+    margin-bottom: 16px;
+}
+
+.identitas-banner {
+    height: 75px;
+    background:
+        linear-gradient(135deg, #991b1b, #b91c1c, #7f1d1d);
+    position: relative;
+}
+
+.identitas-banner::after {
+    content: "";
+    position: absolute;
+    right: -25px;
+    top: -35px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.07);
+}
+
+.identitas-banner::before {
+    content: "";
+    position: absolute;
+    right: 65px;
+    bottom: -45px;
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.05);
+}
+
+.identitas-body {
+    padding: 0 17px 19px;
+}
+
+.identitas-utama {
+    display: flex;
+    align-items: flex-end;
+    gap: 13px;
+    margin-top: -37px;
+    position: relative;
+    z-index: 2;
 }
 
 .avatar {
-    width: 68px;
-    height: 68px;
+    width: 76px;
+    height: 76px;
     border-radius: 50%;
-    background: linear-gradient(135deg,#991b1b,#b91c1c);
+    background: linear-gradient(135deg, #991b1b, #c62828);
     color: white;
+    border: 5px solid white;
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 24px;
+    justify-content: center;
+    font-size: 25px;
     font-weight: bold;
     flex-shrink: 0;
-    border: 3px solid #fee2e2;
+    box-shadow: 0 3px 8px rgba(0,0,0,.10);
 }
 
-.identitas-ringkas {
+.identitas-nama {
     min-width: 0;
     flex: 1;
+    padding-bottom: 4px;
 }
 
 .nama {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: bold;
     color: #7f1d1d;
     line-height: 1.4;
@@ -160,9 +227,9 @@ header {
 }
 
 .nik {
-    font-size: 12px;
+    font-size: 11px;
     color: #777;
-    margin-top: 5px;
+    margin-top: 4px;
     overflow-wrap: anywhere;
 }
 
@@ -171,63 +238,183 @@ header {
     align-items: center;
     gap: 5px;
     margin-top: 8px;
+    background: #dcfce7;
+    color: #166534;
     padding: 5px 9px;
     border-radius: 20px;
     font-size: 10px;
     font-weight: bold;
-    background: #dcfce7;
-    color: #166534;
 }
 
 .badge-status::before {
     content: "";
     width: 6px;
     height: 6px;
-    border-radius: 50%;
     background: #22c55e;
+    border-radius: 50%;
 }
 
-/* DETAIL */
+/* JABATAN */
 
-.detail-profil {
-    padding: 18px 16px 20px;
+.identitas-jabatan {
+    margin-top: 17px;
+    padding-top: 14px;
+    border-top: 1px solid #f0f0f0;
 }
 
-.judul-detail {
+.jabatan {
     font-size: 14px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 16px;
+}
+
+.divisi {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+/* RINGKASAN */
+
+.ringkasan {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 9px;
+    margin-top: 17px;
+}
+
+.ringkasan-item {
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 11px 8px;
+    text-align: center;
+    min-width: 0;
+}
+
+.ringkasan-icon {
+    font-size: 17px;
+    margin-bottom: 6px;
+}
+
+.ringkasan-label {
+    color: #888;
+    font-size: 9px;
+    margin-bottom: 5px;
+}
+
+.ringkasan-nilai {
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
+}
+
+/* TAB */
+
+.tab-container {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 5px;
+    display: flex;
+    gap: 4px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.025);
+}
+
+.tab {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: #777;
+    padding: 11px 5px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.tab.aktif {
+    background: var(--merah);
+    color: white;
+}
+
+/* KONTEN TAB */
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.aktif {
+    display: block;
+}
+
+/* KARTU DATA */
+
+.kartu-data {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #ededed;
+    box-shadow: 0 3px 12px rgba(0,0,0,.035);
+    padding: 17px;
+    margin-bottom: 15px;
+}
+
+.judul-kartu {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 13px;
+    color: #333;
 }
 
-.judul-detail::before {
+.judul-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: #f8eeee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.judul-kartu::after {
     content: "";
+    height: 3px;
     width: 4px;
-    height: 17px;
-    background: #991b1b;
+    background: var(--merah);
     border-radius: 4px;
+    display: none;
 }
 
-.detail-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
+.detail-list {
+    display: flex;
+    flex-direction: column;
 }
 
 .detail-item {
-    padding: 12px 2px;
+    padding: 12px 1px;
     border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item:first-child {
+    padding-top: 5px;
 }
 
 .detail-item:last-child {
     border-bottom: none;
+    padding-bottom: 3px;
 }
 
 .label {
-    font-size: 11px;
+    font-size: 10px;
     color: #888;
     margin-bottom: 5px;
 }
@@ -248,137 +435,87 @@ header {
 
 /* INFORMASI AKUN */
 
-.kartu-akun {
-    background: white;
-    border: 1px solid #ededed;
-    border-radius: 15px;
-    padding: 17px;
-    margin-bottom: 17px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.04);
-}
-
-.kartu-akun .judul-detail {
-    margin-bottom: 12px;
-}
-
-.info-akun {
+.akun-item {
     display: flex;
-    flex-direction: column;
-    gap: 13px;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.info-akun-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
+.akun-item:last-child {
+    border-bottom: none;
 }
 
-.info-akun-icon {
-    width: 34px;
-    height: 34px;
+.akun-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
     background: #f8eeee;
-    color: #991b1b;
-    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 16px;
     flex-shrink: 0;
-    font-size: 15px;
 }
 
-.info-akun-teks {
+.akun-info {
     flex: 1;
     min-width: 0;
 }
 
-.info-akun-teks .label {
-    margin-bottom: 4px;
+.akun-label {
+    color: #888;
+    font-size: 10px;
+    margin-bottom: 5px;
 }
 
-.info-akun-teks .nilai {
+.akun-nilai {
+    color: #333;
     font-size: 12px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 /* CATATAN */
 
 .catatan {
-    padding: 13px;
     background: #fff7ed;
-    border: 1px solid #fed7aa;
-    border-radius: 11px;
-    font-size: 11px;
     color: #9a5b20;
+    border: 1px solid #fed7aa;
+    border-radius: 12px;
+    padding: 13px;
+    font-size: 11px;
     line-height: 1.6;
+    margin-top: 15px;
 }
 
 /* TOMBOL */
 
-.tombol-area {
+.tombol-kembali {
     display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.btn {
-    flex: 1;
-    padding: 13px;
-    border: none;
-    border-radius: 11px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    -webkit-tap-highlight-color: transparent;
+    margin-top: 17px;
 }
 
 .btn-utama {
+    width: 100%;
+    text-decoration: none;
     color: white;
-    background: #991b1b;
-}
-
-.btn-utama:active {
-    background: #7f1d1d;
-    transform: scale(.98);
-}
-
-.btn-putih {
-    color: #991b1b;
-    background: white;
-    border: 1px solid #e5caca;
-}
-
-.btn-putih:active {
-    background: #fff1f1;
-    transform: scale(.98);
-}
-
-/* LOADING */
-
-.loading {
+    background: var(--merah);
+    padding: 13px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 9px;
+    gap: 7px;
+    transition: .15s;
 }
 
-.spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid #ddd;
-    border-top-color: #991b1b;
-    border-radius: 50%;
-    animation: putar .8s linear infinite;
-}
-
-@keyframes putar {
-    to {
-        transform: rotate(360deg);
-    }
+.btn-utama:active {
+    background: var(--merah-gelap);
+    transform: scale(.98);
 }
 
 /* FOOTER */
@@ -386,42 +523,78 @@ header {
 footer {
     text-align: center;
     color: #999;
-    font-size: 11px;
-    padding: 23px 10px;
+    font-size: 10px;
+    padding: 22px 10px;
 }
 
 /* RESPONSIVE */
 
-@media(min-width:600px) {
-    .detail-grid {
+@media (min-width: 600px) {
+
+    .container {
+        padding: 22px 20px 40px;
+    }
+
+    .detail-list {
+        display: grid;
         grid-template-columns: repeat(2,minmax(0,1fr));
-        column-gap: 22px;
+        column-gap: 24px;
     }
 
     .detail-item {
         border-bottom: 1px solid #f0f0f0;
     }
+
+    .identitas-body {
+        padding-left: 23px;
+        padding-right: 23px;
+    }
+
+    .nama {
+        font-size: 21px;
+    }
+
+    .ringkasan-nilai {
+        font-size: 14px;
+    }
 }
 
-@media(max-width:360px) {
-    .profil-header {
-        padding: 19px 13px;
-        gap: 11px;
+@media (max-width: 360px) {
+
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .identitas-body {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
     .avatar {
-        width: 58px;
-        height: 58px;
-        font-size: 21px;
+        width: 65px;
+        height: 65px;
+        font-size: 22px;
     }
 
     .nama {
         font-size: 15px;
     }
 
-    .container {
-        padding-left: 11px;
-        padding-right: 11px;
+    .ringkasan {
+        gap: 5px;
+    }
+
+    .ringkasan-item {
+        padding: 9px 5px;
+    }
+
+    .ringkasan-label {
+        font-size: 8px;
+    }
+
+    .ringkasan-nilai {
+        font-size: 11px;
     }
 }
 </style>
@@ -429,19 +602,32 @@ footer {
 
 <body>
 
-<header>
+<!-- HEADER -->
+
+<header class="header">
+
     <div class="header-top">
-        <div class="logo">WAI<span>NI</span></div>
+
+        <div class="logo">
+            WAI<span>NI</span>
+        </div>
 
         <a href="menu.html" class="btn-kembali">
             ← Menu Utama
         </a>
+
     </div>
 
     <div class="header-info">
+
         <h1>Profil Karyawan</h1>
-        <p>Informasi identitas dan data kepegawaian Anda.</p>
+
+        <p>
+            Informasi identitas dan data kepegawaian Anda.
+        </p>
+
     </div>
+
 </header>
 
 <main class="container">
@@ -449,49 +635,116 @@ footer {
     <!-- STATUS -->
 
     <div id="statusHalaman" class="status">
+
         <div class="loading">
+
             <span class="spinner"></span>
+
             Memuat profil karyawan...
+
         </div>
+
     </div>
 
-    <!-- PROFIL UTAMA -->
+    <!-- KARTU IDENTITAS -->
 
-    <section class="kartu-profil" id="kartuProfil" style="display:none;">
+    <section
+        class="kartu-identitas"
+        id="kartuIdentitas"
+        style="display:none;"
+    >
 
-        <div class="profil-header">
+        <div class="identitas-banner"></div>
 
-            <div class="avatar" id="avatarNama">
-                --
+        <div class="identitas-body">
+
+            <div class="identitas-utama">
+
+                <div class="avatar" id="avatarNama">
+                    --
+                </div>
+
+                <div class="identitas-nama">
+
+                    <div class="nama" id="namaKaryawan">
+                        -
+                    </div>
+
+                    <div class="nik" id="nikKaryawan">
+                        NIK: -
+                    </div>
+
+                    <div class="badge-status" id="badgeStatus">
+                        KARYAWAN AKTIF
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="identitas-ringkas">
+            <div class="identitas-jabatan">
 
-                <div class="nama" id="namaKaryawan">
+                <div class="jabatan" id="jabatanKaryawan">
                     -
                 </div>
 
-                <div class="nik" id="nikKaryawan">
-                    NIK: -
-                </div>
-
-                <div class="badge-status" id="badgeStatus">
-                    AKUN AKTIF
+                <div class="divisi" id="divisiKaryawan">
+                    -
                 </div>
 
             </div>
 
-        </div>
+            <!-- RINGKASAN -->
 
-        <div class="detail-profil">
+            <div class="ringkasan">
 
-            <div class="judul-detail">
-                Data Kepegawaian
-            </div>
+                <div class="ringkasan-item">
 
-            <div class="detail-grid" id="detailGrid">
+                    <div class="ringkasan-icon">
+                        📅
+                    </div>
 
-                <!-- Data akan dimuat dari Firebase -->
+                    <div class="ringkasan-label">
+                        TMK
+                    </div>
+
+                    <div class="ringkasan-nilai" id="ringkasanTMK">
+                        -
+                    </div>
+
+                </div>
+
+                <div class="ringkasan-item">
+
+                    <div class="ringkasan-icon">
+                        🏷️
+                    </div>
+
+                    <div class="ringkasan-label">
+                        GRADE
+                    </div>
+
+                    <div class="ringkasan-nilai" id="ringkasanGrade">
+                        -
+                    </div>
+
+                </div>
+
+                <div class="ringkasan-item">
+
+                    <div class="ringkasan-icon">
+                        🔄
+                    </div>
+
+                    <div class="ringkasan-label">
+                        SISTEM CUTI
+                    </div>
+
+                    <div class="ringkasan-nilai" id="ringkasanSistem">
+                        -
+                    </div>
+
+                </div>
 
             </div>
 
@@ -499,38 +752,157 @@ footer {
 
     </section>
 
-    <!-- INFORMASI AKUN -->
+    <!-- TAB NAVIGASI -->
 
-    <section class="kartu-akun" id="kartuAkun" style="display:none;">
+    <div
+        class="tab-container"
+        id="tabContainer"
+        style="display:none;"
+    >
 
-        <div class="judul-detail">
-            Informasi Akun
-        </div>
+        <button class="tab aktif" data-tab="profil">
+            👤 Profil
+        </button>
 
-        <div class="info-akun">
+        <button class="tab" data-tab="pekerjaan">
+            💼 Pekerjaan
+        </button>
 
-            <div class="info-akun-item">
+        <button class="tab" data-tab="akun">
+            🔐 Akun
+        </button>
 
-                <div class="info-akun-icon">
-                    ✉
+    </div>
+
+    <!-- TAB PROFIL -->
+
+    <section
+        class="tab-content aktif"
+        id="tab-profil"
+    >
+
+        <div class="kartu-data">
+
+            <div class="judul-kartu">
+
+                <div class="judul-icon">
+                    👤
                 </div>
 
-                <div class="info-akun-teks">
-                    <div class="label">Email akun</div>
-                    <div class="nilai" id="emailPengguna">-</div>
+                Informasi Identitas
+
+            </div>
+
+            <div class="detail-list" id="detailIdentitas">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TAB PEKERJAAN -->
+
+    <section
+        class="tab-content"
+        id="tab-pekerjaan"
+    >
+
+        <div class="kartu-data">
+
+            <div class="judul-kartu">
+
+                <div class="judul-icon">
+                    💼
+                </div>
+
+                Data Kepegawaian
+
+            </div>
+
+            <div class="detail-list" id="detailPekerjaan">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TAB AKUN -->
+
+    <section
+        class="tab-content"
+        id="tab-akun"
+    >
+
+        <div class="kartu-data">
+
+            <div class="judul-kartu">
+
+                <div class="judul-icon">
+                    🔐
+                </div>
+
+                Informasi Akun
+
+            </div>
+
+            <div class="akun-item">
+
+                <div class="akun-icon">
+                    ✉️
+                </div>
+
+                <div class="akun-info">
+
+                    <div class="akun-label">
+                        Email Akun
+                    </div>
+
+                    <div class="akun-nilai" id="emailPengguna">
+                        -
+                    </div>
+
                 </div>
 
             </div>
 
-            <div class="info-akun-item">
+            <div class="akun-item">
 
-                <div class="info-akun-icon">
+                <div class="akun-icon">
                     👤
                 </div>
 
-                <div class="info-akun-teks">
-                    <div class="label">Jenis akun</div>
-                    <div class="nilai" id="rolePengguna">Karyawan</div>
+                <div class="akun-info">
+
+                    <div class="akun-label">
+                        Jenis Akun
+                    </div>
+
+                    <div class="akun-nilai" id="rolePengguna">
+                        Karyawan
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="akun-item">
+
+                <div class="akun-icon">
+                    ✅
+                </div>
+
+                <div class="akun-info">
+
+                    <div class="akun-label">
+                        Status Akun
+                    </div>
+
+                    <div class="akun-nilai" id="statusAkun">
+                        Aktif
+                    </div>
+
                 </div>
 
             </div>
@@ -541,17 +913,26 @@ footer {
 
     <!-- CATATAN -->
 
-    <div class="catatan" id="catatanProfil" style="display:none;">
-        Data profil ditampilkan sesuai data yang tersimpan di sistem WAINI.
-        Jika terdapat kesalahan data, silakan hubungi administrator.
+    <div
+        class="catatan"
+        id="catatanProfil"
+        style="display:none;"
+    >
+
+        ℹ️ Data profil ditampilkan sesuai data yang tersimpan
+        di sistem WAINI. Jika terdapat kesalahan data,
+        silakan hubungi administrator.
+
     </div>
 
-    <!-- TOMBOL -->
+    <!-- KEMBALI -->
 
-    <div class="tombol-area">
+    <div class="tombol-kembali">
 
-        <a href="menu.html" class="btn btn-utama">
+        <a href="menu.html" class="btn-utama">
+
             ← Kembali ke Menu Utama
+
         </a>
 
     </div>
@@ -564,10 +945,10 @@ footer {
 
 <script type="module">
 
-// ================================================
+// ==================================================
 // WAINI - PROFIL KARYAWAN
 // Firebase Authentication + Firestore
-// ================================================
+// ==================================================
 
 import { auth, db } from "./firebase.js";
 
@@ -585,40 +966,90 @@ import {
     limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ================================================
+// ==================================================
 // ELEMEN HALAMAN
-// ================================================
+// ==================================================
 
-const statusHalaman = document.getElementById("statusHalaman");
-const kartuProfil = document.getElementById("kartuProfil");
-const kartuAkun = document.getElementById("kartuAkun");
-const catatanProfil = document.getElementById("catatanProfil");
+const statusHalaman =
+    document.getElementById("statusHalaman");
 
-const namaKaryawanEl = document.getElementById("namaKaryawan");
-const nikKaryawanEl = document.getElementById("nikKaryawan");
-const avatarNamaEl = document.getElementById("avatarNama");
-const badgeStatusEl = document.getElementById("badgeStatus");
-const detailGridEl = document.getElementById("detailGrid");
+const kartuIdentitas =
+    document.getElementById("kartuIdentitas");
 
-const emailPenggunaEl = document.getElementById("emailPengguna");
-const rolePenggunaEl = document.getElementById("rolePengguna");
+const tabContainer =
+    document.getElementById("tabContainer");
 
-// ================================================
-// FUNGSI DASAR
-// ================================================
+const catatanProfil =
+    document.getElementById("catatanProfil");
+
+const namaKaryawanEl =
+    document.getElementById("namaKaryawan");
+
+const nikKaryawanEl =
+    document.getElementById("nikKaryawan");
+
+const avatarNamaEl =
+    document.getElementById("avatarNama");
+
+const jabatanKaryawanEl =
+    document.getElementById("jabatanKaryawan");
+
+const divisiKaryawanEl =
+    document.getElementById("divisiKaryawan");
+
+const ringkasanTMKEl =
+    document.getElementById("ringkasanTMK");
+
+const ringkasanGradeEl =
+    document.getElementById("ringkasanGrade");
+
+const ringkasanSistemEl =
+    document.getElementById("ringkasanSistem");
+
+const detailIdentitasEl =
+    document.getElementById("detailIdentitas");
+
+const detailPekerjaanEl =
+    document.getElementById("detailPekerjaan");
+
+const emailPenggunaEl =
+    document.getElementById("emailPengguna");
+
+const rolePenggunaEl =
+    document.getElementById("rolePengguna");
+
+const statusAkunEl =
+    document.getElementById("statusAkun");
+
+// ==================================================
+// FUNGSI STATUS
+// ==================================================
 
 function tampilStatus(pesan, tipe = "") {
+
     statusHalaman.style.display = "block";
-    statusHalaman.className = "status" + (tipe ? " " + tipe : "");
+
+    statusHalaman.className =
+        "status" + (tipe ? " " + tipe : "");
+
     statusHalaman.textContent = pesan;
+
 }
 
 function sembunyikanStatus() {
+
     statusHalaman.style.display = "none";
+
 }
 
+// ==================================================
+// FUNGSI DATA
+// ==================================================
+
 function nilaiPertama(data, daftarField, fallback = "") {
+
     for (const field of daftarField) {
+
         const nilai = data?.[field];
 
         if (
@@ -626,33 +1057,44 @@ function nilaiPertama(data, daftarField, fallback = "") {
             nilai !== null &&
             String(nilai).trim() !== ""
         ) {
+
             return nilai;
+
         }
+
     }
 
     return fallback;
+
 }
 
 function teks(nilai, fallback = "-") {
+
     if (
         nilai === undefined ||
         nilai === null ||
         String(nilai).trim() === ""
     ) {
+
         return fallback;
+
     }
 
     return String(nilai).trim();
+
 }
 
 function normalisasiStatus(status) {
+
     return String(status ?? "")
         .trim()
         .toLowerCase()
         .replace(/\s+/g, "_");
+
 }
 
 function akunAktif(data) {
+
     const status = normalisasiStatus(data?.status);
 
     return (
@@ -661,9 +1103,11 @@ function akunAktif(data) {
         status === "aktif" ||
         status === "active"
     );
+
 }
 
 function ambilNIK(data) {
+
     return String(
         nilaiPertama(
             data,
@@ -677,31 +1121,43 @@ function ambilNIK(data) {
             ""
         )
     ).trim();
+
 }
 
+// ==================================================
+// MEMBUAT INISIAL NAMA
+// ==================================================
+
 function buatInisial(nama) {
+
     const kata = String(nama || "")
         .trim()
         .split(/\s+/)
         .filter(Boolean);
 
-    if (!kata.length) return "?";
+    if (!kata.length) {
+        return "?";
+    }
 
     if (kata.length === 1) {
-        return kata[0].substring(0, 2).toUpperCase();
+        return kata[0]
+            .substring(0, 2)
+            .toUpperCase();
     }
 
     return (
         kata[0][0] +
         kata[1][0]
     ).toUpperCase();
+
 }
 
-// ================================================
-// MENAMPILKAN FIELD PROFIL
-// ================================================
+// ==================================================
+// MEMBUAT DETAIL DATA
+// ==================================================
 
 function buatDetail(label, nilai) {
+
     const item = document.createElement("div");
     item.className = "detail-item";
 
@@ -723,143 +1179,301 @@ function buatDetail(label, nilai) {
     item.append(labelEl, nilaiEl);
 
     return item;
+
 }
+
+// ==================================================
+// MENAMPILKAN DETAIL
+// ==================================================
+
+function tampilkanDaftarDetail(container, daftar) {
+
+    container.innerHTML = "";
+
+    daftar.forEach(item => {
+
+        container.appendChild(
+            buatDetail(item.label, item.nilai)
+        );
+
+    });
+
+}
+
+// ==================================================
+// MENAMPILKAN DATA KARYAWAN
+// ==================================================
 
 function tampilkanDataKaryawan(data, nik) {
 
     const nama = teks(
-        nilaiPertama(data, ["nama", "nama_karyawan", "nama_lengkap"]),
+        nilaiPertama(
+            data,
+            [
+                "nama",
+                "nama_karyawan",
+                "nama_lengkap"
+            ]
+        ),
         "Nama belum tersedia"
     );
 
+    const jabatan = nilaiPertama(
+        data,
+        ["jabatan"]
+    );
+
+    const divisi = nilaiPertama(
+        data,
+        ["divisi"]
+    );
+
+    const departemen = nilaiPertama(
+        data,
+        ["departemen"]
+    );
+
+    const tmk = nilaiPertama(
+        data,
+        ["tmk"]
+    );
+
+    const grade = nilaiPertama(
+        data,
+        ["grade"]
+    );
+
+    const sistemCuti = nilaiPertama(
+        data,
+        ["sistem_cuti"]
+    );
+
+    const shift = nilaiPertama(
+        data,
+        ["shift_kerja"]
+    );
+
+    const poh = nilaiPertama(
+        data,
+        ["poh"]
+    );
+
+    const nomorWA = nilaiPertama(
+        data,
+        [
+            "nowa",
+            "no_wa",
+            "nomor_wa"
+        ]
+    );
+
+    // ------------------------------------------------
+    // IDENTITAS
+    // ------------------------------------------------
+
     namaKaryawanEl.textContent = nama;
-    nikKaryawanEl.textContent = "NIK: " + teks(nik);
-    avatarNamaEl.textContent = buatInisial(nama);
 
-    detailGridEl.innerHTML = "";
+    nikKaryawanEl.textContent =
+        "NIK: " + teks(nik);
 
-    const daftarDetail = [
+    avatarNamaEl.textContent =
+        buatInisial(nama);
+
+    jabatanKaryawanEl.textContent =
+        teks(jabatan, "Jabatan belum tersedia");
+
+    divisiKaryawanEl.textContent =
+        [
+            teks(divisi, ""),
+            teks(departemen, "")
+        ]
+        .filter(Boolean)
+        .filter(v => v !== "-")
+        .join(" • ") || "Divisi belum tersedia";
+
+    // ------------------------------------------------
+    // RINGKASAN
+    // ------------------------------------------------
+
+    ringkasanTMKEl.textContent =
+        teks(tmk);
+
+    ringkasanGradeEl.textContent =
+        teks(grade);
+
+    ringkasanSistemEl.textContent =
+        teks(sistemCuti);
+
+    // ------------------------------------------------
+    // TAB PROFIL
+    // ------------------------------------------------
+
+    const daftarIdentitas = [
+
         {
             label: "Nama Lengkap",
-            nilai: nilaiPertama(
-                data,
-                ["nama", "nama_karyawan", "nama_lengkap"]
-            )
+            nilai: nama
         },
+
         {
             label: "NIK",
             nilai: nik
         },
-        {
-            label: "Divisi",
-            nilai: nilaiPertama(data, ["divisi"])
-        },
-        {
-            label: "Departemen",
-            nilai: nilaiPertama(data, ["departemen"])
-        },
-        {
-            label: "Jabatan",
-            nilai: nilaiPertama(data, ["jabatan"])
-        },
-        {
-            label: "TMK (Tanggal Mulai Kerja)",
-            nilai: nilaiPertama(data, ["tmk"])
-        },
-        {
-            label: "POH",
-            nilai: nilaiPertama(data, ["poh"])
-        },
-        {
-            label: "Sistem Cuti",
-            nilai: nilaiPertama(data, ["sistem_cuti"])
-        },
-        {
-            label: "Shift Kerja",
-            nilai: nilaiPertama(data, ["shift_kerja"])
-        },
-        {
-            label: "Grade",
-            nilai: nilaiPertama(data, ["grade"])
-        },
+
         {
             label: "Nomor WhatsApp",
-            nilai: nilaiPertama(data, ["nowa", "no_wa", "nomor_wa"])
+            nilai: nomorWA
         }
+
     ];
 
-    daftarDetail.forEach(item => {
-        detailGridEl.appendChild(
-            buatDetail(item.label, item.nilai)
-        );
-    });
+    tampilkanDaftarDetail(
+        detailIdentitasEl,
+        daftarIdentitas
+    );
 
-    kartuProfil.style.display = "block";
+    // ------------------------------------------------
+    // TAB PEKERJAAN
+    // ------------------------------------------------
+
+    const daftarPekerjaan = [
+
+        {
+            label: "Divisi",
+            nilai: divisi
+        },
+
+        {
+            label: "Departemen",
+            nilai: departemen
+        },
+
+        {
+            label: "Jabatan",
+            nilai: jabatan
+        },
+
+        {
+            label: "TMK (Tanggal Mulai Kerja)",
+            nilai: tmk
+        },
+
+        {
+            label: "POH",
+            nilai: poh
+        },
+
+        {
+            label: "Sistem Cuti",
+            nilai: sistemCuti
+        },
+
+        {
+            label: "Shift Kerja",
+            nilai: shift
+        },
+
+        {
+            label: "Grade",
+            nilai: grade
+        }
+
+    ];
+
+    tampilkanDaftarDetail(
+        detailPekerjaanEl,
+        daftarPekerjaan
+    );
+
+    kartuIdentitas.style.display = "block";
+
+    tabContainer.style.display = "flex";
+
 }
 
-// ================================================
+// ==================================================
 // MEMBACA DATA PENGGUNA
-// ================================================
+// ==================================================
 
 async function muatDataPengguna(user) {
 
-    const refPengguna = doc(db, "pengguna", user.uid);
-    const snapPengguna = await getDoc(refPengguna);
+    const refPengguna = doc(
+        db,
+        "pengguna",
+        user.uid
+    );
+
+    const snapPengguna =
+        await getDoc(refPengguna);
 
     if (!snapPengguna.exists()) {
+
         throw new Error(
             "Data akun Anda tidak ditemukan di collection pengguna."
         );
+
     }
 
-    const dataPengguna = snapPengguna.data();
+    const dataPengguna =
+        snapPengguna.data();
 
     if (!akunAktif(dataPengguna)) {
+
         throw new Error(
             "Akun Anda belum aktif atau belum diverifikasi. Silakan hubungi administrator."
         );
+
     }
 
     const nik = ambilNIK(dataPengguna);
 
     if (!nik) {
+
         throw new Error(
             "NIK belum tersedia pada data akun pengguna."
         );
+
     }
 
     return {
         dataPengguna,
         nik
     };
+
 }
 
-// ================================================
-// MEMBACA DATA KARYAWAN
-// ================================================
+// ==================================================
+// MENCARI DATA KARYAWAN
+// ==================================================
 
 async function cariDataKaryawan(nik) {
 
     // ------------------------------------------------
     // CARA 1:
     // Document ID data_karyawan = NIK
-    // Sesuai struktur halaman pengelolaan data karyawan.
     // ------------------------------------------------
 
-    const refKaryawan = doc(db, "data_karyawan", nik);
-    const snapKaryawan = await getDoc(refKaryawan);
+    const refKaryawan = doc(
+        db,
+        "data_karyawan",
+        nik
+    );
+
+    const snapKaryawan =
+        await getDoc(refKaryawan);
 
     if (snapKaryawan.exists()) {
+
         return {
             id: snapKaryawan.id,
             ...snapKaryawan.data()
         };
+
     }
 
     // ------------------------------------------------
     // CARA 2:
-    // Jika dokumen tidak ditemukan melalui Document ID,
-    // pencarian berdasarkan field nik.
+    // Pencarian melalui field NIK
     // ------------------------------------------------
 
     const kemungkinanField = [
@@ -877,35 +1491,41 @@ async function cariDataKaryawan(nik) {
                 limit(1)
             );
 
-            const hasil = await getDocs(q);
+            const hasil =
+                await getDocs(q);
 
             if (!hasil.empty) {
-                const dokumen = hasil.docs[0];
+
+                const dokumen =
+                    hasil.docs[0];
 
                 return {
                     id: dokumen.id,
                     ...dokumen.data()
                 };
+
             }
 
         } catch (error) {
 
             console.warn(
-                "Pencarian data karyawan melalui field " +
+                "Pencarian melalui field " +
                 field +
                 " gagal:",
                 error
             );
 
         }
+
     }
 
     return null;
+
 }
 
-// ================================================
-// MENAMPILKAN INFORMASI AKUN
-// ================================================
+// ==================================================
+// INFORMASI AKUN
+// ==================================================
 
 function tampilkanInformasiAkun(user, dataPengguna) {
 
@@ -916,68 +1536,130 @@ function tampilkanInformasiAkun(user, dataPengguna) {
         teks(
             nilaiPertama(
                 dataPengguna,
-                ["role", "peran", "hak_akses"],
+                [
+                    "role",
+                    "peran",
+                    "hak_akses"
+                ],
                 "Karyawan"
             )
         );
 
-    kartuAkun.style.display = "block";
+    statusAkunEl.textContent =
+        "Aktif dan terverifikasi";
+
 }
 
-// ================================================
-// PROSES UTAMA
-// ================================================
+// ==================================================
+// NAVIGASI TAB
+// ==================================================
+
+const semuaTab =
+    document.querySelectorAll(".tab");
+
+const semuaKonten =
+    document.querySelectorAll(".tab-content");
+
+semuaTab.forEach(tab => {
+
+    tab.addEventListener("click", () => {
+
+        const target =
+            tab.dataset.tab;
+
+        // Aktifkan tombol tab.
+        semuaTab.forEach(t => {
+            t.classList.remove("aktif");
+        });
+
+        tab.classList.add("aktif");
+
+        // Aktifkan konten yang sesuai.
+        semuaKonten.forEach(konten => {
+            konten.classList.remove("aktif");
+        });
+
+        const kontenTarget =
+            document.getElementById("tab-" + target);
+
+        if (kontenTarget) {
+            kontenTarget.classList.add("aktif");
+        }
+
+    });
+
+});
+
+// ==================================================
+// PROSES PROFIL
+// ==================================================
 
 async function prosesProfil(user) {
 
     try {
 
-        tampilStatus("Memeriksa akun dan mengambil data profil...");
+        tampilStatus(
+            "Memeriksa akun dan mengambil data profil..."
+        );
 
-        // 1. Periksa akun pengguna dan NIK.
-        const hasilPengguna = await muatDataPengguna(user);
+        // 1. Periksa pengguna.
+        const hasilPengguna =
+            await muatDataPengguna(user);
 
-        const dataPengguna = hasilPengguna.dataPengguna;
-        const nik = hasilPengguna.nik;
+        const dataPengguna =
+            hasilPengguna.dataPengguna;
 
-        // 2. Cari data karyawan berdasarkan NIK.
-        const dataKaryawan = await cariDataKaryawan(nik);
+        const nik =
+            hasilPengguna.nik;
+
+        // 2. Cari data karyawan.
+        const dataKaryawan =
+            await cariDataKaryawan(nik);
 
         if (!dataKaryawan) {
 
-            kartuProfil.style.display = "none";
-            kartuAkun.style.display = "none";
+            kartuIdentitas.style.display = "none";
+            tabContainer.style.display = "none";
             catatanProfil.style.display = "none";
 
             tampilStatus(
                 "Data karyawan dengan NIK " +
                 nik +
-                " belum ditemukan pada collection data_karyawan. " +
-                "Silakan hubungi administrator.",
+                " belum ditemukan pada collection data_karyawan. Silakan hubungi administrator.",
                 "error"
             );
 
             return;
+
         }
 
         // 3. Tampilkan profil.
-        tampilkanDataKaryawan(dataKaryawan, nik);
+        tampilkanDataKaryawan(
+            dataKaryawan,
+            nik
+        );
 
-        // 4. Tampilkan informasi akun.
-        tampilkanInformasiAkun(user, dataPengguna);
+        // 4. Tampilkan akun.
+        tampilkanInformasiAkun(
+            user,
+            dataPengguna
+        );
 
         // 5. Tampilkan catatan.
         catatanProfil.style.display = "block";
 
-        // 6. Sembunyikan status loading.
+        // 6. Sembunyikan status.
         sembunyikanStatus();
 
     } catch (error) {
 
-        console.error("Gagal memuat profil:", error);
+        console.error(
+            "Gagal memuat profil:",
+            error
+        );
 
-        kartuProfil.style.display = "none";
-        kartuAkun.style.display = "none";
+        kartuIdentitas.style.display = "none";
+        tabContainer.style.display = "none";
         catatanProfil.style.display = "none";
 
         tampilStatus(
@@ -987,23 +1669,25 @@ async function prosesProfil(user) {
         );
 
     }
+
 }
 
-// ================================================
-// PEMERIKSAAN LOGIN FIREBASE
-// ================================================
+// ==================================================
+// PEMERIKSAAN LOGIN
+// ==================================================
 
 onAuthStateChanged(auth, async user => {
 
     if (!user) {
 
-        // Belum login, kembali ke halaman login.
+        // Belum login.
         window.location.replace("index.html");
 
         return;
+
     }
 
-    // Pengguna sudah login.
+    // Sudah login.
     await prosesProfil(user);
 
 });
