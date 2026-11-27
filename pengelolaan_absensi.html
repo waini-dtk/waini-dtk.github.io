@@ -56,6 +56,11 @@ select.status{min-width:170px;padding:8px;font-size:12px}
 .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
 .btn{border:1px solid #8d171d;color:#8d171d;background:white;border-radius:9px;padding:12px 8px;font-weight:bold;font-size:12px;width:100%;min-height:45px;overflow-wrap:anywhere}
 .btn.primary{background:#8d171d;color:white}.btn:disabled{opacity:.6}
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;padding:10px 0;margin:6px 0}
+.pagination button{border:1px solid #d6dce5;background:#fff;color:#424b5b;border-radius:8px;padding:8px 11px;font-weight:bold;font-size:12px}
+.pagination button.active{background:#8d171d;color:#fff;border-color:#8d171d}
+.pagination button:disabled{opacity:.45}
+.pagination .page-info{font-size:11px;color:#687385;padding:0 6px}
 .hidden{display:none!important}
 .recap-card{background:white;border:1px solid #e0e4eb;padding:12px}
 .recap-card h4{margin-bottom:8px}.badge{display:inline-block;padding:4px 8px;background:#e7f1ff;border-radius:20px;font-size:11px}
@@ -94,7 +99,7 @@ table{min-width:0;font-size:8px}th{position:static}
 <body>
 <header>
 <div class="logo">⚓</div>
-<div><h1>WAINI</h1><p>Sistem Informasi Manajemen Karyawan</p></div>
+<div><h1>Sistem Informasi Manajemen Karyawan</h1><p>Wadah Informasi Internal Divisi</p></div>
 <div class="user" id="userInfo">Memeriksa akun...</div>
 </header>
 <main>
@@ -136,14 +141,8 @@ table{min-width:0;font-size:8px}th{position:static}
 <tbody id="rows"></tbody>
 </table>
 </div>
-<div class="legend">
-<b>Keterangan Kode Absensi</b><br>
-<span class="chip">1 Masuk</span><span class="chip">1A Perjalanan Dinas</span>
-<span class="chip">2 Cuti</span><span class="chip">3 Sakit</span>
-<span class="chip">4 Ijin Resmi</span><span class="chip">4A Panggilan Negara</span>
-<span class="chip">4B Libur Nasional</span><span class="chip">5 Terlambat/Pulang Cepat</span>
-<span class="chip">6 Masuk Libur Nasional</span><span class="chip">7 LWOP</span><span class="chip">9 Mangki</span>
-</div>
+<div class="pagination" id="inputPager"></div>
+
 <div class="actions">
 <button class="btn" id="reset">↺ Kosongkan Input</button>
 <button class="btn primary" id="save">💾 Simpan ke Firebase</button>
@@ -164,19 +163,29 @@ table{min-width:0;font-size:8px}th{position:static}
 <small class="percent-detail" id="percentDetail">0 dari 0 karyawan tercatat dengan kode 1</small>
 </div>
 </div>
+
+<div class="legend">
+<b>Keterangan Kode Absensi</b><br>
+<span class="chip">1 Masuk</span><span class="chip">1A Perjalanan Dinas</span>
+<span class="chip">2 Cuti</span><span class="chip">3 Sakit</span>
+<span class="chip">4 Ijin Resmi</span><span class="chip">4A Panggilan Negara</span>
+<span class="chip">4B Libur Nasional</span><span class="chip">5 Terlambat/Pulang Cepat</span>
+<span class="chip">6 Masuk Libur Nasional</span><span class="chip">7 LWOP</span><span class="chip">9 Mangki</span>
+</div>
 </div>
 </section>
 <section id="recapPanel" class="hidden">
 <div class="scope"><b>Rekap Periode 11–10</b><span id="recapPeriod"></span></div>
 <div class="recap-card"><h4>Rekapitulasi Kehadiran</h4><p class="note">Rekap berdasarkan data absensi dari Firebase.</p></div>
 <div class="table-wrap"><table><thead id="recapHead"></thead><tbody id="recapRows"></tbody></table></div>
+<div class="pagination" id="recapPager"></div>
 <div class="actions">
 <button class="btn primary" id="recapExcel">📥 Download Rekap Excel</button>
 <button class="btn" id="recapPrint">🖨️ Cetak Rekap</button>
 </div>
 </section>
 <section id="historyPanel" class="hidden">
-<div class="recap-card"><h4>Riwayat Perubahan Absensi</h4><div id="historyList">Memuat riwayat...</div></div>
+<div class="recap-card"><h4>Riwayat Perubahan Absensi</h4><div id="historyList">Memuat riwayat...</div><div class="pagination" id="historyPager"></div></div>
 </section>
 </div>
 </main>
@@ -197,6 +206,9 @@ let authorizedStaff=[],assignmentList=[],attendanceAssignments=[],authorizedAcce
 let values={},notes={},savedRecords={},duplicateRecords={},dirtyKeys=new Set();
 let currentDate="",currentPeriod={},currentPeriodId="",attendanceMenu=null,attendanceCodes=[];
 let loadingStage="Memulai aplikasi",dateLoadToken=0;
+const PAGE_SIZE=5;let inputPage=1,recapPage=1,historyPage=1,historyRecords=[];
+/* Isi tanggal merah yang berlaku dalam format YYYY-MM-DD. BC hanya dihitung pada tanggal dalam daftar ini. */
+const HOLIDAY_DATES=[];
 const rows=$("rows");
 
 const defaultCodes=[
@@ -302,7 +314,7 @@ jabatan:firstValue(data,["jabatan","position","nama_jabatan"],"-"),
 tmk:firstValue(data,["tmk","tanggal_masuk","tgl_masuk"],""),
 poh:firstValue(data,["poh","place_of_hire","lokasi","lokasi_kerja"],"-"),
 cuti:firstValue(data,["sistem_cuti","sistem cuti","cuti","jenis_cuti"],"-"),
-sched:firstValue(data,["jadwal","schedule","shift"],"-"),raw:data
+sched:firstValue(data,["jadwal","schedule","shift"],"-"),grade:firstValue(data,["grade","Grade","golongan","level","tingkat"],""),raw:data
 };
 }
 function employeeIsActive(data){
@@ -375,15 +387,27 @@ if(data.tanggal_mulai&&data.tanggal_mulai!==expected.start)throw new Error("Tang
 if(data.tanggal_selesai&&data.tanggal_selesai!==expected.end)throw new Error("Tanggal selesai periode di Firebase tidak sesuai. Firebase: "+data.tanggal_selesai+", seharusnya: "+expected.end);
 return data;
 }
+function renderPager(containerId,page,total,onChange){
+const el=$(containerId);if(!el)return;const pages=Math.max(1,Math.ceil(total/PAGE_SIZE));page=Math.min(Math.max(1,page),pages);
+if(total<=PAGE_SIZE){el.innerHTML="";return page;}
+let html=`<button data-page="${page-1}" ${page===1?"disabled":""}>‹ Prev</button>`;
+const start=Math.max(1,page-2),end=Math.min(pages,start+4);
+for(let p=start;p<=end;p++)html+=`<button data-page="${p}" class="${p===page?"active":""}">${p}</button>`;
+html+=`<button data-page="${page+1}" ${page===pages?"disabled":""}>Next ›</button><span class="page-info">Halaman ${page}/${pages} • ${total} data</span>`;
+el.innerHTML=html;el.querySelectorAll("button[data-page]").forEach(b=>b.onclick=()=>{const p=Number(b.dataset.page);if(p>=1&&p<=pages){onChange(p);}});return page;
+}
+
 function render(){
 const search=$("search").value.toLowerCase();rows.innerHTML="";
 const filtered=authorizedStaff.filter(s=>[s.name,s.nik,s.div,s.dept,s.jabatan].join(" ").toLowerCase().includes(search));
 $("employeeCount").textContent=authorizedStaff.length+" Karyawan";
-filtered.forEach((s,i)=>{
+inputPage=renderPager("inputPager",inputPage,filtered.length,p=>{inputPage=p;render();});
+const pageItems=filtered.slice((inputPage-1)*PAGE_SIZE,inputPage*PAGE_SIZE);
+pageItems.forEach((s,i)=>{
 const key=dataKey(currentDate,s.nik),selected=values[key]||"",note=notes[key]||"",duplicate=duplicateRecords[key];
 const options='<option value="">— Pilih Kode —</option>'+attendanceCodes.map(c=>`<option value="${escapeHTML(c[0])}" ${selected===c[0]?"selected":""}>${escapeHTML(c[0]+" - "+c[1])}</option>`).join("");
 rows.insertAdjacentHTML("beforeend",`<tr>
-<td>${i+1}</td><td>${escapeHTML(s.nik)}</td><td><b>${escapeHTML(s.name)}</b></td>
+<td>${(inputPage-1)*PAGE_SIZE+i+1}</td><td>${escapeHTML(s.nik)}</td><td><b>${escapeHTML(s.name)}</b></td>
 <td>${escapeHTML(s.div)}</td><td>${escapeHTML(s.dept)}</td><td>${escapeHTML(s.jabatan)}</td>
 <td>${escapeHTML(formatDate(s.tmk))}</td><td>${escapeHTML(s.poh)}</td><td>${escapeHTML(s.cuti)}</td>
 <td><span class="chip">${escapeHTML(s.sched)}</span></td>
@@ -504,10 +528,10 @@ if(!filtered.length){alert("Tidak ada karyawan yang dapat diisi berdasarkan penc
 if(!confirm("Terapkan kode "+selectedCode+" kepada "+filtered.length+" karyawan?"))return;
 filtered.forEach(s=>{const key=dataKey(currentDate,s.nik);values[key]=selectedCode;dirtyKeys.add(key);});render();
 };
-$("search").oninput=render;
+$("search").oninput=()=>{inputPage=1;render();};
 $("datePick").onchange=async e=>{
 const selectedDate=e.target.value;if(!validISODate(selectedDate)){alert("Tanggal yang dipilih tidak valid.");e.target.value=currentDate;return;}
-const token=++dateLoadToken,oldPeriodId=currentPeriodId;currentDate=selectedDate;
+const token=++dateLoadToken,oldPeriodId=currentPeriodId;currentDate=selectedDate;inputPage=1;recapPage=1;historyPage=1;
 try{updatePeriod();if(currentPeriodId!==oldPeriodId)await loadAttendanceFromFirebase();if(token!==dateLoadToken)return;render();}
 catch(error){if(token!==dateLoadToken)return;showError("Gagal membaca absensi tanggal terpilih: "+error.message);}
 };
@@ -521,20 +545,28 @@ if(button.dataset.tab==="recap")renderRecap();if(button.dataset.tab==="history")
 });
 
 async function renderRecap(){
-$("recapRows").innerHTML="<tr><td colspan='20'>Memuat data rekap...</td></tr>";
+$("recapRows").innerHTML="<tr><td colspan='30'>Memuat data rekap...</td></tr>";
 try{
 const dates=getDates(currentPeriod.start,currentPeriod.end);
-let head="<tr><th>No</th><th>NIK</th><th>Nama</th><th>Divisi</th><th>Departemen</th><th>Jabatan</th>";
-dates.forEach(d=>head+=`<th>${formatShort(d)}</th>`);head+="<th>Jumlah Kode 1</th><th>Status Terisi</th></tr>";
+let head="<tr><th rowspan='2'>No</th><th rowspan='2'>NIK</th><th rowspan='2'>Nama</th><th rowspan='2'>Divisi</th><th rowspan='2'>Departemen</th><th rowspan='2'>Jabatan</th><th rowspan='2'>TMK</th><th rowspan='2'>POH</th><th rowspan='2'>Sistem Cuti</th><th rowspan='2'>Keterangan</th>";
+dates.forEach(d=>head+=`<th>${formatShort(d)}</th>`);head+="<th rowspan='2'>Jumlah Kode 1</th><th rowspan='2'>Status Terisi</th></tr><tr>";
+dates.forEach(d=>head+=`<th>${new Date(d+"T00:00:00").toLocaleDateString("id-ID",{weekday:"short"})}</th>`);head+="</tr>";
 $("recapHead").innerHTML=head;let body="";
-authorizedStaff.forEach((s,i)=>{
+const total=authorizedStaff.length;recapPage=renderPager("recapPager",recapPage,total,p=>{recapPage=p;renderRecap();});
+const pageItems=authorizedStaff.slice((recapPage-1)*PAGE_SIZE,recapPage*PAGE_SIZE);
+pageItems.forEach((s,i)=>{
 let masuk=0,terisi=0;
-body+=`<tr><td>${i+1}</td><td>${escapeHTML(s.nik)}</td><td>${escapeHTML(s.name)}</td><td>${escapeHTML(s.div)}</td><td>${escapeHTML(s.dept)}</td><td>${escapeHTML(s.jabatan)}</td>`;
+body+=`<tr><td>${(recapPage-1)*PAGE_SIZE+i+1}</td><td>${escapeHTML(s.nik)}</td><td>${escapeHTML(s.name)}</td><td>${escapeHTML(s.div)}</td><td>${escapeHTML(s.dept)}</td><td>${escapeHTML(s.jabatan)}</td><td>${escapeHTML(formatDate(s.tmk))}</td><td>${escapeHTML(s.poh)}</td><td>${escapeHTML(s.cuti)}</td><td></td>`;
 dates.forEach(date=>{const code=values[dataKey(date,s.nik)]||"";if(code)terisi++;if(code==="1")masuk++;body+=`<td>${escapeHTML(code)}</td>`;});
 body+=`<td>${masuk}</td><td>${terisi}</td></tr>`;
 });
 $("recapRows").innerHTML=body||"<tr><td>Belum ada data karyawan.</td></tr>";
 }catch(error){$("recapRows").innerHTML=`<tr><td>${escapeHTML(error.message)}</td></tr>`;alert("Gagal memuat rekap: "+error.message);}
+}
+function renderHistoryPage(){
+const pageItems=historyRecords.slice((historyPage-1)*PAGE_SIZE,historyPage*PAGE_SIZE);
+renderPager("historyPager",historyPage,historyRecords.length,p=>{historyPage=p;renderHistoryPage();});
+$("historyList").innerHTML=pageItems.map(r=>`<div class="recap-card"><b>${escapeHTML(r.aksi||"Perubahan absensi")}</b><p>NIK: ${escapeHTML(r.nik)}</p><p>Tanggal: ${escapeHTML(formatDate(r.tanggal))}</p><p>Kode lama: ${escapeHTML(r.kode_lama||"-")}</p><p>Kode baru: ${escapeHTML(r.kode_baru||"-")}</p><p>Petugas: ${escapeHTML(r.petugas_nik||"-")}</p><p>ID Absensi: ${escapeHTML(r.absensi_id||"-")}</p></div>`).join("");
 }
 async function loadHistory(){
 $("historyList").textContent="Memuat riwayat Firebase...";
@@ -543,13 +575,9 @@ loadingStage="Membaca riwayat_perubahan_absensi";let records=[];
 if(isSuperAdmin){const snap=await getDocs(collection(db,"riwayat_perubahan_absensi"));records=snap.docs.map(d=>({id:d.id,...d.data()}));}
 else{for(const employee of authorizedStaff){const snap=await getDocs(query(collection(db,"riwayat_perubahan_absensi"),where("nik","==",employee.nik)));snap.forEach(d=>records.push({id:d.id,...d.data()}));}}
 const uniqueRecords=new Map();records.forEach(r=>uniqueRecords.set(r.id,r));records=[...uniqueRecords.values()];
-records.sort((a,b)=>timestampValue(b.createdAt)-timestampValue(a.createdAt));
+records.sort((a,b)=>timestampValue(b.createdAt)-timestampValue(a.createdAt));historyRecords=records;historyPage=1;
 if(!records.length){$("historyList").textContent="Belum ada riwayat perubahan.";return;}
-$("historyList").innerHTML=records.slice(0,100).map(r=>`
-<div class="recap-card"><b>${escapeHTML(r.aksi||"Perubahan absensi")}</b>
-<p>NIK: ${escapeHTML(r.nik)}</p><p>Tanggal: ${escapeHTML(formatDate(r.tanggal))}</p>
-<p>Kode lama: ${escapeHTML(r.kode_lama||"-")}</p><p>Kode baru: ${escapeHTML(r.kode_baru||"-")}</p>
-<p>Petugas: ${escapeHTML(r.petugas_nik||"-")}</p><p>ID Absensi: ${escapeHTML(r.absensi_id||"-")}</p></div>`).join("");
+renderHistoryPage();
 }catch(error){$("historyList").innerHTML=`<div class="error">${escapeHTML(error.message)}</div>`;}
 }
 
@@ -559,7 +587,7 @@ $("historyList").innerHTML=records.slice(0,100).map(r=>`
    AZ = jumlah hari kalender periode inklusif
    BA = kode terisi selain kode 7 dan 9
    BB = jumlah kode 7 dan 9
-   BC = jumlah kode 6
+   BC = tanggal merah + kode sesuai grade (1–3: kode 1; 4–8: kode 6)
    BD = sama dengan AZ
    BE = sama dengan BA
    BF = BE / BD
@@ -735,9 +763,12 @@ function excelCountDeduction(employee,dateList){
 return excelCountCode(employee,dateList,"7")+excelCountCode(employee,dateList,"9");
 }
 
-/* BC = jumlah kode 6 */
+/* BC = insentif hanya pada tanggal merah yang terdaftar, sesuai grade. */
 function excelCountHolidayIncentive(employee,dateList){
-return excelCountCode(employee,dateList,"6");
+const grade=Number(String(employee.grade||"").match(/\d+/)?.[0]||"");if(!grade)return 0;
+const eligibleCode=(grade>=1&&grade<=3)?"1":(grade>=4&&grade<=8)?"6":"";
+if(!eligibleCode)return 0;
+return dateList.reduce((sum,date)=>sum+(HOLIDAY_DATES.includes(date)&&String(values[dataKey(date,employee.nik)]||"")===eligibleCode?1:0),0);
 }
 
 async function createWainiExcel(){
@@ -747,6 +778,7 @@ alert("Pustaka Excel belum termuat. Periksa koneksi internet lalu muat ulang hal
 try{
 const dates=getDates(currentPeriod.start,currentPeriod.end);
 const codes=attendanceCodes.length?attendanceCodes:defaultCodes;
+if(!HOLIDAY_DATES.length)console.warn("HOLIDAY_DATES belum diisi; BC Insentif Tanggal Merah akan bernilai 0.");
 const wb=new ExcelJS.Workbook();
 wb.creator="WAINI";
 wb.subject="Summary Absensi Karyawan";
@@ -1064,12 +1096,20 @@ excelCellStyle(ws.getCell(r,BI),rowFill,EXCEL_COLORS.text,false,"center");
 ws.getCell(r,BJ).value=tenure.months;
 excelCellStyle(ws.getCell(r,BJ),rowFill,EXCEL_COLORS.text,false,"center");
 
-/* Kolom perhitungan bonus yang belum ditentukan tetap kosong */
-for(let c=calcStart+11;c<=lastCol;c++){
-const cell=ws.getCell(r,c);
-cell.value="";
-excelCellStyle(cell,rowFill,EXCEL_COLORS.text,false,"center");
-}
+/* BK = Rp242.000 jika BJ > 3 bulan, selain itu 0 */
+const BK=calcStart+11; /* BK */
+const BL=calcStart+12; /* BL = BF */
+const BM=calcStart+13; /* BM = BL x BK */
+const BN=calcStart+14; /* BN input manual, dikosongkan */
+const BO=calcStart+15; /* BO = BM + BN */
+ws.getCell(r,BK).value=tenure.months>3?242000:0;
+ws.getCell(r,BK).numFmt='\"Rp\" #,##0';excelCellStyle(ws.getCell(r,BK),EXCEL_COLORS.yellow,EXCEL_COLORS.text,true,"center");
+ws.getCell(r,BL).value=bf;ws.getCell(r,BL).numFmt="0.00%";excelCellStyle(ws.getCell(r,BL),EXCEL_COLORS.green,EXCEL_COLORS.text,true,"center");
+ws.getCell(r,BM).value={formula:`${ws.getCell(r,BL).address}*${ws.getCell(r,BK).address}`};ws.getCell(r,BM).numFmt='\"Rp\" #,##0';excelCellStyle(ws.getCell(r,BM),EXCEL_COLORS.green,EXCEL_COLORS.text,true,"center");
+ws.getCell(r,BN).value="";ws.getCell(r,BN).numFmt='\"Rp\" #,##0';excelCellStyle(ws.getCell(r,BN),rowFill,EXCEL_COLORS.text,false,"center");
+ws.getCell(r,BO).value={formula:`${ws.getCell(r,BM).address}+${ws.getCell(r,BN).address}`};ws.getCell(r,BO).numFmt='\"Rp\" #,##0';excelCellStyle(ws.getCell(r,BO),EXCEL_COLORS.green,EXCEL_COLORS.text,true,"center");
+/* Kolom bonus lain yang belum ditentukan tetap kosong */
+for(let c=calcStart+14;c<=calcStart+14;c++){const cell=ws.getCell(r,c);cell.value="";excelCellStyle(cell,rowFill,EXCEL_COLORS.text,false,"center");}
 
 /* Border semua kolom */
 for(let c=1;c<=lastCol;c++){
