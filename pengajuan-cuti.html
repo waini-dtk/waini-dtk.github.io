@@ -3,627 +3,289 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#d00020">
-<title>Pengajuan Cuti | WAINI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pengajuan Cuti - WAINI</title>
 
 <style>
 :root {
-  --red:#e60023;
-  --red-dark:#c90020;
-  --red-soft:#fff0f2;
-  --white:#ffffff;
-  --bg:#f3f4f7;
-  --text:#252b36;
-  --muted:#777e89;
-  --border:#e4e6eb;
-  --green:#16834a;
-  --orange:#b87508;
+  --merah: #e60023;
+  --merah-gelap: #b8001c;
+  --merah-muda: #fff0f2;
+  --putih: #ffffff;
+  --abu: #f4f5f7;
+  --teks: #252525;
+  --abu-teks: #666666;
+  --garis: #e4e4e4;
+  --hijau: #168447;
 }
-* {
-  box-sizing:border-box;
-}
+* { box-sizing: border-box; }
 body {
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  font-size:14px;
+  margin: 0;
+  background: var(--abu);
+  color: var(--teks);
+  font-family: Arial, sans-serif;
 }
-button,input,select,textarea {
-  font:inherit;
+header {
+  background: linear-gradient(135deg, var(--merah), var(--merah-gelap));
+  color: white;
+  padding: 22px 17px;
 }
-.header {
-  background:linear-gradient(120deg,#ed001f,#bd001d);
-  color:white;
-  padding:20px 18px 35px;
-  border-radius:0 0 25px 25px;
-}
-.header-top {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.logo-text {
-  font-size:24px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-.header-sub {
-  font-size:11px;
-  opacity:.9;
-  margin-top:3px;
-}
-.header-icon {
-  width:43px;
-  height:43px;
-  border-radius:50%;
-  background:#ffffff25;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:22px;
-}
-.header-title {
-  margin-top:27px;
-}
-.header-title h1 {
-  font-size:23px;
-  margin:0 0 7px;
-}
-.header-title p {
-  margin:0;
-  font-size:12px;
-  opacity:.9;
-}
+header h2 { margin: 0 0 6px; font-size: 21px; }
+header p { margin: 0; font-size: 13px; opacity: .9; }
 .container {
-  max-width:650px;
-  margin:-16px auto 0;
-  padding:0 13px 30px;
-  position:relative;
+  max-width: 760px;
+  margin: 18px auto;
+  padding: 0 12px 30px;
 }
 .card {
-  background:white;
-  border-radius:17px;
-  padding:17px;
-  margin-bottom:14px;
-  box-shadow:0 3px 13px #22222208;
+  background: white;
+  border-radius: 13px;
+  padding: 17px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 9px rgba(0,0,0,.05);
 }
-.section-title {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:16px;
-}
-.section-icon {
-  width:37px;
-  height:37px;
-  border-radius:11px;
-  background:var(--red-soft);
-  color:var(--red);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:18px;
-}
-.section-title h3 {
-  margin:0;
-  font-size:14px;
-}
-.section-title small {
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  margin-top:4px;
-}
-.profile {
-  display:flex;
-  align-items:center;
-  gap:13px;
-}
-.avatar {
-  width:53px;
-  height:53px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#ff334d,#c90020);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:23px;
-  flex-shrink:0;
-}
-.profile-name {
-  font-size:15px;
-  font-weight:bold;
-}
-.profile-nik {
-  font-size:12px;
-  color:var(--muted);
-  margin-top:5px;
-}
-.profile-badge {
-  display:inline-block;
-  background:var(--red-soft);
-  color:var(--red-dark);
-  border-radius:20px;
-  padding:5px 9px;
-  font-size:10px;
-  margin-top:7px;
-}
-.info-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:13px;
-  margin-top:17px;
-}
-.info-item {
-  min-width:0;
-}
-.info-label {
-  color:var(--muted);
-  font-size:11px;
-  margin-bottom:5px;
-}
-.info-value {
-  font-size:12px;
-  font-weight:bold;
-  overflow-wrap:anywhere;
+.card h3 {
+  margin: 0 0 15px;
+  font-size: 16px;
+  color: var(--merah-gelap);
+  border-bottom: 1px solid var(--garis);
+  padding-bottom: 10px;
 }
 label {
-  display:block;
-  font-weight:600;
-  font-size:12px;
-  margin:14px 0 7px;
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 13px 0 6px;
 }
-input,select,textarea {
-  width:100%;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:12px;
-  background:white;
-  color:var(--text);
-  outline:none;
-  font-size:13px;
+input, select, textarea {
+  width: 100%;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  background: white;
+  color: var(--teks);
 }
-input:focus,select:focus,textarea:focus {
-  border-color:var(--red);
-  box-shadow:0 0 0 3px #e6002310;
+textarea { min-height: 80px; resize: vertical; }
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--merah);
 }
-input[readonly] {
-  background:#f5f6f8;
+.info {
+  padding: 12px;
+  background: var(--merah-muda);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 10px;
 }
-textarea {
-  min-height:85px;
-  resize:vertical;
+.status {
+  padding: 13px;
+  border-radius: 9px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
-.row-fields {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+.status.info-status { background: #eaf3ff; color: #174b80; }
+.status.error { background: #ffe8e8; color: #a30000; }
+.status.success { background: #e6f7ed; color: #126638; }
+.status.warning { background: #fff4dc; color: #805300; }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
-.balance-card {
-  background:linear-gradient(120deg,#fff0f2,#fff8f8);
-  border:1px solid #ffd8df;
-  padding:15px;
-  border-radius:13px;
-  margin-top:14px;
+.value {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  min-height: 42px;
+  overflow-wrap: anywhere;
 }
-.balance-heading {
-  font-size:11px;
-  color:#8b3845;
+.value small {
+  display: block;
+  color: var(--abu-teks);
+  margin-bottom: 5px;
 }
-.balance-value {
-  color:var(--red-dark);
-  font-size:25px;
-  font-weight:900;
-  margin-top:6px;
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 9px;
+  padding: 14px;
+  background: var(--merah);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
 }
-.balance-caption {
-  color:#8b6570;
-  font-size:10px;
-  margin-top:5px;
-  line-height:1.5;
+button:disabled {
+  background: #aaaaaa;
+  cursor: not-allowed;
 }
-.notice {
-  padding:12px;
-  background:#fff7e8;
-  color:#815b18;
-  border-radius:10px;
-  font-size:11px;
-  line-height:1.6;
-  margin-top:12px;
+.hidden { display: none !important; }
+.note {
+  color: var(--abu-teks);
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 7px;
 }
-.notice.red {
-  background:var(--red-soft);
-  color:#a5001b;
-}
-.notice.green {
-  background:#eaf7ef;
-  color:#176c3a;
-}
-.progress {
-  display:flex;
-  gap:5px;
-  margin:12px 0 17px;
-}
-.progress span {
-  height:4px;
-  flex:1;
-  background:#e6e6e6;
-  border-radius:10px;
-}
-.progress span.active {
-  background:var(--red);
-}
-.summary-row {
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding:11px 0;
-  border-bottom:1px solid #f0f0f0;
-  font-size:12px;
-}
-.summary-row:last-child {
-  border-bottom:0;
-}
-.summary-row span:first-child {
-  color:var(--muted);
-}
-.summary-row strong {
-  text-align:right;
-}
-.primary-btn {
-  border:0;
-  border-radius:30px;
-  width:100%;
-  padding:15px;
-  background:linear-gradient(100deg,#f00028,#c90020);
-  color:white;
-  font-weight:bold;
-  font-size:14px;
-  box-shadow:0 6px 15px #e6002330;
-  cursor:pointer;
-}
-.primary-btn:disabled {
-  background:#b9b9b9;
-  box-shadow:none;
-  cursor:not-allowed;
-}
-.secondary-btn {
-  border:1px solid var(--red);
-  background:white;
-  color:var(--red);
-  border-radius:25px;
-  padding:11px 15px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.btn-row {
-  display:flex;
-  gap:9px;
-  margin-top:15px;
-}
-.btn-row button {
-  flex:1;
-}
-.status-message {
-  padding:13px;
-  border-radius:10px;
-  margin-bottom:13px;
-  font-size:12px;
-  line-height:1.6;
-  display:none;
-}
-.status-message.show {
-  display:block;
-}
-.status-message.error {
-  background:#ffeded;
-  color:#a5001b;
-}
-.status-message.success {
-  background:#eaf7ef;
-  color:#176c3a;
-}
-.status-message.warning {
-  background:#fff7e8;
-  color:#815b18;
-}
-.muted {
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.6;
-}
-.hidden {
-  display:none!important;
-}
-.footer {
-  text-align:center;
-  color:#9a9da5;
-  font-size:10px;
-  padding:15px;
-}
-.loading {
-  text-align:center;
-  padding:30px;
-  color:var(--muted);
-}
-@media(max-width:390px) {
-  .row-fields {
-    grid-template-columns:1fr;
-  }
-  .card {
-    padding:14px;
-  }
+@media(max-width:480px) {
+  .grid { grid-template-columns: 1fr; }
+  .container { margin-top: 12px; }
 }
 </style>
 </head>
 
 <body>
 
-<header class="header">
-  <div class="header-top">
-    <div>
-      <div class="logo-text">WAINI</div>
-      <div class="header-sub">Wadah Informasi Internal</div>
-    </div>
-    <div class="header-icon">📋</div>
-  </div>
-
-  <div class="header-title">
-    <h1>Pengajuan Cuti</h1>
-    <p>Divisi Terminal Khusus</p>
-  </div>
+<header>
+  <h2>WAINI</h2>
+  <p>Formulir Pengajuan Cuti Karyawan</p>
 </header>
 
-<main class="container">
+<div class="container">
 
-  <div id="loading" class="card loading">
-    <div style="font-size:28px">⏳</div>
-    <p>Menghubungkan ke database WAINI...</p>
+  <div id="statusUtama" class="status info-status">
+    Menghubungkan ke sistem WAINI...
   </div>
 
-  <div id="message" class="status-message"></div>
-
-  <div id="mainApp" class="hidden">
+  <form id="formCuti">
 
     <div class="card">
-      <div class="section-title">
-        <div class="section-icon">👤</div>
-        <div>
-          <h3>Identitas Karyawan</h3>
-          <small>Data dari database WAINI</small>
-        </div>
-      </div>
+      <h3>1. Identitas Karyawan</h3>
 
-      <div class="profile">
-        <div class="avatar">👤</div>
+      <div class="grid">
         <div>
-          <div id="nama" class="profile-name">-</div>
-          <div id="nik" class="profile-nik">NIK: -</div>
-          <div id="role" class="profile-badge">Karyawan</div>
+          <small>Nama Karyawan</small>
+          <div class="value" id="namaKaryawan">-</div>
         </div>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-item">
-          <div class="info-label">Jabatan</div>
-          <div id="jabatan" class="info-value">-</div>
+        <div>
+          <small>NIK</small>
+          <div class="value" id="nikKaryawan">-</div>
         </div>
-        <div class="info-item">
-          <div class="info-label">Golongan</div>
-          <div id="golongan" class="info-value">-</div>
+        <div>
+          <small>Jabatan</small>
+          <div class="value" id="jabatanKaryawan">-</div>
         </div>
-        <div class="info-item">
-          <div class="info-label">Divisi</div>
-          <div id="divisi" class="info-value">-</div>
+        <div>
+          <small>Departemen</small>
+          <div class="value" id="departemenKaryawan">-</div>
         </div>
-        <div class="info-item">
-          <div class="info-label">Departemen</div>
-          <div id="departemen" class="info-value">-</div>
+        <div>
+          <small>Divisi</small>
+          <div class="value" id="divisiKaryawan">-</div>
         </div>
-        <div class="info-item">
-          <div class="info-label">Lokasi Kerja</div>
-          <div id="lokasi" class="info-value">-</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Sistem Kerja</div>
-          <div id="sistem" class="info-value">-</div>
+        <div>
+          <small>Sistem Cuti</small>
+          <div class="value" id="sistemKaryawan">-</div>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="section-title">
-        <div class="section-icon">🏖️</div>
-        <div>
-          <h3>Jenis dan Saldo Cuti</h3>
-          <small>Pilih jenis cuti sesuai sistem kerja</small>
-        </div>
-      </div>
+      <h3>2. Jenis Cuti dan Saldo</h3>
 
-      <label>Jenis Cuti</label>
-      <select id="jenisCuti">
+      <label for="jenisCuti">Jenis Cuti</label>
+      <select id="jenisCuti" required>
         <option value="">Memuat jenis cuti...</option>
       </select>
 
-      <div id="jenisDetail" class="notice hidden"></div>
-
-      <div class="balance-card">
-        <div class="balance-heading">SALDO CUTI TERCATAT</div>
-        <div id="saldo" class="balance-value">-</div>
-        <div id="saldoCaption" class="balance-caption">
-          Pilih jenis cuti untuk memeriksa saldo.
-        </div>
-      </div>
-
-      <div id="saldoNotice" class="notice">
-        Saldo akan dicocokkan berdasarkan NIK, jenis cuti,
-        dan periode.
+      <div class="info" id="infoSaldo">
+        Saldo cuti akan diperiksa berdasarkan data karyawan,
+        jenis cuti, dan periode yang sesuai.
       </div>
     </div>
 
     <div class="card">
-      <div class="section-title">
-        <div class="section-icon">📅</div>
-        <div>
-          <h3>Periode Pengajuan</h3>
-          <small>Tentukan tanggal cuti</small>
-        </div>
-      </div>
+      <h3>3. Periode Cuti</h3>
 
-      <div class="row-fields">
-        <div>
-          <label>Tanggal Mulai</label>
-          <input type="date" id="tanggalMulai">
-        </div>
-        <div>
-          <label>Tanggal Selesai</label>
-          <input type="date" id="tanggalAkhir">
-        </div>
-      </div>
+      <label for="tanggalMulai">Tanggal Mulai Cuti</label>
+      <input type="date" id="tanggalMulai" required>
 
-      <label>Jumlah Hari Cuti</label>
-      <input type="number" id="jumlahHari" min="1" step="1"
-        placeholder="Masukkan jumlah hari cuti">
+      <label for="tanggalSelesai">Tanggal Selesai Cuti</label>
+      <input type="date" id="tanggalSelesai" required>
 
-      <div class="notice">
-        Jumlah hari diisi sesuai perhitungan ketentuan WAINI.
-        Jangan menyamakan jumlah hari kalender dengan jumlah
-        hari cuti efektif. Perhitungan sistem lokal dan roster
-        mengikuti aturan masing-masing.
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="section-title">
-        <div class="section-icon">🚢</div>
-        <div>
-          <h3>Informasi Perjalanan</h3>
-          <small>Informasi perjalanan selama cuti</small>
-        </div>
-      </div>
-
-      <label>Kota Tujuan</label>
-      <input id="kotaTujuan" placeholder="Masukkan kota tujuan">
-
-      <label>Kebijakan Hari Perjalanan</label>
-      <input id="hariPerjalanan" type="number" min="0" step="1"
-        value="0">
-    </div>
-
-    <div class="card">
-      <div class="section-title">
-        <div class="section-icon">🤝</div>
-        <div>
-          <h3>Penanggung Jawab Pekerjaan</h3>
-          <small>Petugas pengganti selama cuti</small>
-        </div>
-      </div>
-
-      <label>Nama Penanggung Jawab</label>
-      <input id="pjNama" placeholder="Nama penanggung jawab">
-
-      <label>NIK Penanggung Jawab</label>
-      <input id="pjNik" placeholder="Nomor induk karyawan">
-
-      <label>Keterangan Penyerahan Pekerjaan</label>
-      <textarea id="pjKeterangan"
-        placeholder="Tuliskan keterangan pekerjaan"></textarea>
-    </div>
-
-    <div class="card">
-      <div class="section-title">
-        <div class="section-icon">📍</div>
-        <div>
-          <h3>Alamat Selama Cuti</h3>
-          <small>Alamat dan kontak yang dapat dihubungi</small>
-        </div>
-      </div>
-
-      <label>Alamat Lengkap</label>
-      <textarea id="alamat"
-        placeholder="Masukkan alamat selama cuti"></textarea>
-
-      <label>Nama Kontak</label>
-      <input id="kontakNama" placeholder="Nama kontak">
-
-      <label>Nomor Telepon</label>
-      <input id="kontakTelepon" type="tel"
-        placeholder="Nomor telepon">
-    </div>
-
-    <div class="card">
-      <div class="section-title">
-        <div class="section-icon">📝</div>
-        <div>
-          <h3>Catatan Pengajuan</h3>
-          <small>Alasan dan keterangan pengajuan cuti</small>
-        </div>
-      </div>
-
-      <label>Catatan Karyawan</label>
-      <textarea id="catatan"
-        placeholder="Tuliskan alasan atau keterangan pengajuan"></textarea>
-    </div>
-
-    <div class="card">
-      <div class="section-title">
-        <div class="section-icon">📄</div>
-        <div>
-          <h3>Ringkasan Pengajuan</h3>
-          <small>Periksa kembali sebelum mengirim</small>
-        </div>
-      </div>
-
-      <div class="summary-row">
-        <span>Nama</span>
-        <strong id="sumNama">-</strong>
-      </div>
-      <div class="summary-row">
-        <span>Jenis Cuti</span>
-        <strong id="sumJenis">-</strong>
-      </div>
-      <div class="summary-row">
-        <span>Tanggal Mulai</span>
-        <strong id="sumMulai">-</strong>
-      </div>
-      <div class="summary-row">
-        <span>Tanggal Akhir</span>
-        <strong id="sumAkhir">-</strong>
-      </div>
-      <div class="summary-row">
-        <span>Jumlah Hari</span>
-        <strong id="sumHari">-</strong>
-      </div>
-
-      <div id="submitNotice" class="notice">
-        Periksa identitas, jenis cuti, dan saldo sebelum pengajuan.
-      </div>
-
-      <button id="btnKirim" class="primary-btn" disabled>
-        KIRIM PENGAJUAN CUTI
-      </button>
-
-      <p class="muted" style="text-align:center;margin-top:12px">
-        Pengajuan akan masuk ke proses pemeriksaan dan persetujuan.
-        Saldo tidak dipotong pada saat pengajuan dibuat.
+      <label for="jumlahHari">Jumlah Hari Cuti</label>
+      <input type="number" id="jumlahHari" readonly placeholder="Otomatis dihitung">
+      <p class="note">
+        Perhitungan jumlah hari di halaman ini adalah selisih tanggal
+        kalender termasuk tanggal mulai dan selesai. Aturan hari kerja
+        atau hari libur perlu disesuaikan dengan ketentuan perusahaan.
       </p>
     </div>
 
-  </div>
-</main>
+    <div class="card">
+      <h3>4. Keperluan dan Perjalanan</h3>
 
-<footer class="footer">
-  WAINI · Wadah Informasi Internal<br>
-  Divisi Terminal Khusus
-</footer>
+      <label for="keperluan">Keperluan Cuti</label>
+      <textarea id="keperluan" required placeholder="Jelaskan keperluan cuti..."></textarea>
 
+      <label for="tujuan">Tujuan / Tempat Perjalanan</label>
+      <input type="text" id="tujuan" placeholder="Tujuan perjalanan">
+
+      <label for="alamat">Alamat Selama Cuti</label>
+      <textarea id="alamat" required placeholder="Alamat selama menjalani cuti..."></textarea>
+
+      <label for="noHp">Nomor HP yang Bisa Dihubungi</label>
+      <input type="tel" id="noHp" placeholder="Nomor HP aktif">
+    </div>
+
+    <div class="card">
+      <h3>5. Penanggung Jawab Pekerjaan</h3>
+
+      <label for="pengganti">Nama Karyawan Pengganti / Penerima Tugas</label>
+      <input type="text" id="pengganti" placeholder="Nama karyawan">
+
+      <label for="serahTerima">Keterangan Serah Terima Pekerjaan</label>
+      <textarea id="serahTerima" placeholder="Jelaskan pekerjaan yang diserahterimakan..."></textarea>
+
+      <label for="catatan">Catatan Tambahan</label>
+      <textarea id="catatan" placeholder="Catatan tambahan jika ada..."></textarea>
+    </div>
+
+    <div class="card">
+      <h3>6. Ringkasan Pengajuan</h3>
+      <div class="grid">
+        <div>
+          <small>Nama</small>
+          <div class="value" id="ringkasNama">-</div>
+        </div>
+        <div>
+          <small>Jenis Cuti</small>
+          <div class="value" id="ringkasJenis">-</div>
+        </div>
+        <div>
+          <small>Mulai</small>
+          <div class="value" id="ringkasMulai">-</div>
+        </div>
+        <div>
+          <small>Selesai</small>
+          <div class="value" id="ringkasSelesai">-</div>
+        </div>
+        <div>
+          <small>Jumlah Hari</small>
+          <div class="value" id="ringkasHari">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <button type="submit" id="btnKirim" disabled>
+        Pengajuan Belum Dapat Dikirim
+      </button>
+      <p class="note" id="keteranganTombol">
+        Tombol akan aktif setelah data karyawan, jenis cuti,
+        dan saldo operasional yang valid berhasil diperiksa.
+      </p>
+    </div>
+
+  </form>
+</div>
 
 <script type="module">
-
-import {auth,db} from "./js/firebase.js";
+import { auth, db } from "./firebase.js";
 
 import {
   onAuthStateChanged
@@ -631,891 +293,722 @@ import {
 
 import {
   collection,
-  getDocs,
-  getDoc,
   doc,
+  getDoc,
+  getDocs,
   addDoc,
+  query,
+  where,
+  serverTimestamp,
   Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-// ============================================
-// VARIABEL APLIKASI
-// ============================================
-
 const $ = id => document.getElementById(id);
 
+const statusUtama = $("statusUtama");
+const btnKirim = $("btnKirim");
+const form = $("formCuti");
+
 let userLogin = null;
-let karyawan = null;
-let masterCuti = [];
-let daftarSaldo = [];
-let saldoTerpilih = null;
-let dataSaldoValid = false;
-let dataMasterValid = false;
+let dataKaryawan = null;
+let jenisCutiAktif = [];
+let jenisTerpilih = null;
+let saldoValid = null;
+let sedangMengirim = false;
+
+const ID_DOKUMEN_CONTOH =
+  "001PETUGASABSEN_CUTI_ROSTER_R01";
 
 
-// ============================================
-// FUNGSI BANTU
-// ============================================
-
-function text(value) {
-  return value === null || value === undefined
-    ? ""
-    : String(value);
+function tampilStatus(pesan, tipe = "info-status") {
+  statusUtama.className = "status " + tipe;
+  statusUtama.textContent = pesan;
 }
 
-function escapeHTML(value) {
-  return text(value).replace(/[&<>"']/g, char => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  })[char]);
+
+function teks(value) {
+  if (value === undefined || value === null || value === "") {
+    return "-";
+  }
+  return String(value);
 }
 
-function showMessage(message,type="error") {
-  const box = $("message");
-  box.textContent = message;
-  box.className = "status-message show "+type;
-}
 
-function hideMessage() {
-  $("message").className = "status-message";
-  $("message").textContent = "";
-}
+function tanggalKeString(value) {
+  if (!value) return "";
 
-function timestampOrNull(value) {
-  if (!value) return null;
-  if (value.toDate) return value;
+  if (typeof value === "string") {
+    return value.slice(0, 10);
+  }
+
+  if (value.toDate) {
+    return value.toDate().toISOString().slice(0, 10);
+  }
+
   if (value instanceof Date) {
-    return Timestamp.fromDate(value);
-  }
-  return null;
-}
-
-function readDate(id) {
-  const value = $(id).value;
-  if (!value) return null;
-
-  const parts = value.split("-").map(Number);
-  return new Date(
-    parts[0],
-    parts[1]-1,
-    parts[2],
-    12,0,0
-  );
-}
-
-function formatDate(date) {
-  if (!date) return "-";
-  return date.toLocaleDateString("id-ID",{
-    day:"2-digit",
-    month:"long",
-    year:"numeric"
-  });
-}
-
-function isPositiveInteger(value) {
-  return Number.isInteger(Number(value)) &&
-    Number(value)>0;
-}
-
-
-// ============================================
-// 1. IDENTITAS KARYAWAN DAN AUTENTIKASI
-// ============================================
-
-async function loadIdentity(user) {
-
-  const adminSnapshot = await getDocs(
-    collection(db,"admins")
-  );
-
-  const admin = adminSnapshot.docs.find(item => {
-    return item.data().uid_auth === user.uid;
-  });
-
-  let employeeDoc = null;
-
-  // Hubungkan akun Super Admin melalui UID
-  // pada dokumen admins, kemudian gunakan ID
-  // dokumen tersebut untuk mencari data_karyawan.
-
-  if (admin) {
-    employeeDoc = await getDoc(
-      doc(db,"data_karyawan",admin.id)
-    );
-  }
-
-  // Untuk akun non-admin, cari UID jika
-  // field penghubung tersedia pada data karyawan.
-
-  if (!employeeDoc || !employeeDoc.exists()) {
-
-    const employeeSnapshot = await getDocs(
-      collection(db,"data_karyawan")
-    );
-
-    const match = employeeSnapshot.docs.find(item => {
-      const data = item.data();
-
-      return (
-        data.uid_auth === user.uid ||
-        data.uid === user.uid ||
-        data.auth_uid === user.uid
-      );
-    });
-
-    if (match) {
-      employeeDoc = match;
-    }
-  }
-
-  if (!employeeDoc || !employeeDoc.exists()) {
-    throw new Error(
-      "Data karyawan belum ditemukan atau belum terhubung " +
-      "dengan akun Firebase."
-    );
-  }
-
-  karyawan = {
-    id:employeeDoc.id,
-    ...employeeDoc.data()
-  };
-
-  // Identitas akun tetap menggunakan data aktual.
-  $("nama").textContent = text(karyawan.nama) || "-";
-  $("nik").textContent = "NIK: "+text(karyawan.nik || karyawan.id);
-  $("jabatan").textContent = text(karyawan.jabatan) || "-";
-  $("golongan").textContent = text(karyawan.golongan) || "-";
-  $("divisi").textContent = text(karyawan.divisi) || "-";
-  $("departemen").textContent = text(karyawan.departemen) || "-";
-  $("lokasi").textContent = text(karyawan.lokasi_kerja) || "-";
-  $("sistem").textContent = text(karyawan.sistem_kerja) || "-";
-
-  $("sumNama").textContent = text(karyawan.nama) || "-";
-
-  $("role").textContent = admin
-    ? "SUPER ADMIN"
-    : "KARYAWAN";
-
-}
-
-
-// ============================================
-// 2. MASTER JENIS CUTI
-// ============================================
-
-async function loadMasterCuti() {
-
-  const snapshot = await getDocs(
-    collection(db,"master_jenis_cuti")
-  );
-
-  masterCuti = snapshot.docs.map(item => ({
-    id:item.id,
-    ...item.data()
-  })).filter(item => item.aktif === true);
-
-  const select = $("jenisCuti");
-
-  select.innerHTML =
-    '<option value="">-- Pilih Jenis Cuti --</option>';
-
-  masterCuti.forEach(item => {
-
-    const option = document.createElement("option");
-
-    option.value = item.id;
-
-    option.textContent =
-      text(item.nama_cuti) +
-      " ("+text(item.kode_cuti)+")";
-
-    select.appendChild(option);
-
-  });
-
-  dataMasterValid = masterCuti.length > 0;
-
-  if (!dataMasterValid) {
-    throw new Error(
-      "Tidak ada jenis cuti aktif pada master_jenis_cuti."
-    );
-  }
-
-}
-
-
-// ============================================
-// 3. MEMBACA SALDO CUTI
-// ============================================
-
-async function loadSaldoCuti() {
-
-  const snapshot = await getDocs(
-    collection(db,"saldo_cuti")
-  );
-
-  daftarSaldo = snapshot.docs.map(item => ({
-    id:item.id,
-    ...item.data()
-  }));
-
-}
-
-function getMasterTerpilih() {
-  return masterCuti.find(
-    item => item.id === $("jenisCuti").value
-  ) || null;
-}
-
-function getSaldoTerpilih(master) {
-
-  if (!master || !karyawan) return null;
-
-  const nikKaryawan = text(karyawan.nik || karyawan.id);
-
-  return daftarSaldo.find(item => {
-
-    return (
-      text(item.nik) === nikKaryawan &&
-      text(item.jenis_cuti_id) === master.id
-    );
-
-  }) || null;
-
-}
-
-
-// ============================================
-// 4. TAMPILAN INFORMASI JENIS DAN SALDO
-// ============================================
-
-function updateJenisCuti() {
-
-  const master = getMasterTerpilih();
-
-  saldoTerpilih = null;
-  dataSaldoValid = false;
-
-  $("jenisDetail").classList.add("hidden");
-
-  if (!master) {
-
-    $("saldo").textContent = "-";
-    $("saldoCaption").textContent =
-      "Pilih jenis cuti terlebih dahulu.";
-
-    $("saldoNotice").textContent =
-      "Saldo akan dicocokkan berdasarkan NIK, jenis cuti, dan periode.";
-
-    updateButton();
-    updateSummary();
-
-    return;
-  }
-
-  $("jenisDetail").innerHTML = `
-    <strong>${escapeHTML(master.nama_cuti)}</strong><br>
-    Kode: ${escapeHTML(master.kode_cuti)}<br>
-    Kategori: ${escapeHTML(master.kategori_cuti)}<br>
-    Sistem: ${escapeHTML(master.sistem_kerja)}
-  `;
-
-  $("jenisDetail").classList.remove("hidden");
-
-  saldoTerpilih = getSaldoTerpilih(master);
-
-  if (saldoTerpilih) {
-
-    const balance = Number(saldoTerpilih.saldo_akhir);
-
-    if (
-      Number.isFinite(balance) &&
-      saldoTerpilih.status_periode === "AKTIF"
-    ) {
-
-      dataSaldoValid = true;
-
-      $("saldo").textContent = balance.toLocaleString("id-ID");
-
-      $("saldoCaption").textContent =
-        "Saldo pada periode "+text(saldoTerpilih.periode_id);
-
-      $("saldoNotice").className = "notice green";
-
-      $("saldoNotice").textContent =
-        "Dokumen saldo ditemukan. Pastikan data ini merupakan " +
-        "saldo operasional yang sudah diverifikasi.";
-
-    } else {
-
-      $("saldo").textContent = "-";
-      $("saldoCaption").textContent =
-        "Saldo belum dapat dinyatakan valid.";
-
-      $("saldoNotice").className = "notice red";
-
-      $("saldoNotice").textContent =
-        "Dokumen saldo ditemukan, tetapi status periode atau " +
-        "nilai saldo belum memenuhi pemeriksaan.";
-
-    }
-
-  } else {
-
-    $("saldo").textContent = "-";
-
-    $("saldoCaption").textContent =
-      "Tidak ditemukan saldo untuk jenis cuti ini.";
-
-    $("saldoNotice").className = "notice red";
-
-    $("saldoNotice").textContent =
-      "Saldo karyawan belum ditemukan. Pengajuan belum dapat " +
-      "dikirim sampai data saldo yang sesuai tersedia.";
-
-  }
-
-  updateButton();
-  updateSummary();
-
-}
-
-
-// ============================================
-// 5. RINGKASAN FORMULIR
-// ============================================
-
-function updateSummary() {
-
-  const master = getMasterTerpilih();
-
-  $("sumJenis").textContent =
-    master ? text(master.nama_cuti) : "-";
-
-  $("sumMulai").textContent =
-    formatDate(readDate("tanggalMulai"));
-
-  $("sumAkhir").textContent =
-    formatDate(readDate("tanggalAkhir"));
-
-  $("sumHari").textContent =
-    $("jumlahHari").value
-      ? $("jumlahHari").value+" hari"
-      : "-";
-
-}
-
-[
-  "tanggalMulai",
-  "tanggalAkhir",
-  "jumlahHari",
-  "jenisCuti"
-].forEach(id => {
-  $(id).addEventListener("change",() => {
-    updateSummary();
-    updateButton();
-  });
-});
-
-
-// ============================================
-// 6. PEMERIKSAAN SEBELUM PENGAJUAN
-// ============================================
-
-function validateForm() {
-
-  if (!userLogin || !karyawan) {
-    return "Akun atau identitas karyawan belum tersedia.";
-  }
-
-  if (!getMasterTerpilih()) {
-    return "Pilih jenis cuti terlebih dahulu.";
-  }
-
-  if (!dataSaldoValid || !saldoTerpilih) {
-    return "Saldo cuti belum ditemukan atau belum valid.";
-  }
-
-  const start = readDate("tanggalMulai");
-  const end = readDate("tanggalAkhir");
-
-  if (!start || !end) {
-    return "Tanggal mulai dan tanggal akhir wajib diisi.";
-  }
-
-  if (end < start) {
-    return "Tanggal akhir tidak boleh sebelum tanggal mulai.";
-  }
-
-  if (!isPositiveInteger($("jumlahHari").value)) {
-    return "Masukkan jumlah hari cuti yang benar.";
-  }
-
-  const requested = Number($("jumlahHari").value);
-  const balance = Number(saldoTerpilih.saldo_akhir);
-
-  if (requested > balance) {
-    return "Jumlah pengajuan melebihi saldo cuti yang tercatat.";
-  }
-
-  if (!$("kotaTujuan").value.trim()) {
-    return "Kota tujuan wajib diisi.";
-  }
-
-  if (!$("alamat").value.trim()) {
-    return "Alamat selama cuti wajib diisi.";
-  }
-
-  if (!$("catatan").value.trim()) {
-    return "Catatan pengajuan wajib diisi.";
+    return value.toISOString().slice(0, 10);
   }
 
   return "";
-
 }
 
 
-function updateButton() {
+function tanggalFirestore(value) {
+  if (!value) return null;
 
-  const error = validateForm();
+  if (value instanceof Date) {
+    return Timestamp.fromDate(value);
+  }
 
-  $("btnKirim").disabled = Boolean(error);
+  if (typeof value === "string") {
+    const d = new Date(value + "T00:00:00");
+    if (!Number.isNaN(d.getTime())) {
+      return Timestamp.fromDate(d);
+    }
+  }
 
-  $("submitNotice").textContent = error
-    ? error
-    : "Data awal sudah memenuhi pemeriksaan formulir. " +
-      "Pengajuan akan disimpan tanpa memotong saldo.";
-
+  return null;
 }
 
 
-// ============================================
-// 7. SNAPSHOT HISTORY CUTI
-// ============================================
+function formatTanggal(value) {
+  if (!value) return "-";
 
-function makeHistoryCuti(saldo) {
+  const d = new Date(value + "T00:00:00");
 
-  return {
+  if (Number.isNaN(d.getTime())) return value;
 
-    cuti_yang_diambil:0,
-
-    jumlah_hak_cuti:Number(
-      saldo.hak_ditambahkan || 0
-    ),
-
-    jumlah_hak_cuti_periode:Number(
-      saldo.hak_ditambahkan || 0
-    ),
-
-    saldo_cuti:Number(
-      saldo.saldo_akhir || 0
-    ),
-
-    sisa_cuti_lalu:Number(
-      saldo.saldo_migrasi || 0
-    ),
-
-    sisa_hak_sekarang:Number(
-      saldo.saldo_akhir || 0
-    ),
-
-    tanggal_jatuh_tempo:
-      timestampOrNull(saldo.tanggal_jatuh_tempo)
-
-  };
-
+  return d.toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
 }
 
 
-// ============================================
-// 8. MEMBENTUK DOKUMEN PENGAJUAN
-// ============================================
-
-function buildDocument() {
-
-  const master = getMasterTerpilih();
-
-  const now = Timestamp.now();
-
-  const start = readDate("tanggalMulai");
-  const end = readDate("tanggalAkhir");
-
-  const nik = text(karyawan.nik || karyawan.id);
-
-  const nomor =
-    "CUTI-" +
-    Date.now() +
-    "-" +
-    nik;
-
-  const tmk = timestampOrNull(karyawan.tmk);
-
-  return {
-
-    // FIELD UTAMA
-
-    nomor_dokumen:nomor,
-
-    status:"DIAJUKAN",
-
-    tanggal_pengajuan:now,
-
-    created_at:now,
-
-    updated_at:now,
-
-
-    // IDENTITAS KARYAWAN
-
-    identitas_karyawan:{
-
-      uid:userLogin.uid,
-
-      nik:nik,
-
-      nama:text(karyawan.nama),
-
-      tmk:tmk,
-
-      poh:text(karyawan.poh),
-
-      jabatan:text(karyawan.jabatan),
-
-      golongan:text(karyawan.golongan),
-
-      divisi:text(karyawan.divisi),
-
-      departemen:text(karyawan.departemen),
-
-      lokasi_kerja:text(karyawan.lokasi_kerja)
-
-    },
-
-
-    // JENIS CUTI
-
-    jenis_cuti:{
-
-      master_jenis_cuti_id:master.id,
-
-      kode_cuti:text(master.kode_cuti),
-
-      nama_cuti:text(master.nama_cuti),
-
-      kategori_cuti:text(master.kategori_cuti),
-
-      sistem_kerja:text(master.sistem_kerja)
-
-    },
-
-
-    // SNAPSHOT HISTORY CUTI
-
-    history_cuti:makeHistoryCuti(saldoTerpilih),
-
-
-    // PERIODE CUTI
-
-    periode_cuti:{
-
-      jumlah_hari:Number($("jumlahHari").value),
-
-      tanggal_mulai:Timestamp.fromDate(start),
-
-      tanggal_akhir:Timestamp.fromDate(end),
-
-      tanggal_mulai_bekerja:tmk
-
-    },
-
-
-    // PERJALANAN
-
-    perjalanan:{
-
-      kebijakan_hari_perjalanan:
-        Math.max(0,Number($("hariPerjalanan").value)||0),
-
-      kota_tujuan:$("kotaTujuan").value.trim()
-
-    },
-
-
-    // PENANGGUNG JAWAB
-
-    penanggung_jawab:{
-
-      keterangan:$("pjKeterangan").value.trim(),
-
-      nama:$("pjNama").value.trim(),
-
-      nik:$("pjNik").value.trim()
-
-    },
-
-
-    // ALAMAT SELAMA CUTI
-
-    alamat_selama_cuti:{
-
-      alamat_lengkap:$("alamat").value.trim(),
-
-      nama_kontak:$("kontakNama").value.trim(),
-
-      nomor_telepon:$("kontakTelepon").value.trim()
-
-    },
-
-
-    // PERSETUJUAN
-
-    persetujuan:{
-
-      karyawan:{
-
-        uid:"",
-
-        nik:"",
-
-        nama:"",
-
-        status:"",
-
-        tanggal:null,
-
-        catatan:$("catatan").value.trim()
-
-      },
-
-      atasan_langsung:{
-
-        uid:"",
-
-        nik:"",
-
-        nama:"",
-
-        status:"",
-
-        tanggal:null,
-
-        catatan:""
-
-      },
-
-      pimpinan_divisi:{
-
-        uid:"",
-
-        nik:"",
-
-        nama:"",
-
-        status:"",
-
-        tanggal:null,
-
-        catatan:""
-
-      },
-
-      hr:{
-
-        uid:"",
-
-        nik:"",
-
-        nama:"",
-
-        status:"",
-
-        tanggal:null,
-
-        catatan:""
-
-      },
-
-      atasan_pimpinan_divisi:{
-
-        uid:"",
-
-        nik:"",
-
-        nama:"",
-
-        status:"",
-
-        tanggal:null,
-
-        catatan:""
-
-      },
-
-      pimpinan_perusahaan:{
-
-        uid:"",
-
-        nik:"",
-
-        nama:"",
-
-        status:"",
-
-        tanggal:null,
-
-        catatan:""
-
-      }
-
-    },
-
-
-    // RIWAYAT STATUS
-    // Array kosong sesuai keputusan audit.
-    // Perubahan berikutnya harus menambahkan
-    // entri baru, bukan menimpa riwayat lama.
-
-    riwayat_status:[]
-
-  };
-
-}
-
-
-// ============================================
-// 9. SIMPAN PENGAJUAN
-// ============================================
-
-async function submitPengajuan() {
-
-  hideMessage();
-
-  const error = validateForm();
-
-  if (error) {
-    showMessage(error,"warning");
-    updateButton();
+function hitungHari() {
+  const mulai = $("tanggalMulai").value;
+  const selesai = $("tanggalSelesai").value;
+
+  if (!mulai || !selesai) {
+    $("jumlahHari").value = "";
+    perbaruiRingkasan();
     return;
   }
 
-  const confirmed = confirm(
-    "Apakah Anda yakin ingin mengirim pengajuan cuti?\n\n" +
-    "Pengajuan akan disimpan dengan status DIAJUKAN.\n" +
-    "Saldo tidak dipotong pada saat pengajuan."
-  );
+  const a = new Date(mulai + "T00:00:00");
+  const b = new Date(selesai + "T00:00:00");
 
-  if (!confirmed) return;
+  if (b < a) {
+    $("jumlahHari").value = "";
+    $("ringkasHari").textContent = "Tanggal tidak valid";
+    perbaruiRingkasan();
+    return;
+  }
 
-  const button = $("btnKirim");
+  const jumlah = Math.floor((b - a) / 86400000) + 1;
 
-  button.disabled = true;
-  button.textContent = "MENYIMPAN...";
+  $("jumlahHari").value = jumlah;
+  perbaruiRingkasan();
+}
 
-  try {
 
-    const documentData = buildDocument();
+function perbaruiRingkasan() {
+  $("ringkasNama").textContent =
+    dataKaryawan?.nama || "-";
 
-    const result = await addDoc(
-      collection(db,"pengajuan_cuti"),
-      documentData
+  $("ringkasJenis").textContent =
+    jenisTerpilih?.nama_cuti || "-";
+
+  $("ringkasMulai").textContent =
+    formatTanggal($("tanggalMulai").value);
+
+  $("ringkasSelesai").textContent =
+    formatTanggal($("tanggalSelesai").value);
+
+  $("ringkasHari").textContent =
+    $("jumlahHari").value || "-";
+}
+
+
+function kunciPengajuan(pesan) {
+  saldoValid = null;
+  btnKirim.disabled = true;
+  btnKirim.textContent = "Pengajuan Belum Dapat Dikirim";
+  $("keteranganTombol").textContent = pesan;
+}
+
+
+function normalisasi(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+
+/* =========================================
+   MEMERIKSA IDENTITAS LOGIN
+========================================= */
+
+async function ambilIdentitas(user) {
+  const admins = await getDocs(collection(db, "admins"));
+
+  let adminData = null;
+  let adminId = null;
+
+  for (const item of admins.docs) {
+    const d = item.data();
+
+    if (d.uid_auth === user.uid) {
+      adminData = d;
+      adminId = item.id;
+      break;
+    }
+  }
+
+  // Jika pengguna terdaftar sebagai admin,
+  // dokumen karyawan dicari dengan ID dokumen admin.
+  if (adminData && adminId) {
+    const karyawanDoc = await getDoc(
+      doc(db, "data_karyawan", adminId)
     );
 
-    showMessage(
-      "Pengajuan berhasil disimpan. Nomor dokumen: " +
-      documentData.nomor_dokumen +
-      ". ID dokumen: " +
-      result.id,
+    if (karyawanDoc.exists()) {
+      return {
+        ...karyawanDoc.data(),
+        id: karyawanDoc.id,
+        role: adminData.role || "admin"
+      };
+    }
+  }
+
+  // Untuk akun karyawan biasa, coba cari berdasarkan
+  // field UID yang mungkin digunakan pada data karyawan.
+  const karyawanSnapshot = await getDocs(
+    collection(db, "data_karyawan")
+  );
+
+  for (const item of karyawanSnapshot.docs) {
+    const d = item.data();
+
+    if (
+      d.uid_auth === user.uid ||
+      d.auth_uid === user.uid ||
+      d.uid === user.uid
+    ) {
+      return {
+        ...d,
+        id: item.id,
+        role: "karyawan"
+      };
+    }
+  }
+
+  return null;
+}
+
+
+/* =========================================
+   MENAMPILKAN IDENTITAS KARYAWAN
+========================================= */
+
+function tampilkanKaryawan(d) {
+  $("namaKaryawan").textContent = teks(d.nama);
+  $("nikKaryawan").textContent = teks(d.nik);
+  $("jabatanKaryawan").textContent = teks(d.jabatan);
+  $("departemenKaryawan").textContent = teks(d.departemen);
+  $("divisiKaryawan").textContent = teks(d.divisi);
+  $("sistemKaryawan").textContent = teks(d.sistem_cuti);
+
+  perbaruiRingkasan();
+}
+
+
+/* =========================================
+   MEMUAT MASTER JENIS CUTI
+========================================= */
+
+async function muatJenisCuti() {
+  const snap = await getDocs(
+    collection(db, "master_jenis_cuti")
+  );
+
+  const sistemKaryawan = normalisasi(
+    dataKaryawan.sistem_cuti
+  );
+
+  jenisCutiAktif = snap.docs
+    .map(item => ({
+      ...item.data(),
+      id: item.id
+    }))
+    .filter(item => item.aktif === true)
+    .filter(item => {
+      const sistemMaster = normalisasi(item.sistem_kerja);
+
+      // Jika sistem pada master tidak diisi,
+      // jangan menebak kecocokannya.
+      if (!sistemMaster || !sistemKaryawan) return false;
+
+      return sistemMaster === sistemKaryawan;
+    });
+
+  const select = $("jenisCuti");
+  select.innerHTML = '<option value="">Pilih jenis cuti</option>';
+
+  jenisCutiAktif.forEach(item => {
+    const option = document.createElement("option");
+    option.value = item.id;
+    option.textContent =
+      item.nama_cuti || item.kode_cuti || item.id;
+
+    select.appendChild(option);
+  });
+
+  if (jenisCutiAktif.length === 0) {
+    select.innerHTML =
+      '<option value="">Tidak ada jenis cuti yang cocok</option>';
+
+    $("infoSaldo").textContent =
+      "Tidak ditemukan jenis cuti aktif yang cocok dengan sistem cuti karyawan.";
+  }
+}
+
+
+/* =========================================
+   MEMERIKSA SALDO CUTI
+========================================= */
+
+async function periksaSaldo() {
+  jenisTerpilih = jenisCutiAktif.find(
+    item => item.id === $("jenisCuti").value
+  ) || null;
+
+  saldoValid = null;
+
+  if (!jenisTerpilih) {
+    $("infoSaldo").textContent =
+      "Silakan pilih jenis cuti terlebih dahulu.";
+
+    kunciPengajuan("Pilih jenis cuti terlebih dahulu.");
+    perbaruiRingkasan();
+    return;
+  }
+
+  $("infoSaldo").textContent =
+    "Sedang memeriksa saldo cuti...";
+
+  kunciPengajuan("Saldo cuti sedang diperiksa.");
+
+  try {
+    const snap = await getDocs(
+      collection(db, "saldo_cuti")
+    );
+
+    const nik = String(dataKaryawan.nik || "").trim();
+
+    const kandidat = snap.docs.filter(item => {
+      const d = item.data();
+
+      // Dokumen ini sudah dipastikan sebagai contoh.
+      if (item.id === ID_DOKUMEN_CONTOH) return false;
+
+      if (String(d.nik || "").trim() !== nik) return false;
+
+      if (d.jenis_cuti_id !== jenisTerpilih.id) return false;
+
+      if (normalisasi(d.status_periode) !== "aktif") return false;
+
+      if (
+        typeof d.saldo_akhir !== "number" ||
+        !Number.isFinite(d.saldo_akhir)
+      ) return false;
+
+      return true;
+    });
+
+    if (kandidat.length !== 1) {
+      $("infoSaldo").textContent =
+        kandidat.length > 1
+          ? "Ditemukan lebih dari satu dokumen saldo yang cocok. Pengajuan dikunci untuk mencegah salah penggunaan saldo."
+          : "Saldo operasional yang valid belum ditemukan untuk NIK dan jenis cuti ini. Dokumen contoh tidak digunakan sebagai saldo.";
+
+      kunciPengajuan(
+        "Pengajuan belum dapat dikirim karena saldo operasional yang valid belum tersedia atau belum dapat dipastikan."
+      );
+
+      return;
+    }
+
+    const item = kandidat[0];
+    const d = item.data();
+
+    saldoValid = {
+      id: item.id,
+      nik: d.nik,
+      jenis_cuti_id: d.jenis_cuti_id,
+      saldo_akhir: d.saldo_akhir,
+      periode_id: d.periode_id || null
+    };
+
+    $("infoSaldo").textContent =
+      "Saldo ditemukan: " + d.saldo_akhir +
+      " hari. Periode: " + teks(d.periode_id) +
+      ". Saldo hanya dibaca dan tidak diubah saat pengajuan.";
+
+    btnKirim.disabled = false;
+    btnKirim.textContent = "Kirim Pengajuan Cuti";
+
+    $("keteranganTombol").textContent =
+      "Saldo valid ditemukan. Pastikan seluruh informasi pengajuan sudah benar.";
+
+  } catch (error) {
+    console.error("Kesalahan pemeriksaan saldo:", error);
+
+    $("infoSaldo").textContent =
+      "Gagal membaca saldo: " + error.message;
+
+    kunciPengajuan(
+      "Saldo gagal diperiksa. Silakan coba kembali setelah koneksi database normal."
+    );
+  }
+
+  perbaruiRingkasan();
+}
+
+
+/* =========================================
+   NOMOR DOKUMEN
+========================================= */
+
+function buatNomorDokumen() {
+  const sekarang = new Date();
+
+  const tanggal = [
+    sekarang.getFullYear(),
+    String(sekarang.getMonth() + 1).padStart(2, "0"),
+    String(sekarang.getDate()).padStart(2, "0")
+  ].join("");
+
+  const waktu = [
+    String(sekarang.getHours()).padStart(2, "0"),
+    String(sekarang.getMinutes()).padStart(2, "0"),
+    String(sekarang.getSeconds()).padStart(2, "0")
+  ].join("");
+
+  return "CUTI-" + tanggal + "-" + waktu;
+}
+
+
+/* =========================================
+   KIRIM PENGAJUAN
+========================================= */
+
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  if (sedangMengirim) return;
+
+  if (!userLogin || !dataKaryawan) {
+    tampilStatus("Sesi login atau identitas karyawan tidak tersedia.", "error");
+    return;
+  }
+
+  if (!jenisTerpilih || !saldoValid) {
+    tampilStatus(
+      "Pengajuan tidak dapat dikirim karena saldo operasional belum valid.",
+      "warning"
+    );
+    return;
+  }
+
+  const mulai = $("tanggalMulai").value;
+  const selesai = $("tanggalSelesai").value;
+  const jumlahHari = Number($("jumlahHari").value);
+
+  if (!mulai || !selesai || !jumlahHari || selesai < mulai) {
+    tampilStatus("Periksa kembali tanggal pengajuan cuti.", "error");
+    return;
+  }
+
+  if (jumlahHari > saldoValid.saldo_akhir) {
+    tampilStatus(
+      "Jumlah hari cuti melebihi saldo yang tersedia.",
+      "error"
+    );
+    return;
+  }
+
+  if (!$("keperluan").value.trim()) {
+    tampilStatus("Keperluan cuti wajib diisi.", "error");
+    return;
+  }
+
+  if (!$("alamat").value.trim()) {
+    tampilStatus("Alamat selama cuti wajib diisi.", "error");
+    return;
+  }
+
+  const konfirmasi = confirm(
+    "Apakah Anda yakin akan mengirim pengajuan cuti ini?"
+  );
+
+  if (!konfirmasi) return;
+
+  sedangMengirim = true;
+  btnKirim.disabled = true;
+  btnKirim.textContent = "Menyimpan Pengajuan...";
+
+  try {
+    const sekarang = new Date();
+
+    const nomorDokumen = buatNomorDokumen();
+
+    const tanggalMulai = tanggalFirestore(mulai);
+    const tanggalSelesai = tanggalFirestore(selesai);
+
+    if (!tanggalMulai || !tanggalSelesai) {
+      throw new Error("Format tanggal tidak valid.");
+    }
+
+    const payload = {
+      nomor_dokumen: nomorDokumen,
+
+      status: "DIAJUKAN",
+
+      tanggal_pengajuan: serverTimestamp(),
+      created_at: serverTimestamp(),
+      updated_at: serverTimestamp(),
+
+      identitas_karyawan: {
+        nik: dataKaryawan.nik || "",
+        nama: dataKaryawan.nama || "",
+        jabatan: dataKaryawan.jabatan || "",
+        departemen: dataKaryawan.departemen || "",
+        divisi: dataKaryawan.divisi || "",
+        sistem_cuti: dataKaryawan.sistem_cuti || ""
+      },
+
+      jenis_cuti: {
+        jenis_cuti_id: jenisTerpilih.id,
+        kode_cuti: jenisTerpilih.kode_cuti || "",
+        nama_cuti: jenisTerpilih.nama_cuti || "",
+        kategori_cuti: jenisTerpilih.kategori_cuti || ""
+      },
+
+      history_cuti: {
+        saldo_cuti_id: saldoValid.id,
+        periode_id: saldoValid.periode_id,
+        saldo_saat_pengajuan: saldoValid.saldo_akhir,
+        jumlah_hari_diajukan: jumlahHari
+      },
+
+      periode_cuti: {
+        tanggal_mulai: tanggalMulai,
+        tanggal_selesai: tanggalSelesai,
+        jumlah_hari: jumlahHari
+      },
+
+      perjalanan: {
+        tujuan: $("tujuan").value.trim(),
+        keperluan: $("keperluan").value.trim()
+      },
+
+      penanggung_jawab: {
+        nama: $("pengganti").value.trim(),
+        keterangan: $("serahTerima").value.trim()
+      },
+
+      alamat_selama_cuti: {
+        alamat: $("alamat").value.trim(),
+        nomor_hp: $("noHp").value.trim()
+      },
+
+      persetujuan: {
+        karyawan: {
+          status: "DIAJUKAN",
+          uid: userLogin.uid,
+          nama: dataKaryawan.nama || "",
+          waktu: Timestamp.fromDate(sekarang)
+        },
+        atasan_langsung: {
+          status: "MENUNGGU",
+          nama: ""
+        },
+        pimpinan_divisi: {
+          status: "MENUNGGU",
+          nama: ""
+        },
+        hr: {
+          status: "MENUNGGU",
+          nama: ""
+        },
+        atasan_pimpinan_divisi: {
+          status: "MENUNGGU",
+          nama: ""
+        },
+        pimpinan_perusahaan: {
+          status: "MENUNGGU",
+          nama: ""
+        }
+      },
+
+      riwayat_status: [
+        {
+          status: "DIAJUKAN",
+          waktu: Timestamp.fromDate(sekarang),
+          uid: userLogin.uid,
+          nama: dataKaryawan.nama || "",
+          keterangan: "Pengajuan cuti dibuat oleh karyawan."
+        }
+      ],
+
+      catatan: $("catatan").value.trim()
+    };
+
+    await addDoc(
+      collection(db, "pengajuan_cuti"),
+      payload
+    );
+
+    tampilStatus(
+      "Pengajuan cuti berhasil disimpan. Nomor dokumen: " +
+      nomorDokumen,
       "success"
     );
 
-    button.textContent = "PENGAJUAN BERHASIL";
+    form.reset();
 
-    // Tidak mengubah saldo_cuti.
-    // Tidak membuat transaksi_saldo_cuti.
-    // Tidak mengubah dokumen lain.
+    jenisTerpilih = null;
+    saldoValid = null;
 
-  } catch(error) {
+    $("jumlahHari").value = "";
 
-    console.error("Kesalahan pengajuan:",error);
+    $("infoSaldo").textContent =
+      "Pengajuan telah disimpan. Saldo tidak diubah oleh halaman ini.";
 
-    showMessage(
-      "Pengajuan gagal disimpan: "+error.message,
+    kunciPengajuan(
+      "Pengajuan sudah dikirim. Periksa menu Riwayat Cuti untuk melihat perkembangannya."
+    );
+
+    perbaruiRingkasan();
+
+  } catch (error) {
+    console.error("Gagal menyimpan pengajuan:", error);
+
+    tampilStatus(
+      "Pengajuan gagal disimpan: " + error.message,
       "error"
     );
 
-    button.textContent = "KIRIM PENGAJUAN CUTI";
+    btnKirim.disabled = !saldoValid;
+    btnKirim.textContent = saldoValid
+      ? "Kirim Pengajuan Cuti"
+      : "Pengajuan Belum Dapat Dikirim";
 
-    updateButton();
-
+  } finally {
+    sedangMengirim = false;
   }
-
-}
-
-$("btnKirim").addEventListener("click",submitPengajuan);
-
-$("jenisCuti").addEventListener("change",updateJenisCuti);
+});
 
 
-// ============================================
-// 10. INISIALISASI APLIKASI
-// ============================================
+/* =========================================
+   EVENT FORM
+========================================= */
 
-onAuthStateChanged(auth,async user => {
+$("jenisCuti").addEventListener("change", periksaSaldo);
 
-  $("loading").classList.remove("hidden");
-  $("mainApp").classList.add("hidden");
+$("tanggalMulai").addEventListener("change", hitungHari);
+$("tanggalSelesai").addEventListener("change", hitungHari);
 
-  hideMessage();
+[
+  "keperluan",
+  "tujuan",
+  "alamat",
+  "noHp",
+  "pengganti",
+  "serahTerima",
+  "catatan"
+].forEach(id => {
+  $(id).addEventListener("input", perbaruiRingkasan);
+});
 
-  if (!user) {
 
-    $("loading").textContent =
-      "Anda belum login. Silakan masuk melalui halaman login WAINI.";
+/* =========================================
+   INISIALISASI LOGIN DAN DATABASE
+========================================= */
 
-    return;
+let sudahMemprosesLogin = false;
 
-  }
+onAuthStateChanged(auth, async user => {
+  if (sudahMemprosesLogin) return;
+  sudahMemprosesLogin = true;
 
   userLogin = user;
 
+  if (!user) {
+    tampilStatus(
+      "Anda belum login. Silakan login terlebih dahulu untuk mengajukan cuti.",
+      "warning"
+    );
+
+    kunciPengajuan("Silakan login terlebih dahulu.");
+    $("jenisCuti").innerHTML =
+      '<option value="">Login diperlukan</option>';
+
+    return;
+  }
+
   try {
+    tampilStatus("Memeriksa identitas karyawan...", "info-status");
 
-    await loadIdentity(user);
+    dataKaryawan = await ambilIdentitas(user);
 
-    await loadMasterCuti();
+    if (!dataKaryawan) {
+      tampilStatus(
+        "Akun berhasil login, tetapi data karyawan tidak ditemukan atau belum terhubung dengan UID akun.",
+        "error"
+      );
 
-    await loadSaldoCuti();
+      kunciPengajuan(
+        "Identitas karyawan belum ditemukan. Hubungi Super Admin."
+      );
 
-    $("loading").classList.add("hidden");
+      return;
+    }
 
-    $("mainApp").classList.remove("hidden");
+    tampilkanKaryawan(dataKaryawan);
 
-    updateJenisCuti();
+    tampilStatus(
+      "Identitas karyawan berhasil ditemukan. Memuat master jenis cuti...",
+      "info-status"
+    );
 
-    updateSummary();
+    await muatJenisCuti();
 
-    updateButton();
+    tampilStatus(
+      "Koneksi database berhasil. Silakan pilih jenis cuti.",
+      "success"
+    );
 
-  } catch(error) {
+    kunciPengajuan(
+      "Pilih jenis cuti dan tunggu pemeriksaan saldo operasional."
+    );
 
-    console.error("Inisialisasi WAINI:",error);
+  } catch (error) {
+    console.error("Kesalahan inisialisasi:", error);
 
-    $("loading").classList.add("hidden");
-
-    showMessage(
-      "Gagal memuat halaman: "+error.message,
+    tampilStatus(
+      "Terjadi kesalahan saat menghubungkan ke database: " +
+      error.message,
       "error"
     );
 
+    kunciPengajuan(
+      "Data gagal dimuat. Periksa koneksi dan izin akses Firebase."
+    );
   }
-
 });
 
 </script>
-
 </body>
 </html>
