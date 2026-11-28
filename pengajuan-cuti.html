@@ -11,32 +11,42 @@
   --merah: #e60023;
   --merah-gelap: #b8001c;
   --merah-muda: #fff0f2;
-  --putih: #ffffff;
   --abu: #f4f5f7;
   --teks: #252525;
-  --abu-teks: #666666;
+  --abu-teks: #666;
   --garis: #e4e4e4;
-  --hijau: #168447;
 }
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   background: var(--abu);
   color: var(--teks);
   font-family: Arial, sans-serif;
 }
+
 header {
   background: linear-gradient(135deg, var(--merah), var(--merah-gelap));
   color: white;
   padding: 22px 17px;
 }
-header h2 { margin: 0 0 6px; font-size: 21px; }
-header p { margin: 0; font-size: 13px; opacity: .9; }
+
+header h2 {
+  margin: 0 0 6px;
+  font-size: 21px;
+}
+
+header p {
+  margin: 0;
+  font-size: 13px;
+}
+
 .container {
   max-width: 760px;
   margin: 18px auto;
   padding: 0 12px 30px;
 }
+
 .card {
   background: white;
   border-radius: 13px;
@@ -44,6 +54,7 @@ header p { margin: 0; font-size: 13px; opacity: .9; }
   margin-bottom: 14px;
   box-shadow: 0 2px 9px rgba(0,0,0,.05);
 }
+
 .card h3 {
   margin: 0 0 15px;
   font-size: 16px;
@@ -51,12 +62,14 @@ header p { margin: 0; font-size: 13px; opacity: .9; }
   border-bottom: 1px solid var(--garis);
   padding-bottom: 10px;
 }
+
 label {
   display: block;
   font-size: 13px;
   font-weight: bold;
   margin: 13px 0 6px;
 }
+
 input, select, textarea {
   width: 100%;
   border: 1px solid #d8d8d8;
@@ -66,11 +79,17 @@ input, select, textarea {
   background: white;
   color: var(--teks);
 }
-textarea { min-height: 80px; resize: vertical; }
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--merah);
 }
+
 .info {
   padding: 12px;
   background: var(--merah-muda);
@@ -78,7 +97,9 @@ input:focus, select:focus, textarea:focus {
   font-size: 13px;
   line-height: 1.6;
   margin-top: 10px;
+  overflow-wrap: anywhere;
 }
+
 .status {
   padding: 13px;
   border-radius: 9px;
@@ -87,15 +108,33 @@ input:focus, select:focus, textarea:focus {
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
-.status.info-status { background: #eaf3ff; color: #174b80; }
-.status.error { background: #ffe8e8; color: #a30000; }
-.status.success { background: #e6f7ed; color: #126638; }
-.status.warning { background: #fff4dc; color: #805300; }
+
+.info-status {
+  background: #eaf3ff;
+  color: #174b80;
+}
+
+.error {
+  background: #ffe8e8;
+  color: #a30000;
+}
+
+.success {
+  background: #e6f7ed;
+  color: #126638;
+}
+
+.warning {
+  background: #fff4dc;
+  color: #805300;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
+
 .value {
   background: #f7f7f7;
   border-radius: 8px;
@@ -104,11 +143,13 @@ input:focus, select:focus, textarea:focus {
   min-height: 42px;
   overflow-wrap: anywhere;
 }
+
 .value small {
   display: block;
   color: var(--abu-teks);
   margin-bottom: 5px;
 }
+
 button {
   width: 100%;
   border: 0;
@@ -120,20 +161,27 @@ button {
   font-weight: bold;
   cursor: pointer;
 }
+
 button:disabled {
-  background: #aaaaaa;
+  background: #aaa;
   cursor: not-allowed;
 }
-.hidden { display: none !important; }
+
 .note {
   color: var(--abu-teks);
   font-size: 12px;
   line-height: 1.5;
   margin-top: 7px;
 }
+
 @media(max-width:480px) {
-  .grid { grid-template-columns: 1fr; }
-  .container { margin-top: 12px; }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    margin-top: 12px;
+  }
 }
 </style>
 </head>
@@ -158,28 +206,45 @@ button:disabled {
 
       <div class="grid">
         <div>
-          <small>Nama Karyawan</small>
-          <div class="value" id="namaKaryawan">-</div>
+          <div class="value">
+            <small>Nama Karyawan</small>
+            <span id="namaKaryawan">-</span>
+          </div>
         </div>
+
         <div>
-          <small>NIK</small>
-          <div class="value" id="nikKaryawan">-</div>
+          <div class="value">
+            <small>NIK</small>
+            <span id="nikKaryawan">-</span>
+          </div>
         </div>
+
         <div>
-          <small>Jabatan</small>
-          <div class="value" id="jabatanKaryawan">-</div>
+          <div class="value">
+            <small>Jabatan</small>
+            <span id="jabatanKaryawan">-</span>
+          </div>
         </div>
+
         <div>
-          <small>Departemen</small>
-          <div class="value" id="departemenKaryawan">-</div>
+          <div class="value">
+            <small>Departemen</small>
+            <span id="departemenKaryawan">-</span>
+          </div>
         </div>
+
         <div>
-          <small>Divisi</small>
-          <div class="value" id="divisiKaryawan">-</div>
+          <div class="value">
+            <small>Divisi</small>
+            <span id="divisiKaryawan">-</span>
+          </div>
         </div>
+
         <div>
-          <small>Sistem Cuti</small>
-          <div class="value" id="sistemKaryawan">-</div>
+          <div class="value">
+            <small>Sistem Cuti</small>
+            <span id="sistemKaryawan">-</span>
+          </div>
         </div>
       </div>
     </div>
@@ -189,12 +254,11 @@ button:disabled {
 
       <label for="jenisCuti">Jenis Cuti</label>
       <select id="jenisCuti" required>
-        <option value="">Memuat jenis cuti...</option>
+        <option value="">Menunggu data...</option>
       </select>
 
       <div class="info" id="infoSaldo">
-        Saldo cuti akan diperiksa berdasarkan data karyawan,
-        jenis cuti, dan periode yang sesuai.
+        Saldo cuti akan diperiksa setelah jenis cuti dipilih.
       </div>
     </div>
 
@@ -208,11 +272,14 @@ button:disabled {
       <input type="date" id="tanggalSelesai" required>
 
       <label for="jumlahHari">Jumlah Hari Cuti</label>
-      <input type="number" id="jumlahHari" readonly placeholder="Otomatis dihitung">
+      <input type="number" id="jumlahHari" readonly
+        placeholder="Dihitung otomatis">
+
       <p class="note">
-        Perhitungan jumlah hari di halaman ini adalah selisih tanggal
-        kalender termasuk tanggal mulai dan selesai. Aturan hari kerja
-        atau hari libur perlu disesuaikan dengan ketentuan perusahaan.
+        Perhitungan sementara menggunakan hari kalender,
+        termasuk tanggal mulai dan tanggal selesai.
+        Ketentuan hari kerja dan hari libur perlu disesuaikan
+        dengan aturan perusahaan.
       </p>
     </div>
 
@@ -220,53 +287,69 @@ button:disabled {
       <h3>4. Keperluan dan Perjalanan</h3>
 
       <label for="keperluan">Keperluan Cuti</label>
-      <textarea id="keperluan" required placeholder="Jelaskan keperluan cuti..."></textarea>
+      <textarea id="keperluan" required
+        placeholder="Jelaskan keperluan cuti..."></textarea>
 
       <label for="tujuan">Tujuan / Tempat Perjalanan</label>
-      <input type="text" id="tujuan" placeholder="Tujuan perjalanan">
+      <input type="text" id="tujuan"
+        placeholder="Tujuan perjalanan">
 
       <label for="alamat">Alamat Selama Cuti</label>
-      <textarea id="alamat" required placeholder="Alamat selama menjalani cuti..."></textarea>
+      <textarea id="alamat" required
+        placeholder="Alamat selama menjalani cuti..."></textarea>
 
       <label for="noHp">Nomor HP yang Bisa Dihubungi</label>
-      <input type="tel" id="noHp" placeholder="Nomor HP aktif">
+      <input type="tel" id="noHp"
+        placeholder="Nomor HP aktif">
     </div>
 
     <div class="card">
       <h3>5. Penanggung Jawab Pekerjaan</h3>
 
-      <label for="pengganti">Nama Karyawan Pengganti / Penerima Tugas</label>
-      <input type="text" id="pengganti" placeholder="Nama karyawan">
+      <label for="pengganti">
+        Nama Karyawan Pengganti / Penerima Tugas
+      </label>
+      <input type="text" id="pengganti"
+        placeholder="Nama karyawan">
 
-      <label for="serahTerima">Keterangan Serah Terima Pekerjaan</label>
-      <textarea id="serahTerima" placeholder="Jelaskan pekerjaan yang diserahterimakan..."></textarea>
+      <label for="serahTerima">
+        Keterangan Serah Terima Pekerjaan
+      </label>
+      <textarea id="serahTerima"
+        placeholder="Jelaskan pekerjaan yang diserahterimakan..."></textarea>
 
       <label for="catatan">Catatan Tambahan</label>
-      <textarea id="catatan" placeholder="Catatan tambahan jika ada..."></textarea>
+      <textarea id="catatan"
+        placeholder="Catatan tambahan jika ada..."></textarea>
     </div>
 
     <div class="card">
       <h3>6. Ringkasan Pengajuan</h3>
+
       <div class="grid">
-        <div>
+        <div class="value">
           <small>Nama</small>
-          <div class="value" id="ringkasNama">-</div>
+          <span id="ringkasNama">-</span>
         </div>
-        <div>
+
+        <div class="value">
           <small>Jenis Cuti</small>
-          <div class="value" id="ringkasJenis">-</div>
+          <span id="ringkasJenis">-</span>
         </div>
-        <div>
+
+        <div class="value">
           <small>Mulai</small>
-          <div class="value" id="ringkasMulai">-</div>
+          <span id="ringkasMulai">-</span>
         </div>
-        <div>
+
+        <div class="value">
           <small>Selesai</small>
-          <div class="value" id="ringkasSelesai">-</div>
+          <span id="ringkasSelesai">-</span>
         </div>
-        <div>
+
+        <div class="value">
           <small>Jumlah Hari</small>
-          <div class="value" id="ringkasHari">-</div>
+          <span id="ringkasHari">-</span>
         </div>
       </div>
     </div>
@@ -275,9 +358,9 @@ button:disabled {
       <button type="submit" id="btnKirim" disabled>
         Pengajuan Belum Dapat Dikirim
       </button>
+
       <p class="note" id="keteranganTombol">
-        Tombol akan aktif setelah data karyawan, jenis cuti,
-        dan saldo operasional yang valid berhasil diperiksa.
+        Menunggu pemeriksaan identitas dan saldo cuti.
       </p>
     </div>
 
@@ -285,6 +368,7 @@ button:disabled {
 </div>
 
 <script type="module">
+
 import { auth, db } from "./firebase.js";
 
 import {
@@ -292,13 +376,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  collection,
   doc,
   getDoc,
   getDocs,
-  addDoc,
+  collection,
   query,
   where,
+  addDoc,
   serverTimestamp,
   Timestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -310,16 +394,22 @@ const statusUtama = $("statusUtama");
 const btnKirim = $("btnKirim");
 const form = $("formCuti");
 
+const ID_DOKUMEN_CONTOH =
+  "001PETUGASABSEN_CUTI_ROSTER_R01";
+
 let userLogin = null;
+let dataPengguna = null;
 let dataKaryawan = null;
 let jenisCutiAktif = [];
 let jenisTerpilih = null;
 let saldoValid = null;
 let sedangMengirim = false;
+let tahapProses = "Memulai halaman";
 
-const ID_DOKUMEN_CONTOH =
-  "001PETUGASABSEN_CUTI_ROSTER_R01";
 
+/* ======================================
+   TAMPILAN STATUS
+====================================== */
 
 function tampilStatus(pesan, tipe = "info-status") {
   statusUtama.className = "status " + tipe;
@@ -327,57 +417,64 @@ function tampilStatus(pesan, tipe = "info-status") {
 }
 
 
+function kunciPengajuan(pesan) {
+  saldoValid = null;
+  btnKirim.disabled = true;
+  btnKirim.textContent = "Pengajuan Belum Dapat Dikirim";
+  $("keteranganTombol").textContent = pesan;
+}
+
+
+function normalisasi(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+
 function teks(value) {
-  if (value === undefined || value === null || value === "") {
-    return "-";
-  }
-  return String(value);
+  return value === undefined || value === null || value === ""
+    ? "-"
+    : String(value);
 }
 
 
-function tanggalKeString(value) {
-  if (!value) return "";
+/* ======================================
+   FORMAT TANGGAL
+====================================== */
 
-  if (typeof value === "string") {
-    return value.slice(0, 10);
-  }
-
-  if (value.toDate) {
-    return value.toDate().toISOString().slice(0, 10);
-  }
-
-  if (value instanceof Date) {
-    return value.toISOString().slice(0, 10);
-  }
-
-  return "";
-}
-
-
-function tanggalFirestore(value) {
+function buatTanggalLokal(value) {
   if (!value) return null;
 
-  if (value instanceof Date) {
-    return Timestamp.fromDate(value);
+  const bagian = value.split("-").map(Number);
+
+  if (bagian.length !== 3 || bagian.some(Number.isNaN)) {
+    return null;
   }
 
-  if (typeof value === "string") {
-    const d = new Date(value + "T00:00:00");
-    if (!Number.isNaN(d.getTime())) {
-      return Timestamp.fromDate(d);
-    }
+  const d = new Date(
+    bagian[0],
+    bagian[1] - 1,
+    bagian[2],
+    12, 0, 0
+  );
+
+  if (
+    d.getFullYear() !== bagian[0] ||
+    d.getMonth() !== bagian[1] - 1 ||
+    d.getDate() !== bagian[2]
+  ) {
+    return null;
   }
 
-  return null;
+  return d;
 }
 
 
 function formatTanggal(value) {
   if (!value) return "-";
 
-  const d = new Date(value + "T00:00:00");
+  const d = buatTanggalLokal(value);
 
-  if (Number.isNaN(d.getTime())) return value;
+  if (!d) return value;
 
   return d.toLocaleDateString("id-ID", {
     day: "2-digit",
@@ -397,22 +494,27 @@ function hitungHari() {
     return;
   }
 
-  const a = new Date(mulai + "T00:00:00");
-  const b = new Date(selesai + "T00:00:00");
+  const a = buatTanggalLokal(mulai);
+  const b = buatTanggalLokal(selesai);
 
-  if (b < a) {
+  if (!a || !b || b < a) {
     $("jumlahHari").value = "";
-    $("ringkasHari").textContent = "Tanggal tidak valid";
     perbaruiRingkasan();
     return;
   }
 
-  const jumlah = Math.floor((b - a) / 86400000) + 1;
+  const jumlah =
+    Math.round((b - a) / 86400000) + 1;
 
   $("jumlahHari").value = jumlah;
+
   perbaruiRingkasan();
 }
 
+
+/* ======================================
+   RINGKASAN
+====================================== */
 
 function perbaruiRingkasan() {
   $("ringkasNama").textContent =
@@ -432,109 +534,111 @@ function perbaruiRingkasan() {
 }
 
 
-function kunciPengajuan(pesan) {
-  saldoValid = null;
-  btnKirim.disabled = true;
-  btnKirim.textContent = "Pengajuan Belum Dapat Dikirim";
-  $("keteranganTombol").textContent = pesan;
-}
+/* ======================================
+   IDENTITAS PENGGUNA
+   BACA pengguna/{uid}
+====================================== */
 
+async function muatPengguna(user) {
+  tahapProses = "Membaca data pengguna";
 
-function normalisasi(value) {
-  return String(value || "").trim().toLowerCase();
-}
+  const ref = doc(db, "pengguna", user.uid);
+  const snap = await getDoc(ref);
 
-
-/* =========================================
-   MEMERIKSA IDENTITAS LOGIN
-========================================= */
-
-async function ambilIdentitas(user) {
-  const admins = await getDocs(collection(db, "admins"));
-
-  let adminData = null;
-  let adminId = null;
-
-  for (const item of admins.docs) {
-    const d = item.data();
-
-    if (d.uid_auth === user.uid) {
-      adminData = d;
-      adminId = item.id;
-      break;
-    }
-  }
-
-  // Jika pengguna terdaftar sebagai admin,
-  // dokumen karyawan dicari dengan ID dokumen admin.
-  if (adminData && adminId) {
-    const karyawanDoc = await getDoc(
-      doc(db, "data_karyawan", adminId)
+  if (!snap.exists()) {
+    throw new Error(
+      "Dokumen pengguna dengan UID login tidak ditemukan."
     );
-
-    if (karyawanDoc.exists()) {
-      return {
-        ...karyawanDoc.data(),
-        id: karyawanDoc.id,
-        role: adminData.role || "admin"
-      };
-    }
   }
 
-  // Untuk akun karyawan biasa, coba cari berdasarkan
-  // field UID yang mungkin digunakan pada data karyawan.
-  const karyawanSnapshot = await getDocs(
-    collection(db, "data_karyawan")
-  );
+  const data = snap.data();
 
-  for (const item of karyawanSnapshot.docs) {
-    const d = item.data();
-
-    if (
-      d.uid_auth === user.uid ||
-      d.auth_uid === user.uid ||
-      d.uid === user.uid
-    ) {
-      return {
-        ...d,
-        id: item.id,
-        role: "karyawan"
-      };
-    }
+  if (data.status !== "aktif") {
+    throw new Error(
+      "Akun pengguna belum aktif. Status akun: " +
+      teks(data.status)
+    );
   }
 
-  return null;
+  if (!data.nik) {
+    throw new Error(
+      "Field NIK belum tersedia pada dokumen pengguna."
+    );
+  }
+
+  dataPengguna = {
+    ...data,
+    uid: user.uid
+  };
+
+  return dataPengguna;
 }
 
 
-/* =========================================
-   MENAMPILKAN IDENTITAS KARYAWAN
-========================================= */
+/* ======================================
+   DATA KARYAWAN
+   BACA data_karyawan/{nik}
+====================================== */
 
-function tampilkanKaryawan(d) {
-  $("namaKaryawan").textContent = teks(d.nama);
-  $("nikKaryawan").textContent = teks(d.nik);
-  $("jabatanKaryawan").textContent = teks(d.jabatan);
-  $("departemenKaryawan").textContent = teks(d.departemen);
-  $("divisiKaryawan").textContent = teks(d.divisi);
-  $("sistemKaryawan").textContent = teks(d.sistem_cuti);
+async function muatDataKaryawan(nik) {
+  tahapProses = "Membaca data karyawan";
+
+  const ref = doc(db, "data_karyawan", String(nik));
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    throw new Error(
+      "Data karyawan dengan NIK " + nik +
+      " tidak ditemukan di data_karyawan."
+    );
+  }
+
+  const data = snap.data();
+
+  if (String(data.nik || "") !== String(nik)) {
+    throw new Error(
+      "NIK pada dokumen data_karyawan tidak cocok."
+    );
+  }
+
+  dataKaryawan = {
+    ...data,
+    id: snap.id
+  };
+
+  return dataKaryawan;
+}
+
+
+/* ======================================
+   TAMPILKAN IDENTITAS
+====================================== */
+
+function tampilkanKaryawan(data) {
+  $("namaKaryawan").textContent = teks(data.nama);
+  $("nikKaryawan").textContent = teks(data.nik);
+  $("jabatanKaryawan").textContent = teks(data.jabatan);
+  $("departemenKaryawan").textContent = teks(data.departemen);
+  $("divisiKaryawan").textContent = teks(data.divisi);
+  $("sistemKaryawan").textContent = teks(data.sistem_cuti);
 
   perbaruiRingkasan();
 }
 
 
-/* =========================================
-   MEMUAT MASTER JENIS CUTI
-========================================= */
+/* ======================================
+   MASTER JENIS CUTI
+====================================== */
 
 async function muatJenisCuti() {
+  tahapProses = "Membaca master jenis cuti";
+
   const snap = await getDocs(
     collection(db, "master_jenis_cuti")
   );
 
-  const sistemKaryawan = normalisasi(
-    dataKaryawan.sistem_cuti
-  );
+  const sistemKaryawan =
+    normalisasi(dataKaryawan.sistem_cuti);
 
   jenisCutiAktif = snap.docs
     .map(item => ({
@@ -543,40 +647,49 @@ async function muatJenisCuti() {
     }))
     .filter(item => item.aktif === true)
     .filter(item => {
-      const sistemMaster = normalisasi(item.sistem_kerja);
+      const sistemMaster =
+        normalisasi(item.sistem_kerja);
 
-      // Jika sistem pada master tidak diisi,
-      // jangan menebak kecocokannya.
-      if (!sistemMaster || !sistemKaryawan) return false;
-
-      return sistemMaster === sistemKaryawan;
+      return sistemMaster !== "" &&
+        sistemMaster === sistemKaryawan;
     });
 
   const select = $("jenisCuti");
-  select.innerHTML = '<option value="">Pilih jenis cuti</option>';
+
+  select.innerHTML =
+    '<option value="">Pilih jenis cuti</option>';
 
   jenisCutiAktif.forEach(item => {
     const option = document.createElement("option");
+
     option.value = item.id;
+
     option.textContent =
-      item.nama_cuti || item.kode_cuti || item.id;
+      item.nama_cuti ||
+      item.kode_cuti ||
+      item.id;
 
     select.appendChild(option);
   });
 
   if (jenisCutiAktif.length === 0) {
     select.innerHTML =
-      '<option value="">Tidak ada jenis cuti yang cocok</option>';
+      '<option value="">Jenis cuti tidak ditemukan</option>';
 
     $("infoSaldo").textContent =
-      "Tidak ditemukan jenis cuti aktif yang cocok dengan sistem cuti karyawan.";
+      "Tidak ditemukan jenis cuti aktif yang sesuai dengan sistem cuti karyawan (" +
+      teks(dataKaryawan.sistem_cuti) + ").";
+
+    kunciPengajuan(
+      "Master jenis cuti belum memiliki jenis yang sesuai."
+    );
   }
 }
 
 
-/* =========================================
-   MEMERIKSA SALDO CUTI
-========================================= */
+/* ======================================
+   PEMERIKSAAN SALDO CUTI
+====================================== */
 
 async function periksaSaldo() {
   jenisTerpilih = jenisCutiAktif.find(
@@ -597,43 +710,78 @@ async function periksaSaldo() {
   $("infoSaldo").textContent =
     "Sedang memeriksa saldo cuti...";
 
-  kunciPengajuan("Saldo cuti sedang diperiksa.");
+  kunciPengajuan("Saldo sedang diperiksa.");
 
   try {
-    const snap = await getDocs(
-      collection(db, "saldo_cuti")
+    tahapProses = "Membaca saldo cuti";
+
+    // Query hanya saldo dengan NIK karyawan login.
+    // Tidak membaca seluruh collection saldo_cuti.
+    const q = query(
+      collection(db, "saldo_cuti"),
+      where("nik", "==", String(dataKaryawan.nik))
     );
 
-    const nik = String(dataKaryawan.nik || "").trim();
+    const snap = await getDocs(q);
 
     const kandidat = snap.docs.filter(item => {
       const d = item.data();
 
-      // Dokumen ini sudah dipastikan sebagai contoh.
-      if (item.id === ID_DOKUMEN_CONTOH) return false;
+      // Dokumen contoh tidak boleh digunakan.
+      if (item.id === ID_DOKUMEN_CONTOH) {
+        return false;
+      }
 
-      if (String(d.nik || "").trim() !== nik) return false;
+      if (
+        String(d.nik || "") !==
+        String(dataKaryawan.nik)
+      ) {
+        return false;
+      }
 
-      if (d.jenis_cuti_id !== jenisTerpilih.id) return false;
+      if (
+        d.jenis_cuti_id !== jenisTerpilih.id
+      ) {
+        return false;
+      }
 
-      if (normalisasi(d.status_periode) !== "aktif") return false;
+      if (
+        normalisasi(d.status_periode) !== "aktif"
+      ) {
+        return false;
+      }
 
       if (
         typeof d.saldo_akhir !== "number" ||
         !Number.isFinite(d.saldo_akhir)
-      ) return false;
+      ) {
+        return false;
+      }
 
       return true;
     });
 
-    if (kandidat.length !== 1) {
+    if (kandidat.length === 0) {
       $("infoSaldo").textContent =
-        kandidat.length > 1
-          ? "Ditemukan lebih dari satu dokumen saldo yang cocok. Pengajuan dikunci untuk mencegah salah penggunaan saldo."
-          : "Saldo operasional yang valid belum ditemukan untuk NIK dan jenis cuti ini. Dokumen contoh tidak digunakan sebagai saldo.";
+        "Saldo operasional yang valid belum ditemukan untuk NIK " +
+        dataKaryawan.nik +
+        " dan jenis cuti " +
+        (jenisTerpilih.nama_cuti || jenisTerpilih.id) +
+        ". Dokumen contoh tidak digunakan.";
 
       kunciPengajuan(
-        "Pengajuan belum dapat dikirim karena saldo operasional yang valid belum tersedia atau belum dapat dipastikan."
+        "Pengajuan belum dapat dikirim karena saldo operasional belum tersedia atau belum dapat dipastikan."
+      );
+
+      return;
+    }
+
+    if (kandidat.length > 1) {
+      $("infoSaldo").textContent =
+        "Ditemukan lebih dari satu dokumen saldo aktif yang cocok. Perlu pemeriksaan agar tidak salah menggunakan saldo.";
+
+      kunciPengajuan(
+        "Pengajuan dikunci karena terdapat lebih dari satu saldo aktif."
       );
 
       return;
@@ -651,24 +799,26 @@ async function periksaSaldo() {
     };
 
     $("infoSaldo").textContent =
-      "Saldo ditemukan: " + d.saldo_akhir +
-      " hari. Periode: " + teks(d.periode_id) +
-      ". Saldo hanya dibaca dan tidak diubah saat pengajuan.";
+      "Saldo ditemukan: " +
+      d.saldo_akhir +
+      " hari. Periode: " +
+      teks(d.periode_id) +
+      ". Saldo hanya dibaca dan tidak dipotong oleh halaman ini.";
 
     btnKirim.disabled = false;
     btnKirim.textContent = "Kirim Pengajuan Cuti";
 
     $("keteranganTombol").textContent =
-      "Saldo valid ditemukan. Pastikan seluruh informasi pengajuan sudah benar.";
+      "Saldo valid ditemukan. Periksa kembali seluruh data sebelum mengirim.";
 
   } catch (error) {
     console.error("Kesalahan pemeriksaan saldo:", error);
 
     $("infoSaldo").textContent =
-      "Gagal membaca saldo: " + error.message;
+      "Gagal memeriksa saldo: " + error.message;
 
     kunciPengajuan(
-      "Saldo gagal diperiksa. Silakan coba kembali setelah koneksi database normal."
+      "Saldo gagal diperiksa. Pengajuan belum dapat dikirim."
     );
   }
 
@@ -676,9 +826,9 @@ async function periksaSaldo() {
 }
 
 
-/* =========================================
+/* ======================================
    NOMOR DOKUMEN
-========================================= */
+====================================== */
 
 function buatNomorDokumen() {
   const sekarang = new Date();
@@ -699,23 +849,26 @@ function buatNomorDokumen() {
 }
 
 
-/* =========================================
+/* ======================================
    KIRIM PENGAJUAN
-========================================= */
+====================================== */
 
-form.addEventListener("submit", async function(event) {
+form.addEventListener("submit", async event => {
   event.preventDefault();
 
   if (sedangMengirim) return;
 
-  if (!userLogin || !dataKaryawan) {
-    tampilStatus("Sesi login atau identitas karyawan tidak tersedia.", "error");
+  if (!userLogin || !dataPengguna || !dataKaryawan) {
+    tampilStatus(
+      "Identitas login belum lengkap.",
+      "error"
+    );
     return;
   }
 
   if (!jenisTerpilih || !saldoValid) {
     tampilStatus(
-      "Pengajuan tidak dapat dikirim karena saldo operasional belum valid.",
+      "Pengajuan tidak dapat dikirim karena saldo belum valid.",
       "warning"
     );
     return;
@@ -725,8 +878,16 @@ form.addEventListener("submit", async function(event) {
   const selesai = $("tanggalSelesai").value;
   const jumlahHari = Number($("jumlahHari").value);
 
-  if (!mulai || !selesai || !jumlahHari || selesai < mulai) {
-    tampilStatus("Periksa kembali tanggal pengajuan cuti.", "error");
+  if (
+    !mulai ||
+    !selesai ||
+    !jumlahHari ||
+    selesai < mulai
+  ) {
+    tampilStatus(
+      "Periksa kembali tanggal pengajuan.",
+      "error"
+    );
     return;
   }
 
@@ -739,36 +900,43 @@ form.addEventListener("submit", async function(event) {
   }
 
   if (!$("keperluan").value.trim()) {
-    tampilStatus("Keperluan cuti wajib diisi.", "error");
+    tampilStatus(
+      "Keperluan cuti wajib diisi.",
+      "error"
+    );
     return;
   }
 
   if (!$("alamat").value.trim()) {
-    tampilStatus("Alamat selama cuti wajib diisi.", "error");
+    tampilStatus(
+      "Alamat selama cuti wajib diisi.",
+      "error"
+    );
     return;
   }
 
-  const konfirmasi = confirm(
+  if (!confirm(
     "Apakah Anda yakin akan mengirim pengajuan cuti ini?"
-  );
-
-  if (!konfirmasi) return;
+  )) {
+    return;
+  }
 
   sedangMengirim = true;
   btnKirim.disabled = true;
   btnKirim.textContent = "Menyimpan Pengajuan...";
 
   try {
-    const sekarang = new Date();
+    tahapProses = "Menyimpan pengajuan cuti";
 
-    const nomorDokumen = buatNomorDokumen();
-
-    const tanggalMulai = tanggalFirestore(mulai);
-    const tanggalSelesai = tanggalFirestore(selesai);
+    const tanggalMulai = buatTanggalLokal(mulai);
+    const tanggalSelesai = buatTanggalLokal(selesai);
 
     if (!tanggalMulai || !tanggalSelesai) {
       throw new Error("Format tanggal tidak valid.");
     }
+
+    const sekarang = Timestamp.now();
+    const nomorDokumen = buatNomorDokumen();
 
     const payload = {
       nomor_dokumen: nomorDokumen,
@@ -780,7 +948,7 @@ form.addEventListener("submit", async function(event) {
       updated_at: serverTimestamp(),
 
       identitas_karyawan: {
-        nik: dataKaryawan.nik || "",
+        nik: String(dataKaryawan.nik),
         nama: dataKaryawan.nama || "",
         jabatan: dataKaryawan.jabatan || "",
         departemen: dataKaryawan.departemen || "",
@@ -803,8 +971,8 @@ form.addEventListener("submit", async function(event) {
       },
 
       periode_cuti: {
-        tanggal_mulai: tanggalMulai,
-        tanggal_selesai: tanggalSelesai,
+        tanggal_mulai: Timestamp.fromDate(tanggalMulai),
+        tanggal_selesai: Timestamp.fromDate(tanggalSelesai),
         jumlah_hari: jumlahHari
       },
 
@@ -828,24 +996,29 @@ form.addEventListener("submit", async function(event) {
           status: "DIAJUKAN",
           uid: userLogin.uid,
           nama: dataKaryawan.nama || "",
-          waktu: Timestamp.fromDate(sekarang)
+          waktu: sekarang
         },
+
         atasan_langsung: {
           status: "MENUNGGU",
           nama: ""
         },
+
         pimpinan_divisi: {
           status: "MENUNGGU",
           nama: ""
         },
+
         hr: {
           status: "MENUNGGU",
           nama: ""
         },
+
         atasan_pimpinan_divisi: {
           status: "MENUNGGU",
           nama: ""
         },
+
         pimpinan_perusahaan: {
           status: "MENUNGGU",
           nama: ""
@@ -855,7 +1028,7 @@ form.addEventListener("submit", async function(event) {
       riwayat_status: [
         {
           status: "DIAJUKAN",
-          waktu: Timestamp.fromDate(sekarang),
+          waktu: sekarang,
           uid: userLogin.uid,
           nama: dataKaryawan.nama || "",
           keterangan: "Pengajuan cuti dibuat oleh karyawan."
@@ -871,7 +1044,7 @@ form.addEventListener("submit", async function(event) {
     );
 
     tampilStatus(
-      "Pengajuan cuti berhasil disimpan. Nomor dokumen: " +
+      "Pengajuan berhasil disimpan. Nomor dokumen: " +
       nomorDokumen,
       "success"
     );
@@ -887,23 +1060,24 @@ form.addEventListener("submit", async function(event) {
       "Pengajuan telah disimpan. Saldo tidak diubah oleh halaman ini.";
 
     kunciPengajuan(
-      "Pengajuan sudah dikirim. Periksa menu Riwayat Cuti untuk melihat perkembangannya."
+      "Pengajuan sudah dikirim. Silakan periksa menu Riwayat Cuti."
     );
 
     perbaruiRingkasan();
 
   } catch (error) {
-    console.error("Gagal menyimpan pengajuan:", error);
+    console.error("Kesalahan penyimpanan:", error);
 
     tampilStatus(
-      "Pengajuan gagal disimpan: " + error.message,
+      "Gagal menyimpan pengajuan: " + error.message,
       "error"
     );
 
-    btnKirim.disabled = !saldoValid;
-    btnKirim.textContent = saldoValid
-      ? "Kirim Pengajuan Cuti"
-      : "Pengajuan Belum Dapat Dikirim";
+    btnKirim.disabled = true;
+    btnKirim.textContent = "Pengajuan Gagal Disimpan";
+
+    $("keteranganTombol").textContent =
+      "Periksa pesan kesalahan sebelum mencoba kembali.";
 
   } finally {
     sedangMengirim = false;
@@ -911,14 +1085,24 @@ form.addEventListener("submit", async function(event) {
 });
 
 
-/* =========================================
+/* ======================================
    EVENT FORM
-========================================= */
+====================================== */
 
-$("jenisCuti").addEventListener("change", periksaSaldo);
+$("jenisCuti").addEventListener(
+  "change",
+  periksaSaldo
+);
 
-$("tanggalMulai").addEventListener("change", hitungHari);
-$("tanggalSelesai").addEventListener("change", hitungHari);
+$("tanggalMulai").addEventListener(
+  "change",
+  hitungHari
+);
+
+$("tanggalSelesai").addEventListener(
+  "change",
+  hitungHari
+);
 
 [
   "keperluan",
@@ -929,85 +1113,115 @@ $("tanggalSelesai").addEventListener("change", hitungHari);
   "serahTerima",
   "catatan"
 ].forEach(id => {
-  $(id).addEventListener("input", perbaruiRingkasan);
+  $(id).addEventListener(
+    "input",
+    perbaruiRingkasan
+  );
 });
 
 
-/* =========================================
-   INISIALISASI LOGIN DAN DATABASE
-========================================= */
+/* ======================================
+   LOGIN DAN INISIALISASI
+====================================== */
 
-let sudahMemprosesLogin = false;
+onAuthStateChanged(
+  auth,
 
-onAuthStateChanged(auth, async user => {
-  if (sudahMemprosesLogin) return;
-  sudahMemprosesLogin = true;
+  async user => {
+    userLogin = user;
 
-  userLogin = user;
-
-  if (!user) {
-    tampilStatus(
-      "Anda belum login. Silakan login terlebih dahulu untuk mengajukan cuti.",
-      "warning"
-    );
-
-    kunciPengajuan("Silakan login terlebih dahulu.");
-    $("jenisCuti").innerHTML =
-      '<option value="">Login diperlukan</option>';
-
-    return;
-  }
-
-  try {
-    tampilStatus("Memeriksa identitas karyawan...", "info-status");
-
-    dataKaryawan = await ambilIdentitas(user);
-
-    if (!dataKaryawan) {
+    if (!user) {
       tampilStatus(
-        "Akun berhasil login, tetapi data karyawan tidak ditemukan atau belum terhubung dengan UID akun.",
-        "error"
+        "Anda belum login. Silakan login terlebih dahulu.",
+        "warning"
       );
 
+      $("jenisCuti").innerHTML =
+        '<option value="">Login diperlukan</option>';
+
       kunciPengajuan(
-        "Identitas karyawan belum ditemukan. Hubungi Super Admin."
+        "Silakan login terlebih dahulu."
       );
 
       return;
     }
 
-    tampilkanKaryawan(dataKaryawan);
+    try {
+      tampilStatus(
+        "Memeriksa akun pengguna...",
+        "info-status"
+      );
+
+      // 1. Baca pengguna berdasarkan UID login.
+      await muatPengguna(user);
+
+      tampilStatus(
+        "Akun ditemukan. Memeriksa data karyawan...",
+        "info-status"
+      );
+
+      // 2. Baca data karyawan berdasarkan NIK.
+      await muatDataKaryawan(dataPengguna.nik);
+
+      tampilkanKaryawan(dataKaryawan);
+
+      tampilStatus(
+        "Identitas karyawan berhasil ditemukan. Memuat jenis cuti...",
+        "info-status"
+      );
+
+      // 3. Baca master jenis cuti.
+      await muatJenisCuti();
+
+      tampilStatus(
+        "Koneksi database berhasil. Silakan pilih jenis cuti.",
+        "success"
+      );
+
+      if (jenisCutiAktif.length === 0) {
+        kunciPengajuan(
+          "Tidak ditemukan jenis cuti aktif yang sesuai."
+        );
+      } else {
+        kunciPengajuan(
+          "Pilih jenis cuti untuk memeriksa saldo."
+        );
+      }
+
+    } catch (error) {
+      console.error(
+        "Kesalahan tahap:",
+        tahapProses,
+        error
+      );
+
+      tampilStatus(
+        "Gagal pada tahap: " +
+        tahapProses +
+        ". Pesan Firebase: " +
+        error.message,
+        "error"
+      );
+
+      kunciPengajuan(
+        "Halaman belum dapat digunakan. Periksa pesan kesalahan di atas."
+      );
+    }
+  },
+
+  error => {
+    console.error("Auth error:", error);
 
     tampilStatus(
-      "Identitas karyawan berhasil ditemukan. Memuat master jenis cuti...",
-      "info-status"
-    );
-
-    await muatJenisCuti();
-
-    tampilStatus(
-      "Koneksi database berhasil. Silakan pilih jenis cuti.",
-      "success"
-    );
-
-    kunciPengajuan(
-      "Pilih jenis cuti dan tunggu pemeriksaan saldo operasional."
-    );
-
-  } catch (error) {
-    console.error("Kesalahan inisialisasi:", error);
-
-    tampilStatus(
-      "Terjadi kesalahan saat menghubungkan ke database: " +
-      error.message,
+      "Gagal memeriksa login: " + error.message,
       "error"
     );
 
     kunciPengajuan(
-      "Data gagal dimuat. Periksa koneksi dan izin akses Firebase."
+      "Koneksi autentikasi gagal."
     );
   }
-});
+);
 
 </script>
 </body>
